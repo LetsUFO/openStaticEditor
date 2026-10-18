@@ -7,7 +7,8 @@
 	"main": "out/main/index.js",
 	"scripts": {
 		"dev": "env -u ELECTRON_RUN_AS_NODE electron-vite dev",
-		"build": "env -u ELECTRON_RUN_AS_NODE electron-vite build",
+		"build": "vue-tsc --noEmit && env -u ELECTRON_RUN_AS_NODE electron-vite build",
+		"type-check": "vue-tsc --noEmit",
 		"preview": "env -u ELECTRON_RUN_AS_NODE electron-vite preview",
 		"package": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder",
 		"dist": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder",
@@ -25,13 +26,16 @@
 	},
 	"devDependencies": {
 		"@tailwindcss/vite": "^4.3.3",
+		"@types/node": "^22.10.0",
 		"@vitejs/plugin-vue": "^5.2.1",
 		"electron": "^33.3.2",
 		"electron-builder": "^25.1.8",
 		"electron-vite": "^2.3.0",
 		"prettier": "^3.9.10",
 		"tailwindcss": "^4.3.3",
-		"vite": "^5.4.11"
+		"typescript": "^5.6.3",
+		"vite": "^5.4.11",
+		"vue-tsc": "^2.1.10"
 	},
 	"build": {
 		"appId": "com.azrael.openstaticeditor",

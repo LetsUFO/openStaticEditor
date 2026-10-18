@@ -1,14 +1,15 @@
-<script setup>
-defineProps({
-	msg: {
-		type: String,
-		default: 'Hello Vue 3 + Pinia + Electron'
-	}
+<script setup lang="ts">
+interface Props {
+	msg?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+	msg: 'Hello Vue 3 + Pinia + Electron'
 })
 </script>
 
 <template>
-	<h2 class="hello">{{ msg }}</h2>
+	<h2 class="hello">{{ props.msg }}</h2>
 </template>
 
 <style scoped>

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useCounterStore } from './stores/counter'
 import HelloWorld from './components/HelloWorld.vue'
 
