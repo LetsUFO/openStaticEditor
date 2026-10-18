@@ -24,7 +24,12 @@ const counter = useCounterStore()
 
 <style>
 :root {
-	font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	font-family:
+		system-ui,
+		-apple-system,
+		'Segoe UI',
+		Roboto,
+		sans-serif;
 	color: #2c3e50;
 }
 

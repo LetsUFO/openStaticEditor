@@ -6,9 +6,8 @@ dist
 .workbuddy
 package-lock.json
 *.md
-# CSS 不交给 Prettier 格式化（避免多值属性被自动折行，缩进由 .editorconfig 的 tab/4 兜底）
+# CSS / SCSS / 预处理器样式文件不交给 Prettier 格式化（避免多值属性被自动折行，缩进由 .editorconfig 的 tab/4 兜底）
 *.css
 *.scss
 *.less
 *.pcss
-*.vue
