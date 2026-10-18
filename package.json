@@ -1,7 +1,7 @@
 {
 	"name": "openstaticeditor",
 	"version": "1.0.0",
-	"description": "Vue3 + Pinia + Electron 桌面应用（可打包 exe）",
+	"description": "Vue3 + Pinia + Electron 桌面应用",
 	"author": "Azrael",
 	"license": "MIT",
 	"main": "out/main/index.js",
@@ -20,6 +20,7 @@
 	"dependencies": {
 		"@electron-toolkit/preload": "^3.0.2",
 		"@electron-toolkit/utils": "^3.0.0",
+		"ant-design-vue": "^4.2.6",
 		"pinia": "^2.3.1",
 		"vue": "^3.5.13"
 	},
@@ -29,6 +30,7 @@
 		"electron-builder": "^25.1.8",
 		"electron-vite": "^2.3.0",
 		"prettier": "^3.9.10",
+		"tailwindcss": "^4.3.3",
 		"vite": "^5.4.11"
 	},
 	"build": {
