@@ -1,0 +1,5 @@
+/* Tailwind CSS v4 —— 仅引入 theme + utilities，关闭 preflight
+   原因：项目已声明 ant-design-vue 依赖，preflight 的 base reset
+   会覆盖 antd 组件自带样式（如按钮、表单），故关闭以避免冲突。 */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
