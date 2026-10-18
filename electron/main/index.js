@@ -7,43 +7,43 @@ import { ipcMain } from 'electron'
 ipcMain.handle('ping', () => 'pong')
 
 function createWindow() {
-  const mainWindow = new BrowserWindow({
-    width: 960,
-    height: 680,
-    show: false,
-    autoHideMenuBar: true,
-    webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
-    }
-  })
+	const mainWindow = new BrowserWindow({
+		width: 960,
+		height: 680,
+		show: false,
+		autoHideMenuBar: true,
+		webPreferences: {
+			preload: join(__dirname, '../preload/index.js'),
+			sandbox: false
+		}
+	})
 
-  mainWindow.on('ready-to-show', () => mainWindow.show())
+	mainWindow.on('ready-to-show', () => mainWindow.show())
 
-  // 禁止在应用内打开新窗口（安全）
-  mainWindow.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
+	// 禁止在应用内打开新窗口（安全）
+	mainWindow.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
 
-  if (is.dev && process.env.ELECTRON_RENDERER_URL) {
-    mainWindow.loadURL(process.env.ELECTRON_RENDERER_URL)
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-  }
+	if (is.dev && process.env.ELECTRON_RENDERER_URL) {
+		mainWindow.loadURL(process.env.ELECTRON_RENDERER_URL)
+	} else {
+		mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+	}
 }
 
 app.whenReady().then(() => {
-  electronApp.setAppUserModelId('com.azrael.openstaticeditor')
+	electronApp.setAppUserModelId('com.azrael.openstaticeditor')
 
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
-  })
+	app.on('browser-window-created', (_, window) => {
+		optimizer.watchWindowShortcuts(window)
+	})
 
-  createWindow()
+	createWindow()
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
+	app.on('activate', () => {
+		if (BrowserWindow.getAllWindows().length === 0) createWindow()
+	})
 })
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
+	if (process.platform !== 'darwin') app.quit()
 })

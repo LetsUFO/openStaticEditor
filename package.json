@@ -1,60 +1,63 @@
 {
-  "name": "openstaticeditor",
-  "version": "1.0.0",
-  "description": "Vue3 + Pinia + Electron 桌面应用（可打包 exe）",
-  "author": "Azrael",
-  "license": "MIT",
-  "main": "out/main/index.js",
-  "type": "module",
-  "scripts": {
-    "dev": "electron-vite dev",
-    "build": "electron-vite build",
-    "preview": "electron-vite preview",
-    "package": "electron-vite build && electron-builder",
-    "dist": "electron-vite build && electron-builder",
-    "dist:win": "electron-vite build && electron-builder --win",
-    "dist:mac": "electron-vite build && electron-builder --mac"
-  },
-  "dependencies": {
-    "@electron-toolkit/preload": "^3.0.2",
-    "@electron-toolkit/utils": "^3.0.0",
-    "pinia": "^2.3.1",
-    "vue": "^3.5.13"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.1",
-    "electron": "^33.3.2",
-    "electron-builder": "^25.1.8",
-    "electron-vite": "^2.3.0",
-    "vite": "^5.4.11"
-  },
-  "build": {
-    "appId": "com.azrael.openstaticeditor",
-    "productName": "OpenStaticEditor",
-    "copyright": "Copyright © 2026 Azrael",
-    "directories": {
-      "output": "release/${version}"
-    },
-    "files": [
-      "out/**/*"
-    ],
-    "mac": {
-      "target": [
-        "dmg"
-      ],
-      "artifactName": "${productName}-${version}-mac.${ext}"
-    },
-    "win": {
-      "target": [
-        "nsis"
-      ],
-      "artifactName": "${productName}-${version}-setup.${ext}"
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true
-    }
-  }
+	"name": "openstaticeditor",
+	"version": "1.0.0",
+	"description": "Vue3 + Pinia + Electron 桌面应用（可打包 exe）",
+	"author": "Azrael",
+	"license": "MIT",
+	"main": "out/main/index.js",
+	"type": "module",
+	"scripts": {
+		"dev": "electron-vite dev",
+		"build": "electron-vite build",
+		"preview": "electron-vite preview",
+		"package": "electron-vite build && electron-builder",
+		"dist": "electron-vite build && electron-builder",
+		"dist:win": "electron-vite build && electron-builder --win",
+		"dist:mac": "electron-vite build && electron-builder --mac",
+		"format": "prettier --write .",
+		"format:check": "prettier --check ."
+	},
+	"dependencies": {
+		"@electron-toolkit/preload": "^3.0.2",
+		"@electron-toolkit/utils": "^3.0.0",
+		"pinia": "^2.3.1",
+		"vue": "^3.5.13"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^5.2.1",
+		"electron": "^33.3.2",
+		"electron-builder": "^25.1.8",
+		"electron-vite": "^2.3.0",
+		"prettier": "^3.9.10",
+		"vite": "^5.4.11"
+	},
+	"build": {
+		"appId": "com.azrael.openstaticeditor",
+		"productName": "OpenStaticEditor",
+		"copyright": "Copyright © 2026 Azrael",
+		"directories": {
+			"output": "release/${version}"
+		},
+		"files": [
+			"out/**/*"
+		],
+		"mac": {
+			"target": [
+				"dmg"
+			],
+			"artifactName": "${productName}-${version}-mac.${ext}"
+		},
+		"win": {
+			"target": [
+				"nsis"
+			],
+			"artifactName": "${productName}-${version}-setup.${ext}"
+		},
+		"nsis": {
+			"oneClick": false,
+			"perMachine": false,
+			"allowToChangeInstallationDirectory": true,
+			"createDesktopShortcut": true
+		}
+	}
 }
