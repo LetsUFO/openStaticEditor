@@ -21,10 +21,15 @@ module.exports = defineConfig({
 		plugins: [externalizeDepsPlugin()]
 	},
 	renderer: {
-		root: 'src/renderer',
+		root: 'src',
+		build: {
+			rollupOptions: {
+				input: resolve(process.cwd(), 'src/index.html')
+			}
+		},
 		resolve: {
 			alias: {
-				'@renderer': resolve('src/renderer')
+				'@renderer': resolve('src')
 			}
 		},
 		plugins: [vue(), tailwindcss()]
