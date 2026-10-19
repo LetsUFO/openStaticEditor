@@ -1,1 +1,1 @@
-export const light = { primary: '#0011ff' }
+export const light = { primary: '', success: '', error: '', warning: '' }
