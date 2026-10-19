@@ -3,3 +3,9 @@
    会覆盖 antd 组件自带样式（如按钮、表单），故关闭以避免冲突。 */
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
+
+/* 自定义设计 token：声明后自动生成 text-primary / bg-primary / border-primary 等工具类。
+   注意：需与 src/style/theme.ts 的 light.primary 保持同值（目前手动同步一份）。 */
+@theme {
+	--color-primary: #0011ff;
+}

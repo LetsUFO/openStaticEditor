@@ -7,7 +7,7 @@ const counter = useCounterStore()
 
 <template>
 	<div class="container">
-		<h1>OpenStaticEditor</h1>
+		<h1 class="text-primary">OpenStaticEditor</h1>
 		<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
 
 		<HelloWorld />
