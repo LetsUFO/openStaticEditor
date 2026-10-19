@@ -4,8 +4,6 @@
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
 
-/* 自定义设计 token：声明后自动生成 text-primary / bg-primary / border-primary 等工具类。
-   注意：需与 src/style/theme.ts 的 light.primary 保持同值（目前手动同步一份）。 */
-@theme {
-	--color-primary: #0011ff;
-}
+/* Tailwind v4 是 CSS-first：使用 JS 配置文件必须显式 @config 指向它。
+   本文件不写任何颜色值，颜色全部来自 tailwind.config.js（其再 import src/style/theme.ts 的 light）。 */
+@config "../tailwind.config.js";
