@@ -7,3 +7,17 @@
 /* Tailwind v4 是 CSS-first：使用 JS 配置文件必须显式 @config 指向它。
    本文件不写任何颜色值，颜色全部来自 tailwind.config.js（其再 import src/style/theme.ts 的 light）。 */
 @config "../tailwind.config.js";
+
+
+:root {
+	font-family:
+		system-ui,
+		-apple-system,
+		'Segoe UI',
+		Roboto,
+		sans-serif;
+}
+
+html{font-size: 16px;
+   body {margin: 0;background: #f7f8fa;}
+}

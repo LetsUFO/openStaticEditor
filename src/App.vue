@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useCounterStore } from './stores/counter';
+
 import HelloWorld from './components/HelloWorld.vue';
 
 const counter = useCounterStore();
@@ -22,21 +23,9 @@ const counter = useCounterStore();
 	</div>
 </template>
 
-<style>
-:root {
-	font-family:
-		system-ui,
-		-apple-system,
-		'Segoe UI',
-		Roboto,
-		sans-serif;
-	color: #2c3e50;
-}
+<style lang="scss" scoped>
 
-body {
-	margin: 0;
-	background: #f7f8fa;
-}
+
 
 .stage {
 	width: 720px;
