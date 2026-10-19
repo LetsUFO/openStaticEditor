@@ -6,7 +6,7 @@ const counter = useCounterStore();
 </script>
 
 <template>
-	<div class="container">
+	<div class="stage margin-auto-x">
 		<h1 class="text-primary">OpenStaticEditor</h1>
 		<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
 
@@ -38,9 +38,8 @@ body {
 	background: #f7f8fa;
 }
 
-.container {
-	max-width: 720px;
-	margin: 0 auto;
+.stage {
+	width: 720px;
 	padding: 48px 24px;
 	text-align: center;
 }
