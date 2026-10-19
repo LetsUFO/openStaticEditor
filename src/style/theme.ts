@@ -10,8 +10,8 @@
  *   theme.ts(light)  ──import──▶  tailwind.config.js(colors)
  *                                     │ @config
  *                                     ▼
- *                              src/style.css  ──▶  text-primary / bg-success ...
- * style.css 里只放一行 `@config` 指针，不含任何颜色值。
+ *                              src/style.scss  ──▶  text-primary / bg-success ...
+ * style.scss 里只放一行 `@config` 指针，不含任何颜色值。
  */
 import seedToken from 'ant-design-vue/es/theme/themes/seed.js';
 

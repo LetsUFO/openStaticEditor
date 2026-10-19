@@ -6,7 +6,7 @@ const counter = useCounterStore();
 </script>
 
 <template>
-	<div class="stage margin-auto-x">
+	<div class="stage mx-auto">
 		<h1 class="text-primary">OpenStaticEditor</h1>
 		<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
 
