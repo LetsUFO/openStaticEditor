@@ -17,7 +17,10 @@ import seedToken from 'ant-design-vue/es/theme/themes/seed.js';
 
 // 只定义「尺寸值」，键名对齐 Tailwind 原生档位（去掉 radius- 前缀即原生 class 后缀）。
 // 页面照常写原生 class：rounded-md / rounded-lg，其值由这里决定。
-export type IThemeOption = { 'radius-md': string; 'radius-lg': string };
+export interface IThemeOption {
+	'radius-md': string;
+	'radius-lg': string;
+}
 export const option: IThemeOption = {
 	'radius-md': '0.5rem',
 	'radius-lg': '1rem'
