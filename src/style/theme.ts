@@ -15,6 +15,9 @@
  */
 import seedToken from 'ant-design-vue/es/theme/themes/seed.js';
 
+export type IThemeOption = { 'radius-m': number };
+export const option = { 'radius-m': '0.5rem', 'radius-l': '1rem' };
+
 export const light = {
 	primary: `var(--ant-primary-color, ${seedToken.colorPrimary})`,
 	success: `var(--ant-success-color, ${seedToken.colorSuccess})`,
