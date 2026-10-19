@@ -1,11 +1,11 @@
 <script setup lang="ts">
 interface Props {
-	msg?: string
+	msg?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
 	msg: 'Hello Vue 3 + Pinia + Electron'
-})
+});
 </script>
 
 <template>

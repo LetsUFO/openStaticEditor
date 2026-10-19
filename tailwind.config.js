@@ -5,7 +5,7 @@
  * 不在此处写死任何 hex：所有字段都从 theme.ts 的 light 注入。
  * 无需在 style.css 里写 @theme —— Tailwind v4 会自动读取本文件。
  */
-import { light } from './src/style/theme'
+import { light } from './src/style/theme';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -16,8 +16,8 @@ export default {
 				success: light.success,
 				warning: light.warning,
 				error: light.error,
-				info: light.info,
-			},
-		},
-	},
-}
+				info: light.info
+			}
+		}
+	}
+};

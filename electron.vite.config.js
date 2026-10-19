@@ -1,7 +1,7 @@
-const { resolve } = require('node:path')
-const { defineConfig, externalizeDepsPlugin } = require('electron-vite')
-const vue = require('@vitejs/plugin-vue')
-const tailwindcss = require('@tailwindcss/vite').default
+const { resolve } = require('node:path');
+const { defineConfig, externalizeDepsPlugin } = require('electron-vite');
+const vue = require('@vitejs/plugin-vue');
+const tailwindcss = require('@tailwindcss/vite').default;
 
 module.exports = defineConfig({
 	main: {
@@ -34,4 +34,4 @@ module.exports = defineConfig({
 		},
 		plugins: [vue(), tailwindcss()]
 	}
-})
+});

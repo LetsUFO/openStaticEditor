@@ -13,7 +13,7 @@
  *                              src/style.css  ──▶  text-primary / bg-success ...
  * style.css 里只放一行 `@config` 指针，不含任何颜色值。
  */
-import seedToken from 'ant-design-vue/es/theme/themes/seed.js'
+import seedToken from 'ant-design-vue/es/theme/themes/seed.js';
 
 export const light = {
 	primary: `var(--ant-primary-color, ${seedToken.colorPrimary})`,
@@ -21,6 +21,6 @@ export const light = {
 	error: `var(--ant-error-color, ${seedToken.colorError})`,
 	warning: `var(--ant-warning-color, ${seedToken.colorWarning})`,
 	info: `var(--ant-info-color, ${seedToken.colorInfo})`
-}
+};
 
-export default light
+export default light;

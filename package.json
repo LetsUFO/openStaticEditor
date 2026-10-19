@@ -14,8 +14,8 @@
 		"dist": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder",
 		"dist:win": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder --win",
 		"dist:mac": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder --mac",
-		"format": "prettier --write .",
-		"format:check": "prettier --check ."
+		"format": "prettier --write \"**/*.{js,ts,json}\"",
+		"format:check": "prettier --check \"**/*.{js,ts,json}\""
 	},
 	"dependencies": {
 		"@electron-toolkit/preload": "^3.0.2",
@@ -32,6 +32,7 @@
 		"electron-builder": "^25.1.8",
 		"electron-vite": "^2.3.0",
 		"prettier": "^3.9.10",
+		"prettier-plugin-vue": "^1.1.6",
 		"tailwindcss": "^4.3.3",
 		"typescript": "^5.6.3",
 		"vite": "^5.4.11",
