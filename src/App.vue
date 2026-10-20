@@ -29,13 +29,13 @@ const state = reactive<{ openKey: string[] }>({
 <template>
 	<div class="h-full">
 		<div class="flex justify-start h-full">
-			<ul class="menu w-[10rem] bg-primary bgDarken">
+			<ul class="menu w-[10rem] bg-primary overflow-y-auto">
 				<Menu
 					v-model:open-keys="state.openKey"
 					:theme="'dark'"
 					:items="menu"
 					:mode="'inline'"
-					class="relative select-none z-1"
+					class="relative select-none h-full"
 				></Menu>
 			</ul>
 			<div class="flex-1">
