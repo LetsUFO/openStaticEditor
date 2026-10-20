@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCounterStore } from './stores/counter';
 import { useConfigStore } from './stores/config';
-import { dark } from './style/theme';
+// import { dark } from './style/theme';
 import { computed, reactive } from 'vue';
 
 import { Menu } from 'ant-design-vue';
@@ -14,7 +14,6 @@ const configStore = computed(() => {
 	return useConfigStore().config || {};
 });
 const menu = computed(() => {
-	console.log(configStore.value.menu);
 	return (
 		configStore.value.menu?.map((li: any) => {
 			li.key = li.label;
@@ -27,14 +26,15 @@ const state = reactive({ openKey: [] });
 </script>
 
 <template>
-	<div class="">
-		<div class="flex justify-start">
+	<div class="h-full">
+		<div class="flex justify-start h-full">
 			<ul class="menu w-[10rem] bg-primary bgDarken">
 				<Menu
 					v-model:open-keys="state.openKey"
 					:theme="'dark'"
 					:items="menu"
-					class="relative z-1"
+					:mode="'inline'"
+					class="relative select-none z-1"
 				></Menu>
 			</ul>
 			<div class="flex-1">

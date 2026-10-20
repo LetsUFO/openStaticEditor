@@ -5,6 +5,9 @@ import { ref } from 'vue';
 
 // custom/config.json 的渲染进程副本：
 // 主进程读取后经 IPC 传来，供各 .vue 组件调用（窗口名/宽高也在这里可取）
+interface IConfig {
+	menu: [any];
+}
 export const useConfigStore = defineStore('config', () => {
 	const config = ref<AppConfig | null>(null);
 
