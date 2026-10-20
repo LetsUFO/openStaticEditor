@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCounterStore } from './stores/counter';
 import { useConfigStore } from './stores/config';
-import { onMounted, reactive } from 'vue';
+import { reactive } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { Menu } from 'ant-design-vue';
@@ -14,10 +14,8 @@ const counter = useCounterStore();
 const configStore = useConfigStore();
 const { menu } = storeToRefs(configStore);
 
-const state = reactive<{ openKey: string[] }>({ openKey: [] });
-
-onMounted(() => {
-	// state.openKey = menu.value.map((li) => li.key);
+const state = reactive<{ openKey: string[] }>({
+	openKey: menu.value.map((li) => li.key) || []
 });
 </script>
 
