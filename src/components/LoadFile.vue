@@ -1,15 +1,19 @@
 <script setup lang="ts">
+import { Button } from 'ant-design-vue';
+
 interface Props {
-	msg?: string;
+	state: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-	msg: 'Hello Vue 3 + Pinia + Electron'
+	state: false
 });
 </script>
 
 <template>
-	<h2 class="hello">{{ props.msg }}</h2>
+	<div class="fixed w-full h-full">
+		<Button :type="'primary'">加载</Button>
+	</div>
 </template>
 
 <style scoped>

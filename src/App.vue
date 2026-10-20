@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useCounterStore } from './stores/counter';
+import { useConfigStore } from './stores/config';
 
 import HelloWorld from './components/HelloWorld.vue';
-import { useConfigStore } from './stores/config';
+import LoadFile from './components/LoadFile.vue';
 
 const counter = useCounterStore();
 // custom/config.json 的数据（主进程读取 → IPC → 本 store）
@@ -10,18 +11,21 @@ const configStore = useConfigStore();
 </script>
 
 <template>
-	<div class="stage mx-auto">
-		<h1 class="text-primary">{{ configStore.config?.name ?? 'OpenStaticEditor' }}</h1>
-		<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
-
+	<div class="stage ">
 		<HelloWorld />
 
-		<div class="counter">
+		<h1 class="text-primary">{{ configStore.config?.name ?? 'OpenStaticEditor' }}</h1>
+		<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
+		<div class="flex flex-start">
+			<div class="w-12">asdasd</div>
+			<div class="flex-1">
 			<button @click="counter.decrement">-</button>
 			<span class="value">
 				count: <b>{{ counter.count }}</b> / double: <b>{{ counter.double }}</b>
 			</span>
 			<button @click="counter.increment">+</button>
+				
+			</div>
 		</div>
 	</div>
 </template>
@@ -41,34 +45,5 @@ const configStore = useConfigStore();
 	margin-bottom: 32px;
 }
 
-.counter {
-	display: inline-flex;
-	align-items: center;
-	gap: 16px;
-	margin-top: 16px;
-	padding: 16px 24px;
-	background: #fff;
-	border-radius: 12px;
-	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-}
 
-.counter button {
-	width: 40px;
-	height: 40px;
-	font-size: 20px;
-	border: none;
-	border-radius: 8px;
-	background: #3b82f6;
-	color: #fff;
-	cursor: pointer;
-}
-
-.counter button:active {
-	transform: scale(0.96);
-}
-
-.counter .value {
-	min-width: 220px;
-	font-size: 15px;
-}
 </style>

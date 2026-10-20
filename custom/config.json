@@ -1,1 +1,1 @@
-{ "name": "demo", "width": 960, "height": 480 }
+{ "name": "demo", "width": 960, "height": 480, "background": { "src": "", "base64": "" }, "i18n": { "zh": {} } }
