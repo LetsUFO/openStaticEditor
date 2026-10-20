@@ -46,6 +46,17 @@ function createWindow() {
 
 	mainWindow.on('ready-to-show', () => mainWindow.show());
 
+	// 页面加载后，Electron 会用 HTML 的 <title> 覆盖窗口标题（page-title-updated），
+	// 这里阻止该行为，并把标题锁定为 custom/config.json 的 name。
+	const applyWindowTitle = () => {
+		if (mainWindow.getTitle() !== config.name) mainWindow.setTitle(config.name);
+	};
+	mainWindow.on('page-title-updated', (event) => {
+		event.preventDefault();
+		applyWindowTitle();
+	});
+	mainWindow.webContents.on('did-finish-load', applyWindowTitle);
+
 	// 禁止在应用内打开新窗口（安全）
 	mainWindow.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
 
