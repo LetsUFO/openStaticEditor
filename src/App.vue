@@ -11,29 +11,25 @@ const configStore = useConfigStore();
 </script>
 
 <template>
-	<div class="stage ">
+	<div class="stage">
 		<HelloWorld />
 
 		<h1 class="text-primary">{{ configStore.config?.name ?? 'OpenStaticEditor' }}</h1>
 		<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
-		<div class="flex flex-start">
+		<div class="flex justify-start">
 			<div class="w-12">asdasd</div>
 			<div class="flex-1">
-			<button @click="counter.decrement">-</button>
-			<span class="value">
-				count: <b>{{ counter.count }}</b> / double: <b>{{ counter.double }}</b>
-			</span>
-			<button @click="counter.increment">+</button>
-				
+				<button @click="counter.decrement">-</button>
+				<span class="value">
+					count: <b>{{ counter.count }}</b> / double: <b>{{ counter.double }}</b>
+				</span>
+				<button @click="counter.increment">+</button>
 			</div>
 		</div>
 	</div>
 </template>
 
 <style lang="scss" scoped>
-
-
-
 .stage {
 	width: 720px;
 	padding: 48px 24px;
@@ -44,6 +40,4 @@ const configStore = useConfigStore();
 	color: #8a94a6;
 	margin-bottom: 32px;
 }
-
-
 </style>

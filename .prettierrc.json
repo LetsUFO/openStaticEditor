@@ -4,6 +4,5 @@
 	"printWidth": 200,
 	"semi": true,
 	"singleQuote": true,
-	"trailingComma": "none",
-	"plugins": ["prettier-plugin-vue"]
+	"trailingComma": "none"
 }
