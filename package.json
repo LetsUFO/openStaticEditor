@@ -50,6 +50,12 @@
 		"files": [
 			"out/**/*"
 		],
+		"extraResources": [
+			{
+				"from": "custom/config.json",
+				"to": "config.json"
+			}
+		],
 		"mac": {
 			"target": [
 				"dmg"

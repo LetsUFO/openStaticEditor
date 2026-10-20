@@ -2,13 +2,16 @@
 import { useCounterStore } from './stores/counter';
 
 import HelloWorld from './components/HelloWorld.vue';
+import { useConfigStore } from './stores/config';
 
 const counter = useCounterStore();
+// custom/config.json 的数据（主进程读取 → IPC → 本 store）
+const configStore = useConfigStore();
 </script>
 
 <template>
 	<div class="stage mx-auto">
-		<h1 class="text-primary">OpenStaticEditor</h1>
+		<h1 class="text-primary">{{ configStore.config?.name ?? 'OpenStaticEditor' }}</h1>
 		<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
 
 		<HelloWorld />
