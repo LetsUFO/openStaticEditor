@@ -12,7 +12,9 @@ const DEFAULT_CONFIG = { name: 'OpenStaticEditor', width: 960, height: 680 };
 function loadConfig() {
 	// 打包后：extraResources 把 config.json 复制到 resources 目录（app.asar 之外，便于用户直接改）
 	// dev：入口 out/main/index.js，向上两级即项目根
-	const files = app.isPackaged ? [join(process.resourcesPath, 'config.json')] : [join(__dirname, '../../custom/config.json'), join(process.cwd(), 'custom/config.json')];
+	const files = app.isPackaged
+		? [join(process.resourcesPath, 'config.json')]
+		: [join(__dirname, '../../custom/config.json'), join(process.cwd(), 'custom/config.json')];
 
 	for (const file of files) {
 		try {

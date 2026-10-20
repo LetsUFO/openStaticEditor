@@ -45,5 +45,10 @@ export const light = {
 	fcLv2: '#333333',
 	fcLv3: '#111111'
 };
+export const dark = {
+	fcLv1: '#333333',
+	fcLv2: '#999999',
+	fcLv3: '#eeeeee'
+};
 
 export default light;
