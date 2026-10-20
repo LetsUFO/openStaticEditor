@@ -2,11 +2,11 @@
 import { useCounterStore } from './stores/counter';
 import { useConfigStore } from './stores/config';
 import { dark } from './style/theme';
+import { computed } from 'vue';
 
 import { Menu } from 'ant-design-vue';
 import HelloWorld from './components/HelloWorld.vue';
 import LoadFile from './components/LoadFile.vue';
-import { computed } from 'vue';
 
 const counter = useCounterStore();
 // custom/config.json 的数据（主进程读取 → IPC → 本 store）

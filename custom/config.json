@@ -5,7 +5,7 @@
 	"background": { "src": "", "base64": "", "blur": 10 },
 	"menu": [
 		{
-			"name": "舰船修改",
+			"label": "舰船装备",
 			"form": [{ "name": "装备", "items": [{ "name": "主武器1", "type": "select" }] }]
 		}
 	],
