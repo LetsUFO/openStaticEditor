@@ -1,28 +1,24 @@
 <script setup lang="ts">
 import { useCounterStore } from './stores/counter';
 import { useConfigStore } from './stores/config';
-// import { dark } from './style/theme';
-import { computed, reactive } from 'vue';
+import { onMounted, reactive } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import { Menu } from 'ant-design-vue';
 import HelloWorld from './components/HelloWorld.vue';
 import LoadFile from './components/LoadFile.vue';
 
 const counter = useCounterStore();
-// custom/config.json 的数据（主进程读取 → IPC → 本 store）
-const configStore = computed(() => {
-	return useConfigStore().config || {};
-});
-const menu = computed(() => {
-	return (
-		configStore.value.menu?.map((li: any) => {
-			li.key = li.label;
-			return li;
-		}) || []
-	);
-});
 
-const state = reactive({ openKey: [] });
+// menu 已在 store 里定义（store 负责把 config.json 的 menu 树转成 antd 需要的 items），
+const configStore = useConfigStore();
+const { menu } = storeToRefs(configStore);
+
+const state = reactive<{ openKey: string[] }>({ openKey: [] });
+
+onMounted(() => {
+	// state.openKey = menu.value.map((li) => li.key);
+});
 </script>
 
 <template>
@@ -39,7 +35,6 @@ const state = reactive({ openKey: [] });
 			</ul>
 			<div class="flex-1">
 				<HelloWorld />
-				<h1 class="text-primary">{{ configStore?.name ?? 'OpenStaticEditor' }}</h1>
 				<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
 				<button @click="counter.decrement">-</button>
 				<span class="value">
