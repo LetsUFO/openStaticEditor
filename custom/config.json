@@ -5,8 +5,32 @@
 	"background": { "src": "", "base64": "", "blur": 10 },
 	"menu": [
 		{
-			"label": "舰船装备",
-			"form": [{ "name": "装备", "items": [{ "name": "主武器1", "type": "select" }] }]
+			"label": "舰船",
+			"children": [
+				{
+					"label": "装备",
+					"tip": "",
+					"form": [
+						{
+							"name": "主武器1",
+							"tip": "",
+							"items": [{ "name": "等级", "type": "number" }]
+						},
+						{
+							"name": "能量核心",
+							"tip": "",
+							"items": [{ "name": "等级", "type": "select" }]
+						}
+					]
+				},
+				{
+					"label": "模块demo",
+					"form": [
+						{ "name": "装备", "items": [{ "name": "主武器1", "type": "select" }] },
+						{ "name": "模块", "items": [{ "name": "能量核心", "type": "select" }] }
+					]
+				}
+			]
 		}
 	],
 	"i18n": { "zh": {} }
