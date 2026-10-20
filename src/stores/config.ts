@@ -20,6 +20,7 @@ function toMenuItems(list: AppMenuItem[]): ItemType[] {
 
 export const useConfigStore = defineStore('config', () => {
 	const config = ref<AppConfig | null>(null);
+	const fileData = ref<any>({});
 
 	/** 直接给 <Menu :items> 用 */
 	const menu = computed<ItemType[]>(() => toMenuItems(config.value?.menu ?? []));
@@ -27,11 +28,9 @@ export const useConfigStore = defineStore('config', () => {
 	/** 顶层菜单 key 列表，可作为 openKeys 默认值 */
 	const rootKeys = computed<string[]>(() => (config.value?.menu ?? []).map((item) => item.label));
 
-	const background = computed<AppBackground | null>(() => config.value?.background ?? null);
-
 	async function load(): Promise<void> {
 		config.value = await window.api.getConfig();
 	}
 
-	return { config, menu, rootKeys, background, load };
+	return { config, menu, rootKeys, load };
 });

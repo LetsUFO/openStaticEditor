@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 <template>
 	<div class="fixed w-full h-full">
-		<Button :type="'primary'">加载</Button>
+		<Button :type="'primary'">加载文件</Button>
 	</div>
 </template>
 

@@ -3,6 +3,7 @@
 	"width": 960,
 	"height": 480,
 	"background": { "src": "", "base64": "", "blur": 10 },
+	"loadFiles": { "base": { "fileSrc": "", "readScriptSrc": "", "writeScriptSrc": "" } },
 	"menu": [
 		{
 			"label": "舰船装备",
@@ -37,24 +38,11 @@
 		},
 		{
 			"label": "舰船被动技能",
-			"children": [
+			"form": [
 				{
-					"label": "武器",
+					"name": "能量核心",
 					"tip": "",
-					"form": [
-						{
-							"name": "能量核心",
-							"tip": "",
-							"items": [{ "name": "等级", "type": "select" }]
-						}
-					]
-				},
-				{
-					"label": "模块",
-					"form": [
-						{ "name": "装备", "items": [{ "name": "主武器1", "type": "select" }] },
-						{ "name": "模块", "items": [{ "name": "能量核心", "type": "select" }] }
-					]
+					"items": [{ "name": "等级", "type": "select" }]
 				}
 			]
 		}
