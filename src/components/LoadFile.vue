@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Button } from 'ant-design-vue';
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import { useConfigStore } from '@renderer/stores/config';
 
 interface Props {
@@ -11,16 +11,19 @@ const props = withDefaults(defineProps<Props>(), {
 	// state: false
 });
 
-const needFiles = useConfigStore().config?.loadFiles || [];
+const needFiles = useConfigStore().config?.loadFiles || {};
 const state = reactive({ loaded: false });
 </script>
 
 <template>
-	<div class="root fixed w-full h-full backdrop-blur-md z-1 grid place-content-center">
+	<div
+		class="root fixed w-full h-full backdrop-blur-md z-1 grid place-content-center transition ease-in-out"
+		:class="{ 'opacity-0 pointer-events-none': state.loaded }"
+	>
 		<ul>
 			<li v-for="(file, key) in needFiles" :key="key">{{ file.fileSrc }}</li>
 		</ul>
-		<Button :type="'primary'" :size="'large'">加载文件</Button>
+		<Button :type="'primary'" :size="'large'" @click="state.loaded = true">加载文件</Button>
 	</div>
 </template>
 

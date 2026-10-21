@@ -20,7 +20,7 @@ function toMenuItems(list: AppMenuItem[]): ItemType[] {
 
 export const useConfigStore = defineStore('config', () => {
 	const config = ref<AppConfig | null>(null);
-	const fileData = ref<any>({});
+	const fileData = ref<any>({}); //经过转换的文件数据
 
 	/** 直接给 <Menu :items> 用 */
 	const menu = computed<ItemType[]>(() => toMenuItems(config.value?.menu ?? []));
@@ -32,5 +32,5 @@ export const useConfigStore = defineStore('config', () => {
 		config.value = await window.api.getConfig();
 	}
 
-	return { config, menu, rootKeys, load };
+	return { config, menu, rootKeys, load, fileData };
 });

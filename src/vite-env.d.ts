@@ -37,7 +37,7 @@ interface AppConfig {
 	name: string;
 	width: number;
 	height: number;
-	loadFiles: Record<string, unknown>;
+	loadFiles: Record<string>;
 	menu: AppMenuItem[];
 	background?: AppBackground;
 	i18n?: Record<string, unknown>;
