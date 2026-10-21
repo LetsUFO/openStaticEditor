@@ -23,7 +23,9 @@ const state = reactive({ loaded: false });
 		:class="{ 'opacity-0 pointer-events-none': state.loaded }"
 	>
 		<ul>
-			<li v-for="(file, key) in needFiles" :key="key">{{ file.fileSrc }}</li>
+			<li v-for="(file, key) in needFiles" :key="key" class="mb-2 pb-2 border-b">
+				{{ file.fileSrc }}
+			</li>
 		</ul>
 		<Button :type="'primary'" :size="'large'" @click="state.loaded = true">加载文件</Button>
 	</div>
