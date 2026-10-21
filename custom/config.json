@@ -15,12 +15,12 @@
 					"tip": "",
 					"form": [
 						{
-							"name": "主武器1",
+							"label": "主武器1",
 							"tip": "",
 							"items": [{ "name": "等级", "type": "number" }]
 						},
 						{
-							"name": "主武器2",
+							"label": "主武器2",
 							"tip": "",
 							"items": [{ "name": "等级", "type": "number" }]
 						}
@@ -30,7 +30,7 @@
 					"label": "模块",
 					"form": [
 						{
-							"name": "能量核心",
+							"label": "能量核心",
 							"tip": "",
 							"items": [{ "name": "等级", "type": "select" }]
 						}
@@ -42,7 +42,7 @@
 			"label": "舰船被动技能",
 			"form": [
 				{
-					"name": "能量核心",
+					"label": "能量核心",
 					"tip": "",
 					"items": [{ "name": "等级", "type": "select" }]
 				}

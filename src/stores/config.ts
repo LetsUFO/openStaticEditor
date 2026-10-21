@@ -14,6 +14,7 @@ function toMenuItems(list: AppMenuItem[]): ItemType[] {
 		key: node.label,
 		label: node.label,
 		tip: node.tip,
+		form: node.form,
 		...(node.children?.length ? { children: toMenuItems(node.children) } : {})
 	}));
 }

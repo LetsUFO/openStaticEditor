@@ -29,8 +29,13 @@ const { menu } = storeToRefs(configStore);
  *   1. `li?.key` —— 可选链，挡掉 TS18047（'li' is possibly 'null'）
  *   2. `.filter((k): k is string => ...)` —— 类型谓词，把 `(Key | undefined)[]` 收窄成 `string[]`，挡掉 TS2322
  */
-const state = reactive<{ openKey: string[] }>({
-	openKey: menu.value.map((li) => li?.key).filter((k): k is string => typeof k === 'string')
+interface IState {
+	openKey: string[];
+	activeMenu: any;
+}
+const state = reactive<IState>({
+	openKey: menu.value.map((li) => li?.key).filter((k): k is string => typeof k === 'string'),
+	activeMenu: {}
 });
 </script>
 
@@ -45,10 +50,16 @@ const state = reactive<{ openKey: string[] }>({
 					:items="menu"
 					:mode="'inline'"
 					class="relative select-none h-full"
+					@select="
+						({ item }) => {
+							state.activeMenu = item.form;
+						}
+					"
 				></Menu>
 			</div>
 			<div class="flex-1">
-				<FormBuilder />
+				<FormBuilder :data="state.activeMenu?.form || []" />
+				{{ state.activeMenu }}
 				<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
 				<button @click="counter.decrement">-</button>
 				<span class="value">
