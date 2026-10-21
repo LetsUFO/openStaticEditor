@@ -8,7 +8,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-	data: []
+	data: () => []
 });
 const formState = reactive({});
 </script>
