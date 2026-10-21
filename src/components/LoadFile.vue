@@ -22,9 +22,9 @@ const state = reactive({ loaded: false });
 		class="root fixed w-full h-full backdrop-blur-md z-1 grid place-content-center transition ease-in-out"
 		:class="{ 'opacity-0 pointer-events-none': state.loaded }"
 	>
-		<ul>
+		<ul class="dark-fcLv3">
 			<li v-for="(file, key) in needFiles" :key="key" class="mb-2 pb-2 border-b">
-				{{ file.fileSrc }}
+				{{ key }}: {{ file.fileSrc }}
 			</li>
 		</ul>
 		<Button :type="'primary'" :size="'large'" @click="state.loaded = true">加载文件</Button>
@@ -34,5 +34,8 @@ const state = reactive({ loaded: false });
 <style scoped>
 .root {
 	background-color: rgba(0, 0, 0, 0.8);
+}
+li {
+	border-color: var(--dark-fcLv2);
 }
 </style>

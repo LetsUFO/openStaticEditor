@@ -7,6 +7,14 @@ import { storeToRefs } from 'pinia';
 import { Menu } from 'ant-design-vue';
 import HelloWorld from './components/HelloWorld.vue';
 import LoadFile from './components/LoadFile.vue';
+import { dark } from './style/theme';
+
+// 把 dark 的 fcLv 系列注入为 CSS 变量 --dark-fcLv*（单一来源 = theme.ts，供 style.scss 使用）
+for (const [key, value] of Object.entries(dark)) {
+	if (key.startsWith('fcLv')) {
+		document.documentElement.style.setProperty(`--dark-${key}`, value as string);
+	}
+}
 
 const counter = useCounterStore();
 
@@ -30,7 +38,7 @@ const state = reactive<{ openKey: string[] }>({
 	<div class="h-full">
 		<LoadFile />
 		<div class="flex justify-start h-full">
-			<ul class="menu w-[10rem] bg-primary overflow-y-auto">
+			<div class="menu w-[10rem] bg-primary overflow-y-auto">
 				<Menu
 					v-model:open-keys="state.openKey"
 					:theme="'dark'"
@@ -38,7 +46,7 @@ const state = reactive<{ openKey: string[] }>({
 					:mode="'inline'"
 					class="relative select-none h-full"
 				></Menu>
-			</ul>
+			</div>
 			<div class="flex-1">
 				<HelloWorld />
 				<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
