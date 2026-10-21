@@ -5,7 +5,7 @@ import { reactive } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { Menu } from 'ant-design-vue';
-import HelloWorld from './components/HelloWorld.vue';
+import FormBuilder from './components/FormBuilder.vue';
 import LoadFile from './components/LoadFile.vue';
 import { dark } from './style/theme';
 
@@ -48,7 +48,7 @@ const state = reactive<{ openKey: string[] }>({
 				></Menu>
 			</div>
 			<div class="flex-1">
-				<HelloWorld />
+				<FormBuilder />
 				<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
 				<button @click="counter.decrement">-</button>
 				<span class="value">
