@@ -11,7 +11,9 @@ const props = withDefaults(defineProps<Props>(), {
 	// state: false
 });
 
-const needFiles = useConfigStore().config?.loadFiles || {};
+const needFiles = computed(() => {
+	return useConfigStore().config?.loadFiles || {};
+});
 const state = reactive({ loaded: false });
 </script>
 
