@@ -3,7 +3,9 @@
 	"width": 960,
 	"height": 480,
 	"background": { "src": "", "base64": "", "blur": 10 },
-	"loadFiles": { "base": { "fileSrc": "", "readScriptSrc": "", "writeScriptSrc": "" } },
+	"loadFiles": {
+		"base": { "fileSrc": "asdasd/asdasda", "readScriptSrc": "", "writeScriptSrc": "" }
+	},
 	"menu": [
 		{
 			"label": "舰船装备",

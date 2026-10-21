@@ -37,7 +37,8 @@ interface AppConfig {
 	name: string;
 	width: number;
 	height: number;
-	menu?: AppMenuItem[];
+	loadFiles: Record<string, unknown>;
+	menu: AppMenuItem[];
 	background?: AppBackground;
 	i18n?: Record<string, unknown>;
 	// config.json 可自行扩展字段，都会原样带过来

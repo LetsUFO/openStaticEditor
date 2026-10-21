@@ -28,6 +28,7 @@ const state = reactive<{ openKey: string[] }>({
 
 <template>
 	<div class="h-full">
+		<LoadFile />
 		<div class="flex justify-start h-full">
 			<ul class="menu w-[10rem] bg-primary overflow-y-auto">
 				<Menu
