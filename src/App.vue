@@ -52,14 +52,13 @@ const state = reactive<IState>({
 					class="relative select-none h-full"
 					@select="
 						({ item }) => {
-							state.activeMenu = item.form;
+							state.activeMenu = item.category;
 						}
 					"
 				></Menu>
 			</div>
 			<div class="flex-1">
-				<FormBuilder :data="state.activeMenu?.form || []" />
-				{{ state.activeMenu }}
+				<FormBuilder :data="state.activeMenu || []" />
 				<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
 				<button @click="counter.decrement">-</button>
 				<span class="value">
