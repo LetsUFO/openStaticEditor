@@ -10,12 +10,12 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
 	data: () => []
 });
-const formState = reactive({});
+const formState = reactive<Record<string, any>>({});
 </script>
 
 <template>
 	<Form :model="formState" :layout="'vertical'">
-		<div v-for="li in props.data">
+		<div v-for="li in props.data" :key="li.label" class="p-4">
 			<Form.Item v-for="item in li.items" :key="item.label" :label="item.label">
 				<Select v-model:value="formState[item.name]"></Select>
 			</Form.Item>
