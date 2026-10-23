@@ -19,7 +19,7 @@ const formState = reactive<Record<string, any>>({});
 			<div class="px-4 pt-4 pb-2 text-fcLv1 text-base border-b border-split italic">
 				{{ li.label }}
 			</div>
-			<div class="mt-2 px-4 flex flex-wrap gap-4">
+			<div class="mt-2 px-4 flex flex-wrap gap-x-4">
 				<Form.Item
 					v-for="item in li.items"
 					:key="item.label"
@@ -36,6 +36,7 @@ const formState = reactive<Record<string, any>>({});
 					<Select
 						v-else-if="item.type == 'select'"
 						v-model:value="formState[item.name]"
+						:options="item.options"
 					></Select>
 				</Form.Item>
 			</div>
