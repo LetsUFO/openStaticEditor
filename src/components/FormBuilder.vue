@@ -31,10 +31,12 @@ const formState = reactive<Record<string, any>>({});
 						v-model:value="formState[item.name]"
 						:min="item.min"
 						:max="item.max"
+						class="flex-1"
 					></InputNumber>
 					<Select
-						v-if="item.type == 'select'"
+						v-else-if="item.type == 'select'"
 						v-model:value="formState[item.name]"
+						class="flex-1"
 					></Select>
 				</Form.Item>
 			</div>
