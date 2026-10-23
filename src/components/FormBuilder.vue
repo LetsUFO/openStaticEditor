@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
 
-import { Form, Select } from 'ant-design-vue';
+import { Form, InputNumber, Select } from 'ant-design-vue';
 
 interface Props {
 	data?: Array<any>;
@@ -26,7 +26,16 @@ const formState = reactive<Record<string, any>>({});
 					:label="item.label"
 					class="w-4/12"
 				>
-					<Select v-model:value="formState[item.name]"></Select>
+					<InputNumber
+						v-if="item.type == 'number'"
+						v-model:value="formState[item.name]"
+						:min="item.min"
+						:max="item.max"
+					></InputNumber>
+					<Select
+						v-if="item.type == 'select'"
+						v-model:value="formState[item.name]"
+					></Select>
 				</Form.Item>
 			</div>
 		</template>
