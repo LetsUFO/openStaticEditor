@@ -19,12 +19,12 @@ const formState = reactive<Record<string, any>>({});
 			<div class="px-4 pt-4 pb-2 text-fcLv1 text-base border-b border-split italic">
 				{{ li.label }}
 			</div>
-			<div class="mt-2 px-4 flex flex-wrap gap-x-4">
+			<div class="mt-2 px-4 flex flex-wrap">
 				<Form.Item
 					v-for="item in li.items"
 					:key="item.label"
 					:label="item.label"
-					class="w-4/12"
+					class="w-1/3 !pr-4"
 				>
 					<InputNumber
 						v-if="item.type == 'number'"
