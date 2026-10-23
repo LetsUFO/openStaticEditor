@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useCounterStore } from './stores/counter';
 import { useConfigStore } from './stores/config';
 import { reactive } from 'vue';
 import { storeToRefs } from 'pinia';
@@ -15,8 +14,6 @@ for (const [key, value] of Object.entries(dark)) {
 		document.documentElement.style.setProperty(`--dark-${key}`, value as string);
 	}
 }
-
-const counter = useCounterStore();
 
 // menu 已在 store 里定义（store 负责把 config.json 的 menu 树转成 antd 需要的 items），
 const configStore = useConfigStore();
@@ -59,12 +56,6 @@ const state = reactive<IState>({
 			</div>
 			<div class="content flex-1 h-full overflow-y-auto">
 				<FormBuilder :data="state.activeMenu || []" />
-				<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
-				<button @click="counter.decrement">-</button>
-				<span class="value">
-					count: <b>{{ counter.count }}</b> / double: <b>{{ counter.double }}</b>
-				</span>
-				<button @click="counter.increment">+</button>
 			</div>
 		</div>
 	</div>
