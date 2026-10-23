@@ -16,16 +16,22 @@ const needFiles = computed(() => {
 });
 const state = reactive({ loaded: false, loading: false });
 
-const loadFiles = function (fileArray: Array<string>) {
+const loadFiles = function (needFiles: Record<string, any>) {
 	state.loading = true;
 	//todo 批量加载文件，以及让脚本处理每个文件
-	useConfigStore()
-		.setFileData()
-		.then(() => {
-			state.loading = false;
-			state.loaded = true;
-			message.success('文件加载成功！');
-		});
+	const setFileData = useConfigStore().setFileData;
+	const loadList: Array<Promise<void>> = [];
+	Object.keys(needFiles).forEach((key) => {
+		//todo 加载脚本文件，返回数据
+		//needFiles[key].fileSrc
+		//needFiles[key].readScriptSrc
+		setFileData(key, data);
+	});
+	Promise.all(loadList).then(() => {
+		state.loading = false;
+		state.loaded = true;
+		message.success('文件加载成功！');
+	});
 };
 </script>
 
@@ -39,7 +45,7 @@ const loadFiles = function (fileArray: Array<string>) {
 				{{ key }}: {{ file.fileSrc }}
 			</li>
 		</ul>
-		<Button :type="'primary'" :size="'large'" @click="loadFiles()">加载文件</Button>
+		<Button :type="'primary'" :size="'large'" @click="loadFiles(needFiles)">加载文件</Button>
 	</div>
 </template>
 

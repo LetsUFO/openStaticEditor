@@ -51,3 +51,5 @@ npmmirror（`registry.npmmirror.com`）并配置 `ELECTRON_MIRROR`，确保 elec
 若你的网络能直连官方源，可删除 `.npmrc` 改用默认。
 
 ## 数据对接
+needFileKey和loadFiles下key匹配
+saveScript:指定所需的文件key，传给脚本

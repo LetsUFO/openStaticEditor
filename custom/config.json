@@ -96,7 +96,7 @@
 							]
 						}
 					],
-					"saveScript": ""
+					"saveScript": { "needFileKey": "base", "saveScript": "" }
 				},
 				{
 					"label": "副武器",

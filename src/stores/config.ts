@@ -21,7 +21,7 @@ function toMenuItems(list: AppMenuItem[]): ItemType[] {
 
 export const useConfigStore = defineStore('config', () => {
 	const config = ref<AppConfig | null>(null);
-	const fileData = ref<any>({}); //经过转换的文件数据
+	const fileData = ref<Record<string, any>>({}); //经过转换的文件数据
 
 	/** 直接给 <Menu :items> 用 */
 	const menu = computed<ItemType[]>(() => toMenuItems(config.value?.menu ?? []));
@@ -32,8 +32,9 @@ export const useConfigStore = defineStore('config', () => {
 	async function load(): Promise<void> {
 		config.value = await window.api.getConfig();
 	}
-	function setFileData(): Promise<void> {
+	function setFileData(fileKey: string, data: Record<string, any>): Promise<void> {
 		return new Promise((resolve, reject) => {
+			fileData.value[fileKey] = data;
 			resolve();
 		});
 	}
