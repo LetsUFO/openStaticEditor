@@ -19,7 +19,16 @@
 							"tip": "",
 							"items": [
 								{ "label": "等级", "type": "number" },
-								{ "label": "附加属性1", "type": "number" }
+								{
+									"label": "附加属性1",
+									"type": "select",
+									"options": [{ "label": "1", "value": "1" }]
+								},
+								{
+									"label": "附加属性2",
+									"type": "select",
+									"options": [{ "label": "1", "value": "1" }]
+								}
 							]
 						},
 						{

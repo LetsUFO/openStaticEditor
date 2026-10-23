@@ -40,6 +40,7 @@ export const light = {
 	error: `var(--ant-error-color, ${seedToken.colorError})`,
 	warning: `var(--ant-warning-color, ${seedToken.colorWarning})`,
 	info: `var(--ant-info-color, ${seedToken.colorInfo})`,
+	split: '#eeeeee',
 
 	fcLv1: '#999999',
 	fcLv2: '#333333',

@@ -15,11 +15,21 @@ const formState = reactive<Record<string, any>>({});
 
 <template>
 	<Form :model="formState" :layout="'vertical'">
-		<div v-for="li in props.data" :key="li.label" class="p-4">
-			<Form.Item v-for="item in li.items" :key="item.label" :label="item.label">
-				<Select v-model:value="formState[item.name]"></Select>
-			</Form.Item>
-		</div>
+		<template v-for="li in props.data" :key="li.label">
+			<div class="px-4 pt-4 pb-2 text-fcLv1 text-base border-b border-split italic">
+				{{ li.label }}
+			</div>
+			<div class="mt-2 px-4 flex flex-wrap gap-4">
+				<Form.Item
+					v-for="item in li.items"
+					:key="item.label"
+					:label="item.label"
+					class="w-4/12"
+				>
+					<Select v-model:value="formState[item.name]"></Select>
+				</Form.Item>
+			</div>
+		</template>
 	</Form>
 </template>
 
