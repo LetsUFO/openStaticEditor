@@ -14,7 +14,14 @@ const props = withDefaults(defineProps<Props>(), {
 const needFiles = computed(() => {
 	return useConfigStore().config?.loadFiles || {};
 });
-const state = reactive({ loaded: false });
+const state = reactive({ loaded: false, loading: false });
+
+const loadFiles = function (fileArray: Array<string>) {
+	state.loaded = true;
+	state.loading = true;
+	//todo 批量加载文件，以及让脚本处理每个文件
+	state.loading = false;
+};
 </script>
 
 <template>
@@ -27,7 +34,7 @@ const state = reactive({ loaded: false });
 				{{ key }}: {{ file.fileSrc }}
 			</li>
 		</ul>
-		<Button :type="'primary'" :size="'large'" @click="state.loaded = true">加载文件</Button>
+		<Button :type="'primary'" :size="'large'" @click="loadFiles()">加载文件</Button>
 	</div>
 </template>
 

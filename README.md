@@ -3,7 +3,7 @@
 Vue 3 + Pinia + Electron 桌面应用骨架，使用 electron-vite 构建，可打包成 Windows `.exe` 安装包。
 
 ## 技术栈
-- Vue 3（`<script setup>`）
+- Vue 3（`<script setup lang="ts">`）
 - Pinia（状态管理，已接入）
 - Vite（构建工具，经 electron-vite 驱动）
 - Electron（桌面运行时）
@@ -49,3 +49,5 @@ npm run dist:mac
 默认 npm 源（nexus / 华为云）对 `electron` 返回 502，本项目 `.npmrc` 已切换到
 npmmirror（`registry.npmmirror.com`）并配置 `ELECTRON_MIRROR`，确保 electron 二进制可下载。
 若你的网络能直连官方源，可删除 `.npmrc` 改用默认。
+
+## 数据对接
