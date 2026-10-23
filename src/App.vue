@@ -57,7 +57,7 @@ const state = reactive<IState>({
 					"
 				></Menu>
 			</div>
-			<div class="flex-1">
+			<div class="content flex-1 h-full overflow-y-auto">
 				<FormBuilder :data="state.activeMenu || []" />
 				<p class="sub">Vue 3 + Pinia + Electron 桌面应用骨架</p>
 				<button @click="counter.decrement">-</button>
@@ -70,4 +70,13 @@ const state = reactive<IState>({
 	</div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.content {
+	//底下多一点留白
+	&::after {
+		content: '';
+		display: block;
+		height: 1rem;
+	}
+}
+</style>
