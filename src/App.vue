@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useConfigStore } from './stores/config';
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import { storeToRefs } from 'pinia';
 
-import { Menu } from 'ant-design-vue';
+import { Button, Menu } from 'ant-design-vue';
 import FormBuilder from './components/FormBuilder.vue';
 import LoadFile from './components/LoadFile.vue';
 import { dark } from './style/theme';
@@ -34,6 +34,9 @@ const state = reactive<IState>({
 	openKey: menu.value.map((li) => li?.key).filter((k): k is string => typeof k === 'string'),
 	activeMenu: {}
 });
+const activeCategory = computed(() => {
+	return state.activeMenu.category || [];
+});
 </script>
 
 <template>
@@ -49,13 +52,18 @@ const state = reactive<IState>({
 					class="relative select-none h-full"
 					@select="
 						({ item }) => {
-							state.activeMenu = item.category;
+							state.activeMenu = item;
 						}
 					"
 				></Menu>
 			</div>
 			<div class="content flex-1 h-full overflow-y-auto">
-				<FormBuilder :data="state.activeMenu || []" />
+				<FormBuilder :data="activeCategory" />
+				<div class="absolute bottom-4 right-4">
+					<Button v-if="state.activeMenu?.category?.length" :type="'primary'"
+						>保存</Button
+					>
+				</div>
 			</div>
 		</div>
 	</div>
