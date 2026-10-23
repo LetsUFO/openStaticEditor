@@ -32,6 +32,11 @@ export const useConfigStore = defineStore('config', () => {
 	async function load(): Promise<void> {
 		config.value = await window.api.getConfig();
 	}
+	function setFileData(): Promise<void> {
+		return new Promise((resolve, reject) => {
+			resolve();
+		});
+	}
 
-	return { config, menu, rootKeys, load, fileData };
+	return { config, menu, rootKeys, load, fileData, setFileData };
 });

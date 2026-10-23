@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button } from 'ant-design-vue';
+import { Button, message } from 'ant-design-vue';
 import { computed, reactive } from 'vue';
 import { useConfigStore } from '@renderer/stores/config';
 
@@ -17,10 +17,15 @@ const needFiles = computed(() => {
 const state = reactive({ loaded: false, loading: false });
 
 const loadFiles = function (fileArray: Array<string>) {
-	state.loaded = true;
 	state.loading = true;
 	//todo 批量加载文件，以及让脚本处理每个文件
-	state.loading = false;
+	useConfigStore()
+		.setFileData()
+		.then(() => {
+			state.loading = false;
+			state.loaded = true;
+			message.success('文件加载成功！');
+		});
 };
 </script>
 
