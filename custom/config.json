@@ -28,13 +28,72 @@
 									"label": "附加属性2",
 									"type": "select",
 									"options": [{ "label": "1", "value": "1" }]
+								},
+								{
+									"label": "附加属性3",
+									"type": "select",
+									"options": [{ "label": "1", "value": "1" }]
+								},
+								{
+									"label": "附加属性4",
+									"type": "select",
+									"options": [{ "label": "1", "value": "1" }]
 								}
 							]
 						},
 						{
 							"label": "主武器2",
 							"tip": "",
-							"items": [{ "label": "等级", "type": "number" }]
+							"items": [
+								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "附加属性1",
+									"type": "select",
+									"options": [{ "label": "1", "value": "1" }]
+								},
+								{
+									"label": "附加属性2",
+									"type": "select",
+									"options": [{ "label": "1", "value": "1" }]
+								},
+								{
+									"label": "附加属性3",
+									"type": "select",
+									"options": [{ "label": "1", "value": "1" }]
+								},
+								{
+									"label": "附加属性4",
+									"type": "select",
+									"options": [{ "label": "1", "value": "1" }]
+								}
+							]
+						},
+						{
+							"label": "主武器3",
+							"tip": "",
+							"items": [
+								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "附加属性1",
+									"type": "select",
+									"options": [{ "label": "1", "value": "1" }]
+								},
+								{
+									"label": "附加属性2",
+									"type": "select",
+									"options": [{ "label": "1", "value": "1" }]
+								},
+								{
+									"label": "附加属性3",
+									"type": "select",
+									"options": [{ "label": "1", "value": "1" }]
+								},
+								{
+									"label": "附加属性4",
+									"type": "select",
+									"options": [{ "label": "1", "value": "1" }]
+								}
+							]
 						}
 					]
 				},
