@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useConfigStore } from './stores/config';
-import { computed, reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
-import { Button, Menu } from 'ant-design-vue';
+import { Button, Menu, message } from 'ant-design-vue';
 import FormBuilder from './components/FormBuilder.vue';
 import LoadFile from './components/LoadFile.vue';
 import { dark } from './style/theme';
@@ -27,16 +27,27 @@ const { menu } = storeToRefs(configStore);
  *   2. `.filter((k): k is string => ...)` —— 类型谓词，把 `(Key | undefined)[]` 收窄成 `string[]`，挡掉 TS2322
  */
 interface IState {
+	loading: boolean;
 	openKey: string[];
 	activeMenu: any;
 }
 const state = reactive<IState>({
+	loading: false,
 	openKey: menu.value.map((li) => li?.key).filter((k): k is string => typeof k === 'string'),
 	activeMenu: {}
 });
 const activeCategory = computed(() => {
 	return state.activeMenu.category || [];
 });
+
+const $FormBuilder = ref();
+
+const save = function (scriptSrc: string) {
+	state.loading = true;
+	//todo 拿到form数据，提交给这个地址的脚本
+	message.success('保存成功！');
+	state.loading = false;
+};
 </script>
 
 <template>
@@ -58,9 +69,13 @@ const activeCategory = computed(() => {
 				></Menu>
 			</div>
 			<div class="content flex-1 h-full overflow-y-auto">
-				<FormBuilder :data="activeCategory" />
+				<FormBuilder :config="activeCategory" ref="$FormBuilder" />
 				<div class="absolute bottom-4 right-4">
-					<Button v-if="state.activeMenu?.category?.length" :type="'primary'"
+					<Button
+						v-if="state.activeMenu?.category?.length"
+						:type="'primary'"
+						:loading="state.loading"
+						@click="save(state.activeMenu.saveScript)"
 						>保存</Button
 					>
 				</div>
