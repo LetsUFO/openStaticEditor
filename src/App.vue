@@ -64,7 +64,6 @@ const save = function (scriptSrc: string) {
 					@select="
 						({ item }) => {
 							state.activeMenu = item;
-							console.log(item);
 						}
 					"
 				></Menu>

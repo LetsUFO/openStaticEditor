@@ -163,7 +163,9 @@
 								}
 							]
 						}
-					]
+					],
+					"dataKey": "base",
+					"saveScript": { "needFileKey": "base", "saveScript": "" }
 				},
 				{
 					"label": "模块",
@@ -330,7 +332,9 @@
 								}
 							]
 						}
-					]
+					],
+					"dataKey": "base",
+					"saveScript": { "needFileKey": "base", "saveScript": "" }
 				}
 			]
 		},
@@ -338,11 +342,21 @@
 			"label": "舰船被动技能",
 			"category": [
 				{
-					"label": "能量核心",
+					"label": "仅列出当前飞船适合的被动技能",
 					"tip": "",
-					"items": [{ "label": "等级", "type": "select" }]
+					"loadScript": { "dataKey": "base", "loadSrc": "custom/skillOption.js" },
+					"items": [
+						{
+							"label": "1",
+							"type": "select",
+							"options": [],
+							"optionFilterFn": "skillFilter"
+						}
+					]
 				}
-			]
+			],
+			"dataKey": "base",
+			"saveScript": { "needFileKey": "base", "saveScript": "" }
 		}
 	],
 	"i18n": { "zh": {} }

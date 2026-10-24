@@ -35,7 +35,10 @@ export const useConfigStore = defineStore('config', () => {
 	}
 	function setFileData(fileKey: string, data: Record<string, any>): Promise<void> {
 		return new Promise((resolve, reject) => {
-			fileData.value[fileKey] = data;
+			if (!fileData.value[fileKey]) {
+				fileData.value[fileKey] = {};
+			}
+			Object.assign(fileData.value[fileKey], data);
 			resolve();
 		});
 	}

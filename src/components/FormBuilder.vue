@@ -26,7 +26,10 @@ watch(
 <template>
 	<Form :model="formState" :layout="'vertical'">
 		<template v-for="li in props.config" :key="li.label">
-			<div class="px-4 pt-4 pb-2 text-fcLv1 text-base border-b border-split italic">
+			<div
+				v-if="li.label"
+				class="px-4 pt-4 pb-2 text-fcLv1 text-base border-b border-split italic"
+			>
 				{{ li.label }}
 			</div>
 			<div class="mt-2 px-4 flex flex-wrap">
