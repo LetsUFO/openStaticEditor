@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { join, isAbsolute } from 'node:path';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 
 // 示例：渲染进程可通过 window.api.ping() 调用
@@ -43,12 +43,18 @@ ipcMain.handle('config:get', () => config);
  * 运行 custom 目录下的读取脚本，返回解析后的数据。
  * 脚本约定（CommonJS）：
  *   module.exports = function (ctx) {
- *     // ctx.fileSrc    —— config.json 里配置的原始文件路径
- *     // ctx.filePath   —— 解析后的绝对路径（相对路径按 custom 目录解析）
- *     // ctx.customDir  —— custom 目录绝对路径，方便脚本读取同目录其它资源
+ *     // ctx.fileSrc       —— config.json 里配置的原始文件路径
+ *     // ctx.filePath      —— 解析后的绝对路径（相对路径按 custom 目录解析）
+ *     // ctx.customDir     —— custom 目录绝对路径，方便脚本读取同目录其它资源
+ *     // ctx.downloadsPath —— 系统下载目录绝对路径（Electron 官方 getPath('downloads')）
  *     // return 解析后的数据（同步或 Promise 均可）
  *   }
  * 若脚本直接导出数据（非函数），则原样返回。
+ *
+ * 脚本路径解析顺序（相对 readScriptSrc）：
+ *   1. customDir 下（如 readScriptSrc = "read_base.js"）
+ *   2. 项目根下（如 readScriptSrc = "custom/read_base.js"，打包后同 resources 目录）
+ *   绝对路径直接使用。
  */
 ipcMain.handle('file:read', async (_event, { fileSrc, readScriptSrc } = {}) => {
 	const customDir = getCustomDir();
@@ -57,7 +63,17 @@ ipcMain.handle('file:read', async (_event, { fileSrc, readScriptSrc } = {}) => {
 		throw new Error('未配置 readScriptSrc，无法加载读取脚本');
 	}
 
-	const scriptPath = isAbsolute(readScriptSrc) ? readScriptSrc : join(customDir, readScriptSrc);
+	// 脚本路径：绝对路径直接用，否则依次尝试 customDir 下 与 项目根下
+	let scriptPath;
+	if (isAbsolute(readScriptSrc)) {
+		scriptPath = readScriptSrc;
+	} else {
+		const fromCustom = join(customDir, readScriptSrc);
+		const projectRoot = app.isPackaged ? process.resourcesPath : join(__dirname, '../../');
+		const fromRoot = join(projectRoot, readScriptSrc);
+		scriptPath = existsSync(fromCustom) ? fromCustom : fromRoot;
+	}
+
 	const filePath = fileSrc ? (isAbsolute(fileSrc) ? fileSrc : join(customDir, fileSrc)) : '';
 
 	// require 会缓存模块，脚本修改后需要清缓存才能重新加载
@@ -67,8 +83,13 @@ ipcMain.handle('file:read', async (_event, { fileSrc, readScriptSrc } = {}) => {
 
 	// 支持函数导出 与 直接数据导出
 	const reader = typeof script === 'function' ? script : script?.default;
-	const data =
-		typeof reader === 'function' ? await reader({ fileSrc, filePath, customDir }) : script;
+	const ctx = {
+		fileSrc,
+		filePath,
+		customDir,
+		downloadsPath: app.getPath('downloads')
+	};
+	const data = typeof reader === 'function' ? await reader(ctx) : script;
 
 	return data;
 });

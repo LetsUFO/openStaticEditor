@@ -1,16 +1,26 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { ref, watch } from 'vue';
 
 import { Form, InputNumber, Select } from 'ant-design-vue';
+import { useConfigStore } from '@renderer/stores/config';
 
 interface Props {
 	config?: Array<any>;
+	dataKey: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-	config: () => []
+	config: () => [],
+	dataKey: ''
 });
-const formState = reactive<Record<string, any>>({});
+const formState = ref<Record<string, any>>({});
+watch(
+	() => props.dataKey,
+	(key: string) => {
+		formState.value = useConfigStore().fileData?.[key] || {};
+	}
+	// { immediate: true }
+);
 </script>
 
 <template>

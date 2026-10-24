@@ -22,6 +22,7 @@ interface AppMenuItem {
 	tip?: string;
 	children?: AppMenuItem[];
 	category?: AppMenuFormItem[];
+	dataKey: string;
 	// 由 store 补齐后回填：antd Menu 需要唯一 key，此处用 label 充当
 	key?: string;
 }

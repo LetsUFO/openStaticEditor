@@ -64,12 +64,17 @@ const save = function (scriptSrc: string) {
 					@select="
 						({ item }) => {
 							state.activeMenu = item;
+							console.log(item);
 						}
 					"
 				></Menu>
 			</div>
 			<div class="content flex-1 h-full overflow-y-auto">
-				<FormBuilder :config="activeCategory" ref="$FormBuilder" />
+				<FormBuilder
+					:config="activeCategory"
+					:dataKey="state.activeMenu.dataKey"
+					ref="$FormBuilder"
+				/>
 				<div class="absolute bottom-4 right-4">
 					<Button
 						v-if="state.activeMenu?.category?.length"

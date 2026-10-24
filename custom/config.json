@@ -4,7 +4,7 @@
 	"height": 480,
 	"background": { "src": "", "base64": "", "blur": 10 },
 	"loadFiles": {
-		"base": { "fileSrc": "asdasd/asdasda", "readScriptSrc": "" }
+		"base": { "fileSrc": "ufo.sav", "readScriptSrc": "read_base.js" }
 	},
 	"menu": [
 		{
@@ -18,7 +18,13 @@
 							"label": "武器1",
 							"tip": "",
 							"items": [
-								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "等级",
+									"name": "level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
 								{
 									"label": "附加属性1",
 									"type": "select",
