@@ -5,7 +5,10 @@ import { electronAPI } from '@electron-toolkit/preload';
 const api = {
 	ping: () => ipcRenderer.invoke('ping'),
 	// 取主进程加载的 custom/config.json
-	getConfig: () => ipcRenderer.invoke('config:get')
+	getConfig: () => ipcRenderer.invoke('config:get'),
+	// 运行 custom 目录下的读取脚本，返回解析后的数据
+	readFile: (fileSrc, readScriptSrc) =>
+		ipcRenderer.invoke('file:read', { fileSrc, readScriptSrc })
 };
 
 if (process.contextIsolated) {

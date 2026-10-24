@@ -51,8 +51,8 @@
 		],
 		"extraResources": [
 			{
-				"from": "custom/config.json",
-				"to": "config.json"
+				"from": "custom",
+				"to": "custom"
 			}
 		],
 		"mac": {

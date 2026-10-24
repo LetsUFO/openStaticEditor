@@ -16,22 +16,29 @@ const needFiles = computed(() => {
 });
 const state = reactive({ loaded: false, loading: false });
 
-const loadFiles = function (needFiles: Record<string, any>) {
+const loadFiles = async function (needFiles: Record<string, any>) {
 	state.loading = true;
 	//todo 批量加载文件，以及让脚本处理每个文件
 	const setFileData = useConfigStore().setFileData;
-	const loadList: Array<Promise<void>> = [];
-	Object.keys(needFiles).forEach((key) => {
-		//todo 加载脚本文件，返回数据
-		//needFiles[key].fileSrc
-		//needFiles[key].readScriptSrc
-		setFileData(key, data);
+	const errors: string[] = [];
+	const loadList = Object.keys(needFiles).map(async (key) => {
+		const { fileSrc, readScriptSrc } = needFiles[key] || {};
+		try {
+			// 由主进程在 Node 环境中加载 custom 目录下的脚本并运行，返回解析后的数据
+			const data = await window.api.readFile(fileSrc, readScriptSrc);
+			await setFileData(key, data);
+		} catch (err: any) {
+			errors.push(`${key}: ${err?.message || err}`);
+		}
 	});
-	Promise.all(loadList).then(() => {
-		state.loading = false;
+	await Promise.all(loadList);
+	state.loading = false;
+	if (errors.length) {
+		message.error(`文件加载失败：\n${errors.join('\n')}`);
+	} else {
 		state.loaded = true;
 		message.success('文件加载成功！');
-	});
+	}
 };
 </script>
 

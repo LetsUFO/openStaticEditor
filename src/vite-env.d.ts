@@ -50,5 +50,6 @@ interface Window {
 	api: {
 		ping: () => Promise<string>;
 		getConfig: () => Promise<AppConfig>;
+		readFile: (fileSrc: string, readScriptSrc: string) => Promise<any>;
 	};
 }

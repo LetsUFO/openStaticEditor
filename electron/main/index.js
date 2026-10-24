@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { join } from 'node:path';
+import { join, isAbsolute } from 'node:path';
 import { readFileSync } from 'node:fs';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 
@@ -9,12 +9,19 @@ ipcMain.handle('ping', () => 'pong');
 // custom/config.json —— 运行（dev）与打包后都要能加载到
 const DEFAULT_CONFIG = { name: 'OpenStaticEditor', width: 960, height: 680 };
 
+/**
+ * custom 目录根路径（config.json 与用户脚本都在这里）。
+ * 打包后：extraResources 把 custom 内容复制到 resources 目录（app.asar 之外，便于用户直接改）
+ * dev：入口 out/main/index.js，向上两级即项目根
+ */
+function getCustomDir() {
+	return app.isPackaged ? join(process.resourcesPath, 'custom') : join(__dirname, '../../custom');
+}
+
 function loadConfig() {
-	// 打包后：extraResources 把 config.json 复制到 resources 目录（app.asar 之外，便于用户直接改）
-	// dev：入口 out/main/index.js，向上两级即项目根
 	const files = app.isPackaged
-		? [join(process.resourcesPath, 'config.json')]
-		: [join(__dirname, '../../custom/config.json'), join(process.cwd(), 'custom/config.json')];
+		? [join(getCustomDir(), 'config.json')]
+		: [join(getCustomDir(), 'config.json'), join(process.cwd(), 'custom/config.json')];
 
 	for (const file of files) {
 		try {
@@ -31,6 +38,40 @@ const config = loadConfig();
 
 // 渲染进程（Pinia store）通过 window.api.getConfig() 取同一份数据
 ipcMain.handle('config:get', () => config);
+
+/**
+ * 运行 custom 目录下的读取脚本，返回解析后的数据。
+ * 脚本约定（CommonJS）：
+ *   module.exports = function (ctx) {
+ *     // ctx.fileSrc    —— config.json 里配置的原始文件路径
+ *     // ctx.filePath   —— 解析后的绝对路径（相对路径按 custom 目录解析）
+ *     // ctx.customDir  —— custom 目录绝对路径，方便脚本读取同目录其它资源
+ *     // return 解析后的数据（同步或 Promise 均可）
+ *   }
+ * 若脚本直接导出数据（非函数），则原样返回。
+ */
+ipcMain.handle('file:read', async (_event, { fileSrc, readScriptSrc } = {}) => {
+	const customDir = getCustomDir();
+
+	if (!readScriptSrc) {
+		throw new Error('未配置 readScriptSrc，无法加载读取脚本');
+	}
+
+	const scriptPath = isAbsolute(readScriptSrc) ? readScriptSrc : join(customDir, readScriptSrc);
+	const filePath = fileSrc ? (isAbsolute(fileSrc) ? fileSrc : join(customDir, fileSrc)) : '';
+
+	// require 会缓存模块，脚本修改后需要清缓存才能重新加载
+	const resolved = require.resolve(scriptPath);
+	delete require.cache[resolved];
+	const script = require(resolved);
+
+	// 支持函数导出 与 直接数据导出
+	const reader = typeof script === 'function' ? script : script?.default;
+	const data =
+		typeof reader === 'function' ? await reader({ fileSrc, filePath, customDir }) : script;
+
+	return data;
+});
 
 function createWindow() {
 	const mainWindow = new BrowserWindow({
