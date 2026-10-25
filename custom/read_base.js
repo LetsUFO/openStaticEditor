@@ -17,5 +17,5 @@ module.exports = function (ctx) {
 	const target = join(ctx.downloadsPath, ctx.fileSrc);
 	// 仅验证文件可读，暂不解析内容；后续根据 ufo.sav 的实际格式再扩展
 	readFileSync(target);
-	return { level: 1, weapon1_param1: 'asd' };
+	return { main_weapon1_level: 1, main_weapon1_param1: 'asd' };
 };
