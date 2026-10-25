@@ -12,7 +12,7 @@
 			"children": [
 				{
 					"label": "主武器",
-					"tip": "",
+					"tip": "重复选择相同的属性只生效1条",
 					"category": [
 						{
 							"label": "武器1",
@@ -20,7 +20,7 @@
 							"items": [
 								{
 									"label": "等级",
-									"name": "level",
+									"name": "main_weapon1_level",
 									"type": "number",
 									"min": 1,
 									"max": 99
@@ -28,21 +28,25 @@
 								{
 									"label": "附加属性1",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"name": "main_weapon1_param1",
+									"options": [{ "label": "asd", "value": "asd" }]
 								},
 								{
 									"label": "附加属性2",
 									"type": "select",
+									"name": "main_weapon1_param2",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性3",
 									"type": "select",
+									"name": "main_weapon1_param3",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性4",
 									"type": "select",
+									"name": "main_weapon1_param4",
 									"options": [{ "label": "1", "value": "1" }]
 								}
 							]
@@ -51,25 +55,35 @@
 							"label": "武器2",
 							"tip": "",
 							"items": [
-								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "等级",
+									"name": "main_weapon2_level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
 								{
 									"label": "附加属性1",
 									"type": "select",
+									"name": "main_weapon2_param1",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性2",
 									"type": "select",
+									"name": "main_weapon2_param2",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性3",
 									"type": "select",
+									"name": "main_weapon2_param3",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性4",
 									"type": "select",
+									"name": "main_weapon2_param4",
 									"options": [{ "label": "1", "value": "1" }]
 								}
 							]
@@ -78,25 +92,35 @@
 							"label": "武器3",
 							"tip": "",
 							"items": [
-								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "等级",
+									"name": "main_weapon3_level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
 								{
 									"label": "附加属性1",
 									"type": "select",
+									"name": "main_weapon3_param1",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性2",
 									"type": "select",
+									"name": "main_weapon3_param2",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性3",
 									"type": "select",
+									"name": "main_weapon3_param3",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性4",
 									"type": "select",
+									"name": "main_weapon3_param4",
 									"options": [{ "label": "1", "value": "1" }]
 								}
 							]
@@ -113,25 +137,35 @@
 							"label": "武器1",
 							"tip": "",
 							"items": [
-								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "等级",
+									"name": "sub_weapon1_level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
 								{
 									"label": "附加属性1",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"name": "sub_weapon1_param1",
+									"options": [{ "label": "asd", "value": "asd" }]
 								},
 								{
 									"label": "附加属性2",
 									"type": "select",
+									"name": "sub_weapon1_param2",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性3",
 									"type": "select",
+									"name": "sub_weapon1_param3",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性4",
 									"type": "select",
+									"name": "sub_weapon1_param4",
 									"options": [{ "label": "1", "value": "1" }]
 								}
 							]
@@ -140,25 +174,72 @@
 							"label": "武器2",
 							"tip": "",
 							"items": [
-								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "等级",
+									"name": "sub_weapon2_level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
 								{
 									"label": "附加属性1",
 									"type": "select",
+									"name": "sub_weapon2_param1",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性2",
 									"type": "select",
+									"name": "sub_weapon2_param2",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性3",
 									"type": "select",
+									"name": "sub_weapon2_param3",
 									"options": [{ "label": "1", "value": "1" }]
 								},
 								{
 									"label": "附加属性4",
 									"type": "select",
+									"name": "sub_weapon2_param4",
+									"options": [{ "label": "1", "value": "1" }]
+								}
+							]
+						},
+						{
+							"label": "武器3",
+							"tip": "",
+							"items": [
+								{
+									"label": "等级",
+									"name": "sub_weapon3_level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"type": "select",
+									"name": "sub_weapon3_param1",
+									"options": [{ "label": "1", "value": "1" }]
+								},
+								{
+									"label": "附加属性2",
+									"type": "select",
+									"name": "sub_weapon3_param2",
+									"options": [{ "label": "1", "value": "1" }]
+								},
+								{
+									"label": "附加属性3",
+									"type": "select",
+									"name": "sub_weapon3_param3",
+									"options": [{ "label": "1", "value": "1" }]
+								},
+								{
+									"label": "附加属性4",
+									"type": "select",
+									"name": "sub_weapon3_param4",
 									"options": [{ "label": "1", "value": "1" }]
 								}
 							]
@@ -348,8 +429,10 @@
 					"items": [
 						{
 							"label": "1",
+							"name": "skill1",
 							"type": "select",
 							"options": [],
+							"optionKey": "skillList",
 							"optionFilterFn": "skillFilter"
 						}
 					]
