@@ -605,10 +605,6 @@ module.exports = function (ctx) {
 		});
 	}
 
-	const selPrimary = childVal(ship, 'SelectedPrimaryIndex');
-	const selSecondary = childVal(ship, 'SelectedSecondaryIndex');
-	const selConsumable = childVal(ship, 'SelectedConsumableIndex');
-
 	const modules = {};
 	for (const c of MODULE_CATS) modules[c] = extractCategory(inv, c);
 
@@ -622,18 +618,10 @@ module.exports = function (ctx) {
 		currentShip: {
 			index: idx,
 			templateId: shipTpl,
-			selected: {
-				primaryWeapon: selPrimary,
-				secondaryWeapon: selSecondary,
-				consumable: selConsumable
-			},
-			loadout: {
-				primaryWeapons: extractCategory(inv, 'PrimaryWeapons'),
-				secondaryWeapons: extractCategory(inv, 'SecondaryWeapons'),
-				modules,
-				devices: extractCategory(inv, 'Devices'),
-				cargo: []
-			}
+			primaryWeapons: extractCategory(inv, 'PrimaryWeapons'),
+			secondaryWeapons: extractCategory(inv, 'SecondaryWeapons'),
+			modules,
+			cargo: []
 		},
 		ships: shipSummary
 	};
