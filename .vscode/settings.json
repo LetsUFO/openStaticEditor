@@ -3,5 +3,8 @@
 	// VSCode 内置的 CSS/SCSS 语言服务不认识它，会误报 "Unknown at rule @config"。
 	// 构建本身不受影响，这里关掉该静态检查避免编辑器红波浪线。
 	"css.lint.unknownAtRules": "ignore",
-	"scss.lint.unknownAtRules": "ignore"
+	"scss.lint.unknownAtRules": "ignore",
+	// 保存时用 Prettier 自动格式化（规则见 .prettierrc.json，排除规则见 .prettierignore）
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode"
 }
