@@ -1,0 +1,468 @@
+#!/usr/bin/env node
+/*
+ * es2_loadout.js — EVERSPACE 2 存档读取（初版）
+ * ---------------------------------------------------------------
+ * 纯 Node（仅用内置 zlib / fs，无需 npm 安装），读取 ES2 的 GVAS 存档，
+ * 提取【当前驾驶飞船】的主武器 / 副武器 / 模块 的：
+ *   等级(ItemLevel) + 虚拟等级偏移(VirtualLevelOffset) = 有效等级
+ *   品质等级(Rarity) / 品级(Grade)
+ *   附加效果数据(AttributeStates: 属性ID + 归一化位置 0~1)
+ * 输出为 JSON 对象，写到桌面（默认 es2_loadout.json）。
+ *
+ * 用法:
+ *   node es2_loadout.js                自动选最新存档 -> 桌面
+ *   node es2_loadout.js --save <路径>  指定存档
+ *   node es2_loadout.js --out  <路径>  指定输出文件
+ *   node es2_loadout.js --ship <索引>  指定飞船（默认第一艘有模板的船）
+ *
+ * 注意: 存档里只存 ValuePositionInRange（0~1 归一化位置），真实数值由游戏
+ *       运行时按品质/等级计算，此处不还原真实数值。
+ */
+
+'use strict';
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+const zlib = require('zlib');
+
+// ---------------------------------------------------------------- 常量
+const SAVE_DIR = 'C:/Users/Azrael/AppData/Local/ES2/Saved/SaveGames';
+const DEFAULT_OUT = path.join(os.homedir(), 'Desktop', 'es2_loadout.json');
+
+const FIXED = new Set([
+  'Int8Property', 'Int16Property', 'IntProperty', 'Int64Property',
+  'UInt16Property', 'UInt32Property', 'UInt64Property',
+  'FloatProperty', 'DoubleProperty',
+]);
+const STR_TYPES = new Set([
+  'StrProperty', 'NameProperty', 'ObjectProperty', 'InterfaceProperty',
+  'EnumProperty', 'ByteProperty', 'FieldPathProperty', 'ClassProperty',
+  'DelegateProperty', 'MulticastInlineDelegateProperty',
+]);
+const SOFT_TYPES = new Set(['SoftObjectProperty', 'SoftClassProperty']);
+const RAW_STRUCTS = new Set([
+  'Guid', 'DateTime', 'Timespan', 'Vector', 'Rotator', 'Quat', 'LinearColor',
+  'Color', 'IntPoint', 'Vector2D', 'Vector4', 'Transform', 'FrameNumber',
+  'SmartName', 'MovieSceneSegmentIdentifier', 'MovieSceneSequenceID',
+  'MovieSceneTrackIdentifier', 'MovieSceneEvaluationKey', 'MovieSceneFloatChannel',
+  'Vector_NetQuantize', 'ESVariant', 'FSVariant',
+]);
+
+// ---------------------------------------------------------------- 基础读
+function readFString(buf, off) {
+  let n = buf.readInt32LE(off); off += 4;
+  if (n === 0) return { str: '', off };
+  if (n > 0) {
+    const raw = buf.subarray(off, off + n); off += n;
+    let s = raw.toString('utf8');
+    if (s.endsWith('\u0000')) s = s.slice(0, -1);
+    return { str: s, off };
+  }
+  n = -n;
+  const raw = buf.subarray(off, off + 2 * n); off += 2 * n;
+  let s = raw.toString('utf16le').replace(/\u0000+$/, '');
+  return { str: s, off };
+}
+
+function readFixed(buf, off, type) {
+  switch (type) {
+    case 'Int8Property':   return buf.readInt8(off);
+    case 'Int16Property':  return buf.readInt16LE(off);
+    case 'IntProperty':    return buf.readInt32LE(off);
+    case 'Int64Property':  return Number(buf.readBigInt64LE(off));
+    case 'UInt16Property': return buf.readUInt16LE(off);
+    case 'UInt32Property': return buf.readUInt32LE(off);
+    case 'UInt64Property': return Number(buf.readBigUInt64LE(off));
+    case 'FloatProperty':  return buf.readFloatLE(off);
+    case 'DoubleProperty': return buf.readDoubleLE(off);
+  }
+  throw new Error('未知定长类型 ' + type);
+}
+
+function readTNode(buf, off, depth) {
+  const r = readFString(buf, off); off = r.off;
+  const name = r.str;
+  let n = buf.readInt32LE(off); off += 4;
+  if (!(n >= 0 && n <= 8) || depth > 8) throw new Error('类型树 nchild 异常 @' + (off - 4));
+  const kids = [];
+  for (let i = 0; i < n; i++) {
+    const k = readTNode(buf, off, depth + 1); off = k.off;
+    kids.push(k.node);
+  }
+  return { node: { name, children: kids }, off };
+}
+
+function readTypeTree(buf, off, tname) {
+  let n = buf.readInt32LE(off); off += 4;
+  if (!(n >= 0 && n <= 8)) throw new Error('类型树 nchild 异常 @' + (off - 4));
+  const kids = [];
+  for (let i = 0; i < n; i++) {
+    const k = readTNode(buf, off, 0); off = k.off;
+    kids.push(k.node);
+  }
+  return { node: { name: tname, children: kids }, off };
+}
+
+function flat(node) {
+  let s = node.name;
+  if (node.children && node.children.length) {
+    s += '<' + node.children.map(flat).join(',') + '>';
+  }
+  return s;
+}
+
+function structNameOfT(t) {
+  if (!t || !t.includes('<')) return t;
+  return t.split('<', 1)[1].split('<', 1)[0].replace(/>+$/, '');
+}
+
+// ---------------------------------------------------------------- 解析
+function parseGvas(data) {
+  if (!(data[0] === 0x47 && data[1] === 0x56 && data[2] === 0x41 && data[3] === 0x53))
+    throw new Error('不是 GVAS 文件');
+  let off = 4;
+  const saveVer = data.readInt32LE(off); off += 4;
+  const pkgUe4 = data.readInt32LE(off); off += 4;
+  const pkgUe5 = data.readInt32LE(off); off += 4;
+  const major = data.readUInt16LE(off); off += 2;
+  const minor = data.readUInt16LE(off); off += 2;
+  const patch = data.readUInt16LE(off); off += 2;
+  const build = data.readUInt32LE(off); off += 4;
+  const br = readFString(data, off); const branch = br.str; off = br.off;
+  const cvfmt = data.readInt32LE(off); off += 4;
+  const n = data.readInt32LE(off); off += 4;
+  off += 20 * n; // CustomVersions
+  const cl = readFString(data, off); const cls = cl.str; off = cl.off;
+  if (off < data.length && data[off] === 0x00) off += 1; // 类名后填充
+  const header = data.subarray(0, off);
+  const res = parseProps(data, off, data.length, true);
+  const footer = data.subarray(res.off);
+  return {
+    header, props: res.props, footer,
+    info: { saveVer, pkgUe4, pkgUe5, engine: [major, minor, patch, build], branch, cvfmt, cls },
+  };
+}
+
+// 读一条裸值（数组/Map 元素），t 可能带尖括号
+function readBareValue(buf, off, end, t) {
+  const base = t ? t.split('<')[0] : '';
+  if (FIXED.has(t)) return { value: readFixed(buf, off, t), off: off + typeSize(t) };
+  if (FIXED.has(base)) return { value: readFixed(buf, off, base), off: off + typeSize(base) };
+  if (STR_TYPES.has(t) || STR_TYPES.has(base)) { const r = readFString(buf, off); return { value: r.str, off: r.off }; }
+  if (base === 'BoolProperty') return { value: buf[off] !== 0, off: off + 1 };
+  if (base === 'StructProperty') {
+    const sn = structNameOfT(t);
+    if (sn && sn.endsWith('BufferWrapper')) {
+      const len = buf.readInt32LE(off); off += 4;
+      return { value: '<buffer ' + len + ' bytes>', off: off + len };
+    }
+    const r = parseProps(buf, off, end);
+    return { value: r.props, off: r.off };
+  }
+  if (base === 'ByteProperty' && !t.includes('<')) return { value: buf[off], off: off + 1 };
+  throw new Error('无法读取裸值类型 ' + t);
+}
+
+function typeSize(t) {
+  const map = {
+    Int8Property: 1, Int16Property: 2, IntProperty: 4, Int64Property: 8,
+    UInt16Property: 2, UInt32Property: 4, UInt64Property: 8,
+    FloatProperty: 4, DoubleProperty: 8,
+  };
+  return map[t] || 0;
+}
+
+function parseProps(buf, off, end, allowTail) {
+  const props = [];
+  while (off < end) {
+    let p, noff;
+    try {
+      const r = parseOne(buf, off, end);
+      p = r.prop; noff = r.off;
+    } catch (e) {
+      if (allowTail) break;
+      throw e;
+    }
+    if (p === null) { off = noff; break; }
+    props.push(p);
+    off = noff;
+  }
+  return { props, off };
+}
+
+function parseOne(buf, off, end) {
+  const start = off;
+  const rn = readFString(buf, off); off = rn.off;
+  const name = rn.str;
+  if (name === 'None') return { prop: null, off };
+  const rt = readFString(buf, off); off = rt.off;
+  const tname = rt.str;
+  const tt = readTypeTree(buf, off, tname); off = tt.off;
+  const tnode = tt.node;
+  const size = buf.readInt32LE(off); off += 4;
+  if (!(size >= 0 && size <= buf.length)) throw new Error(name + '(' + tname + '): Size=' + size + ' 不合理');
+  const flag = buf[off]; off += 1;
+  let guid = null;
+  if (flag === 1) { guid = buf.subarray(off, off + 16); off += 16; }
+  const pstart = off;
+  const pend = pstart + size;
+  const prop = { name, type: tname, tnode, size, flag, guid, children: null, value: null, raw: buf.subarray(start, pend) };
+  try {
+    const o2 = parsePayload(buf, pstart, pend, prop);
+    if (o2 !== pend) throw new Error('payload 消耗 ' + (o2 - pstart) + ' != Size ' + size);
+  } catch (e) {
+    prop.unparsed = true;
+    prop.error = String(e.message || e);
+    prop.payloadRaw = buf.subarray(pstart, pend);
+  }
+  return { prop, off: pend };
+}
+
+function parsePayload(buf, off, end, prop) {
+  const t = prop.type;
+  if (FIXED.has(t)) { prop.value = readFixed(buf, off, t); return off + typeSize(t); }
+  if (SOFT_TYPES.has(t)) {
+    const vals = [];
+    while (off < end && vals.length < 4) { const r = readFString(buf, off); off = r.off; vals.push(r.str); }
+    prop.value = vals.length === 1 ? vals[0] : vals;
+    return off;
+  }
+  if (STR_TYPES.has(t)) { const r = readFString(buf, off); prop.value = r.str; return r.off; }
+  if (t === 'BoolProperty') { prop.value = (prop.flag & 0x10) !== 0; return off + prop.size; }
+  if (t === 'TextProperty') { prop.payloadRaw = buf.subarray(off, end); return end; }
+  if (t === 'StructProperty') {
+    const sn = prop.tnode && prop.tnode.children[0] ? prop.tnode.children[0].name : null;
+    if (sn === null || RAW_STRUCTS.has(sn) || (sn && sn.endsWith('BufferWrapper'))) {
+      prop.payloadRaw = buf.subarray(off, end);
+      return end;
+    }
+    const r = parseProps(buf, off, end);
+    prop.children = r.props;
+    return r.off;
+  }
+  if (t === 'ArrayProperty' || t === 'SetProperty') {
+    const cnt = buf.readInt32LE(off); off += 4;
+    const itnode = prop.tnode.children[0];
+    const it = itnode ? itnode.name : null;
+    if (it === 'ByteProperty' && itnode && (!itnode.children || itnode.children.length === 0)) {
+      prop.payloadRaw = buf.subarray(off - 4, end);
+      prop.value = '<' + cnt + ' bytes>';
+      return end;
+    }
+    if (it && it.startsWith('StructProperty') && structNameOfT(it) && structNameOfT(it).endsWith('BufferWrapper')) {
+      prop.payloadRaw = buf.subarray(off, end);
+      return end;
+    }
+    const kids = [];
+    for (let i = 0; i < cnt; i++) {
+      if (it === 'StructProperty') {
+        const r = parseProps(buf, off, end);
+        off = r.off;
+        kids.push({ type: 'StructProperty', name: '', children: r.props });
+      } else {
+        const r = readBareValue(buf, off, end, it);
+        off = r.off;
+        kids.push({ type: it, name: '', value: r.value });
+      }
+    }
+    prop.children = kids;
+    return off;
+  }
+  if (t === 'MapProperty') {
+    const numRemoved = buf.readInt32LE(off); off += 4;
+    const cnt = buf.readInt32LE(off); off += 4;
+    prop.numRemoved = numRemoved;
+    const keyT = prop.tnode.children[0] ? flat(prop.tnode.children[0]) : null;
+    const valT = prop.tnode.children[1] ? flat(prop.tnode.children[1]) : null;
+    const kids = [];
+    for (let i = 0; i < cnt; i++) {
+      const kr = readBareValue(buf, off, end, keyT); off = kr.off;
+      const vr = readBareValue(buf, off, end, valT); off = vr.off;
+      kids.push({ name: String(kr.value), type: valT, value: vr.value, keyType: keyT, keyValue: kr.value });
+    }
+    prop.children = kids;
+    return off;
+  }
+  throw new Error('未知类型 ' + t);
+}
+
+function loadSav(p) {
+  const raw = fs.readFileSync(p);
+  if (raw[0] === 0x47 && raw[1] === 0x56 && raw[2] === 0x41 && raw[3] === 0x53) {
+    return { data: raw, meta: { raw: true } };
+  }
+  if (!(raw[0] === 0xDE && raw[1] === 0xC0 && raw[2] === 0xDE && raw[3] === 0x00))
+    throw new Error(p + ': 不是 ES2 存档 (magic=' + raw.subarray(0, 4).toString('hex') + ')');
+  const ver = raw.readUInt32LE(4);
+  const usize = raw.readUInt32LE(8);
+  const csize = raw.readUInt32LE(12);
+  const body = zlib.inflateSync(raw.subarray(16));
+  return { data: body, meta: { ver, usize, csize, raw: false } };
+}
+
+// ---------------------------------------------------------------- 导航
+function getChild(node, name) {
+  const arr = Array.isArray(node) ? node : (node && node.children ? node.children : null);
+  if (!arr) return null;
+  for (const c of arr) if (c.name === name) return c;
+  return null;
+}
+function childVal(node, name) {
+  const c = getChild(node, name);
+  return c ? c.value : null;
+}
+
+function extractItem(el) {
+  if (!el || !el.children) return null;
+  const tpl = childVal(el, 'ItemTemplateID');
+  if (!tpl || tpl === 'None' || tpl === '') return null;
+  const itemLevel = childVal(el, 'ItemLevel') || 0;
+  const vlo = childVal(el, 'VirtualLevelOffset') || 0;
+  const rarity = (childVal(el, 'Rarity') || '').replace('EItemRarity::', '');
+  const grade = (childVal(el, 'Grade') || '').replace('EItemGrade::', '');
+  const attrsEl = getChild(el, 'AttributeStates');
+  const attributes = [];
+  if (attrsEl && attrsEl.children) {
+    for (const a of attrsEl.children) {
+      const id = childVal(a, 'AttributeTemplateID');
+      const pos = childVal(a, 'ValuePositionInRange');
+      if (id) attributes.push({ id, position: pos });
+    }
+  }
+  return {
+    templateId: tpl,
+    itemLevel,
+    virtualLevelOffset: vlo,
+    effectiveLevel: +(+itemLevel + +vlo).toFixed(4),
+    rarity,
+    grade,
+    attributes,
+  };
+}
+
+function extractCategory(inv, catName) {
+  const cat = getChild(inv, catName);
+  if (!cat || !cat.children) return [];
+  const out = [];
+  for (const el of cat.children) {
+    const it = extractItem(el);
+    if (it) out.push(it);
+  }
+  return out;
+}
+
+const MODULE_CATS = ['EnergyCores', 'Sensors', 'Shields', 'CargoUnits', 'Platings', 'thrusters'];
+
+// ---------------------------------------------------------------- 主流程
+function main() {
+  const args = process.argv.slice(2);
+  let savePath = null;
+  let outPath = DEFAULT_OUT;
+  let shipIdx = null;
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--save') savePath = args[++i];
+    else if (args[i] === '--out') outPath = args[++i];
+    else if (args[i] === '--ship') shipIdx = parseInt(args[++i], 10);
+  }
+  if (!savePath) {
+    savePath = findLatestSave(SAVE_DIR);
+    if (!savePath) { console.error('未找到存档，请用 --save 指定'); process.exit(1); }
+  }
+
+  console.log('读取存档: ' + savePath);
+  const { data } = loadSav(savePath);
+  const g = parseGvas(data);
+  const top = {};
+  for (const p of g.props) top[p.name] = p;
+  if (!top.ShipsSaveState) { console.error('存档缺少 ShipsSaveState'); process.exit(1); }
+  const ships = top.ShipsSaveState.children || [];
+
+  // 选当前船：指定索引 > 第一艘有模板的船 > 0
+  let idx = shipIdx;
+  if (idx === null) {
+    idx = 0;
+    for (let i = 0; i < ships.length; i++) {
+      const sis = getChild(ships[i], 'ShipItemState');
+      const tpl = sis ? childVal(sis, 'ItemTemplateID') : null;
+      if (tpl && tpl !== 'None' && tpl !== '') { idx = i; break; }
+    }
+  }
+  const ship = ships[idx];
+  const sis = getChild(ship, 'ShipItemState');
+  const inv = getChild(ship, 'Inventory');
+  const shipTpl = childVal(sis, 'ItemTemplateID') || 'None';
+
+  // 飞船概览
+  const shipSummary = [];
+  for (let i = 0; i < ships.length; i++) {
+    const s = getChild(ships[i], 'ShipItemState');
+    const t = s ? childVal(s, 'ItemTemplateID') : null;
+    shipSummary.push({
+      index: i,
+      templateId: t || 'None',
+      itemLevel: childVal(s, 'ItemLevel') || 0,
+      rarity: (childVal(s, 'Rarity') || '').replace('EItemRarity::', ''),
+      isCurrent: i === idx,
+    });
+  }
+
+  const selPrimary = childVal(ship, 'SelectedPrimaryIndex');
+  const selSecondary = childVal(ship, 'SelectedSecondaryIndex');
+  const selConsumable = childVal(ship, 'SelectedConsumableIndex');
+
+  const modules = {};
+  for (const c of MODULE_CATS) modules[c] = extractCategory(inv, c);
+
+  const result = {
+    _meta: {
+      saveFile: path.basename(savePath),
+      engine: 'UE ' + g.info.engine.slice(0, 3).join('.'),
+      generatedAt: new Date().toISOString(),
+      note: 'AttributeStates[].position 为 0~1 归一化位置，非真实数值；真实数值由游戏运行时按品质/等级计算。',
+    },
+    currentShip: {
+      index: idx,
+      templateId: shipTpl,
+      itemLevel: childVal(sis, 'ItemLevel') || 0,
+      virtualLevelOffset: childVal(sis, 'VirtualLevelOffset') || 0,
+      effectiveLevel: +(+ (childVal(sis, 'ItemLevel') || 0) + +(childVal(sis, 'VirtualLevelOffset') || 0)).toFixed(4),
+      rarity: (childVal(sis, 'Rarity') || '').replace('EItemRarity::', ''),
+      grade: (childVal(sis, 'Grade') || '').replace('EItemGrade::', ''),
+      selected: { primaryWeapon: selPrimary, secondaryWeapon: selSecondary, consumable: selConsumable },
+      loadout: {
+        primaryWeapons: extractCategory(inv, 'PrimaryWeapons'),
+        secondaryWeapons: extractCategory(inv, 'SecondaryWeapons'),
+        modules,
+        devices: extractCategory(inv, 'Devices'),
+        consumables: extractCategory(inv, 'Consumables'),
+        cargo: extractCategory(inv, 'Cargo'),
+      },
+    },
+    ships: shipSummary,
+  };
+
+  fs.writeFileSync(outPath, JSON.stringify(result, null, 2), 'utf8');
+  console.log('已写出 -> ' + outPath);
+  console.log('当前飞船[' + idx + '] ' + shipTpl +
+    '  主武 ' + result.currentShip.loadout.primaryWeapons.length +
+    '  副武 ' + result.currentShip.loadout.secondaryWeapons.length +
+    '  模块 ' + MODULE_CATS.reduce((a, c) => a + modules[c].length, 0) +
+    '  装置 ' + result.currentShip.loadout.devices.length);
+}
+
+function findLatestSave(dir) {
+  let files = [];
+  try { files = fs.readdirSync(dir); } catch (e) { return null; }
+  const cands = files.filter(f =>
+    f.endsWith('.sav') && !f.includes('_PREVIEW_') && f !== 'MetaData.sav' && !f.endsWith('.bak'));
+  let best = null, bestT = 0;
+  for (const f of cands) {
+    try {
+      const st = fs.statSync(path.join(dir, f));
+      if (st.mtimeMs > bestT) { bestT = st.mtimeMs; best = f; }
+    } catch (e) { /* ignore */ }
+  }
+  return best ? path.join(dir, best) : null;
+}
+
+main();

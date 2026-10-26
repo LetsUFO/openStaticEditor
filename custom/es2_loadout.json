@@ -1,0 +1,1031 @@
+{
+	"meta": {
+		"saveFileName": "ufo.sav",
+		"lastUpdateTime": "2026-10-25T09:34:20.881Z"
+	},
+	"currentShip": {
+		"index": 0,
+		"templateId": "ship_light_rogue",
+		"itemLevel": 7,
+		"virtualLevelOffset": 0,
+		"effectiveLevel": 7,
+		"rarity": "None",
+		"grade": "None",
+		"selected": {
+			"primaryWeapon": 1,
+			"secondaryWeapon": 0,
+			"consumable": -1
+		},
+		"loadout": {
+			"primaryWeapons": [
+				{
+					"templateId": "pulse_laser_okkar",
+					"itemLevel": 60,
+					"virtualLevelOffset": 6,
+					"effectiveLevel": 66,
+					"rarity": "Ascendant",
+					"grade": "None",
+					"attributes": [
+						{
+							"id": "no_random_drop",
+							"position": 0.35509026050567627
+						},
+						{
+							"id": "content_group",
+							"position": 0.7952244281768799
+						},
+						{
+							"id": "weapon_hull_damage",
+							"position": 0.7930634021759033
+						},
+						{
+							"id": "weapon_shield_damage",
+							"position": 0.5306574106216431
+						},
+						{
+							"id": "weapon_range",
+							"position": 0
+						},
+						{
+							"id": "weapon_fire_rate",
+							"position": 0.07358121871948242
+						},
+						{
+							"id": "weapon_shots_per_burst",
+							"position": 0.12192773818969727
+						},
+						{
+							"id": "weapon_burst_delay",
+							"position": 0.7290623188018799
+						},
+						{
+							"id": "weapon_velocity",
+							"position": 0.7583283185958862
+						},
+						{
+							"id": "weapon_spread",
+							"position": 0.5178165435791016
+						},
+						{
+							"id": "weapon_energy_capacity",
+							"position": 0.7801158428192139
+						},
+						{
+							"id": "weapon_energy_consumption",
+							"position": 0.055079102516174316
+						},
+						{
+							"id": "weapon_energy_recharge_delay",
+							"position": 0.4626353979110718
+						},
+						{
+							"id": "item_price",
+							"position": 0.23787009716033936
+						},
+						{
+							"id": "shield_piercing",
+							"position": 0.49253058433532715
+						},
+						{
+							"id": "armor_piercing",
+							"position": 0.1318567991256714
+						},
+						{
+							"id": "anti_armor",
+							"position": 0.1318567991256714
+						},
+						{
+							"id": "destabilizer",
+							"position": 0.8880668878555298
+						},
+						{
+							"id": "ascendant_rank",
+							"position": 1
+						}
+					]
+				},
+				{
+					"templateId": "flak_legendary_backer_1",
+					"itemLevel": 60,
+					"virtualLevelOffset": 6,
+					"effectiveLevel": 66,
+					"rarity": "Legendary",
+					"grade": "None",
+					"attributes": [
+						{
+							"id": "no_random_drop",
+							"position": 0.957233190536499
+						},
+						{
+							"id": "min_level",
+							"position": 0.9648319482803345
+						},
+						{
+							"id": "weapon_hull_damage",
+							"position": 0.2680790424346924
+						},
+						{
+							"id": "weapon_shield_damage",
+							"position": 0.26651036739349365
+						},
+						{
+							"id": "weapon_range",
+							"position": 1
+						},
+						{
+							"id": "weapon_damage_radius",
+							"position": 0.08887720108032227
+						},
+						{
+							"id": "weapon_fire_rate",
+							"position": 0.33319056034088135
+						},
+						{
+							"id": "weapon_velocity",
+							"position": 0.8081778287887573
+						},
+						{
+							"id": "weapon_spread",
+							"position": 0.49256396293640137
+						},
+						{
+							"id": "weapon_energy_capacity",
+							"position": 0.9876784086227417
+						},
+						{
+							"id": "weapon_energy_consumption",
+							"position": 0.8070313930511475
+						},
+						{
+							"id": "weapon_energy_recharge_delay",
+							"position": 0.8700846433639526
+						},
+						{
+							"id": "legendary_effect",
+							"position": 0.10706198215484619
+						},
+						{
+							"id": "item_price",
+							"position": 0.006297111511230469
+						}
+					]
+				}
+			],
+			"secondaryWeapons": [
+				{
+					"templateId": "launcher_homing_legendary_battery",
+					"itemLevel": 60,
+					"virtualLevelOffset": 6,
+					"effectiveLevel": 66,
+					"rarity": "Legendary",
+					"grade": "None",
+					"attributes": [
+						{
+							"id": "no_random_drop",
+							"position": 0.2793090343475342
+						},
+						{
+							"id": "min_level",
+							"position": 0.7663452625274658
+						},
+						{
+							"id": "weapon_hull_damage",
+							"position": 0.11363029479980469
+						},
+						{
+							"id": "weapon_shield_damage",
+							"position": 0.5421870946884155
+						},
+						{
+							"id": "weapon_range",
+							"position": 0.3445206880569458
+						},
+						{
+							"id": "weapon_damage_radius",
+							"position": 0.9821368455886841
+						},
+						{
+							"id": "weapon_fire_rate",
+							"position": 0.08251714706420898
+						},
+						{
+							"id": "weapon_shots_per_burst",
+							"position": 0.6296206712722778
+						},
+						{
+							"id": "weapon_burst_delay",
+							"position": 0.8387042284011841
+						},
+						{
+							"id": "weapon_velocity",
+							"position": 0.7070460319519043
+						},
+						{
+							"id": "weapon_spread",
+							"position": 0.7076007127761841
+						},
+						{
+							"id": "weapon_energy_capacity",
+							"position": 0.7716574668884277
+						},
+						{
+							"id": "weapon_energy_consumption",
+							"position": 0.16068661212921143
+						},
+						{
+							"id": "weapon_energy_recharge_delay",
+							"position": 0.5322645902633667
+						},
+						{
+							"id": "legendary_effect",
+							"position": 0.6005967855453491
+						},
+						{
+							"id": "legendary_count",
+							"position": 0.4031381607055664
+						},
+						{
+							"id": "secondary_max_ammo",
+							"position": 0.34455978870391846
+						},
+						{
+							"id": "secondary_lock_duration",
+							"position": 0.8547661304473877
+						},
+						{
+							"id": "item_price",
+							"position": 0.32577741146087646
+						},
+						{
+							"id": "no_interception",
+							"position": 0.7106215953826904
+						}
+					]
+				},
+				{
+					"templateId": "launcher_homing_missile_okkar",
+					"itemLevel": 60,
+					"virtualLevelOffset": 3.799999952316284,
+					"effectiveLevel": 63.8,
+					"rarity": "Superior",
+					"grade": "None",
+					"attributes": [
+						{
+							"id": "no_random_drop",
+							"position": 0.1779102087020874
+						},
+						{
+							"id": "content_group",
+							"position": 0.7614971399307251
+						},
+						{
+							"id": "weapon_hull_damage",
+							"position": 0.14591538906097412
+						},
+						{
+							"id": "weapon_shield_damage",
+							"position": 0.5730421543121338
+						},
+						{
+							"id": "weapon_range",
+							"position": 0.4088031053543091
+						},
+						{
+							"id": "weapon_damage_radius",
+							"position": 0.6923866271972656
+						},
+						{
+							"id": "weapon_fire_rate",
+							"position": 0.9227380752563477
+						},
+						{
+							"id": "weapon_velocity",
+							"position": 0.12283062934875488
+						},
+						{
+							"id": "weapon_energy_capacity",
+							"position": 0.5770177841186523
+						},
+						{
+							"id": "weapon_energy_consumption",
+							"position": 0.3908562660217285
+						},
+						{
+							"id": "weapon_energy_recharge_delay",
+							"position": 0.29791855812072754
+						},
+						{
+							"id": "secondary_max_ammo",
+							"position": 0.07533419132232666
+						},
+						{
+							"id": "item_price",
+							"position": 0.44238126277923584
+						},
+						{
+							"id": "fire_missile_critical",
+							"position": 0.33803510665893555
+						},
+						{
+							"id": "missile_damage_flytime",
+							"position": 0.18730580806732178
+						},
+						{
+							"id": "no_interception",
+							"position": 0.028729796409606934
+						},
+						{
+							"id": "missiles_hit_closest_target",
+							"position": 0.9951633214950562
+						}
+					]
+				}
+			],
+			"modules": {
+				"EnergyCores": [
+					{
+						"templateId": "energy_core",
+						"itemLevel": 90,
+						"virtualLevelOffset": 6,
+						"effectiveLevel": 96,
+						"rarity": "Ascendant",
+						"grade": "None",
+						"attributes": [
+							{
+								"id": "blueprintable",
+								"position": 1
+							},
+							{
+								"id": "energy_core_regen_weapons",
+								"position": 1
+							},
+							{
+								"id": "energy_core_regen_shield",
+								"position": 1
+							},
+							{
+								"id": "energy_core_regen_boost",
+								"position": 1
+							},
+							{
+								"id": "utility",
+								"position": 1
+							},
+							{
+								"id": "item_price",
+								"position": 1
+							},
+							{
+								"id": "tractor_beam_range_buff",
+								"position": 1
+							},
+							{
+								"id": "all_modules_reduced_device_cooldowns",
+								"position": 1
+							},
+							{
+								"id": "all_modules_increased_primary_weapon_range",
+								"position": 1
+							},
+							{
+								"id": "ascendant_rank",
+								"position": 1
+							},
+							{
+								"id": "okkar_catalyst_energycore2_buff",
+								"position": 0.6383715867996216
+							},
+							{
+								"id": "okkar_catalyst_energycore2_debuff",
+								"position": 0.3685251474380493
+							}
+						]
+					}
+				],
+				"Sensors": [
+					{
+						"templateId": "sensor_resources",
+						"itemLevel": 60,
+						"virtualLevelOffset": 6,
+						"effectiveLevel": 66,
+						"rarity": "Ascendant",
+						"grade": "None",
+						"attributes": [
+							{
+								"id": "expertise",
+								"position": 1
+							},
+							{
+								"id": "item_price",
+								"position": 1
+							},
+							{
+								"id": "sensor_range_ships",
+								"position": 1
+							},
+							{
+								"id": "sensor_range_loot",
+								"position": 1
+							},
+							{
+								"id": "sensor_range_resources",
+								"position": 1
+							},
+							{
+								"id": "all_modules_reduced_device_cooldowns",
+								"position": 1
+							},
+							{
+								"id": "all_modules_increased_primary_weapon_range",
+								"position": 1
+							},
+							{
+								"id": "all_modules_increased_secondary_weapon_range",
+								"position": 1
+							},
+							{
+								"id": "ascendant_rank",
+								"position": 1
+							},
+							{
+								"id": "okkar_catalyst_sensor1_buff",
+								"position": 0.8191907405853271
+							},
+							{
+								"id": "okkar_catalyst_sensor1_debuff",
+								"position": 0.6458134651184082
+							}
+						]
+					}
+				],
+				"Shields": [
+					{
+						"templateId": "shield_autonomous",
+						"itemLevel": 60,
+						"virtualLevelOffset": 6,
+						"effectiveLevel": 66,
+						"rarity": "Ascendant",
+						"grade": "None",
+						"attributes": [
+							{
+								"id": "min_level",
+								"position": 0.39043128490448
+							},
+							{
+								"id": "shield_capacity",
+								"position": 0.9574414491653442
+							},
+							{
+								"id": "shield_recharge_speed",
+								"position": 0.3177725076675415
+							},
+							{
+								"id": "shield_recharge_delay",
+								"position": 0.6794763803482056
+							},
+							{
+								"id": "shield_shutdown_duration",
+								"position": 0.2046574354171753
+							},
+							{
+								"id": "utility",
+								"position": 1
+							},
+							{
+								"id": "item_price",
+								"position": 0.3727923631668091
+							},
+							{
+								"id": "instant_shield_restore",
+								"position": 0.5263260006904602
+							},
+							{
+								"id": "all_modules_reduced_device_cooldowns",
+								"position": 1
+							},
+							{
+								"id": "all_modules_increased_primary_weapon_range",
+								"position": 1
+							},
+							{
+								"id": "all_modules_increased_secondary_weapon_range",
+								"position": 1
+							},
+							{
+								"id": "ascendant_rank",
+								"position": 1
+							}
+						]
+					}
+				],
+				"CargoUnits": [
+					{
+						"templateId": "cargo_unit_legendary_bob",
+						"itemLevel": 60,
+						"virtualLevelOffset": 6,
+						"effectiveLevel": 66,
+						"rarity": "Legendary",
+						"grade": "None",
+						"attributes": [
+							{
+								"id": "no_random_drop",
+								"position": 0.4545499086380005
+							},
+							{
+								"id": "min_level",
+								"position": 0.4992913007736206
+							},
+							{
+								"id": "firepower",
+								"position": 0.5376113653182983
+							},
+							{
+								"id": "precision",
+								"position": 0.2854229211807251
+							},
+							{
+								"id": "structure",
+								"position": 0.5605678558349609
+							},
+							{
+								"id": "resistance",
+								"position": 0.687391996383667
+							},
+							{
+								"id": "cargo_slots_buff",
+								"position": 0.40242552757263184
+							},
+							{
+								"id": "legendary_time",
+								"position": 0.7607630491256714
+							},
+							{
+								"id": "item_price",
+								"position": 0.7258458137512207
+							}
+						]
+					}
+				],
+				"Platings": [
+					{
+						"templateId": "plating_opulence",
+						"itemLevel": 60,
+						"virtualLevelOffset": 6,
+						"effectiveLevel": 66,
+						"rarity": "Ascendant",
+						"grade": "None",
+						"attributes": [
+							{
+								"id": "min_level",
+								"position": 1
+							},
+							{
+								"id": "armor",
+								"position": 1
+							},
+							{
+								"id": "armor_per_kill",
+								"position": 1
+							},
+							{
+								"id": "expertise",
+								"position": 1
+							},
+							{
+								"id": "item_price",
+								"position": 1
+							},
+							{
+								"id": "opulence_increase_hitpoints_per_credit",
+								"position": 1
+							},
+							{
+								"id": "all_modules_reduced_device_cooldowns",
+								"position": 1
+							},
+							{
+								"id": "all_modules_increased_primary_weapon_range",
+								"position": 1
+							},
+							{
+								"id": "all_modules_increased_secondary_weapon_range",
+								"position": 1
+							},
+							{
+								"id": "ascendant_rank",
+								"position": 1
+							},
+							{
+								"id": "okkar_catalyst_plating1_buff",
+								"position": 0.7427123785018921
+							},
+							{
+								"id": "okkar_catalyst_plating1_debuff",
+								"position": 0.31659889221191406
+							}
+						]
+					}
+				],
+				"thrusters": [
+					{
+						"templateId": "thrusters_boost",
+						"itemLevel": 30,
+						"virtualLevelOffset": 6,
+						"effectiveLevel": 36,
+						"rarity": "Ascendant",
+						"grade": "None",
+						"attributes": [
+							{
+								"id": "min_level",
+								"position": 0.954941987991333
+							},
+							{
+								"id": "expertise",
+								"position": 1
+							},
+							{
+								"id": "boost_speed",
+								"position": 0.5127646923065186
+							},
+							{
+								"id": "boost_acceleration",
+								"position": 0.8793755769729614
+							},
+							{
+								"id": "boost_recharge_speed",
+								"position": 0.6784623861312866
+							},
+							{
+								"id": "boost_energy_capacity",
+								"position": 0.010762810707092285
+							},
+							{
+								"id": "boost_energy_consumption",
+								"position": 0.6279810667037964
+							},
+							{
+								"id": "boost_recharge_delay",
+								"position": 0.8589909076690674
+							},
+							{
+								"id": "item_price",
+								"position": 0.9461537599563599
+							},
+							{
+								"id": "all_modules_reduced_device_cooldowns",
+								"position": 1
+							},
+							{
+								"id": "all_modules_increased_primary_weapon_range",
+								"position": 1
+							},
+							{
+								"id": "all_modules_increased_secondary_weapon_range",
+								"position": 1
+							},
+							{
+								"id": "ascendant_rank",
+								"position": 1
+							},
+							{
+								"id": "okkar_catalyst_booster1_buff",
+								"position": 0.06289327144622803
+							},
+							{
+								"id": "okkar_catalyst_booster1_debuff",
+								"position": 0.7877719402313232
+							}
+						]
+					}
+				]
+			},
+			"devices": [
+				{
+					"templateId": "orbital_cannon",
+					"itemLevel": 30,
+					"virtualLevelOffset": 0,
+					"effectiveLevel": 30,
+					"rarity": "None",
+					"grade": "None",
+					"attributes": [
+						{
+							"id": "device_cooldown",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_duration",
+							"position": 0.6718975305557251
+						},
+						{
+							"id": "device_effect_duration",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_effect_range",
+							"position": 0.330586314201355
+						},
+						{
+							"id": "device_kinetic_damage",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_energy_damage",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_effect",
+							"position": 0.1782933473587036
+						},
+						{
+							"id": "device_effect_2",
+							"position": 0.823103666305542
+						},
+						{
+							"id": "device_time",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_range",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_range_2",
+							"position": 0.10812735557556152
+						},
+						{
+							"id": "device_hitpoints",
+							"position": 0.4995764493942261
+						},
+						{
+							"id": "device_max_level_difference",
+							"position": 0.4134364128112793
+						},
+						{
+							"id": "device_charges",
+							"position": 0.49783217906951904
+						},
+						{
+							"id": "item_price",
+							"position": 0.33075010776519775
+						}
+					]
+				},
+				{
+					"templateId": "energized_boost",
+					"itemLevel": 30,
+					"virtualLevelOffset": 0,
+					"effectiveLevel": 30,
+					"rarity": "None",
+					"grade": "None",
+					"attributes": [
+						{
+							"id": "device_cooldown",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_duration",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_effect_duration",
+							"position": 0.9746452569961548
+						},
+						{
+							"id": "device_effect_range",
+							"position": 0.31521666049957275
+						},
+						{
+							"id": "device_kinetic_damage",
+							"position": 0.967801570892334
+						},
+						{
+							"id": "device_energy_damage",
+							"position": 0.8390390872955322
+						},
+						{
+							"id": "device_effect",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_effect_2",
+							"position": 0.23944830894470215
+						},
+						{
+							"id": "device_time",
+							"position": 0.9443670511245728
+						},
+						{
+							"id": "device_range",
+							"position": 0.25954151153564453
+						},
+						{
+							"id": "device_range_2",
+							"position": 0.1975175142288208
+						},
+						{
+							"id": "device_hitpoints",
+							"position": 0.2985217571258545
+						},
+						{
+							"id": "device_max_level_difference",
+							"position": 0.019134044647216797
+						},
+						{
+							"id": "device_charges",
+							"position": 0.24054944515228271
+						},
+						{
+							"id": "item_price",
+							"position": 0.8013660907745361
+						}
+					]
+				},
+				{
+					"templateId": "frontshield_generator",
+					"itemLevel": 30,
+					"virtualLevelOffset": 0,
+					"effectiveLevel": 30,
+					"rarity": "None",
+					"grade": "None",
+					"attributes": [
+						{
+							"id": "device_cooldown",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_duration",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_effect_duration",
+							"position": 0.6018484830856323
+						},
+						{
+							"id": "device_effect_range",
+							"position": 0.45311546325683594
+						},
+						{
+							"id": "device_kinetic_damage",
+							"position": 0.9121384620666504
+						},
+						{
+							"id": "device_energy_damage",
+							"position": 0.03392982482910156
+						},
+						{
+							"id": "device_effect",
+							"position": 0.049958229064941406
+						},
+						{
+							"id": "device_effect_2",
+							"position": 0.9775646924972534
+						},
+						{
+							"id": "device_time",
+							"position": 0.08085095882415771
+						},
+						{
+							"id": "device_range",
+							"position": 0.5608316659927368
+						},
+						{
+							"id": "device_range_2",
+							"position": 0.516555666923523
+						},
+						{
+							"id": "device_hitpoints",
+							"position": 0.3707616329193115
+						},
+						{
+							"id": "device_max_level_difference",
+							"position": 0.1393033266067505
+						},
+						{
+							"id": "device_charges",
+							"position": 0.009921789169311523
+						},
+						{
+							"id": "item_price",
+							"position": 0.3152347803115845
+						}
+					]
+				},
+				{
+					"templateId": "nano_transmitter",
+					"itemLevel": 30,
+					"virtualLevelOffset": 0,
+					"effectiveLevel": 30,
+					"rarity": "None",
+					"grade": "None",
+					"attributes": [
+						{
+							"id": "device_cooldown",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_duration",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_effect_duration",
+							"position": 0.858614444732666
+						},
+						{
+							"id": "device_effect_range",
+							"position": 0.022765278816223145
+						},
+						{
+							"id": "device_kinetic_damage",
+							"position": 0.5274108648300171
+						},
+						{
+							"id": "device_energy_damage",
+							"position": 0.9853640794754028
+						},
+						{
+							"id": "device_effect",
+							"position": 0.2113248109817505
+						},
+						{
+							"id": "device_effect_2",
+							"position": 0.4499666690826416
+						},
+						{
+							"id": "device_time",
+							"position": 0.6886521577835083
+						},
+						{
+							"id": "device_range",
+							"position": 0.0771716833114624
+						},
+						{
+							"id": "device_range_2",
+							"position": 0.45451200008392334
+						},
+						{
+							"id": "device_hitpoints",
+							"position": 0.9300978183746338
+						},
+						{
+							"id": "device_max_level_difference",
+							"position": 0.07257723808288574
+						},
+						{
+							"id": "device_charges",
+							"position": 0.015515565872192383
+						},
+						{
+							"id": "item_price",
+							"position": 0.7985665798187256
+						}
+					]
+				}
+			],
+			"cargo": ["保留字段但是不解析数据"]
+		}
+	},
+	"ships": [
+		{
+			"index": 0,
+			"templateId": "ship_light_rogue",
+			"itemLevel": 7,
+			"rarity": "None",
+			"isCurrent": true
+		},
+		{
+			"index": 1,
+			"templateId": "ship_okkar_medium_ship1",
+			"itemLevel": 7,
+			"rarity": "None",
+			"isCurrent": false
+		},
+		{
+			"index": 2,
+			"templateId": "None",
+			"itemLevel": 1,
+			"rarity": "None",
+			"isCurrent": false
+		},
+		{
+			"index": 3,
+			"templateId": "None",
+			"itemLevel": 1,
+			"rarity": "None",
+			"isCurrent": false
+		},
+		{
+			"index": 4,
+			"templateId": "None",
+			"itemLevel": 1,
+			"rarity": "None",
+			"isCurrent": false
+		},
+		{
+			"index": 5,
+			"templateId": "None",
+			"itemLevel": 1,
+			"rarity": "None",
+			"isCurrent": false
+		}
+	]
+}
