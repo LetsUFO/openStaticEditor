@@ -1,13 +1,18 @@
 #!/usr/bin/env node
 /*
- * es2_loadout.js — EVERSPACE 2 存档读取（初版）
+ * es2_loadout.js — EVERSPACE 2 存档读取
  * ---------------------------------------------------------------
  * 纯 Node（仅用内置 zlib / fs，无需 npm 安装），读取 ES2 的 GVAS 存档，
- * 提取【当前驾驶飞船】的主武器 / 副武器 / 模块 的：
- *   等级(ItemLevel) + 虚拟等级偏移(VirtualLevelOffset) = 有效等级
- *   品质等级(Rarity) / 品级(Grade)
- *   附加效果数据(AttributeStates: 属性ID + 归一化位置 0~1)
- * 输出为 JSON 对象，写到桌面（默认 es2_loadout.json）。
+ * 提取【当前驾驶飞船】的装备附加属性。
+ *
+ * 输出口径（按需求精简）:
+ *   - 主武器 / 副武器 / 模块 / 装置 / 消耗品: 每件仅输出
+ *       templateId  (物品模板，用于辨识是哪件装备)
+ *       attributes  (附加属性/占槽词缀: 属性ID + 0~1 归一化位置)
+ *     —— 不再输出等级(ItemLevel) / 品质(Rarity) / 品级(Grade) 等基础属性。
+ *     —— attributes 只保留「附加词缀」: 已剔除核心属性(模板固有)与隐藏标记，
+ *        故通常 ≤ 4 条（槽数 = f(品质): 0/1/2/3/4/5 对应 None~Ascendant）。
+ *   - 携带货物(cargo): 固定输出空数组 []。
  *
  * 用法:
  *   node es2_loadout.js                自动选最新存档 -> 桌面
@@ -48,6 +53,38 @@ const RAW_STRUCTS = new Set([
   'Vector_NetQuantize', 'ESVariant', 'FSVariant',
 ]);
 
+// ---------------------------------------------------------------- 附加属性判定
+// AttributeStates 里混了三类：核心属性(模板固有,不占槽) + 隐藏标记 + 附加词缀(占槽)。
+// 目标：只输出「附加词缀」(通常 0~4 条，Ascendant 5 条)。
+//   - 隐藏标记：不占槽、UI 不显示的元数据（见机制手册 §3）。
+//   - 核心属性：模板固有，如 weapon_* / boost_* / shield_* / sensor_range_* /
+//     energy_core_regen_* / cargo_slots_buff / armor* 等（按模板而异）。
+//   - 附加词缀：占槽的可 roll 加成，含 6 大裸族 + all_modules_* + *_buff + 已知具体词缀。
+const HIDDEN_ATTR = new Set([
+  'min_level', 'system_drop', 'blueprintable', 'no_random_drop', 'content_group',
+  'item_price', 'ascendant_rank', 'no_damage', 'full_auto', 'level_dependence',
+  'cargo_slots_buff', // 货舱模块的核心属性（非词缀），且名字以 _buff 结尾易被误判
+]);
+const AFFIX_BARE = new Set([
+  'structure', 'firepower', 'precision', 'resistance', 'utility', 'expertise',
+  'all_modules_increased_hull_hitpoints', 'all_modules_increased_primary_weapon_range',
+  'all_modules_shield_damage_reduction', 'all_modules_increased_device_range',
+  'all_modules_reduced_weapon_energy_consumption', 'all_modules_increased_critical_hit_damage',
+  'all_modules_increased_armor_repair', 'all_modules_increased_secondary_weapon_range',
+  'anti_turret_bonus_damage', 'last_missiles_more_damage', 'anti_gnb_bonus_damage',
+  'heal_on_kill', 'missile_ammo_refund', 'instant_shield_restore', 'low_shield_recharges_boost_energy',
+  'shield_disrupt', 'shield_piercing', 'armor_piercing', 'anti_armor', 'destabilizer',
+  'boost_after_kill', 'opulence_increased_income', 'repair_damage_item', 'xr_wish_effect',
+]);
+function isAffixAttr(id) {
+  if (!id) return false;
+  if (HIDDEN_ATTR.has(id)) return false;
+  if (id.startsWith('okkar_catalyst_')) return false; // 欧卡尔能量核心变体的固有核心，非词缀
+  if (id.startsWith('all_modules_')) return true;
+  if (id.endsWith('_buff')) return true;
+  return AFFIX_BARE.has(id);
+}
+
 // ---------------------------------------------------------------- 基础读
 function readFString(buf, off) {
   let n = buf.readInt32LE(off); off += 4;
@@ -74,7 +111,7 @@ function readFixed(buf, off, type) {
     case 'UInt32Property': return buf.readUInt32LE(off);
     case 'UInt64Property': return Number(buf.readBigUInt64LE(off));
     case 'FloatProperty':  return buf.readFloatLE(off);
-    case 'DoubleProperty': return buf.readDoubleLE(off);
+    case 'DoubleProperty':  return buf.readDoubleLE(off);
   }
   throw new Error('未知定长类型 ' + type);
 }
@@ -312,32 +349,21 @@ function childVal(node, name) {
   return c ? c.value : null;
 }
 
+// 仅提取「附加属性(占槽词缀)」: templateId + attributes[]（已剔除核心属性与隐藏标记）
 function extractItem(el) {
   if (!el || !el.children) return null;
   const tpl = childVal(el, 'ItemTemplateID');
   if (!tpl || tpl === 'None' || tpl === '') return null;
-  const itemLevel = childVal(el, 'ItemLevel') || 0;
-  const vlo = childVal(el, 'VirtualLevelOffset') || 0;
-  const rarity = (childVal(el, 'Rarity') || '').replace('EItemRarity::', '');
-  const grade = (childVal(el, 'Grade') || '').replace('EItemGrade::', '');
   const attrsEl = getChild(el, 'AttributeStates');
   const attributes = [];
   if (attrsEl && attrsEl.children) {
     for (const a of attrsEl.children) {
       const id = childVal(a, 'AttributeTemplateID');
       const pos = childVal(a, 'ValuePositionInRange');
-      if (id) attributes.push({ id, position: pos });
+      if (id && isAffixAttr(id)) attributes.push({ id, position: pos });
     }
   }
-  return {
-    templateId: tpl,
-    itemLevel,
-    virtualLevelOffset: vlo,
-    effectiveLevel: +(+itemLevel + +vlo).toFixed(4),
-    rarity,
-    grade,
-    attributes,
-  };
+  return { templateId: tpl, attributes };
 }
 
 function extractCategory(inv, catName) {
@@ -392,7 +418,7 @@ function main() {
   const inv = getChild(ship, 'Inventory');
   const shipTpl = childVal(sis, 'ItemTemplateID') || 'None';
 
-  // 飞船概览
+  // 飞船概览（仅标识，不输出基础属性）
   const shipSummary = [];
   for (let i = 0; i < ships.length; i++) {
     const s = getChild(ships[i], 'ShipItemState');
@@ -400,8 +426,6 @@ function main() {
     shipSummary.push({
       index: i,
       templateId: t || 'None',
-      itemLevel: childVal(s, 'ItemLevel') || 0,
-      rarity: (childVal(s, 'Rarity') || '').replace('EItemRarity::', ''),
       isCurrent: i === idx,
     });
   }
@@ -418,16 +442,11 @@ function main() {
       saveFile: path.basename(savePath),
       engine: 'UE ' + g.info.engine.slice(0, 3).join('.'),
       generatedAt: new Date().toISOString(),
-      note: 'AttributeStates[].position 为 0~1 归一化位置，非真实数值；真实数值由游戏运行时按品质/等级计算。',
+      note: '每件装备仅输出 templateId + 附加属性(attributes，已剔除核心属性与隐藏标记，仅保留占槽词缀)。附加属性 .position 为 0~1 归一化位置，非真实数值。携带货物(cargo)固定为空数组。',
     },
     currentShip: {
       index: idx,
       templateId: shipTpl,
-      itemLevel: childVal(sis, 'ItemLevel') || 0,
-      virtualLevelOffset: childVal(sis, 'VirtualLevelOffset') || 0,
-      effectiveLevel: +(+ (childVal(sis, 'ItemLevel') || 0) + +(childVal(sis, 'VirtualLevelOffset') || 0)).toFixed(4),
-      rarity: (childVal(sis, 'Rarity') || '').replace('EItemRarity::', ''),
-      grade: (childVal(sis, 'Grade') || '').replace('EItemGrade::', ''),
       selected: { primaryWeapon: selPrimary, secondaryWeapon: selSecondary, consumable: selConsumable },
       loadout: {
         primaryWeapons: extractCategory(inv, 'PrimaryWeapons'),
@@ -435,7 +454,7 @@ function main() {
         modules,
         devices: extractCategory(inv, 'Devices'),
         consumables: extractCategory(inv, 'Consumables'),
-        cargo: extractCategory(inv, 'Cargo'),
+        cargo: [],
       },
     },
     ships: shipSummary,
