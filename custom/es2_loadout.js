@@ -28,12 +28,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 const zlib = require('zlib');
-
-// ---------------------------------------------------------------- 常量
-const SAVE_DIR = 'C:/Users/Azrael/AppData/Local/ES2/Saved/SaveGames';
-const DEFAULT_OUT = path.join(os.homedir(), 'Desktop', 'es2_loadout.json');
 
 const FIXED = new Set([
   'Int8Property', 'Int16Property', 'IntProperty', 'Int64Property',
@@ -414,39 +409,24 @@ function extractCategory(inv, catName) {
 
 const MODULE_CATS = ['EnergyCores', 'Sensors', 'Shields', 'CargoUnits', 'Platings', 'thrusters'];
 
-// ---------------------------------------------------------------- 主流程
-function main() {
-  const args = process.argv.slice(2);
-  let savePath = null;
-  let outPath = DEFAULT_OUT;
-  let shipIdx = null;
-  for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--save') savePath = args[++i];
-    else if (args[i] === '--out') outPath = args[++i];
-    else if (args[i] === '--ship') shipIdx = parseInt(args[++i], 10);
-  }
-  if (!savePath) {
-    savePath = findLatestSave(SAVE_DIR);
-    if (!savePath) { console.error('未找到存档，请用 --save 指定'); process.exit(1); }
-  }
+// ---------------------------------------------------------------- 主流程（模块导出）
+module.exports = function (ctx) {
+  const savePath = ctx.filePath;
+  if (!savePath) throw new Error('未指定存档文件路径 (ctx.filePath)');
 
-  console.log('读取存档: ' + savePath);
   const { data } = loadSav(savePath);
   const g = parseGvas(data);
   const top = {};
   for (const p of g.props) top[p.name] = p;
-  if (!top.ShipsSaveState) { console.error('存档缺少 ShipsSaveState'); process.exit(1); }
+  if (!top.ShipsSaveState) throw new Error('存档缺少 ShipsSaveState');
   const ships = top.ShipsSaveState.children || [];
 
-  // 选当前船：指定索引 > 第一艘有模板的船 > 0
-  let idx = shipIdx;
-  if (idx === null) {
-    idx = 0;
-    for (let i = 0; i < ships.length; i++) {
-      const sis = getChild(ships[i], 'ShipItemState');
-      const tpl = sis ? childVal(sis, 'ItemTemplateID') : null;
-      if (tpl && tpl !== 'None' && tpl !== '') { idx = i; break; }
-    }
+  // 选当前船：第一艘有模板的船，否则 0
+  let idx = 0;
+  for (let i = 0; i < ships.length; i++) {
+    const sis = getChild(ships[i], 'ShipItemState');
+    const tpl = sis ? childVal(sis, 'ItemTemplateID') : null;
+    if (tpl && tpl !== 'None' && tpl !== '') { idx = i; break; }
   }
   const ship = ships[idx];
   const sis = getChild(ship, 'ShipItemState');
@@ -494,28 +474,6 @@ function main() {
     ships: shipSummary,
   };
 
-  fs.writeFileSync(outPath, JSON.stringify(result, null, 2), 'utf8');
-  console.log('已写出 -> ' + outPath);
-  console.log('当前飞船[' + idx + '] ' + shipTpl +
-    '  主武 ' + result.currentShip.loadout.primaryWeapons.length +
-    '  副武 ' + result.currentShip.loadout.secondaryWeapons.length +
-    '  模块 ' + MODULE_CATS.reduce((a, c) => a + modules[c].length, 0) +
-    '  装置 ' + result.currentShip.loadout.devices.length);
+  return result;
 }
 
-function findLatestSave(dir) {
-  let files = [];
-  try { files = fs.readdirSync(dir); } catch (e) { return null; }
-  const cands = files.filter(f =>
-    f.endsWith('.sav') && !f.includes('_PREVIEW_') && f !== 'MetaData.sav' && !f.endsWith('.bak'));
-  let best = null, bestT = 0;
-  for (const f of cands) {
-    try {
-      const st = fs.statSync(path.join(dir, f));
-      if (st.mtimeMs > bestT) { bestT = st.mtimeMs; best = f; }
-    } catch (e) { /* ignore */ }
-  }
-  return best ? path.join(dir, best) : null;
-}
-
-main();
