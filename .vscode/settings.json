@@ -6,5 +6,14 @@
 	"scss.lint.unknownAtRules": "ignore",
 	// 保存时用 Prettier 自动格式化（规则见 .prettierrc.json，排除规则见 .prettierignore）
 	"editor.formatOnSave": true,
-	"editor.defaultFormatter": "esbenp.prettier-vscode"
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	// 语言级设置优先级最高：确保 JSON/JSONC 不会被其他来源的默认配置抢占格式化器
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	}
 }
