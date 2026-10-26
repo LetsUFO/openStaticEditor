@@ -6,13 +6,16 @@
  * 提取【当前驾驶飞船】的装备附加属性。
  *
  * 输出口径（按需求精简）:
- *   - 主武器 / 副武器 / 模块 / 装置: 每件仅输出
- *       templateId  (物品模板，用于辨识是哪件装备)
- *       attributes  (附加属性/占槽词缀: 属性ID + 0~1 归一化位置)
- *     —— 不再输出等级(ItemLevel) / 品质(Rarity) / 品级(Grade) 等基础属性。
+ *   - 主武器 / 副武器 / 模块: 每件输出
+ *       templateId      (物品模板，用于辨识是哪件装备)
+ *       level           (ItemLevel，原始等级)
+ *       effectiveLevel  (ItemLevel + VirtualLevelOffset，游戏界面显示等级)
+ *       attributes      (附加属性/占槽词缀: 属性ID + 0~1 归一化位置)
  *     —— attributes 只保留「附加词缀」: 采用负向剔除（去掉各品类固有核心属性 +
  *        隐藏/元数据标记），其余全部视为附加词缀，故能覆盖传说特效、导弹专属词缀、
  *        okkar 催化剂增益、all_modules_* 等全部真实属性（手动注入的可超过 4 条）。
+ *   - 模块(modules): 每种模块只能装备一件，故直接输出单件对象（未装备为 null），
+ *     不使用数组；主/副武器仍为数组（可装备多把）。
  *   - 携带货物(cargo): 固定输出空数组 []。
  *
  * 用法（模块导出，由主进程 file:read 调用）:
@@ -536,11 +539,15 @@ function childVal(node, name) {
 	return c ? c.value : null;
 }
 
-// 仅提取「附加属性(占槽词缀)」: templateId + attributes[]（已剔除核心属性与隐藏标记）
+// 提取单件装备: templateId + 等级 + 附加属性(占槽词缀，已剔除核心属性与隐藏标记)
+// 等级说明: level = ItemLevel(原始等级)；effectiveLevel = ItemLevel + VirtualLevelOffset
+//           (虚拟等级偏移，如 Ascension 加成)，即游戏界面上显示的等级。
 function extractItem(el) {
 	if (!el || !el.children) return null;
 	const tpl = childVal(el, 'ItemTemplateID');
 	if (!tpl || tpl === 'None' || tpl === '') return null;
+	const level = childVal(el, 'ItemLevel');
+	const vlo = childVal(el, 'VirtualLevelOffset') || 0;
 	const attrsEl = getChild(el, 'AttributeStates');
 	const attributes = [];
 	if (attrsEl && attrsEl.children) {
@@ -550,7 +557,14 @@ function extractItem(el) {
 			if (id && isAffixAttr(id)) attributes.push({ id, position: pos });
 		}
 	}
-	return { templateId: tpl, attributes };
+	return {
+		templateId: tpl,
+		level: level,
+		// 规整到 2 位小数：VirtualLevelOffset 以 float 存储，直接相加会产生
+		// 如 60 + 3.8 = 63.799999952316284 的浮点噪声
+		effectiveLevel: level == null ? null : Math.round((level + vlo) * 100) / 100,
+		attributes
+	};
 }
 
 function extractCategory(inv, catName) {
@@ -605,15 +619,19 @@ module.exports = function (ctx) {
 		});
 	}
 
+	// 每种模块只能装备一件 -> 直接输出单件对象；该槽位未装备则为 null（不再用数组）
 	const modules = {};
-	for (const c of MODULE_CATS) modules[c] = extractCategory(inv, c);
+	for (const c of MODULE_CATS) {
+		const arr = extractCategory(inv, c);
+		modules[c] = arr.length ? arr[0] : null;
+	}
 
 	const result = {
 		meta: {
 			saveFile: path.basename(savePath),
 			engine: 'UE ' + g.info.engine.slice(0, 3).join('.'),
 			generatedAt: new Date().toISOString(),
-			note: '每件装备仅输出 templateId + 附加属性(attributes)。attributes 采用负向剔除：去掉各品类固有核心属性(weapon_*/secondary_*/device_*/sensor_range_*/energy_core_regen_*/shield 基础值/cargo_slots_buff/armor 等)与隐藏标记(no_random_drop/min_level/blueprintable/item_price/ascendant_rank 等)，其余全部视为占槽附加词缀，覆盖传说特效(legendary_*)、导弹专属词缀、okkar 催化剂增益、all_modules_*、*_buff 等。.position 为 0~1 归一化位置，非真实数值。携带货物(cargo)固定为空数组。'
+			note: '每件装备输出 templateId + level(ItemLevel) + effectiveLevel(ItemLevel+VirtualLevelOffset，界面显示等级) + attributes。attributes 采用负向剔除：去掉各品类固有核心属性(weapon_*/secondary_*/device_*/sensor_range_*/energy_core_regen_*/shield 基础值/cargo_slots_buff/armor 等)与隐藏标记(no_random_drop/min_level/blueprintable/item_price/ascendant_rank 等)，其余全部视为占槽附加词缀，覆盖传说特效(legendary_*)、导弹专属词缀、okkar 催化剂增益、all_modules_*、*_buff 等。.position 为 0~1 归一化位置，非真实数值。modules 每种模块只装备一件，直接输出单件对象(未装备为 null)；主/副武器为数组。携带货物(cargo)固定为空数组。'
 		},
 		currentShip: {
 			index: idx,
