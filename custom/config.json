@@ -20,7 +20,7 @@
 							"items": [
 								{
 									"label": "等级",
-									"name": "main_weapon1_level",
+									"name": "currentShip.primaryWeapons[0].level",
 									"type": "number",
 									"min": 1,
 									"max": 99
