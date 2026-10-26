@@ -16,16 +16,32 @@ const needFiles = computed(() => {
 });
 const state = reactive({ loaded: false, loading: false });
 
+// fileSrc 系统目录简写（成对 %，不区分大小写）：
+//   %download% → 系统下载目录，%document% → 系统文档目录
+// 替换后得到绝对路径，主进程会直接使用；无简写时原样返回（仍按 custom 目录解析）
+const resolveFileSrc = async function (fileSrc: string): Promise<string> {
+	if (!fileSrc || !fileSrc.includes('%')) return fileSrc;
+	const paths = await window.api.getPaths();
+	const dirMap: Record<string, string> = {
+		download: paths.downloads,
+		document: paths.documents
+	};
+	return fileSrc.replace(/%([^%]+)%/g, (_match, key: string) => {
+		const dir = dirMap[key.toLowerCase()];
+		if (!dir) throw new Error(`未知路径简写 %${key}%（当前支持 %download% / %document%）`);
+		return dir;
+	});
+};
+
 const loadFiles = async function (needFiles: Record<string, any>) {
 	state.loading = true;
-	//todo 批量加载文件，以及让脚本处理每个文件
 	const setFileData = useConfigStore().setFileData;
 	const errors: string[] = [];
 	const loadList = Object.keys(needFiles).map(async (key) => {
 		const { fileSrc, readScriptSrc } = needFiles[key] || {};
 		try {
-			// 由主进程在 Node 环境中加载 custom 目录下的脚本并运行，返回解析后的数据
-			const data = await window.api.readFile(fileSrc, readScriptSrc);
+			// 先解析 fileSrc 里的系统目录简写，再由主进程在 Node 环境中加载脚本并运行，返回解析后的数据
+			const data = await window.api.readFile(await resolveFileSrc(fileSrc), readScriptSrc);
 			await setFileData(key, data);
 		} catch (err: any) {
 			errors.push(`${key}: ${err?.message || err}`);

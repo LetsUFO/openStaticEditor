@@ -6,6 +6,12 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 // 示例：渲染进程可通过 window.api.ping() 调用
 ipcMain.handle('ping', () => 'pong');
 
+// 系统内置目录：渲染进程解析 fileSrc 里的简写（%download% / %document%）时使用
+ipcMain.handle('app:paths', () => ({
+	downloads: app.getPath('downloads'),
+	documents: app.getPath('documents')
+}));
+
 // custom/config.json —— 运行（dev）与打包后都要能加载到
 const DEFAULT_CONFIG = { name: 'OpenStaticEditor', width: 960, height: 680 };
 
@@ -47,6 +53,7 @@ ipcMain.handle('config:get', () => config);
  *     // ctx.filePath      —— 解析后的绝对路径（相对路径按 custom 目录解析）
  *     // ctx.customDir     —— custom 目录绝对路径，方便脚本读取同目录其它资源
  *     // ctx.downloadsPath —— 系统下载目录绝对路径（Electron 官方 getPath('downloads')）
+ *     // ctx.documentsPath —— 系统文档目录绝对路径（Electron 官方 getPath('documents')）
  *     // return 解析后的数据（同步或 Promise 均可）
  *   }
  * 若脚本直接导出数据（非函数），则原样返回。
@@ -87,7 +94,8 @@ ipcMain.handle('file:read', async (_event, { fileSrc, readScriptSrc } = {}) => {
 		fileSrc,
 		filePath,
 		customDir,
-		downloadsPath: app.getPath('downloads')
+		downloadsPath: app.getPath('downloads'),
+		documentsPath: app.getPath('documents')
 	};
 	const data = typeof reader === 'function' ? await reader(ctx) : script;
 

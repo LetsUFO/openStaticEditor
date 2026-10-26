@@ -15,11 +15,15 @@
  *        okkar 催化剂增益、all_modules_* 等全部真实属性（手动注入的可超过 4 条）。
  *   - 携带货物(cargo): 固定输出空数组 []。
  *
- * 用法:
- *   node es2_loadout.js                自动选最新存档 -> 桌面
- *   node es2_loadout.js --save <路径>  指定存档
- *   node es2_loadout.js --out  <路径>  指定输出文件
- *   node es2_loadout.js --ship <索引>  指定飞船（默认第一艘有模板的船）
+ * 用法（模块导出，由主进程 file:read 调用）:
+ *   module.exports = function (ctx) {
+ *     // ctx.fileSrc       —— config.json 里配置的原始文件路径
+ *     // ctx.filePath      —— 主进程解析后的路径（相对路径按 custom 目录拼接）
+ *     // ctx.customDir     —— custom 目录绝对路径
+ *     // ctx.downloadsPath —— 系统下载目录绝对路径
+ *     // ctx.documentsPath —— 系统文档目录绝对路径
+ *     // return 解析后的数据对象
+ *   }
  *
  * 注意: 存档里只存 ValuePositionInRange（0~1 归一化位置），真实数值由游戏
  *       运行时按品质/等级计算，此处不还原真实数值。
