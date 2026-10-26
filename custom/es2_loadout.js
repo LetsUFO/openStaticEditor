@@ -6,12 +6,13 @@
  * 提取【当前驾驶飞船】的装备附加属性。
  *
  * 输出口径（按需求精简）:
- *   - 主武器 / 副武器 / 模块 / 装置 / 消耗品: 每件仅输出
+ *   - 主武器 / 副武器 / 模块 / 装置: 每件仅输出
  *       templateId  (物品模板，用于辨识是哪件装备)
  *       attributes  (附加属性/占槽词缀: 属性ID + 0~1 归一化位置)
  *     —— 不再输出等级(ItemLevel) / 品质(Rarity) / 品级(Grade) 等基础属性。
- *     —— attributes 只保留「附加词缀」: 已剔除核心属性(模板固有)与隐藏标记，
- *        故通常 ≤ 4 条（槽数 = f(品质): 0/1/2/3/4/5 对应 None~Ascendant）。
+ *     —— attributes 只保留「附加词缀」: 采用负向剔除（去掉各品类固有核心属性 +
+ *        隐藏/元数据标记），其余全部视为附加词缀，故能覆盖传说特效、导弹专属词缀、
+ *        okkar 催化剂增益、all_modules_* 等全部真实属性（手动注入的可超过 4 条）。
  *   - 携带货物(cargo): 固定输出空数组 []。
  *
  * 用法:
@@ -55,34 +56,68 @@ const RAW_STRUCTS = new Set([
 
 // ---------------------------------------------------------------- 附加属性判定
 // AttributeStates 里混了三类：核心属性(模板固有,不占槽) + 隐藏标记 + 附加词缀(占槽)。
-// 目标：只输出「附加词缀」(通常 0~4 条，Ascendant 5 条)。
-//   - 隐藏标记：不占槽、UI 不显示的元数据（见机制手册 §3）。
-//   - 核心属性：模板固有，如 weapon_* / boost_* / shield_* / sensor_range_* /
-//     energy_core_regen_* / cargo_slots_buff / armor* 等（按模板而异）。
-//   - 附加词缀：占槽的可 roll 加成，含 6 大裸族 + all_modules_* + *_buff + 已知具体词缀。
+// 之前的「正向白名单」只收录了少数已知词缀，会漏掉大量真实附加属性（传说特效、
+// 导弹专属词缀、okkar 催化剂增益、模块 all_modules_* 等）。
+//
+// 改用【负向剔除】：只剔除「各品类固有核心属性」+「隐藏/元数据标记」，其余一律视为
+// 占槽附加属性。这样能覆盖所有真实词缀（含手动用存档工具注入的额外词缀）。
+//
+// 注意：手动用存档工具给装备追加词缀时，单件可能超过 4 条；Ascendant 本体 5 槽。
+//       本脚本如实输出剔除核心/隐藏后的全部属性，不再硬性限制条数。
+
+// 隐藏 / 元数据标记：永不占槽、UI 不显示，直接剔除
 const HIDDEN_ATTR = new Set([
-  'min_level', 'system_drop', 'blueprintable', 'no_random_drop', 'content_group',
-  'item_price', 'ascendant_rank', 'no_damage', 'full_auto', 'level_dependence',
-  'cargo_slots_buff', // 货舱模块的核心属性（非词缀），且名字以 _buff 结尾易被误判
+  'no_random_drop', 'content_group', 'min_level', 'blueprintable', 'system_drop',
+  'item_price', 'ascendant_rank', 'level_dependence', 'no_damage', 'full_auto',
+  'item_stack_amount', // 消耗品/货物固有堆叠数
 ]);
-const AFFIX_BARE = new Set([
-  'structure', 'firepower', 'precision', 'resistance', 'utility', 'expertise',
-  'all_modules_increased_hull_hitpoints', 'all_modules_increased_primary_weapon_range',
-  'all_modules_shield_damage_reduction', 'all_modules_increased_device_range',
-  'all_modules_reduced_weapon_energy_consumption', 'all_modules_increased_critical_hit_damage',
-  'all_modules_increased_armor_repair', 'all_modules_increased_secondary_weapon_range',
-  'anti_turret_bonus_damage', 'last_missiles_more_damage', 'anti_gnb_bonus_damage',
-  'heal_on_kill', 'missile_ammo_refund', 'instant_shield_restore', 'low_shield_recharges_boost_energy',
-  'shield_disrupt', 'shield_piercing', 'armor_piercing', 'anti_armor', 'destabilizer',
-  'boost_after_kill', 'opulence_increased_income', 'repair_damage_item', 'xr_wish_effect',
-]);
+
+// 各品类「固有核心属性」：模板自带基础数值，不占附加槽，需剔除。
+// 采用「前缀/精确名」规则，而非枚举全部词缀，以最大化覆盖真实附加属性。
+function isCoreAttr(id) {
+  if (!id) return true;
+  // 武器基础属性族（weapon_* 但以 _buff 结尾的是附加增益，保留）
+  if (/^weapon_/.test(id) && !/_buff$/.test(id)) return true;
+  // 副武器基础属性族
+  if (/^secondary_/.test(id)) return true;
+  // 装置(Device)基础属性族：device_* 全为固有
+  if (/^device_/.test(id)) return true;
+  // 传感器固有探测范围族
+  if (/^sensor_range_/.test(id)) return true;
+  // 能量核心固有回充族
+  if (/^energy_core_regen_/.test(id)) return true;
+  // 消耗品固有持续时间 / 效果类型
+  if (/^consumable_/.test(id)) return true;
+  // 护盾基础属性（注意：shield_piercing 等是附加，不能一刀切排除 shield_）
+  if ([
+    'shield_capacity', 'shield_recharge_speed', 'shield_recharge_delay',
+    'shield_shutdown_duration', 'shield_absorption', 'shield_bleed_through',
+    'shield_damage_reduction', 'shield_hardness',
+  ].includes(id)) return true;
+  // 推进器(thruster/booster)基础属性：boost_* 固有基础数值，不占附加槽
+  // （注意：boost_after_kill 等是附加词缀，用精确名单而非前缀以避免误删）
+  if ([
+    'boost_speed', 'boost_acceleration', 'boost_recharge_speed',
+    'boost_energy_capacity', 'boost_energy_consumption', 'boost_recharge_delay',
+    'boost_charge', 'boost_regeneration', 'boost_duration',
+  ].includes(id)) return true;
+  // 货舱单元固有槽位数
+  if (id === 'cargo_slots_buff') return true;
+  // 装甲板基础护甲值（armor 裸词；armor_piercing / armor_per_kill 是附加）
+  if (id === 'armor') return true;
+  // 追踪导弹发射器固有「不可拦截」
+  if (id === 'no_interception') return true;
+  // 团结(togetherwestand) cargo unit 固有许愿效果
+  if (id === 'xr_wish_effect') return true;
+  return false;
+}
+
+// 附加属性 = 非隐藏 且 非核心
 function isAffixAttr(id) {
   if (!id) return false;
   if (HIDDEN_ATTR.has(id)) return false;
-  if (id.startsWith('okkar_catalyst_')) return false; // 欧卡尔能量核心变体的固有核心，非词缀
-  if (id.startsWith('all_modules_')) return true;
-  if (id.endsWith('_buff')) return true;
-  return AFFIX_BARE.has(id);
+  if (isCoreAttr(id)) return false;
+  return true; // 其余一律保留（开放收录所有真实词缀）
 }
 
 // ---------------------------------------------------------------- 基础读
@@ -442,7 +477,7 @@ function main() {
       saveFile: path.basename(savePath),
       engine: 'UE ' + g.info.engine.slice(0, 3).join('.'),
       generatedAt: new Date().toISOString(),
-      note: '每件装备仅输出 templateId + 附加属性(attributes，已剔除核心属性与隐藏标记，仅保留占槽词缀)。附加属性 .position 为 0~1 归一化位置，非真实数值。携带货物(cargo)固定为空数组。',
+      note: '每件装备仅输出 templateId + 附加属性(attributes)。attributes 采用负向剔除：去掉各品类固有核心属性(weapon_*/secondary_*/device_*/sensor_range_*/energy_core_regen_*/shield 基础值/cargo_slots_buff/armor 等)与隐藏标记(no_random_drop/min_level/blueprintable/item_price/ascendant_rank 等)，其余全部视为占槽附加词缀，覆盖传说特效(legendary_*)、导弹专属词缀、okkar 催化剂增益、all_modules_*、*_buff 等。.position 为 0~1 归一化位置，非真实数值。携带货物(cargo)固定为空数组。',
     },
     currentShip: {
       index: idx,
@@ -453,7 +488,6 @@ function main() {
         secondaryWeapons: extractCategory(inv, 'SecondaryWeapons'),
         modules,
         devices: extractCategory(inv, 'Devices'),
-        consumables: extractCategory(inv, 'Consumables'),
         cargo: [],
       },
     },
