@@ -580,6 +580,39 @@ function extractCategory(inv, catName) {
 
 const MODULE_CATS = ['EnergyCores', 'Sensors', 'Shields', 'CargoUnits', 'Platings', 'thrusters'];
 
+// ---------------------------------------------------------------- 舰种(ship class)
+// 存档里只有 ItemTemplateID(如 ship_light_rogue)，没有独立的"舰种"字段。
+// 舰种 = 游戏内 Ship Class（Rogue/Gunship/Bomber/Sentinel…），与 heavy/medium/light 尺寸前缀无关。
+// 已知模板硬编码映射；未知模板走 fallback(去 ship_ 前缀 + 尺寸词后首字母大写)。
+const SHIP_CLASS_MAP = {
+	ship_light_rogue: 'Rogue',
+	ship_rogue: 'Rogue',
+	ship_stinger: 'Stinger',
+	ship_vindicator: 'Vindicator',
+	ship_vanguard: 'Vanguard',
+	ship_interceptor: 'Interceptor',
+	ship_sentinel: 'Sentinel',
+	ship_scout: 'Scout',
+	ship_striker: 'Striker',
+	ship_gunship: 'Gunship',
+	ship_heavy_bomber: 'Bomber',
+	ship_bomber: 'Bomber',
+	ship_dreadnought: 'Dreadnought',
+	ship_okkar_fighter: 'Okkar',
+	ship_okkar_gunship: 'Okkar',
+	ship_okkar_prime: 'Okkar',
+	ship_okkar_medium_ship1: 'Okkar'
+};
+const SHIP_SIZE_WORDS = ['light', 'heavy', 'medium'];
+function shipClassOf(tpl) {
+	if (!tpl || tpl === 'None' || tpl === '') return null;
+	if (SHIP_CLASS_MAP[tpl]) return SHIP_CLASS_MAP[tpl];
+	// fallback: ship_<size?>_<class> -> "Class"
+	let s = tpl.startsWith('ship_') ? tpl.slice(5) : tpl;
+	const parts = s.split('_').filter((p) => !SHIP_SIZE_WORDS.includes(p));
+	return parts.map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
+}
+
 // ---------------------------------------------------------------- 主流程（模块导出）
 module.exports = function (ctx) {
 	const savePath = ctx.filePath;
@@ -608,13 +641,14 @@ module.exports = function (ctx) {
 	const shipTpl = childVal(sis, 'ItemTemplateID') || 'None';
 
 	// 飞船概览（仅标识，不输出基础属性）
-	const shipSummary = [];
+		const shipSummary = [];
 	for (let i = 0; i < ships.length; i++) {
 		const s = getChild(ships[i], 'ShipItemState');
 		const t = s ? childVal(s, 'ItemTemplateID') : null;
 		shipSummary.push({
 			index: i,
 			templateId: t || 'None',
+			shipClass: shipClassOf(t || 'None'),
 			isCurrent: i === idx
 		});
 	}
@@ -636,6 +670,7 @@ module.exports = function (ctx) {
 		currentShip: {
 			index: idx,
 			templateId: shipTpl,
+			shipClass: shipClassOf(shipTpl), // 舰种(游戏内 Ship Class): Rogue/Gunship/Bomber/Sentinel…
 			primaryWeapons: extractCategory(inv, 'PrimaryWeapons'),
 			secondaryWeapons: extractCategory(inv, 'SecondaryWeapons'),
 			modules,
