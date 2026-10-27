@@ -641,7 +641,8 @@ module.exports = function (ctx) {
 			modules,
 			cargo: []
 		},
-		ships: shipSummary
+		ships: shipSummary,
+		skillFilter: function () {}
 	};
 
 	return result;

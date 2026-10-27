@@ -1,5 +1,5 @@
 {
-	"name": "demo",
+	"name": "EVER SPACE 2 永恒空间2 存档修改器",
 	"width": 960,
 	"height": 480,
 	"background": {
@@ -25,12 +25,6 @@
 							"label": "武器1",
 							"tip": "",
 							"items": [
-								{
-									"label": "模板",
-									"name": "currentShip.primaryWeapons[0].templateId",
-									"type": "text",
-									"disabled": true
-								},
 								{
 									"label": "等级",
 									"name": "currentShip.primaryWeapons[0].level",
@@ -69,12 +63,6 @@
 							"tip": "",
 							"items": [
 								{
-									"label": "模板",
-									"name": "currentShip.primaryWeapons[1].templateId",
-									"type": "text",
-									"disabled": true
-								},
-								{
 									"label": "等级",
 									"name": "currentShip.primaryWeapons[1].level",
 									"type": "number",
@@ -111,12 +99,6 @@
 							"label": "武器3",
 							"tip": "",
 							"items": [
-								{
-									"label": "模板",
-									"name": "currentShip.primaryWeapons[2].templateId",
-									"type": "text",
-									"disabled": true
-								},
 								{
 									"label": "等级",
 									"name": "currentShip.primaryWeapons[2].level",
@@ -166,12 +148,6 @@
 							"tip": "",
 							"items": [
 								{
-									"label": "模板",
-									"name": "currentShip.secondaryWeapons[0].templateId",
-									"type": "text",
-									"disabled": true
-								},
-								{
 									"label": "等级",
 									"name": "currentShip.secondaryWeapons[0].level",
 									"type": "number",
@@ -209,12 +185,6 @@
 							"tip": "",
 							"items": [
 								{
-									"label": "模板",
-									"name": "currentShip.secondaryWeapons[1].templateId",
-									"type": "text",
-									"disabled": true
-								},
-								{
 									"label": "等级",
 									"name": "currentShip.secondaryWeapons[1].level",
 									"type": "number",
@@ -251,12 +221,6 @@
 							"label": "武器3",
 							"tip": "",
 							"items": [
-								{
-									"label": "模板",
-									"name": "currentShip.secondaryWeapons[2].templateId",
-									"type": "text",
-									"disabled": true
-								},
 								{
 									"label": "等级",
 									"name": "currentShip.secondaryWeapons[2].level",
@@ -305,12 +269,6 @@
 							"tip": "",
 							"items": [
 								{
-									"label": "模板",
-									"name": "currentShip.modules.EnergyCores.templateId",
-									"type": "text",
-									"disabled": true
-								},
-								{
 									"label": "等级",
 									"name": "currentShip.modules.EnergyCores.level",
 									"type": "number",
@@ -347,12 +305,6 @@
 							"label": "护盾",
 							"tip": "",
 							"items": [
-								{
-									"label": "模板",
-									"name": "currentShip.modules.Shields.templateId",
-									"type": "text",
-									"disabled": true
-								},
 								{
 									"label": "等级",
 									"name": "currentShip.modules.Shields.level",
@@ -391,12 +343,6 @@
 							"tip": "",
 							"items": [
 								{
-									"label": "模板",
-									"name": "currentShip.modules.Platings.templateId",
-									"type": "text",
-									"disabled": true
-								},
-								{
 									"label": "等级",
 									"name": "currentShip.modules.Platings.level",
 									"type": "number",
@@ -433,12 +379,6 @@
 							"label": "传感器",
 							"tip": "",
 							"items": [
-								{
-									"label": "模板",
-									"name": "currentShip.modules.Sensors.templateId",
-									"type": "text",
-									"disabled": true
-								},
 								{
 									"label": "等级",
 									"name": "currentShip.modules.Sensors.level",
@@ -477,12 +417,6 @@
 							"tip": "",
 							"items": [
 								{
-									"label": "模板",
-									"name": "currentShip.modules.thrusters.templateId",
-									"type": "text",
-									"disabled": true
-								},
-								{
 									"label": "等级",
 									"name": "currentShip.modules.thrusters.level",
 									"type": "number",
@@ -519,12 +453,6 @@
 							"label": "货物单元",
 							"tip": "",
 							"items": [
-								{
-									"label": "模板",
-									"name": "currentShip.modules.CargoUnits.templateId",
-									"type": "text",
-									"disabled": true
-								},
 								{
 									"label": "等级",
 									"name": "currentShip.modules.CargoUnits.level",
