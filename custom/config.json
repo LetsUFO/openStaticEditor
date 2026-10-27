@@ -2,9 +2,16 @@
 	"name": "demo",
 	"width": 960,
 	"height": 480,
-	"background": { "src": "", "base64": "", "blur": 10 },
+	"background": {
+		"src": "",
+		"base64": "",
+		"blur": 10
+	},
 	"loadFiles": {
-		"base": { "fileSrc": "%download%/ufo.sav", "readScriptSrc": "custom/es2_loadout.js" }
+		"base": {
+			"fileSrc": "%download%/ufo.sav",
+			"readScriptSrc": "custom/es2_loadout.js"
+		}
 	},
 	"menu": [
 		{
@@ -19,6 +26,12 @@
 							"tip": "",
 							"items": [
 								{
+									"label": "模板",
+									"name": "currentShip.primaryWeapons[0].templateId",
+									"type": "text",
+									"disabled": true
+								},
+								{
 									"label": "等级",
 									"name": "currentShip.primaryWeapons[0].level",
 									"type": "number",
@@ -28,26 +41,26 @@
 								{
 									"label": "附加属性1",
 									"type": "select",
-									"name": "main_weapon1_param1",
-									"options": [{ "label": "asd", "value": "asd" }]
+									"name": "currentShip.primaryWeapons[0].attributes[0].id",
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性2",
 									"type": "select",
-									"name": "main_weapon1_param2",
-									"options": [{ "label": "1", "value": "1" }]
+									"name": "currentShip.primaryWeapons[0].attributes[1].id",
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性3",
 									"type": "select",
-									"name": "main_weapon1_param3",
-									"options": [{ "label": "1", "value": "1" }]
+									"name": "currentShip.primaryWeapons[0].attributes[2].id",
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性4",
 									"type": "select",
-									"name": "main_weapon1_param4",
-									"options": [{ "label": "1", "value": "1" }]
+									"name": "currentShip.primaryWeapons[0].attributes[3].id",
+									"optionsFrom": ""
 								}
 							]
 						},
@@ -56,35 +69,41 @@
 							"tip": "",
 							"items": [
 								{
+									"label": "模板",
+									"name": "currentShip.primaryWeapons[1].templateId",
+									"type": "text",
+									"disabled": true
+								},
+								{
 									"label": "等级",
-									"name": "main_weapon2_level",
+									"name": "currentShip.primaryWeapons[1].level",
 									"type": "number",
 									"min": 1,
 									"max": 99
 								},
 								{
 									"label": "附加属性1",
+									"name": "currentShip.primaryWeapons[1].attributes[0].id",
 									"type": "select",
-									"name": "main_weapon2_param1",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性2",
+									"name": "currentShip.primaryWeapons[1].attributes[1].id",
 									"type": "select",
-									"name": "main_weapon2_param2",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性3",
+									"name": "currentShip.primaryWeapons[1].attributes[2].id",
 									"type": "select",
-									"name": "main_weapon2_param3",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性4",
+									"name": "currentShip.primaryWeapons[1].attributes[3].id",
 									"type": "select",
-									"name": "main_weapon2_param4",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								}
 							]
 						},
@@ -93,41 +112,50 @@
 							"tip": "",
 							"items": [
 								{
+									"label": "模板",
+									"name": "currentShip.primaryWeapons[2].templateId",
+									"type": "text",
+									"disabled": true
+								},
+								{
 									"label": "等级",
-									"name": "main_weapon3_level",
+									"name": "currentShip.primaryWeapons[2].level",
 									"type": "number",
 									"min": 1,
 									"max": 99
 								},
 								{
 									"label": "附加属性1",
+									"name": "currentShip.primaryWeapons[2].attributes[0].id",
 									"type": "select",
-									"name": "main_weapon3_param1",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性2",
+									"name": "currentShip.primaryWeapons[2].attributes[1].id",
 									"type": "select",
-									"name": "main_weapon3_param2",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性3",
+									"name": "currentShip.primaryWeapons[2].attributes[2].id",
 									"type": "select",
-									"name": "main_weapon3_param3",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性4",
+									"name": "currentShip.primaryWeapons[2].attributes[3].id",
 									"type": "select",
-									"name": "main_weapon3_param4",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								}
 							]
 						}
 					],
 					"dataKey": "base",
-					"saveScript": { "needFileKey": "base", "saveScript": "" }
+					"saveScript": {
+						"needFileKey": "base",
+						"saveScript": ""
+					}
 				},
 				{
 					"label": "副武器",
@@ -138,35 +166,41 @@
 							"tip": "",
 							"items": [
 								{
+									"label": "模板",
+									"name": "currentShip.secondaryWeapons[0].templateId",
+									"type": "text",
+									"disabled": true
+								},
+								{
 									"label": "等级",
-									"name": "sub_weapon1_level",
+									"name": "currentShip.secondaryWeapons[0].level",
 									"type": "number",
 									"min": 1,
 									"max": 99
 								},
 								{
 									"label": "附加属性1",
+									"name": "currentShip.secondaryWeapons[0].attributes[0].id",
 									"type": "select",
-									"name": "sub_weapon1_param1",
-									"options": [{ "label": "asd", "value": "asd" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性2",
+									"name": "currentShip.secondaryWeapons[0].attributes[1].id",
 									"type": "select",
-									"name": "sub_weapon1_param2",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性3",
+									"name": "currentShip.secondaryWeapons[0].attributes[2].id",
 									"type": "select",
-									"name": "sub_weapon1_param3",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性4",
+									"name": "currentShip.secondaryWeapons[0].attributes[3].id",
 									"type": "select",
-									"name": "sub_weapon1_param4",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								}
 							]
 						},
@@ -175,35 +209,41 @@
 							"tip": "",
 							"items": [
 								{
+									"label": "模板",
+									"name": "currentShip.secondaryWeapons[1].templateId",
+									"type": "text",
+									"disabled": true
+								},
+								{
 									"label": "等级",
-									"name": "sub_weapon2_level",
+									"name": "currentShip.secondaryWeapons[1].level",
 									"type": "number",
 									"min": 1,
 									"max": 99
 								},
 								{
 									"label": "附加属性1",
+									"name": "currentShip.secondaryWeapons[1].attributes[0].id",
 									"type": "select",
-									"name": "sub_weapon2_param1",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性2",
+									"name": "currentShip.secondaryWeapons[1].attributes[1].id",
 									"type": "select",
-									"name": "sub_weapon2_param2",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性3",
+									"name": "currentShip.secondaryWeapons[1].attributes[2].id",
 									"type": "select",
-									"name": "sub_weapon2_param3",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性4",
+									"name": "currentShip.secondaryWeapons[1].attributes[3].id",
 									"type": "select",
-									"name": "sub_weapon2_param4",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								}
 							]
 						},
@@ -212,41 +252,50 @@
 							"tip": "",
 							"items": [
 								{
+									"label": "模板",
+									"name": "currentShip.secondaryWeapons[2].templateId",
+									"type": "text",
+									"disabled": true
+								},
+								{
 									"label": "等级",
-									"name": "sub_weapon3_level",
+									"name": "currentShip.secondaryWeapons[2].level",
 									"type": "number",
 									"min": 1,
 									"max": 99
 								},
 								{
 									"label": "附加属性1",
+									"name": "currentShip.secondaryWeapons[2].attributes[0].id",
 									"type": "select",
-									"name": "sub_weapon3_param1",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性2",
+									"name": "currentShip.secondaryWeapons[2].attributes[1].id",
 									"type": "select",
-									"name": "sub_weapon3_param2",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性3",
+									"name": "currentShip.secondaryWeapons[2].attributes[2].id",
 									"type": "select",
-									"name": "sub_weapon3_param3",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性4",
+									"name": "currentShip.secondaryWeapons[2].attributes[3].id",
 									"type": "select",
-									"name": "sub_weapon3_param4",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								}
 							]
 						}
 					],
 					"dataKey": "base",
-					"saveScript": { "needFileKey": "base", "saveScript": "" }
+					"saveScript": {
+						"needFileKey": "base",
+						"saveScript": ""
+					}
 				},
 				{
 					"label": "模块",
@@ -255,26 +304,42 @@
 							"label": "能量核心",
 							"tip": "",
 							"items": [
-								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "模板",
+									"name": "currentShip.modules.EnergyCores.templateId",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"label": "等级",
+									"name": "currentShip.modules.EnergyCores.level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
 								{
 									"label": "附加属性1",
+									"name": "currentShip.modules.EnergyCores.attributes[0].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性2",
+									"name": "currentShip.modules.EnergyCores.attributes[1].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性3",
+									"name": "currentShip.modules.EnergyCores.attributes[2].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性4",
+									"name": "currentShip.modules.EnergyCores.attributes[3].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								}
 							]
 						},
@@ -282,26 +347,42 @@
 							"label": "护盾",
 							"tip": "",
 							"items": [
-								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "模板",
+									"name": "currentShip.modules.Shields.templateId",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"label": "等级",
+									"name": "currentShip.modules.Shields.level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
 								{
 									"label": "附加属性1",
+									"name": "currentShip.modules.Shields.attributes[0].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性2",
+									"name": "currentShip.modules.Shields.attributes[1].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性3",
+									"name": "currentShip.modules.Shields.attributes[2].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性4",
+									"name": "currentShip.modules.Shields.attributes[3].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								}
 							]
 						},
@@ -309,26 +390,42 @@
 							"label": "装甲板",
 							"tip": "",
 							"items": [
-								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "模板",
+									"name": "currentShip.modules.Platings.templateId",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"label": "等级",
+									"name": "currentShip.modules.Platings.level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
 								{
 									"label": "附加属性1",
+									"name": "currentShip.modules.Platings.attributes[0].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性2",
+									"name": "currentShip.modules.Platings.attributes[1].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性3",
+									"name": "currentShip.modules.Platings.attributes[2].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性4",
+									"name": "currentShip.modules.Platings.attributes[3].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								}
 							]
 						},
@@ -336,26 +433,42 @@
 							"label": "传感器",
 							"tip": "",
 							"items": [
-								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "模板",
+									"name": "currentShip.modules.Sensors.templateId",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"label": "等级",
+									"name": "currentShip.modules.Sensors.level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
 								{
 									"label": "附加属性1",
+									"name": "currentShip.modules.Sensors.attributes[0].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性2",
+									"name": "currentShip.modules.Sensors.attributes[1].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性3",
+									"name": "currentShip.modules.Sensors.attributes[2].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性4",
+									"name": "currentShip.modules.Sensors.attributes[3].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								}
 							]
 						},
@@ -363,26 +476,42 @@
 							"label": "推进器",
 							"tip": "",
 							"items": [
-								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "模板",
+									"name": "currentShip.modules.thrusters.templateId",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"label": "等级",
+									"name": "currentShip.modules.thrusters.level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
 								{
 									"label": "附加属性1",
+									"name": "currentShip.modules.thrusters.attributes[0].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性2",
+									"name": "currentShip.modules.thrusters.attributes[1].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性3",
+									"name": "currentShip.modules.thrusters.attributes[2].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性4",
+									"name": "currentShip.modules.thrusters.attributes[3].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								}
 							]
 						},
@@ -390,32 +519,51 @@
 							"label": "货物单元",
 							"tip": "",
 							"items": [
-								{ "label": "等级", "type": "number", "min": 1, "max": 99 },
+								{
+									"label": "模板",
+									"name": "currentShip.modules.CargoUnits.templateId",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"label": "等级",
+									"name": "currentShip.modules.CargoUnits.level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
 								{
 									"label": "附加属性1",
+									"name": "currentShip.modules.CargoUnits.attributes[0].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性2",
+									"name": "currentShip.modules.CargoUnits.attributes[1].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性3",
+									"name": "currentShip.modules.CargoUnits.attributes[2].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								},
 								{
 									"label": "附加属性4",
+									"name": "currentShip.modules.CargoUnits.attributes[3].id",
 									"type": "select",
-									"options": [{ "label": "1", "value": "1" }]
+									"optionsFrom": ""
 								}
 							]
 						}
 					],
 					"dataKey": "base",
-					"saveScript": { "needFileKey": "base", "saveScript": "" }
+					"saveScript": {
+						"needFileKey": "base",
+						"saveScript": ""
+					}
 				}
 			]
 		},
@@ -425,7 +573,10 @@
 				{
 					"label": "仅列出当前飞船适合的被动技能",
 					"tip": "即使选择相同的效果，只能生效一个",
-					"loadScript": { "dataKey": "base", "loadSrc": "custom/skillOption.js" },
+					"loadScript": {
+						"dataKey": "base",
+						"loadSrc": "custom/skillOption.js"
+					},
 					"items": [
 						{
 							"label": "1",
@@ -519,8 +670,13 @@
 				}
 			],
 			"dataKey": "base",
-			"saveScript": { "needFileKey": "base", "saveScript": "" }
+			"saveScript": {
+				"needFileKey": "base",
+				"saveScript": ""
+			}
 		}
 	],
-	"i18n": { "zh": {} }
+	"i18n": {
+		"zh": {}
+	}
 }

@@ -23,6 +23,9 @@ function toMenuItems(list: AppMenuItem[]): ItemType[] {
 export const useConfigStore = defineStore('config', () => {
 	const config = ref<AppConfig | null>(null);
 	const fileData = ref<Record<string, any>>({}); //经过转换的文件数据
+	// fileData 每次写入自增。表单/下拉选项靠它触发刷新，
+	// 避免对整份存档数据做 deep watch（存档里属性条目多，深度监听开销大）
+	const dataVersion = ref(0);
 
 	/** 直接给 <Menu :items> 用 */
 	const menu = computed<ItemType[]>(() => toMenuItems(config.value?.menu ?? []));
@@ -34,14 +37,15 @@ export const useConfigStore = defineStore('config', () => {
 		config.value = await window.api.getConfig();
 	}
 	function setFileData(fileKey: string, data: Record<string, any>): Promise<void> {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			if (!fileData.value[fileKey]) {
 				fileData.value[fileKey] = {};
 			}
 			Object.assign(fileData.value[fileKey], data);
+			dataVersion.value++;
 			resolve();
 		});
 	}
 
-	return { config, menu, rootKeys, load, fileData, setFileData };
+	return { config, menu, rootKeys, load, fileData, dataVersion, setFileData };
 });

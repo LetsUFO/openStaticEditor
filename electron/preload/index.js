@@ -10,7 +10,9 @@ const api = {
 	getPaths: () => ipcRenderer.invoke('app:paths'),
 	// 运行 custom 目录下的读取脚本，返回解析后的数据
 	readFile: (fileSrc, readScriptSrc) =>
-		ipcRenderer.invoke('file:read', { fileSrc, readScriptSrc })
+		ipcRenderer.invoke('file:read', { fileSrc, readScriptSrc }),
+	// 运行 custom 目录下的选项脚本，返回下拉选项数组
+	runScript: (payload) => ipcRenderer.invoke('script:run', payload)
 };
 
 if (process.contextIsolated) {

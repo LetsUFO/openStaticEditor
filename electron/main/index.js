@@ -102,6 +102,63 @@ ipcMain.handle('file:read', async (_event, { fileSrc, readScriptSrc } = {}) => {
 	return data;
 });
 
+/**
+ * 运行 custom 目录下的「选项脚本」，返回下拉框（Select）的选项数组。
+ * 与 file:read 的区别：不读存档文件，只算选项（如「当前飞船可用的被动技能」）。
+ *
+ * 请求参数：{ scriptSrc, dataKey, data, itemName, optionKey, optionFilterFn }
+ * 脚本约定（CommonJS）：
+ *   module.exports = function (ctx) {
+ *     return {
+ *       skillList: [{ label: 'xxx', value: 'xxx' }],
+ *       skillFilter: (list, ctx) => list.filter(...)
+ *     };
+ *   }
+ * optionFilterFn 取脚本返回值里同名的函数，在【主进程】里执行后再回传结果
+ * （函数无法跨 IPC 序列化），渲染进程只拿到最终的选项数组。
+ */
+ipcMain.handle('script:run', async (_event, payload = {}) => {
+	const { scriptSrc, dataKey, data, itemName, optionKey, optionFilterFn } = payload;
+
+	if (!scriptSrc) throw new Error('未配置 scriptSrc，无法加载选项脚本');
+
+	const customDir = getCustomDir();
+	let scriptPath;
+	if (isAbsolute(scriptSrc)) {
+		scriptPath = scriptSrc;
+	} else {
+		const fromCustom = join(customDir, scriptSrc);
+		const projectRoot = app.isPackaged ? process.resourcesPath : join(__dirname, '../../');
+		const fromRoot = join(projectRoot, scriptSrc);
+		scriptPath = existsSync(fromCustom) ? fromCustom : fromRoot;
+	}
+
+	// require 会缓存模块，脚本修改后需要清缓存才能重新加载
+	const resolved = require.resolve(scriptPath);
+	delete require.cache[resolved];
+	const script = require(resolved);
+
+	const reader = typeof script === 'function' ? script : script?.default;
+	const ctx = {
+		scriptSrc,
+		dataKey,
+		data,
+		itemName,
+		customDir,
+		downloadsPath: app.getPath('downloads'),
+		documentsPath: app.getPath('documents')
+	};
+
+	const out = typeof reader === 'function' ? await reader(ctx) : script;
+	let options = optionKey ? out?.[optionKey] : out;
+
+	if (optionFilterFn && typeof out?.[optionFilterFn] === 'function') {
+		options = out[optionFilterFn](Array.isArray(options) ? options : [], ctx);
+	}
+
+	return Array.isArray(options) ? options : [];
+});
+
 function createWindow() {
 	const mainWindow = new BrowserWindow({
 		width: config.width,

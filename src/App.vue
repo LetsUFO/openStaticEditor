@@ -42,11 +42,29 @@ const activeCategory = computed(() => {
 
 const $FormBuilder = ref();
 
-const save = function (scriptSrc: string) {
+/**
+ * @param saveCfg config.json 里的 { needFileKey, saveScript }
+ * 表单直接绑定 store.fileData[dataKey]，所以这里拿到的就是改完的完整数据。
+ */
+const save = async function (saveCfg: any = {}) {
+	const formData = ($FormBuilder.value as any)?.getFormData?.() || {};
+	if (!saveCfg.saveScript) {
+		message.warning('该分类未配置保存脚本（config.json -> saveScript.saveScript）');
+		return;
+	}
 	state.loading = true;
-	//todo 拿到form数据，提交给这个地址的脚本
-	message.success('保存成功！');
-	state.loading = false;
+	try {
+		await window.api.runScript({
+			scriptSrc: saveCfg.saveScript,
+			dataKey: saveCfg.needFileKey,
+			data: formData
+		});
+		message.success('保存成功！');
+	} catch (error: any) {
+		message.error(`保存失败：${error?.message || error}`);
+	} finally {
+		state.loading = false;
+	}
 };
 </script>
 
