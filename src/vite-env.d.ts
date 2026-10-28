@@ -22,9 +22,10 @@ interface AppMenuFormField {
 	placeholder?: string;
 	/** 静态选项：[{label,value}]，也允许直接给字符串数组 */
 	options?: any[];
-	/** 动态选项（交给 custom 下的脚本算）：取脚本返回对象的该字段 */
-	optionKey?: string;
-	/** 动态选项过滤函数：取脚本返回对象里同名的函数，在主进程执行 */
+	/** 动态选项数据：store.fileData[dataKey] 下该路径的值（如 "skillMap"）。
+	 * 配了 optionFilterFn 时作为其第二参数传入；否则直接作为选项使用 */
+	optionUse?: string;
+	/** 选项过滤函数名（最高优先级）：store 里注入的同名函数，签名 (formData, optionUseData) => options */
 	optionFilterFn?: string;
 }
 
@@ -33,11 +34,6 @@ interface AppMenuFormItem {
 	label: string;
 	tip?: string;
 	items?: AppMenuFormField[];
-	/** 为本块的下拉框动态取选项的脚本 */
-	loadScript?: {
-		dataKey?: string;
-		loadSrc: string;
-	};
 }
 
 /** config.json -> menu 的一个节点（可递归嵌套 children） */
@@ -77,13 +73,6 @@ interface Window {
 		getConfig: () => Promise<AppConfig>;
 		getPaths: () => Promise<{ downloads: string; documents: string }>;
 		readFile: (fileSrc: string, readScriptSrc: string) => Promise<any>;
-		runScript: (payload: {
-			scriptSrc: string;
-			dataKey?: string;
-			data?: any;
-			itemName?: string;
-			optionKey?: string;
-			optionFilterFn?: string;
-		}) => Promise<any[]>;
+		runScript: (payload: { scriptSrc: string; dataKey?: string; data?: any }) => Promise<any>;
 	};
 }

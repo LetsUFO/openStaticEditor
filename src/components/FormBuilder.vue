@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, watch } from 'vue';
 import { get, set } from 'lodash';
 
 import { Form, Input, InputNumber, Select } from 'ant-design-vue';
@@ -54,50 +54,28 @@ function normalizeOptions(list: any): { label: string; value: any }[] {
 	);
 }
 
-/** 脚本算出来的选项，key = 脚本 + optionKey + 过滤函数，避免重复请求 */
-const scriptOptions = ref<Record<string, any[]>>({});
-
-async function loadScriptOptions(block: AppMenuFormItem): Promise<void> {
-	const cfg = block?.loadScript;
-	if (!cfg?.loadSrc) return;
-	const dataKey = cfg.dataKey || props.dataKey;
-
-	for (const item of block.items || []) {
-		if (!item.optionKey) continue;
-		const cacheKey = `${cfg.loadSrc}::${item.optionKey}::${item.optionFilterFn || ''}`;
-		if (scriptOptions.value[cacheKey]) continue;
-		try {
-			const list = await window.api.runScript({
-				scriptSrc: cfg.loadSrc,
-				dataKey,
-				data: dataKey ? configStore.fileData[dataKey] : null,
-				itemName: item.name,
-				optionKey: item.optionKey,
-				optionFilterFn: item.optionFilterFn
-			});
-			scriptOptions.value[cacheKey] = list || [];
-		} catch (error) {
-			console.error(`[FormBuilder] 选项脚本执行失败：${cfg.loadSrc}`, error);
-			scriptOptions.value[cacheKey] = []; // 失败了也占位，避免每次渲染都重跑
+/** Select 选项的三级来源（优先级从高到低）：
+ *  1. optionFilterFn —— store 里同名注入函数（functionTextList eval 注入），调用
+ *     fn(fileData[dataKey] 完整子集, optionUse 抽取的数据)，返回值作为选项
+ *  2. optionUse     —— 直接抽取 fileData[dataKey] 下该路径的数据作为选项
+ *  3. options       —— config.json 里的静态选项（默认） */
+function optionsOf(item: AppMenuFormField) {
+	if (item?.optionFilterFn) {
+		const fn = configStore.fileData[item.optionFilterFn];
+		if (typeof fn === 'function') {
+			const useData = item.optionUse
+				? get(configStore.fileData[props.dataKey] ?? {}, item.optionUse)
+				: undefined;
+			try {
+				return normalizeOptions(fn(model.value, useData));
+			} catch (error) {
+				console.error(`[FormBuilder] optionFilterFn(${item.optionFilterFn}) 执行失败：`, error);
+				return [];
+			}
 		}
 	}
-}
-
-// 切分类、切 dataKey、文件数据落地时都重算一次脚本选项
-watch(
-	[() => props.config, () => props.dataKey, () => configStore.dataVersion],
-	() => {
-		(props.config || []).forEach((block) => loadScriptOptions(block));
-	},
-	{ immediate: true }
-);
-
-/** 选项优先级：脚本 loadScript > 静态 options（脚本未就绪时回退静态） */
-function optionsOf(block: AppMenuFormItem, item: AppMenuFormField) {
-	const cfg = block?.loadScript;
-	if (cfg?.loadSrc && item?.optionKey) {
-		const cacheKey = `${cfg.loadSrc}::${item.optionKey}::${item.optionFilterFn || ''}`;
-		if (scriptOptions.value[cacheKey]) return normalizeOptions(scriptOptions.value[cacheKey]);
+	if (item?.optionUse) {
+		return normalizeOptions(get(configStore.fileData[props.dataKey] ?? {}, item.optionUse));
 	}
 	if (Array.isArray(item?.options) && item.options.length) {
 		return normalizeOptions(item.options);
@@ -143,7 +121,7 @@ defineExpose({ getFormData });
 					<Select
 						v-else-if="item.type == 'select'"
 						:value="read(item)"
-						:options="optionsOf(block, item)"
+						:options="optionsOf(item)"
 						:disabled="item.disabled"
 						:placeholder="item.placeholder || '请选择'"
 						:show-search="true"

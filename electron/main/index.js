@@ -103,24 +103,14 @@ ipcMain.handle('file:read', async (_event, { fileSrc, readScriptSrc } = {}) => {
 });
 
 /**
- * 运行 custom 目录下的「选项脚本」，返回下拉框（Select）的选项数组。
- * 与 file:read 的区别：不读存档文件，只算选项（如「当前飞船可用的被动技能」）。
- *
- * 请求参数：{ scriptSrc, dataKey, data, itemName, optionKey, optionFilterFn }
- * 脚本约定（CommonJS）：
- *   module.exports = function (ctx) {
- *     return {
- *       skillList: [{ label: 'xxx', value: 'xxx' }],
- *       skillFilter: (list, ctx) => list.filter(...)
- *     };
- *   }
- * optionFilterFn 取脚本返回值里同名的函数，在【主进程】里执行后再回传结果
- * （函数无法跨 IPC 序列化），渲染进程只拿到最终的选项数组。
+ * 运行 custom 目录下的通用脚本（目前用于保存：saveScript 拿表单数据写回存档）。
+ * 请求参数：{ scriptSrc, dataKey, data }，脚本函数收到 ctx = { scriptSrc, dataKey, data, customDir, ... }
+ * （下拉选项过滤已移到渲染进程 store 内完成，不再走这里）
  */
 ipcMain.handle('script:run', async (_event, payload = {}) => {
-	const { scriptSrc, dataKey, data, itemName, optionKey, optionFilterFn } = payload;
+	const { scriptSrc, dataKey, data } = payload;
 
-	if (!scriptSrc) throw new Error('未配置 scriptSrc，无法加载选项脚本');
+	if (!scriptSrc) throw new Error('未配置 scriptSrc，无法运行脚本');
 
 	const customDir = getCustomDir();
 	let scriptPath;
@@ -143,20 +133,12 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 		scriptSrc,
 		dataKey,
 		data,
-		itemName,
 		customDir,
 		downloadsPath: app.getPath('downloads'),
 		documentsPath: app.getPath('documents')
 	};
 
-	const out = typeof reader === 'function' ? await reader(ctx) : script;
-	let options = optionKey ? out?.[optionKey] : out;
-
-	if (optionFilterFn && typeof out?.[optionFilterFn] === 'function') {
-		options = out[optionFilterFn](Array.isArray(options) ? options : [], ctx);
-	}
-
-	return Array.isArray(options) ? options : [];
+	return typeof reader === 'function' ? await reader(ctx) : script;
 });
 
 function createWindow() {

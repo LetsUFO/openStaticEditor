@@ -507,7 +507,7 @@
 							"name": "skill1",
 							"type": "select",
 							"options": [],
-							"optionKey": "skillList",
+							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
@@ -515,7 +515,7 @@
 							"name": "skill2",
 							"type": "select",
 							"options": [],
-							"optionKey": "skillList",
+							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
@@ -523,7 +523,7 @@
 							"name": "skill3",
 							"type": "select",
 							"options": [],
-							"optionKey": "skillList",
+							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
@@ -531,7 +531,7 @@
 							"name": "skill4",
 							"type": "select",
 							"options": [],
-							"optionKey": "skillList",
+							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
@@ -539,7 +539,7 @@
 							"name": "skill5",
 							"type": "select",
 							"options": [],
-							"optionKey": "skillList",
+							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
@@ -547,7 +547,7 @@
 							"name": "skill6",
 							"type": "select",
 							"options": [],
-							"optionKey": "skillList",
+							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
@@ -555,7 +555,7 @@
 							"name": "skill7",
 							"type": "select",
 							"options": [],
-							"optionKey": "skillList",
+							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
@@ -563,7 +563,7 @@
 							"name": "skill8",
 							"type": "select",
 							"options": [],
-							"optionKey": "skillList",
+							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
@@ -571,7 +571,7 @@
 							"name": "skill9",
 							"type": "select",
 							"options": [],
-							"optionKey": "skillList",
+							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
@@ -579,7 +579,7 @@
 							"name": "skill10",
 							"type": "select",
 							"options": [],
-							"optionKey": "skillList",
+							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
@@ -587,7 +587,7 @@
 							"name": "skill11",
 							"type": "select",
 							"options": [],
-							"optionKey": "skillList",
+							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						}
 					]
