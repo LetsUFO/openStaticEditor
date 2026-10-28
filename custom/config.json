@@ -1,7 +1,7 @@
 {
 	"name": "EVERSPACE2 永恒空间2 存档修改器",
-	"width": 960,
-	"height": 480,
+	"width": 1000,
+	"height": 800,
 	"background": {
 		"src": "",
 		"base64": "",
@@ -36,25 +36,25 @@
 									"label": "附加属性1",
 									"type": "select",
 									"name": "currentShip.primaryWeapons[0].attributes[0].id",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性2",
 									"type": "select",
 									"name": "currentShip.primaryWeapons[0].attributes[1].id",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性3",
 									"type": "select",
 									"name": "currentShip.primaryWeapons[0].attributes[2].id",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性4",
 									"type": "select",
 									"name": "currentShip.primaryWeapons[0].attributes[3].id",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_mainWeapon"
 								}
 							]
 						},
@@ -73,25 +73,25 @@
 									"label": "附加属性1",
 									"name": "currentShip.primaryWeapons[1].attributes[0].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.primaryWeapons[1].attributes[1].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.primaryWeapons[1].attributes[2].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.primaryWeapons[1].attributes[3].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_mainWeapon"
 								}
 							]
 						},
@@ -110,25 +110,25 @@
 									"label": "附加属性1",
 									"name": "currentShip.primaryWeapons[2].attributes[0].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.primaryWeapons[2].attributes[1].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.primaryWeapons[2].attributes[2].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.primaryWeapons[2].attributes[3].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_mainWeapon"
 								}
 							]
 						}
