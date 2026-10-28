@@ -506,7 +506,6 @@
 							"label": "1",
 							"name": "skill1",
 							"type": "select",
-							"options": [],
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
@@ -514,7 +513,6 @@
 							"label": "2",
 							"name": "skill2",
 							"type": "select",
-							"options": [],
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
@@ -522,7 +520,6 @@
 							"label": "3",
 							"name": "skill3",
 							"type": "select",
-							"options": [],
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
@@ -530,7 +527,6 @@
 							"label": "4",
 							"name": "skill4",
 							"type": "select",
-							"options": [],
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
@@ -538,7 +534,6 @@
 							"label": "5",
 							"name": "skill5",
 							"type": "select",
-							"options": [],
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
@@ -546,7 +541,6 @@
 							"label": "6",
 							"name": "skill6",
 							"type": "select",
-							"options": [],
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
@@ -554,7 +548,6 @@
 							"label": "7",
 							"name": "skill7",
 							"type": "select",
-							"options": [],
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
@@ -562,7 +555,6 @@
 							"label": "8",
 							"name": "skill8",
 							"type": "select",
-							"options": [],
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
@@ -570,7 +562,6 @@
 							"label": "9",
 							"name": "skill9",
 							"type": "select",
-							"options": [],
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
@@ -578,7 +569,6 @@
 							"label": "10",
 							"name": "skill10",
 							"type": "select",
-							"options": [],
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
@@ -586,7 +576,6 @@
 							"label": "11",
 							"name": "skill11",
 							"type": "select",
-							"options": [],
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						}

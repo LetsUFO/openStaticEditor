@@ -61,15 +61,16 @@ function normalizeOptions(list: any): { label: string; value: any }[] {
  *  3. options       —— config.json 里的静态选项（默认） */
 function optionsOf(item: AppMenuFormField) {
 	if (item?.optionFilterFn) {
-		const fn = configStore.fileData[item.optionFilterFn];
+		const fn = source.value[item.optionFilterFn];
 		if (typeof fn === 'function') {
-			const useData = item.optionUse
-				? get(configStore.fileData[props.dataKey] ?? {}, item.optionUse)
-				: undefined;
+			const useData = item.optionUse ? get(source.value ?? {}, item.optionUse) : undefined;
 			try {
 				return normalizeOptions(fn(model.value, useData));
 			} catch (error) {
-				console.error(`[FormBuilder] optionFilterFn(${item.optionFilterFn}) 执行失败：`, error);
+				console.error(
+					`[FormBuilder] optionFilterFn(${item.optionFilterFn}) 执行失败：`,
+					error
+				);
 				return [];
 			}
 		}
