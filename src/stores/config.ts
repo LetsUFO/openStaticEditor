@@ -44,7 +44,7 @@ export const useConfigStore = defineStore('config', () => {
 			}
 			Object.assign(fileData.value[fileKey], data);
 			if (data?.functionTextList?.length) {
-				data.functionTextList.array.forEach((li: IFunctionTextList) => {
+				data.functionTextList.forEach((li: IFunctionTextList) => {
 					fileData.value[li.name] = eval(li.function); //将方法字符转换为方法注入到store
 				});
 			}
