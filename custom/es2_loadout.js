@@ -613,6 +613,18 @@ function shipTypeOf(tpl) {
 	return parts.map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
 }
 
+// ---------------------------------------------------------------- 附加属性表
+// 属性表由同目录 attributeMap.json 维护，按装备槽位分组供下拉框取选项。
+// 用 readFileSync 而非 require：Node 会缓存 JSON 模块，改表后不重启不生效。
+function loadAttributeMap() {
+	try {
+		return JSON.parse(fs.readFileSync(path.join(__dirname, 'attributeMap.json'), 'utf8'));
+	} catch (e) {
+		console.warn('[es2_loadout] 读取 attributeMap.json 失败：' + e.message);
+		return {};
+	}
+}
+
 // ---------------------------------------------------------------- 主流程（模块导出）
 module.exports = function (ctx) {
 	const savePath = ctx.filePath;
@@ -885,12 +897,28 @@ module.exports = function (ctx) {
 				}
 			]
 		},
+		attributeMap: loadAttributeMap(),
 		functionTextList: [
 			{
 				name: 'skillFilter',
 				function: `function (store, typeSkillMap) {
 			return typeSkillMap[store.currentShip.shipType];
 		}`
+			},
+			{
+				// 必须是字符串：主进程返回值走 IPC 结构化克隆，函数值无法序列化
+				name: 'attributeFilter_mainWeapon',
+				function: `function (store) {
+				const map = store.attributeMap || {};
+				return [...(map.mainWeapon || []), ...(map.public || [])];
+			}`
+			},
+			{
+				name: 'attributeFilter_subWeapon',
+				function: `function (store) {
+				const map = store.attributeMap || {};
+				return [...(map.subWeapon || []), ...(map.public || [])];
+			}`
 			}
 		]
 	};
