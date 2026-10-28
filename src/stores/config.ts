@@ -20,7 +20,11 @@ function toMenuItems(list: AppMenuItem[]): ItemType[] {
 	}));
 }
 
-interface IFunctionTextList {}
+/** 脚本随数据回传的「函数文本」条目：加载后 eval 成真函数注入 fileData */
+interface IFunctionTextListObj {
+	name: string; // 注入到 fileData 的键（如 skillFilter）
+	function: string; // 函数文本，如 "function (list, ctx) { return list.filter(...) }"
+}
 export const useConfigStore = defineStore('config', () => {
 	const config = ref<AppConfig | null>(null);
 	const fileData = ref<Record<string, any>>({}); //经过转换的文件数据
@@ -43,13 +47,14 @@ export const useConfigStore = defineStore('config', () => {
 				fileData.value[fileKey] = {};
 			}
 			Object.assign(fileData.value[fileKey], data);
-			if (data?.functionTextList?.length) {
-				data.functionTextList.forEach((li: IFunctionTextList) => {
-					fileData.value[li.name] = eval(li.function); //将方法字符转换为方法注入到store
+			if (Array.isArray(data?.functionTextList)) {
+				data.functionTextList.forEach((li: IFunctionTextListObj) => {
+					// 外层括号让 eval 把 "function (...)" 按函数表达式处理（直接 eval 会被当声明，返回 undefined）
+					fileData.value[fileKey][li.name] = eval(`(${li.function})`);
 				});
 			}
 			dataVersion.value++;
-			console.log(data);
+			console.log(fileData.value);
 			resolve();
 		});
 	}

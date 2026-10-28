@@ -501,9 +501,6 @@
 				{
 					"label": "仅列出当前飞船适合的被动技能",
 					"tip": "即使选择相同的效果，只能生效一个",
-					"loadScript": {
-						"dataKey": "base"
-					},
 					"items": [
 						{
 							"label": "1",
