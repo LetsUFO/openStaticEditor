@@ -604,7 +604,7 @@ const SHIP_CLASS_MAP = {
 	ship_okkar_medium_ship1: 'Okkar'
 };
 const SHIP_SIZE_WORDS = ['light', 'heavy', 'medium'];
-function shipClassOf(tpl) {
+function shipTypeOf(tpl) {
 	if (!tpl || tpl === 'None' || tpl === '') return null;
 	if (SHIP_CLASS_MAP[tpl]) return SHIP_CLASS_MAP[tpl];
 	// fallback: ship_<size?>_<class> -> "Class"
@@ -641,14 +641,14 @@ module.exports = function (ctx) {
 	const shipTpl = childVal(sis, 'ItemTemplateID') || 'None';
 
 	// 飞船概览（仅标识，不输出基础属性）
-		const shipSummary = [];
+	const shipSummary = [];
 	for (let i = 0; i < ships.length; i++) {
 		const s = getChild(ships[i], 'ShipItemState');
 		const t = s ? childVal(s, 'ItemTemplateID') : null;
 		shipSummary.push({
 			index: i,
 			templateId: t || 'None',
-			shipClass: shipClassOf(t || 'None'),
+			shipType: shipTypeOf(t || 'None'),
 			isCurrent: i === idx
 		});
 	}
@@ -670,14 +670,21 @@ module.exports = function (ctx) {
 		currentShip: {
 			index: idx,
 			templateId: shipTpl,
-			shipClass: shipClassOf(shipTpl), // 舰种(游戏内 Ship Class): Rogue/Gunship/Bomber/Sentinel…
+			shipType: shipTypeOf(shipTpl), // 舰种(游戏内 Ship Class): Rogue/Gunship/Bomber/Sentinel…
 			primaryWeapons: extractCategory(inv, 'PrimaryWeapons'),
 			secondaryWeapons: extractCategory(inv, 'SecondaryWeapons'),
 			modules,
 			cargo: []
 		},
 		ships: shipSummary,
-		skillFilter: function () {}
+		functionTextList: [
+			{
+				name: 'skillFilter',
+				function: `function (shipType, typeSkillMap) {
+			return typeSkillMap[shipType];
+		}`
+			}
+		]
 	};
 
 	return result;

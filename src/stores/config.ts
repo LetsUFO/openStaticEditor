@@ -20,6 +20,7 @@ function toMenuItems(list: AppMenuItem[]): ItemType[] {
 	}));
 }
 
+interface IFunctionTextList {}
 export const useConfigStore = defineStore('config', () => {
 	const config = ref<AppConfig | null>(null);
 	const fileData = ref<Record<string, any>>({}); //经过转换的文件数据
@@ -42,7 +43,13 @@ export const useConfigStore = defineStore('config', () => {
 				fileData.value[fileKey] = {};
 			}
 			Object.assign(fileData.value[fileKey], data);
+			if (data?.functionTextList?.length) {
+				data.functionTextList.array.forEach((li: IFunctionTextList) => {
+					fileData.value[li.name] = eval(li.function); //将方法字符转换为方法注入到store
+				});
+			}
 			dataVersion.value++;
+			console.log(data);
 			resolve();
 		});
 	}
