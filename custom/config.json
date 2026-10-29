@@ -1,7 +1,7 @@
 {
 	"name": "EVERSPACE2 永恒空间2 存档修改器",
 	"width": 1200,
-	"height": 720,
+	"height": 740,
 	"background": {
 		"src": "",
 		"base64": "",
@@ -24,6 +24,7 @@
 						{
 							"label": "武器1",
 							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.primaryWeapons[0].level",
 							"items": [
 								{
 									"label": "等级",
@@ -61,6 +62,7 @@
 						{
 							"label": "武器2",
 							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.primaryWeapons[1].level",
 							"items": [
 								{
 									"label": "等级",
@@ -98,6 +100,7 @@
 						{
 							"label": "武器3",
 							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.primaryWeapons[2].level",
 							"items": [
 								{
 									"label": "等级",
@@ -146,6 +149,7 @@
 						{
 							"label": "武器1",
 							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.secondaryWeapons[0].level",
 							"items": [
 								{
 									"label": "等级",
@@ -183,6 +187,7 @@
 						{
 							"label": "武器2",
 							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.secondaryWeapons[1].level",
 							"items": [
 								{
 									"label": "等级",
@@ -220,6 +225,7 @@
 						{
 							"label": "武器3",
 							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.secondaryWeapons[2].level",
 							"items": [
 								{
 									"label": "等级",

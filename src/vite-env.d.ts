@@ -34,6 +34,9 @@ interface AppMenuFormField {
 interface AppMenuFormItem {
 	label: string;
 	tip?: string;
+	/** 块级启停：指向数据路径（如 "currentShip.primaryWeapons[0].level"），
+	 *  该路径值 truthy 时块启用，falsy 时块置灰且不可交互；不填则始终启用 */
+	enableKey?: string;
 	items?: AppMenuFormField[];
 }
 

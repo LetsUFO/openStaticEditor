@@ -85,6 +85,12 @@ function optionsOf(item: AppMenuFormField) {
 	return [];
 }
 
+/** 块级启停：外部直接传入数据路径，该路径值 truthy 时启用，否则禁用；路径为空则始终启用 */
+function isBlockEnabled(path?: string): boolean {
+	if (!path) return true;
+	return !!get(source.value, path);
+}
+
 /** 供父组件（保存按钮）取当前分类的表单数据 */
 function getFormData(): Record<string, any> {
 	return source.value || {};
@@ -102,7 +108,10 @@ defineExpose({ getFormData });
 				{{ block.label }}
 				<span v-if="block.tip" class="ml-2 text-xs text-fcLv1 italic">{{ block.tip }}</span>
 			</div>
-			<div class="mt-2 px-4 flex flex-wrap">
+			<div
+				class="mt-2 px-4 flex flex-wrap"
+				:class="{ 'opacity-20 pointer-events-none': !isBlockEnabled(block.enableKey) }"
+			>
 				<Form.Item
 					v-for="(item, ii) in block.items || []"
 					:key="`${item.name || item.label}-${ii}`"
