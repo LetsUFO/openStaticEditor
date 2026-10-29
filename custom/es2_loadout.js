@@ -912,23 +912,23 @@ module.exports = function (ctx) {
 			{
 				name: 'skillFilter',
 				function: `function (store, typeSkillMap) {
-			return typeSkillMap[store.currentShip.shipType];
-		}`
+					return typeSkillMap[store.currentShip.shipType];
+				}`
 			},
 			{
 				// 必须是字符串：主进程返回值走 IPC 结构化克隆，函数值无法序列化
 				name: 'attributeFilter_mainWeapon',
 				function: `function (store) {
-				const map = store.attributeMap || {};
-				return [...(map.mainWeapon || []), ...(map.public || [])];
-			}`
+					const map = store.attributeMap || {};
+					return [...(map.mainWeapon || []), ...(map.public || [])];
+				}`
 			},
 			{
 				name: 'attributeFilter_subWeapon',
 				function: `function (store) {
-				const map = store.attributeMap || {};
-				return [...(map.subWeapon || []), ...(map.public || [])];
-			}`
+					const map = store.attributeMap || {};
+					return [...(map.subWeapon || []), ...(map.public || [])];
+				}`
 			}
 		]
 	};
