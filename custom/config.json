@@ -158,25 +158,25 @@
 									"label": "附加属性1",
 									"name": "currentShip.secondaryWeapons[0].attributes[0].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.secondaryWeapons[0].attributes[1].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.secondaryWeapons[0].attributes[2].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.secondaryWeapons[0].attributes[3].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_subWeapon"
 								}
 							]
 						},
@@ -195,25 +195,25 @@
 									"label": "附加属性1",
 									"name": "currentShip.secondaryWeapons[1].attributes[0].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.secondaryWeapons[1].attributes[1].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.secondaryWeapons[1].attributes[2].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.secondaryWeapons[1].attributes[3].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_subWeapon"
 								}
 							]
 						},
@@ -232,25 +232,25 @@
 									"label": "附加属性1",
 									"name": "currentShip.secondaryWeapons[2].attributes[0].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.secondaryWeapons[2].attributes[1].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.secondaryWeapons[2].attributes[2].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.secondaryWeapons[2].attributes[3].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_subWeapon"
 								}
 							]
 						}
