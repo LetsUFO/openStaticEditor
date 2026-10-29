@@ -17,6 +17,8 @@
  *   - 模块(modules): 每种模块只能装备一件，故直接输出单件对象（未装备为 null），
  *     不使用数组；主/副武器仍为数组（可装备多把）。
  *   - 携带货物(cargo): 固定输出空数组 []。
+ *   - 传奇(Legendary)装备: 主武器/副武器/模块/装置所有传奇稀有度装备的附加属性暂不抽取
+ *     （能否更换尚不确定），attributes 置空数组；templateId / level / effectiveLevel 仍照常输出。
  *
  * 用法（模块导出，由主进程 file:read 调用）:
  *   module.exports = function (ctx) {
@@ -542,15 +544,19 @@ function childVal(node, name) {
 // 提取单件装备: templateId + 等级 + 附加属性(占槽词缀，已剔除核心属性与隐藏标记)
 // 等级说明: level = ItemLevel(原始等级)；effectiveLevel = ItemLevel + VirtualLevelOffset
 //           (虚拟等级偏移，如 Ascension 加成)，即游戏界面上显示的等级。
-function extractItem(el) {
+// opts.skipLegendaryAffix: 传奇(Legendary)装备暂不抽取附加属性（能否更换尚不确定）。
+function extractItem(el, opts) {
 	if (!el || !el.children) return null;
 	const tpl = childVal(el, 'ItemTemplateID');
 	if (!tpl || tpl === 'None' || tpl === '') return null;
 	const level = childVal(el, 'ItemLevel');
 	const vlo = childVal(el, 'VirtualLevelOffset') || 0;
+	const rarity = childVal(el, 'Rarity') || '';
+	const isLegendary = /(?:EItemRarity::)?Legendary/i.test(rarity);
+	const skipAffix = !!(opts && opts.skipLegendaryAffix) && isLegendary;
 	const attrsEl = getChild(el, 'AttributeStates');
 	const attributes = [];
-	if (attrsEl && attrsEl.children) {
+	if (!skipAffix && attrsEl && attrsEl.children) {
 		for (const a of attrsEl.children) {
 			const id = childVal(a, 'AttributeTemplateID');
 			const pos = childVal(a, 'ValuePositionInRange');
@@ -563,6 +569,7 @@ function extractItem(el) {
 		// 规整到 2 位小数：VirtualLevelOffset 以 float 存储，直接相加会产生
 		// 如 60 + 3.8 = 63.799999952316284 的浮点噪声
 		effectiveLevel: level == null ? null : Math.round((level + vlo) * 100) / 100,
+		// 传奇武器: attributes 置空（附加属性暂不抽取，能否更换待确认）
 		attributes
 	};
 }
@@ -570,9 +577,12 @@ function extractItem(el) {
 function extractCategory(inv, catName) {
 	const cat = getChild(inv, catName);
 	if (!cat || !cat.children) return [];
+	// 所有类别(主/副武器、各模块、装置)的传奇(Legendary)装备均暂不抽取附加属性
+	// （能否更换尚不确定），attributes 置空；其余装备照常抽取。
+	const skipLegendaryAffix = true;
 	const out = [];
 	for (const el of cat.children) {
-		const it = extractItem(el);
+		const it = extractItem(el, { skipLegendaryAffix });
 		if (it) out.push(it);
 	}
 	return out;
@@ -676,7 +686,7 @@ module.exports = function (ctx) {
 		meta: {
 			saveFile: path.basename(savePath),
 			generatedAt: new Date().toISOString(),
-			note: '每件装备输出 templateId + level(ItemLevel) + effectiveLevel(ItemLevel+VirtualLevelOffset，界面显示等级) + attributes。attributes 采用负向剔除：去掉各品类固有核心属性(weapon_*/secondary_*/device_*/sensor_range_*/energy_core_regen_*/shield 基础值/cargo_slots_buff/armor 等)与隐藏标记(no_random_drop/min_level/blueprintable/item_price/ascendant_rank 等)，其余全部视为占槽附加词缀，覆盖传说特效(legendary_*)、导弹专属词缀、okkar 催化剂增益、all_modules_*、*_buff 等。.position 为 0~1 归一化位置，非真实数值。modules 每种模块只装备一件，直接输出单件对象(未装备为 null)；主/副武器为数组。携带货物(cargo)固定为空数组。'
+			note: '每件装备输出 templateId + level(ItemLevel) + effectiveLevel(ItemLevel+VirtualLevelOffset，界面显示等级) + attributes。attributes 采用负向剔除：去掉各品类固有核心属性(weapon_*/secondary_*/device_*/sensor_range_*/energy_core_regen_*/shield 基础值/cargo_slots_buff/armor 等)与隐藏标记(no_random_drop/min_level/blueprintable/item_price/ascendant_rank 等)，其余全部视为占槽附加词缀，覆盖传说特效(legendary_*)、导弹专属词缀、okkar 催化剂增益、all_modules_*、*_buff 等。.position 为 0~1 归一化位置，非真实数值。modules 每种模块只装备一件，直接输出单件对象(未装备为 null)；主/副武器为数组。携带货物(cargo)固定为空数组。特别说明：所有传奇(Legendary)装备(主武器/副武器/模块/装置)的附加属性暂不抽取(attributes=[]，能否更换待确认)，其等级字段仍照常输出。'
 		},
 		currentShip: {
 			index: idx,
