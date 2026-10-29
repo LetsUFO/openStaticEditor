@@ -920,14 +920,56 @@ module.exports = function (ctx) {
 				name: 'attributeFilter_mainWeapon',
 				function: `function (store) {
 					const map = store.attributeMap || {};
-					return [...(map.mainWeapon || []), ...(map.public || [])];
+					return [...(map.mainWeapon || [])];
 				}`
 			},
 			{
 				name: 'attributeFilter_subWeapon',
 				function: `function (store) {
 					const map = store.attributeMap || {};
-					return [...(map.subWeapon || []), ...(map.public || [])];
+					return [...(map.subWeapon || [])];
+				}`
+			},
+			{
+				name: 'attributeFilter_energyCore',
+				function: `function (store) {
+					const map = store.attributeMap || {};
+					return [...(map.energyCore || []), ...(map.public || [])];
+				}`
+			},
+			{
+				name: 'attributeFilter_shield',
+				function: `function (store) {
+					const map = store.attributeMap || {};
+					return [...(map.shield || []), ...(map.public || [])];
+				}`
+			},
+			{
+				name: 'attributeFilter_plating',
+				function: `function (store) {
+					const map = store.attributeMap || {};
+					return [...(map.plating || []), ...(map.public || [])];
+				}`
+			},
+			{
+				name: 'attributeFilter_sensor',
+				function: `function (store) {
+					const map = store.attributeMap || {};
+					return [...(map.sensor || []), ...(map.public || [])];
+				}`
+			},
+			{
+				name: 'attributeFilter_thruster',
+				function: `function (store) {
+					const map = store.attributeMap || {};
+					return [...(map.thruster || []), ...(map.public || [])];
+				}`
+			},
+			{
+				name: 'attributeFilter_cargoUnit',
+				function: `function (store) {
+					const map = store.attributeMap || {};
+					return [...(map.cargoUnit || []), ...(map.public || [])];
 				}`
 			}
 		]

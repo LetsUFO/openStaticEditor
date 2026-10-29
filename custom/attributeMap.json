@@ -213,7 +213,7 @@
 			"verified": true
 		}
 	],
-	"EnergyCore": [
+	"energyCore": [
 		{
 			"label": "牵引光束作用距离增加",
 			"value": "tractor_beam_range_buff",
@@ -245,7 +245,7 @@
 			"verified": true
 		}
 	],
-	"Shield": [
+	"shield": [
 		{
 			"label": "腐蚀免疫（护盾免受腐蚀性伤害）",
 			"value": "hazard_shield_corrosion_immunity",
@@ -282,7 +282,7 @@
 			"verified": true
 		}
 	],
-	"Plating": [
+	"plating": [
 		{
 			"label": "每击杀叠加装甲值",
 			"value": "armor_per_kill",
@@ -309,7 +309,7 @@
 			"verified": true
 		}
 	],
-	"Sensor": [
+	"sensor": [
 		{
 			"label": "舰船探测距离提高",
 			"value": "sensor_range_ships_buff",
@@ -323,73 +323,6 @@
 		{
 			"label": "资源探测距离提高",
 			"value": "sensor_range_resources_buff",
-			"verified": true
-		},
-		{
-			"label": "装备 Scout 货舱时船体生命值提高",
-			"value": "increased_hull_cargo_unit_scout",
-			"verified": true
-		},
-		{
-			"label": "装备 Interceptor 货舱时船体生命值提高",
-			"value": "increased_hull_cargo_unit_interceptor",
-			"verified": true
-		},
-		{
-			"label": "装备 Stinger 货舱时船体生命值提高",
-			"value": "increased_hull_cargo_unit_stinger",
-			"verified": true
-		},
-		{
-			"label": "装备 Striker 货舱时船体生命值提高",
-			"value": "increased_hull_cargo_unit_striker",
-			"verified": true
-		},
-		{
-			"label": "装备 Vanguard 货舱时船体生命值提高",
-			"value": "increased_hull_cargo_unit_vanguard",
-			"verified": true
-		},
-		{
-			"label": "装备 Gunship 货舱时船体生命值提高",
-			"value": "increased_hull_cargo_unit_gunship",
-			"verified": true
-		},
-		{
-			"label": "装备 Bomber 货舱时船体生命值提高",
-			"value": "increased_hull_cargo_unit_bomber",
-			"verified": true
-		},
-		{
-			"label": "装备 Sentinel 货舱时船体生命值提高",
-			"value": "increased_hull_cargo_unit_sentinel",
-			"verified": true
-		},
-		{
-			"label": "装备 Vindicator 货舱时船体生命值提高",
-			"value": "increased_hull_cargo_unit_vindicator",
-			"verified": true
-		}
-	],
-	"CargoUnit": [
-		{
-			"label": "牵引光束作用距离增加",
-			"value": "tractor_beam_range_buff",
-			"verified": true
-		},
-		{
-			"label": "巡航速度提高",
-			"value": "cruise_speed_buff",
-			"verified": true
-		},
-		{
-			"label": "操控性提高",
-			"value": "handling_buff",
-			"verified": true
-		},
-		{
-			"label": "货舱格数增加",
-			"value": "cargo_slots_buff",
 			"verified": true
 		},
 		{
@@ -472,6 +405,73 @@
 		{
 			"label": "侧向推进速度提高",
 			"value": "increased_lateral_boost_speed",
+			"verified": true
+		}
+	],
+	"cargoUnit": [
+		{
+			"label": "牵引光束作用距离增加",
+			"value": "tractor_beam_range_buff",
+			"verified": true
+		},
+		{
+			"label": "巡航速度提高",
+			"value": "cruise_speed_buff",
+			"verified": true
+		},
+		{
+			"label": "操控性提高",
+			"value": "handling_buff",
+			"verified": true
+		},
+		{
+			"label": "货舱格数增加",
+			"value": "cargo_slots_buff",
+			"verified": true
+		},
+		{
+			"label": "装备 Scout 货舱时船体生命值提高",
+			"value": "increased_hull_cargo_unit_scout",
+			"verified": true
+		},
+		{
+			"label": "装备 Interceptor 货舱时船体生命值提高",
+			"value": "increased_hull_cargo_unit_interceptor",
+			"verified": true
+		},
+		{
+			"label": "装备 Stinger 货舱时船体生命值提高",
+			"value": "increased_hull_cargo_unit_stinger",
+			"verified": true
+		},
+		{
+			"label": "装备 Striker 货舱时船体生命值提高",
+			"value": "increased_hull_cargo_unit_striker",
+			"verified": true
+		},
+		{
+			"label": "装备 Vanguard 货舱时船体生命值提高",
+			"value": "increased_hull_cargo_unit_vanguard",
+			"verified": true
+		},
+		{
+			"label": "装备 Gunship 货舱时船体生命值提高",
+			"value": "increased_hull_cargo_unit_gunship",
+			"verified": true
+		},
+		{
+			"label": "装备 Bomber 货舱时船体生命值提高",
+			"value": "increased_hull_cargo_unit_bomber",
+			"verified": true
+		},
+		{
+			"label": "装备 Sentinel 货舱时船体生命值提高",
+			"value": "increased_hull_cargo_unit_sentinel",
+			"verified": true
+		},
+		{
+			"label": "装备 Vindicator 货舱时船体生命值提高",
+			"value": "increased_hull_cargo_unit_vindicator",
 			"verified": true
 		}
 	],

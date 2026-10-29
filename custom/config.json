@@ -279,25 +279,25 @@
 									"label": "附加属性1",
 									"name": "currentShip.modules.EnergyCores.attributes[0].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_energyCore"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.modules.EnergyCores.attributes[1].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_energyCore"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.modules.EnergyCores.attributes[2].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_energyCore"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.modules.EnergyCores.attributes[3].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_energyCore"
 								}
 							]
 						},
@@ -316,25 +316,25 @@
 									"label": "附加属性1",
 									"name": "currentShip.modules.Shields.attributes[0].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_shield"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.modules.Shields.attributes[1].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_shield"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.modules.Shields.attributes[2].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_shield"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.modules.Shields.attributes[3].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_shield"
 								}
 							]
 						},
@@ -353,25 +353,25 @@
 									"label": "附加属性1",
 									"name": "currentShip.modules.Platings.attributes[0].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_plating"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.modules.Platings.attributes[1].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_plating"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.modules.Platings.attributes[2].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_plating"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.modules.Platings.attributes[3].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_plating"
 								}
 							]
 						},
@@ -390,25 +390,25 @@
 									"label": "附加属性1",
 									"name": "currentShip.modules.Sensors.attributes[0].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_sensor"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.modules.Sensors.attributes[1].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_sensor"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.modules.Sensors.attributes[2].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_sensor"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.modules.Sensors.attributes[3].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_sensor"
 								}
 							]
 						},
@@ -427,25 +427,25 @@
 									"label": "附加属性1",
 									"name": "currentShip.modules.thrusters.attributes[0].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_thruster"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.modules.thrusters.attributes[1].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_thruster"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.modules.thrusters.attributes[2].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_thruster"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.modules.thrusters.attributes[3].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_thruster"
 								}
 							]
 						},
@@ -464,25 +464,25 @@
 									"label": "附加属性1",
 									"name": "currentShip.modules.CargoUnits.attributes[0].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_cargoUnit"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.modules.CargoUnits.attributes[1].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_cargoUnit"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.modules.CargoUnits.attributes[2].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_cargoUnit"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.modules.CargoUnits.attributes[3].id",
 									"type": "select",
-									"optionsFrom": ""
+									"optionFilterFn": "attributeFilter_cargoUnit"
 								}
 							]
 						}

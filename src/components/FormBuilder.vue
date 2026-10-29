@@ -127,6 +127,7 @@ defineExpose({ getFormData });
 						:placeholder="item.placeholder || '请选择'"
 						:show-search="true"
 						:option-filter-prop="'label'"
+						:allowClear="true"
 						class="w-full!"
 						@update:value="(v) => write(item, v)"
 					></Select>
