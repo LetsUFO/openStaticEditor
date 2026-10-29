@@ -588,6 +588,22 @@ function extractCategory(inv, catName) {
 	return out;
 }
 
+// 提取当前飞船的被动技能：从 ShipItemState.AttributeStates 读取全部属性 ID，
+// 仅保留与 skillMap 任一组 value 能对得上的（即真正的被动技能 code），
+// 剔除 11 条船体核心属性(shield_capacity_buff / hull_hitpoints / cruise_speed 等，
+// 它们不在 skillMap 中)。返回 string[]（每个值是技能 code，与 skillMap.value 对应）。
+function extractShipSkills(sisNode, skillValueSet) {
+	const out = [];
+	if (!sisNode) return out;
+	const attrsEl = getChild(sisNode, 'AttributeStates');
+	if (!attrsEl || !attrsEl.children) return out;
+	for (const a of attrsEl.children) {
+		const id = childVal(a, 'AttributeTemplateID');
+		if (id && skillValueSet.has(id)) out.push(id);
+	}
+	return out;
+}
+
 const MODULE_CATS = ['EnergyCores', 'Sensors', 'Shields', 'CargoUnits', 'Platings', 'thrusters'];
 
 // ---------------------------------------------------------------- 舰种(ship class)
@@ -829,6 +845,7 @@ module.exports = function (ctx) {
 				{ label: '舰体伤害减免 20%', value: 'striker_hull_damage_reduction' }
 			],
 			Okkar: [
+				{ label: '量子契约（签名被动）：击杀敌人掉落残响碎片，拾取获得空灵共振层数，提升移动速度并对附近敌人造成每秒持续伤害（锁定目标双倍）', value: 'okkar_passive_perk' },
 				{ label: '消耗品使用时 30% 几率不被消耗', value: 'okkar_free_consumable_chance' },
 				{ label: '舰体伤害 25% 几率被完全无视', value: 'okkar_hull_damage_ignore_chance' },
 				{ label: '进入幽灵形态回满武器与推进能量', value: 'okkar_restore_energy' },
@@ -974,6 +991,14 @@ module.exports = function (ctx) {
 			}
 		]
 	};
+
+	// 当前飞船被动技能：用 skillMap 的 value 集合过滤飞船 AttributeStates，
+	// 仅保留能对得上的技能 code（剔除船体核心属性等非技能项）。
+	const SKILL_VALUE_SET = new Set();
+	for (const k of Object.keys(result.skillMap)) {
+		for (const e of result.skillMap[k]) SKILL_VALUE_SET.add(e.value);
+	}
+	result.currentShip.skills = extractShipSkills(sis, SKILL_VALUE_SET);
 
 	return result;
 };
