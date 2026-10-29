@@ -527,46 +527,6 @@
 			"verified": true
 		},
 		{
-			"label": "奥卡尔催化剂·能量核心2 增益（未实测）",
-			"value": "okkar_catalyst_energycore2_buff",
-			"verified": false
-		},
-		{
-			"label": "奥卡尔催化剂·能量核心2 减益（未实测）",
-			"value": "okkar_catalyst_energycore2_debuff",
-			"verified": false
-		},
-		{
-			"label": "奥卡尔催化剂·传感器1 增益（未实测）",
-			"value": "okkar_catalyst_sensor1_buff",
-			"verified": false
-		},
-		{
-			"label": "奥卡尔催化剂·传感器1 减益（未实测）",
-			"value": "okkar_catalyst_sensor1_debuff",
-			"verified": false
-		},
-		{
-			"label": "奥卡尔催化剂·装甲板1 增益（未实测）",
-			"value": "okkar_catalyst_plating1_buff",
-			"verified": false
-		},
-		{
-			"label": "奥卡尔催化剂·装甲板1 减益（未实测）",
-			"value": "okkar_catalyst_plating1_debuff",
-			"verified": false
-		},
-		{
-			"label": "奥卡尔催化剂·推进器1 增益（未实测）",
-			"value": "okkar_catalyst_booster1_buff",
-			"verified": false
-		},
-		{
-			"label": "奥卡尔催化剂·推进器1 减益（未实测）",
-			"value": "okkar_catalyst_booster1_debuff",
-			"verified": false
-		},
-		{
 			"label": "全船主武器伤害提高",
 			"value": "all_modules_increased_primary_weapon_damage",
 			"verified": true
@@ -777,6 +737,171 @@
 			"verified": true
 		},
 		{
+			"label": "装置作用距离提高",
+			"value": "device_range_buff",
+			"verified": true
+		},
+		{
+			"label": "装置作用距离2提高（第二距离参数）",
+			"value": "device_range_2_buff",
+			"verified": true
+		},
+		{
+			"label": "装置冷却时间缩短",
+			"value": "device_cooldown_buff",
+			"verified": true
+		},
+		{
+			"label": "装置持续时间延长",
+			"value": "device_duration_buff",
+			"verified": true
+		},
+		{
+			"label": "装置计时（参数）调整",
+			"value": "device_time_buff",
+			"verified": true
+		},
+		{
+			"label": "装置效果增强",
+			"value": "device_effect_buff",
+			"verified": true
+		},
+		{
+			"label": "装置效果2增强（第二效果参数）",
+			"value": "device_effect_2_buff",
+			"verified": true
+		},
+		{
+			"label": "装置效果持续时间延长",
+			"value": "device_effect_duration_buff",
+			"verified": true
+		},
+		{
+			"label": "装置效果范围扩大",
+			"value": "device_effect_range_buff",
+			"verified": true
+		},
+		{
+			"label": "装置生命值提高",
+			"value": "device_hitpoints_buff",
+			"verified": true
+		},
+		{
+			"label": "装置能量伤害提高",
+			"value": "device_energy_damage_buff",
+			"verified": true
+		},
+		{
+			"label": "装置动能伤害提高",
+			"value": "device_kinetic_damage_buff",
+			"verified": true
+		},
+		{
+			"label": "游荡者（Rogue）第三武器专精",
+			"value": "rogue_expertise_3rd_weapon",
+			"verified": true
+		},
+		{
+			"label": "奥卡尔专精",
+			"value": "okkar_expertise",
+			"verified": true
+		},
+		{
+			"label": "奥卡尔距离专精",
+			"value": "okkar_expertise_range",
+			"verified": true
+		},
+		{
+			"label": "复仇者（Vindicator）距离专精",
+			"value": "vindicator_expertise_range",
+			"verified": true
+		},
+		{
+			"label": "复仇者伤害专精",
+			"value": "vindicator_expertise_dmg",
+			"verified": true
+		},
+		{
+			"label": "复仇者生命专精",
+			"value": "vindicator_expertise_hp",
+			"verified": true
+		},
+		{
+			"label": "装甲值提高",
+			"value": "armor_buff",
+			"verified": true
+		},
+		{
+			"label": "船体生命值提高",
+			"value": "hull_hitpoints_buff",
+			"verified": true
+		},
+		{
+			"label": "巡航速度（基础值）",
+			"value": "cruise_speed",
+			"verified": true
+		},
+		{
+			"label": "操控性（基础值）",
+			"value": "handling",
+			"verified": true
+		},
+		{
+			"label": "巡航模式充能时间",
+			"value": "cruise_charge_duration",
+			"verified": true
+		},
+		{
+			"label": "巡航模式敌距参数",
+			"value": "cruise_enemy_distance",
+			"verified": true
+		},
+		{
+			"label": "巡航模式速度提高",
+			"value": "increased_cruise_mode_speed",
+			"verified": true
+		},
+		{
+			"label": "奥卡尔催化剂·能量核心2 增益（未实测）",
+			"value": "okkar_catalyst_energycore2_buff",
+			"verified": false
+		},
+		{
+			"label": "奥卡尔催化剂·能量核心2 减益（未实测）",
+			"value": "okkar_catalyst_energycore2_debuff",
+			"verified": false
+		},
+		{
+			"label": "奥卡尔催化剂·传感器1 增益（未实测）",
+			"value": "okkar_catalyst_sensor1_buff",
+			"verified": false
+		},
+		{
+			"label": "奥卡尔催化剂·传感器1 减益（未实测）",
+			"value": "okkar_catalyst_sensor1_debuff",
+			"verified": false
+		},
+		{
+			"label": "奥卡尔催化剂·装甲板1 增益（未实测）",
+			"value": "okkar_catalyst_plating1_buff",
+			"verified": false
+		},
+		{
+			"label": "奥卡尔催化剂·装甲板1 减益（未实测）",
+			"value": "okkar_catalyst_plating1_debuff",
+			"verified": false
+		},
+		{
+			"label": "奥卡尔催化剂·推进器1 增益（未实测）",
+			"value": "okkar_catalyst_booster1_buff",
+			"verified": false
+		},
+		{
+			"label": "奥卡尔催化剂·推进器1 减益（未实测）",
+			"value": "okkar_catalyst_booster1_debuff",
+			"verified": false
+		},
+		{
 			"label": "奥卡尔催化剂·能量核心1 增益（未实测）",
 			"value": "okkar_catalyst_energycore1_buff",
 			"verified": false
@@ -887,66 +1012,6 @@
 			"verified": false
 		},
 		{
-			"label": "装置作用距离提高",
-			"value": "device_range_buff",
-			"verified": true
-		},
-		{
-			"label": "装置作用距离2提高（第二距离参数）",
-			"value": "device_range_2_buff",
-			"verified": true
-		},
-		{
-			"label": "装置冷却时间缩短",
-			"value": "device_cooldown_buff",
-			"verified": true
-		},
-		{
-			"label": "装置持续时间延长",
-			"value": "device_duration_buff",
-			"verified": true
-		},
-		{
-			"label": "装置计时（参数）调整",
-			"value": "device_time_buff",
-			"verified": true
-		},
-		{
-			"label": "装置效果增强",
-			"value": "device_effect_buff",
-			"verified": true
-		},
-		{
-			"label": "装置效果2增强（第二效果参数）",
-			"value": "device_effect_2_buff",
-			"verified": true
-		},
-		{
-			"label": "装置效果持续时间延长",
-			"value": "device_effect_duration_buff",
-			"verified": true
-		},
-		{
-			"label": "装置效果范围扩大",
-			"value": "device_effect_range_buff",
-			"verified": true
-		},
-		{
-			"label": "装置生命值提高",
-			"value": "device_hitpoints_buff",
-			"verified": true
-		},
-		{
-			"label": "装置能量伤害提高",
-			"value": "device_energy_damage_buff",
-			"verified": true
-		},
-		{
-			"label": "装置动能伤害提高",
-			"value": "device_kinetic_damage_buff",
-			"verified": true
-		},
-		{
 			"label": "Scout 型号被动专精（未实测）",
 			"value": "scout_passive_perk",
 			"verified": false
@@ -997,36 +1062,6 @@
 			"verified": false
 		},
 		{
-			"label": "游荡者（Rogue）第三武器专精",
-			"value": "rogue_expertise_3rd_weapon",
-			"verified": true
-		},
-		{
-			"label": "奥卡尔专精",
-			"value": "okkar_expertise",
-			"verified": true
-		},
-		{
-			"label": "奥卡尔距离专精",
-			"value": "okkar_expertise_range",
-			"verified": true
-		},
-		{
-			"label": "复仇者（Vindicator）距离专精",
-			"value": "vindicator_expertise_range",
-			"verified": true
-		},
-		{
-			"label": "复仇者伤害专精",
-			"value": "vindicator_expertise_dmg",
-			"verified": true
-		},
-		{
-			"label": "复仇者生命专精",
-			"value": "vindicator_expertise_hp",
-			"verified": true
-		},
-		{
 			"label": "进化催化剂（未实测）",
 			"value": "evolution_catalyst_buff",
 			"verified": false
@@ -1045,41 +1080,6 @@
 			"label": "未知专项 buff（未实测）",
 			"value": "bf_buff",
 			"verified": false
-		},
-		{
-			"label": "装甲值提高",
-			"value": "armor_buff",
-			"verified": true
-		},
-		{
-			"label": "船体生命值提高",
-			"value": "hull_hitpoints_buff",
-			"verified": true
-		},
-		{
-			"label": "巡航速度（基础值）",
-			"value": "cruise_speed",
-			"verified": true
-		},
-		{
-			"label": "操控性（基础值）",
-			"value": "handling",
-			"verified": true
-		},
-		{
-			"label": "巡航模式充能时间",
-			"value": "cruise_charge_duration",
-			"verified": true
-		},
-		{
-			"label": "巡航模式敌距参数",
-			"value": "cruise_enemy_distance",
-			"verified": true
-		},
-		{
-			"label": "巡航模式速度提高",
-			"value": "increased_cruise_mode_speed",
-			"verified": true
 		}
 	]
 }
