@@ -41,6 +41,71 @@ const activeCategory = computed(() => {
 	return state.activeMenu.category || [];
 });
 
+// ---- 文件加载（原 LoadFile.vue 内逻辑，挪到父级以便重新加载按钮复用）----
+const needFiles = computed(() => configStore.config?.loadFiles || {});
+const fileState = reactive({ loaded: false, loading: false });
+
+// fileSrc 系统目录简写（成对 %，不区分大小写）：
+//   %download% → 系统下载目录，%document% → 系统文档目录
+// 替换后得到绝对路径，主进程会直接使用；无简写时原样返回（仍按 custom 目录解析）
+const resolveFileSrc = async function (fileSrc: string): Promise<string> {
+	if (!fileSrc || !fileSrc.includes('%')) return fileSrc;
+	const paths = await window.api.getPaths();
+	const dirMap: Record<string, string> = {
+		download: paths.downloads,
+		document: paths.documents
+	};
+	return fileSrc.replace(/%([^%]+)%/g, (_match, key: string) => {
+		const dir = dirMap[key.toLowerCase()];
+		if (!dir) throw new Error(`未知路径简写 %${key}%（当前支持 %download% / %document%）`);
+		return dir;
+	});
+};
+
+const loadFiles = async function (files: Record<string, any>) {
+	fileState.loading = true;
+	const setFileData = configStore.setFileData;
+	const errors: string[] = [];
+	const loadList = Object.keys(files).map(async (key) => {
+		const { fileSrc, readScriptSrc } = files[key] || {};
+		try {
+			// 先解析 fileSrc 里的系统目录简写，再由主进程在 Node 环境中加载脚本并运行，返回解析后的数据
+			const data = await window.api.readFile(await resolveFileSrc(fileSrc), readScriptSrc);
+			await setFileData(key, data);
+		} catch (err: any) {
+			errors.push(`${key}: ${err?.message || err}`);
+		}
+	});
+	await Promise.all(loadList);
+	fileState.loading = false;
+	if (errors.length) {
+		message.error(`文件加载失败：\n${errors.join('\n')}`);
+		return false;
+	}
+	return true;
+};
+
+// LoadFile 遮罩的加载按钮：加载全部配置文件，成功后收起遮罩
+const loadAll = async function () {
+	if (await loadFiles(needFiles.value)) {
+		fileState.loaded = true;
+		message.success('文件加载成功！');
+	}
+};
+
+// 重新加载按钮：只刷新当前分类对应的文件
+const reload = async function () {
+	const dataKey = state.activeMenu.dataKey;
+	const fileCfg = dataKey ? needFiles.value[dataKey] : null;
+	if (!fileCfg) {
+		message.warning('当前分类未配置文件');
+		return;
+	}
+	if (await loadFiles({ [dataKey]: fileCfg })) {
+		message.success('文件加载成功！');
+	}
+};
+
 const $FormBuilder = ref();
 
 /**
@@ -71,7 +136,7 @@ const save = async function (saveCfg: any = {}) {
 
 <template>
 	<div class="h-full">
-		<LoadFile />
+		<LoadFile :loading="fileState.loading" :loaded="fileState.loaded" @loadFiles="loadAll" />
 		<div class="flex justify-start h-full">
 			<div class="menu w-[10rem] bg-primary overflow-y-auto">
 				<Menu
@@ -94,7 +159,7 @@ const save = async function (saveCfg: any = {}) {
 					ref="$FormBuilder"
 				/>
 				<div class="absolute bottom-4 right-4">
-					<Button :loading="state.loading" @click="save(state.activeMenu.saveScript)">
+					<Button :loading="fileState.loading" @click="reload()">
 						<ReloadOutlined />重新加载</Button
 					>
 					<Button
