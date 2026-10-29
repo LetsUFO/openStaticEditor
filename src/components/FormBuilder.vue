@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue';
 import { get, set } from 'lodash';
+import { useConfigStore } from '@renderer/stores/config';
 
 import { Form, Input, InputNumber, Select } from 'ant-design-vue';
-import { useConfigStore } from '@renderer/stores/config';
+import { AppstoreAddOutlined } from '@ant-design/icons-vue';
 
 interface Props {
 	/** config.json -> menu[].category（表单块数组） */
@@ -105,9 +106,14 @@ defineExpose({ getFormData });
 				<Form.Item
 					v-for="(item, ii) in block.items || []"
 					:key="`${item.name || item.label}-${ii}`"
-					:label="item.label"
 					class="w-1/3 !pr-4"
 				>
+					<template #label>
+						<AppstoreAddOutlined
+							class="text-fcLv1! mr-2"
+							:style="{ fontSize: '1rem' }"
+						/>{{ item.label }}
+					</template>
 					<InputNumber
 						v-if="item.type == 'number'"
 						:value="read(item)"

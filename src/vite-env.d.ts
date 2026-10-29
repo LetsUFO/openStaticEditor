@@ -9,7 +9,8 @@ interface AppMenuFormField {
 	/**
 	 * 数据路径（相对 store.fileData[dataKey]），支持嵌套写法：
 	 *   "currentShip.primaryWeapons[0].attributes[1].id"
-	 * 也兼容扁平 key："skill1"
+	 *   "currentShip.skills[0]"（数组下标写法同样由 _.get / _.set 处理）
+	 * 也兼容扁平 key："skillFilter"
 	 */
 	name?: string;
 	type?: 'number' | 'select' | 'text' | string;

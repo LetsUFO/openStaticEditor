@@ -2,11 +2,12 @@
 import { useConfigStore } from './stores/config';
 import { computed, reactive, ref } from 'vue';
 import { storeToRefs } from 'pinia';
+import { dark } from './style/theme';
 
 import { Button, Menu, message } from 'ant-design-vue';
 import FormBuilder from './components/FormBuilder.vue';
 import LoadFile from './components/LoadFile.vue';
-import { dark } from './style/theme';
+import { DownloadOutlined, ReloadOutlined } from '@ant-design/icons-vue';
 
 // 把 dark 的 fcLv 系列注入为 CSS 变量 --dark-fcLv*（单一来源 = theme.ts，供 style.scss 使用）
 for (const [key, value] of Object.entries(dark)) {
@@ -93,12 +94,17 @@ const save = async function (saveCfg: any = {}) {
 					ref="$FormBuilder"
 				/>
 				<div class="absolute bottom-4 right-4">
+					<Button :loading="state.loading" @click="save(state.activeMenu.saveScript)">
+						<ReloadOutlined />重新加载</Button
+					>
 					<Button
 						v-if="state.activeMenu?.category?.length"
+						class="ml-4"
 						:type="'primary'"
 						:loading="state.loading"
 						@click="save(state.activeMenu.saveScript)"
-						>保存</Button
+					>
+						<DownloadOutlined />保存</Button
 					>
 				</div>
 			</div>

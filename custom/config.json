@@ -23,7 +23,7 @@
 					"category": [
 						{
 							"label": "武器1",
-							"tip": "",
+							"tip": "即使选择相同的效果，只能生效一个",
 							"items": [
 								{
 									"label": "等级",
@@ -60,7 +60,7 @@
 						},
 						{
 							"label": "武器2",
-							"tip": "",
+							"tip": "即使选择相同的效果，只能生效一个",
 							"items": [
 								{
 									"label": "等级",
@@ -97,7 +97,7 @@
 						},
 						{
 							"label": "武器3",
-							"tip": "",
+							"tip": "即使选择相同的效果，只能生效一个",
 							"items": [
 								{
 									"label": "等级",
@@ -145,7 +145,7 @@
 					"category": [
 						{
 							"label": "武器1",
-							"tip": "",
+							"tip": "即使选择相同的效果，只能生效一个",
 							"items": [
 								{
 									"label": "等级",
@@ -182,7 +182,7 @@
 						},
 						{
 							"label": "武器2",
-							"tip": "",
+							"tip": "即使选择相同的效果，只能生效一个",
 							"items": [
 								{
 									"label": "等级",
@@ -219,7 +219,7 @@
 						},
 						{
 							"label": "武器3",
-							"tip": "",
+							"tip": "即使选择相同的效果，只能生效一个",
 							"items": [
 								{
 									"label": "等级",
@@ -266,7 +266,7 @@
 					"category": [
 						{
 							"label": "能量核心",
-							"tip": "",
+							"tip": "即使选择相同的效果，只能生效一个",
 							"items": [
 								{
 									"label": "等级",
@@ -303,7 +303,7 @@
 						},
 						{
 							"label": "护盾",
-							"tip": "",
+							"tip": "即使选择相同的效果，只能生效一个",
 							"items": [
 								{
 									"label": "等级",
@@ -340,7 +340,7 @@
 						},
 						{
 							"label": "装甲板",
-							"tip": "",
+							"tip": "即使选择相同的效果，只能生效一个",
 							"items": [
 								{
 									"label": "等级",
@@ -377,7 +377,7 @@
 						},
 						{
 							"label": "传感器",
-							"tip": "",
+							"tip": "即使选择相同的效果，只能生效一个",
 							"items": [
 								{
 									"label": "等级",
@@ -414,7 +414,7 @@
 						},
 						{
 							"label": "推进器",
-							"tip": "",
+							"tip": "即使选择相同的效果，只能生效一个",
 							"items": [
 								{
 									"label": "等级",
@@ -451,7 +451,7 @@
 						},
 						{
 							"label": "货物单元",
-							"tip": "",
+							"tip": "即使选择相同的效果，只能生效一个",
 							"items": [
 								{
 									"label": "等级",
@@ -504,77 +504,77 @@
 					"items": [
 						{
 							"label": "1",
-							"name": "skill1",
+							"name": "currentShip.skills[0]",
 							"type": "select",
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
 							"label": "2",
-							"name": "skill2",
+							"name": "currentShip.skills[1]",
 							"type": "select",
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
 							"label": "3",
-							"name": "skill3",
+							"name": "currentShip.skills[2]",
 							"type": "select",
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
 							"label": "4",
-							"name": "skill4",
+							"name": "currentShip.skills[3]",
 							"type": "select",
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
 							"label": "5",
-							"name": "skill5",
+							"name": "currentShip.skills[4]",
 							"type": "select",
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
 							"label": "6",
-							"name": "skill6",
+							"name": "currentShip.skills[5]",
 							"type": "select",
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
 							"label": "7",
-							"name": "skill7",
+							"name": "currentShip.skills[6]",
 							"type": "select",
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
 							"label": "8",
-							"name": "skill8",
+							"name": "currentShip.skills[7]",
 							"type": "select",
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
 							"label": "9",
-							"name": "skill9",
+							"name": "currentShip.skills[8]",
 							"type": "select",
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
 							"label": "10",
-							"name": "skill10",
+							"name": "currentShip.skills[9]",
 							"type": "select",
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
 						},
 						{
 							"label": "11",
-							"name": "skill11",
+							"name": "currentShip.skills[10]",
 							"type": "select",
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
