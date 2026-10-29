@@ -91,6 +91,20 @@ function isBlockEnabled(path?: string): boolean {
 	return !!get(source.value, path);
 }
 
+/** InputNumber 失焦校正：antd 的 min/max 只裁剪已输入的数值，空值不会自动补 min，这里手动兜底 */
+function onNumberBlur(item: AppMenuFormField) {
+	const val = read(item);
+	const min = item.min;
+	const max = item.max;
+	if (val == null || Number.isNaN(val)) {
+		if (min != null) write(item, min);
+	} else if (min != null && val < min) {
+		write(item, min);
+	} else if (max != null && val > max) {
+		write(item, max);
+	}
+}
+
 /** 供父组件（保存按钮）取当前分类的表单数据 */
 function getFormData(): Record<string, any> {
 	return source.value || {};
@@ -133,6 +147,7 @@ defineExpose({ getFormData });
 						:disabled="item.disabled"
 						class="w-full!"
 						@update:value="(v) => write(item, v)"
+						@blur="() => onNumberBlur(item)"
 					></InputNumber>
 					<Select
 						v-else-if="item.type == 'select'"

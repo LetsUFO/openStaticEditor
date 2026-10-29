@@ -273,6 +273,7 @@
 						{
 							"label": "能量核心",
 							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.modules.EnergyCores.level",
 							"items": [
 								{
 									"label": "等级",
@@ -310,6 +311,7 @@
 						{
 							"label": "护盾",
 							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.modules.Shields.level",
 							"items": [
 								{
 									"label": "等级",
@@ -347,6 +349,7 @@
 						{
 							"label": "装甲板",
 							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.modules.Platings.level",
 							"items": [
 								{
 									"label": "等级",
@@ -384,6 +387,7 @@
 						{
 							"label": "传感器",
 							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.modules.Sensors.level",
 							"items": [
 								{
 									"label": "等级",
@@ -421,6 +425,7 @@
 						{
 							"label": "推进器",
 							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.modules.thrusters.level",
 							"items": [
 								{
 									"label": "等级",
@@ -458,6 +463,7 @@
 						{
 							"label": "货物单元",
 							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.modules.CargoUnits.level",
 							"items": [
 								{
 									"label": "等级",
