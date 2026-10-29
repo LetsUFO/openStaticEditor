@@ -1,6 +1,34 @@
 {
 	"mainWeapon": [
 		{
+			"label": "穿盾",
+			"value": "shield_piercing"
+		},
+		{
+			"label": "穿甲",
+			"value": "armor_piercing"
+		},
+		{
+			"label": "对装甲伤害加成",
+			"value": "anti_armor"
+		},
+		{
+			"label": "失稳",
+			"value": "destabilizer"
+		},
+		{
+			"label": "击杀回血",
+			"value": "heal_on_kill"
+		},
+		{
+			"label": "击杀返还弹药",
+			"value": "ammo_refund_on_kill"
+		},
+		{
+			"label": "暴击回复武器能量",
+			"value": "critical_hit_recharge_weapon_energy"
+		},
+		{
 			"label": "武器射程加成-未实测",
 			"value": "weapon_range_buff"
 		},
@@ -73,36 +101,8 @@
 			"value": "weapon_ramp_up_duration_buff"
 		},
 		{
-			"label": "穿盾",
-			"value": "shield_piercing"
-		},
-		{
-			"label": "穿甲",
-			"value": "armor_piercing"
-		},
-		{
-			"label": "对装甲伤害加成",
-			"value": "anti_armor"
-		},
-		{
-			"label": "失稳",
-			"value": "destabilizer"
-		},
-		{
 			"label": "破盾-未实测",
 			"value": "shield_disrupt"
-		},
-		{
-			"label": "击杀回血",
-			"value": "heal_on_kill"
-		},
-		{
-			"label": "击杀返还弹药",
-			"value": "ammo_refund_on_kill"
-		},
-		{
-			"label": "暴击回复武器能量",
-			"value": "critical_hit_recharge_weapon_energy"
 		},
 		{
 			"label": "无伤害-未实测",
@@ -173,6 +173,10 @@
 	],
 	"EnergyCore": [
 		{
+			"label": "牵引光束距离加成",
+			"value": "tractor_beam_range_buff"
+		},
+		{
 			"label": "推进能量回复加成-未实测",
 			"value": "energy_core_regen_boost_buff"
 		},
@@ -191,13 +195,17 @@
 		{
 			"label": "护盾低时回复推进能量-未实测",
 			"value": "low_shield_recharges_boost_energy"
-		},
-		{
-			"label": "牵引光束距离加成",
-			"value": "tractor_beam_range_buff"
 		}
 	],
 	"Shield": [
+		{
+			"label": "腐蚀免疫",
+			"value": "hazard_shield_corrosion_immunity"
+		},
+		{
+			"label": "瞬间护盾恢复",
+			"value": "instant_shield_restore"
+		},
 		{
 			"label": "护盾容量加成-未实测",
 			"value": "shield_capacity_buff"
@@ -215,23 +223,11 @@
 			"value": "shield_shutdown_duration_buff"
 		},
 		{
-			"label": "腐蚀免疫",
-			"value": "hazard_shield_corrosion_immunity"
-		},
-		{
-			"label": "瞬间护盾恢复",
-			"value": "instant_shield_restore"
-		},
-		{
 			"label": "装备辅助装置时护盾容量提高-未实测",
 			"value": "increased_shield_capacity_for_support_device"
 		}
 	],
 	"Plating": [
-		{
-			"label": "装甲基础值-未实测",
-			"value": "armor"
-		},
 		{
 			"label": "每击杀叠加装甲",
 			"value": "armor_per_kill"
@@ -239,6 +235,10 @@
 		{
 			"label": "每信用点提升船体值",
 			"value": "opulence_increase_hitpoints_per_credit"
+		},
+		{
+			"label": "装甲基础值-未实测",
+			"value": "armor"
 		},
 		{
 			"label": "装备作战装置时装甲值提高-未实测",
@@ -301,10 +301,6 @@
 	],
 	"CargoUnit": [
 		{
-			"label": "货舱格数加成-未实测",
-			"value": "cargo_slots_buff"
-		},
-		{
 			"label": "牵引光束距离加成",
 			"value": "tractor_beam_range_buff"
 		},
@@ -315,6 +311,10 @@
 		{
 			"label": "操控性加成",
 			"value": "handling_buff"
+		},
+		{
+			"label": "货舱格数加成-未实测",
+			"value": "cargo_slots_buff"
 		},
 		{
 			"label": "装备 Scout 货舱时船体生命值提高-未实测",
@@ -413,12 +413,52 @@
 			"value": "all_modules_increased_primary_weapon_range"
 		},
 		{
-			"label": "主武器伤害提高-未实测",
-			"value": "all_modules_increased_primary_weapon_damage"
-		},
-		{
 			"label": "副武器射程提高",
 			"value": "all_modules_increased_secondary_weapon_range"
+		},
+		{
+			"label": "装置冷却时间缩减",
+			"value": "all_modules_reduced_device_cooldowns"
+		},
+		{
+			"label": "暴击连锁",
+			"value": "critical_hit_chain"
+		},
+		{
+			"label": "奥卡尔催化剂·能量核心2 增益",
+			"value": "okkar_catalyst_energycore2_buff"
+		},
+		{
+			"label": "奥卡尔催化剂·能量核心2 减益",
+			"value": "okkar_catalyst_energycore2_debuff"
+		},
+		{
+			"label": "奥卡尔催化剂·传感器1 增益",
+			"value": "okkar_catalyst_sensor1_buff"
+		},
+		{
+			"label": "奥卡尔催化剂·传感器1 减益",
+			"value": "okkar_catalyst_sensor1_debuff"
+		},
+		{
+			"label": "奥卡尔催化剂·装甲板1 增益",
+			"value": "okkar_catalyst_plating1_buff"
+		},
+		{
+			"label": "奥卡尔催化剂·装甲板1 减益",
+			"value": "okkar_catalyst_plating1_debuff"
+		},
+		{
+			"label": "奥卡尔催化剂·推进器1 增益",
+			"value": "okkar_catalyst_booster1_buff"
+		},
+		{
+			"label": "奥卡尔催化剂·推进器1 减益",
+			"value": "okkar_catalyst_booster1_debuff"
+		},
+		{
+			"label": "主武器伤害提高-未实测",
+			"value": "all_modules_increased_primary_weapon_damage"
 		},
 		{
 			"label": "副武器伤害提高-未实测",
@@ -451,10 +491,6 @@
 		{
 			"label": "护盾值提高-未实测",
 			"value": "all_modules_increased_shield_hitpoints"
-		},
-		{
-			"label": "装置冷却时间缩减",
-			"value": "all_modules_reduced_device_cooldowns"
 		},
 		{
 			"label": "武器能量消耗降低-未实测",
@@ -519,10 +555,6 @@
 		{
 			"label": "终极技能充能速度提高-未实测",
 			"value": "all_modules_increased_ult_generation"
-		},
-		{
-			"label": "暴击连锁",
-			"value": "critical_hit_chain"
 		},
 		{
 			"label": "击杀后获得伤害加成-未实测",
@@ -601,22 +633,6 @@
 			"value": "okkar_catalyst_energycore1_debuff"
 		},
 		{
-			"label": "奥卡尔催化剂·能量核心2 增益",
-			"value": "okkar_catalyst_energycore2_buff"
-		},
-		{
-			"label": "奥卡尔催化剂·能量核心2 减益",
-			"value": "okkar_catalyst_energycore2_debuff"
-		},
-		{
-			"label": "奥卡尔催化剂·传感器1 增益",
-			"value": "okkar_catalyst_sensor1_buff"
-		},
-		{
-			"label": "奥卡尔催化剂·传感器1 减益",
-			"value": "okkar_catalyst_sensor1_debuff"
-		},
-		{
 			"label": "奥卡尔催化剂·传感器2 增益-未实测",
 			"value": "okkar_catalyst_sensor2_buff"
 		},
@@ -625,28 +641,12 @@
 			"value": "okkar_catalyst_sensor2_debuff"
 		},
 		{
-			"label": "奥卡尔催化剂·装甲板1 增益",
-			"value": "okkar_catalyst_plating1_buff"
-		},
-		{
-			"label": "奥卡尔催化剂·装甲板1 减益",
-			"value": "okkar_catalyst_plating1_debuff"
-		},
-		{
 			"label": "奥卡尔催化剂·装甲板2 增益-未实测",
 			"value": "okkar_catalyst_plating2_buff"
 		},
 		{
 			"label": "奥卡尔催化剂·装甲板2 减益-未实测",
 			"value": "okkar_catalyst_plating2_debuff"
-		},
-		{
-			"label": "奥卡尔催化剂·推进器1 增益",
-			"value": "okkar_catalyst_booster1_buff"
-		},
-		{
-			"label": "奥卡尔催化剂·推进器1 减益",
-			"value": "okkar_catalyst_booster1_debuff"
 		},
 		{
 			"label": "奥卡尔催化剂·护盾1 增益-未实测",
@@ -867,18 +867,6 @@
 		{
 			"label": "巡航模式速度提高-未实测",
 			"value": "increased_cruise_mode_speed"
-		},
-		{
-			"label": "传说特效",
-			"value": "legendary_effect"
-		},
-		{
-			"label": "传说效果数量",
-			"value": "legendary_count"
-		},
-		{
-			"label": "传说持续时间",
-			"value": "legendary_time"
 		}
 	]
 }
