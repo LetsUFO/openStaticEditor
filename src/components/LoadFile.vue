@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Button, Select } from 'ant-design-vue';
 import { computed, reactive } from 'vue';
 import { useConfigStore } from '@renderer/stores/config';
+
+import { Button, Select } from 'ant-design-vue';
 
 interface Props {
 	// 加载状态与结果由父级（App.vue）持有，本组件只负责展示与 emit
@@ -15,7 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const emit = defineEmits(['loadFiles']);
 
-const state = reactive({ targetFile: '' });
+const state = reactive({ targetFile: '', fileList: [] });
 const needFiles = computed(() => {
 	return useConfigStore().config?.loadFiles || {};
 });
@@ -31,7 +32,14 @@ const needFiles = computed(() => {
 				<template v-if="file.fileSrc"> {{ key }}: {{ file.fileSrc }} </template>
 				<template v-else>
 					<div>{{ key }}: {{ file.filePath + state.targetFile }}</div>
-					<Select :options=""></Select>
+					<Select
+						:options="
+							state.fileList.map((fileName) => ({
+								label: fileName,
+								value: fileName
+							}))
+						"
+					></Select>
 				</template>
 			</li>
 		</ul>
