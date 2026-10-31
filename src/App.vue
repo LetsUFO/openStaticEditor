@@ -30,16 +30,32 @@ const { menu } = storeToRefs(configStore);
 interface IState {
 	loading: boolean;
 	openKey: string[];
+	selectedKey: string[];
 	activeMenu: any;
 }
 const state = reactive<IState>({
 	loading: false,
 	openKey: menu.value.map((li) => li?.key).filter((k): k is string => typeof k === 'string'),
+	selectedKey: [],
 	activeMenu: {}
 });
 const activeCategory = computed(() => {
 	return state.activeMenu.category || [];
 });
+
+// 第一个叶子菜单项（有 children 就递归取第一个子项）
+const firstLeaf = function (items: any[]): any {
+	const first = items?.[0];
+	if (!first) return null;
+	return first.children?.length ? firstLeaf(first.children) : first;
+};
+
+// 激活指定菜单项：高亮 + 切换表单内容（等价于用户点击）
+const activateMenu = function (item: any) {
+	if (!item) return;
+	state.activeMenu = item;
+	state.selectedKey = typeof item.key === 'string' ? [item.key] : [];
+};
 
 // ---- 文件加载（原 LoadFile.vue 内逻辑，挪到父级以便重新加载按钮复用）----
 const needFiles = computed(() => configStore.config?.loadFiles || {});
@@ -90,10 +106,11 @@ const loadFiles = async function (files: Record<string, any>) {
 	return true;
 };
 
-// LoadFile 遮罩的加载按钮：加载全部配置文件，成功后收起遮罩
+// LoadFile 遮罩的加载按钮：加载全部配置文件，成功后收起遮罩，并默认激活第一个菜单（有子菜单则取第一个子项）
 const loadAll = async function () {
 	if (await loadFiles(needFiles.value)) {
 		fileState.loaded = true;
+		activateMenu(firstLeaf(menu.value));
 		message.success('文件加载成功！');
 	}
 };
@@ -156,6 +173,7 @@ const save = async function (saveCfg: any = {}) {
 			<div class="menu w-[10rem] bg-primary overflow-y-auto">
 				<Menu
 					v-model:open-keys="state.openKey"
+					v-model:selected-keys="state.selectedKey"
 					:theme="'dark'"
 					:items="menu"
 					:mode="'inline'"
