@@ -104,11 +104,12 @@ ipcMain.handle('file:read', async (_event, { fileSrc, readScriptSrc } = {}) => {
 
 /**
  * 运行 custom 目录下的通用脚本（目前用于保存：saveScript 拿表单数据写回存档）。
- * 请求参数：{ scriptSrc, dataKey, data }，脚本函数收到 ctx = { scriptSrc, dataKey, data, customDir, ... }
+ * 请求参数：{ scriptSrc, dataKey, filePath, data }，脚本函数收到
+ * ctx = { scriptSrc, dataKey, filePath, data, customDir, ... }
  * （下拉选项过滤已移到渲染进程 store 内完成，不再走这里）
  */
 ipcMain.handle('script:run', async (_event, payload = {}) => {
-	const { scriptSrc, dataKey, data } = payload;
+	const { scriptSrc, dataKey, filePath, data } = payload;
 
 	if (!scriptSrc) throw new Error('未配置 scriptSrc，无法运行脚本');
 
@@ -132,6 +133,7 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 	const ctx = {
 		scriptSrc,
 		dataKey,
+		filePath,
 		data,
 		customDir,
 		downloadsPath: app.getPath('downloads'),

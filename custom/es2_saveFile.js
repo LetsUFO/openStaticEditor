@@ -996,19 +996,17 @@ function ts() {
 }
 
 // ===================================================================
-//  主流程
+//  主流程（应用内调用 / CLI 共用）
 // ===================================================================
-function main() {
-	const args = parseArgs(process.argv.slice(2));
-	const jsonPath = args.json || path.join(__dirname, 'es2_loadout.json');
-	if (!fs.existsSync(jsonPath)) throw new Error('找不到 JSON 文件: ' + jsonPath);
-	const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+/**
+ * 把数据应用到存档并（可选）写盘。
+ * @param data     与 es2_loadout.js 输出同构的对象（meta / currentShip / skillMap …）
+ * @param savePath 存档绝对路径
+ * @param opts     { write, anyLevel, keepPos, jsonPath }
+ */
+function runWriteback(data, savePath, opts) {
 	const cs = data.currentShip;
-	if (!cs) throw new Error('JSON 缺少 currentShip');
-
-	const savName = (data.meta && data.meta.saveFile) || 'ufo.sav';
-	const savePath = args.save || path.join(SAVDIR, savName);
-	if (!fs.existsSync(savePath)) throw new Error('找不到存档文件: ' + savePath);
+	if (!cs) throw new Error('数据缺少 currentShip');
 
 	const { data: body, meta } = loadSav(savePath);
 	const g = parseGvas(body);
@@ -1031,18 +1029,22 @@ function main() {
 		}
 	}
 
-	const opts = { anyLevel: args.anyLevel, keepPos: args.keepPos, proto: findProto(ship) };
+	const o = {
+		anyLevel: !!opts.anyLevel,
+		keepPos: !!opts.keepPos,
+		proto: findProto(ship)
+	};
 	const changes = [];
 
 	changes.push(`存档: ${savePath}`);
-	changes.push(`JSON: ${jsonPath}`);
+	if (opts.jsonPath) changes.push(`JSON: ${opts.jsonPath}`);
 	changes.push(`当前船索引: ${idx} (templateId=${childVal(sis, 'ItemTemplateID')})`);
 	changes.push('');
 
-	applyList(inv, 'PrimaryWeapons', cs.primaryWeapons, changes, opts);
-	applyList(inv, 'SecondaryWeapons', cs.secondaryWeapons, changes, opts);
-	for (const c of MODULE_CATS) applyModule(inv, c, cs.modules && cs.modules[c], changes, opts);
-	if (cs.skills) applySkills(sis, cs.skills, skillValueSet, changes, opts.proto);
+	applyList(inv, 'PrimaryWeapons', cs.primaryWeapons, changes, o);
+	applyList(inv, 'SecondaryWeapons', cs.secondaryWeapons, changes, o);
+	for (const c of MODULE_CATS) applyModule(inv, c, cs.modules && cs.modules[c], changes, o);
+	if (cs.skills) applySkills(sis, cs.skills, skillValueSet, changes, o.proto);
 
 	// ⚠️ 关键：整棵 ShipsSaveState 子树递归置脏+清 raw，强制从内存树重建
 	//    （否则中间结构体 ShipItemState/Inventory/物品 仍带旧 raw，wrProp 回吐旧字节吞掉深改）
@@ -1056,38 +1058,91 @@ function main() {
 		throw new Error(`自检失败：顶层属性数 ${g.props.length} -> ${g2.props.length}`);
 	}
 
-	if (!args.write) {
-		console.log('==================== 演练模式（未写盘） ====================');
-		console.log(changes.join('\n'));
-		console.log(
-			`\n演练完成：重建 ${out.length.toLocaleString()} 字节，重新解析 ${g2.props.length} 个顶层属性 OK。`
-		);
-		console.log('确认无误后加 --write 真正写回（写前会自动备份）。');
-		return;
+	if (!opts.write) {
+		return { write: false, savePath, changes, bytes: out.length, props: g2.props.length };
 	}
 
 	// 真正写盘：先备份
 	const bak = savePath + '.' + ts() + '.bak';
 	fs.copyFileSync(savePath, bak);
 	const bytes = saveSav(savePath, out, meta.raw ? null : meta.ver);
+	return { write: true, savePath, backup: bak, bytes, changes, props: g2.props.length };
+}
+
+/**
+ * 应用内调用入口（主进程 script:run 把本模块当函数调用）。
+ * ctx = { data, filePath, dataKey, customDir, downloadsPath, documentsPath }
+ *   data     —— 渲染进程 store.fileData[dataKey]（已去掉函数等不可序列化字段）
+ *   filePath —— 要写回的存档绝对路径（渲染进程按 loadFiles[dataKey].fileSrc 解析后传入）
+ */
+function saveFromData(ctx = {}) {
+	const data = ctx.data;
+	if (!data || typeof data !== 'object' || !data.currentShip) {
+		throw new Error('缺少 ctx.data.currentShip（请先加载存档）');
+	}
+
+	let savePath = ctx.filePath;
+	if (!savePath) {
+		const name = (data.meta && data.meta.saveFile) || 'ufo.sav';
+		savePath = path.join(ctx.downloadsPath || SAVDIR, name);
+	}
+	if (!fs.existsSync(savePath)) throw new Error('找不到存档文件: ' + savePath);
+
+	const res = runWriteback(data, savePath, { write: true });
+	return {
+		ok: true,
+		savePath: res.savePath,
+		backup: res.backup,
+		bytes: res.bytes,
+		changes: res.changes
+	};
+}
+
+function main() {
+	const args = parseArgs(process.argv.slice(2));
+	const jsonPath = args.json || path.join(__dirname, 'es2_loadout.json');
+	if (!fs.existsSync(jsonPath)) throw new Error('找不到 JSON 文件: ' + jsonPath);
+	const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+	if (!data.currentShip) throw new Error('JSON 缺少 currentShip');
+
+	const savName = (data.meta && data.meta.saveFile) || 'ufo.sav';
+	const savePath = args.save || path.join(SAVDIR, savName);
+	if (!fs.existsSync(savePath)) throw new Error('找不到存档文件: ' + savePath);
+
+	const res = runWriteback(data, savePath, {
+		write: args.write,
+		anyLevel: args.anyLevel,
+		keepPos: args.keepPos,
+		jsonPath
+	});
+
+	if (!res.write) {
+		console.log('==================== 演练模式（未写盘） ====================');
+		console.log(res.changes.join('\n'));
+		console.log(
+			`\n演练完成：重建 ${res.bytes.toLocaleString()} 字节，重新解析 ${res.props} 个顶层属性 OK。`
+		);
+		console.log('确认无误后加 --write 真正写回（写前会自动备份）。');
+		return;
+	}
+
 	console.log('==================== 已写回 ====================');
-	console.log(changes.join('\n'));
-	console.log(`\n已写回 -> ${savePath} (${bytes.toLocaleString()} 字节)`);
-	console.log(`备份   -> ${bak}`);
+	console.log(res.changes.join('\n'));
+	console.log(`\n已写回 -> ${res.savePath} (${res.bytes.toLocaleString()} 字节)`);
+	console.log(`备份   -> ${res.backup}`);
 	console.log('\n⚠️ 务必在游戏里【载入该存档】后再保存，否则游戏会用内存里的旧值覆盖你的修改。');
 	console.log('   载入 -> 保存 -> 再读盘，确认改动生效。');
 }
 
-// 作为模块被 require 时导出内部函数（便于单独测试序列化正确性）
-module.exports = {
-	parseGvas,
-	buildGvas,
-	loadSav,
-	saveSav,
-	wrProp,
-	getChild,
-	childVal
-};
+// 主进程 script:run 以函数形式调用本模块；同时保留内部函数便于单独测试序列化正确性
+module.exports = saveFromData;
+module.exports.parseGvas = parseGvas;
+module.exports.buildGvas = buildGvas;
+module.exports.loadSav = loadSav;
+module.exports.saveSav = saveSav;
+module.exports.wrProp = wrProp;
+module.exports.getChild = getChild;
+module.exports.childVal = childVal;
 
 if (require.main === module) {
 	try {

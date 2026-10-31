@@ -77,6 +77,11 @@ interface Window {
 		getConfig: () => Promise<AppConfig>;
 		getPaths: () => Promise<{ downloads: string; documents: string }>;
 		readFile: (fileSrc: string, readScriptSrc: string) => Promise<any>;
-		runScript: (payload: { scriptSrc: string; dataKey?: string; data?: any }) => Promise<any>;
+		runScript: (payload: {
+			scriptSrc: string;
+			dataKey?: string;
+			filePath?: string;
+			data?: any;
+		}) => Promise<any>;
 	};
 }

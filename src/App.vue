@@ -120,10 +120,19 @@ const save = async function (saveCfg: any = {}) {
 	}
 	state.loading = true;
 	try {
+		// IPC 走结构化克隆，无法传递函数（functionTextList 注入的 skillFilter 等），
+		// 先做一次 JSON 往返，只保留可序列化的纯数据
+		const data = JSON.parse(JSON.stringify(formData));
+
+		// 写回目标 = 该分类对应 loadFiles 里的存档文件（fileSrc 支持 %download% 等简写）
+		const fileCfg = saveCfg.needFileKey ? needFiles.value[saveCfg.needFileKey] : null;
+		const filePath = fileCfg?.fileSrc ? await resolveFileSrc(fileCfg.fileSrc) : '';
+
 		await window.api.runScript({
 			scriptSrc: saveCfg.saveScript,
 			dataKey: saveCfg.needFileKey,
-			data: formData
+			filePath,
+			data
 		});
 		message.success('保存成功！');
 	} catch (error: any) {
