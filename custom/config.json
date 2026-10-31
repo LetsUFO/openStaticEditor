@@ -597,7 +597,7 @@
 			"dataKey": "base",
 			"saveScript": {
 				"needFileKey": "base",
-				"saveScript": ""
+				"saveScript": "custom/es2_saveFile.js"
 			}
 		}
 	],
