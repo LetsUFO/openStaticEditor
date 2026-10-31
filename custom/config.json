@@ -9,7 +9,9 @@
 	},
 	"loadFiles": {
 		"base": {
+			"beforeScript": "custom/getSaveFiles.js",
 			"fileSrc": "%user%/AppData/Local/ES2/Saved/SaveGames/ufo.sav",
+			"filePath": "%user%/AppData/Local/ES2/Saved/SaveGames/",
 			"readScriptSrc": "custom/es2_loadout.js"
 		}
 	},

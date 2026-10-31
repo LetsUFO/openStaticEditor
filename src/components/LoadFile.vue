@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Button } from 'ant-design-vue';
-import { computed } from 'vue';
+import { Button, Select } from 'ant-design-vue';
+import { computed, reactive } from 'vue';
 import { useConfigStore } from '@renderer/stores/config';
 
 interface Props {
@@ -15,6 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const emit = defineEmits(['loadFiles']);
 
+const state = reactive({ targetFile: '' });
 const needFiles = computed(() => {
 	return useConfigStore().config?.loadFiles || {};
 });
@@ -27,7 +28,11 @@ const needFiles = computed(() => {
 	>
 		<ul class="dark-fcLv3">
 			<li v-for="(file, key) in needFiles" :key="key" class="mb-2 pb-2 border-b">
-				{{ key }}: {{ file.fileSrc }}
+				<template v-if="file.fileSrc"> {{ key }}: {{ file.fileSrc }} </template>
+				<template v-else>
+					<div>{{ key }}: {{ file.filePath + state.targetFile }}</div>
+					<Select :options=""></Select>
+				</template>
 			</li>
 		</ul>
 		<Button :type="'primary'" :size="'large'" :loading="loading" @click="emit('loadFiles')"
