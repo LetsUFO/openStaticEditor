@@ -75,7 +75,7 @@ interface Window {
 	api: {
 		ping: () => Promise<string>;
 		getConfig: () => Promise<AppConfig>;
-		getPaths: () => Promise<{ downloads: string; documents: string }>;
+		getPaths: () => Promise<{ downloads: string; documents: string; user: string }>;
 		readFile: (fileSrc: string, readScriptSrc: string) => Promise<any>;
 		runScript: (payload: {
 			scriptSrc: string;

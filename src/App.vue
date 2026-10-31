@@ -46,18 +46,20 @@ const needFiles = computed(() => configStore.config?.loadFiles || {});
 const fileState = reactive({ loaded: false, loading: false });
 
 // fileSrc 系统目录简写（成对 %，不区分大小写）：
-//   %download% → 系统下载目录，%document% → 系统文档目录
+//   %download% → 系统下载目录，%document% → 系统文档目录，%user% → 用户主目录
+// 例如 Windows 存档可写成 `%user%/AppData/Local/ES2/Saved/SaveGames/ufo.sav`
 // 替换后得到绝对路径，主进程会直接使用；无简写时原样返回（仍按 custom 目录解析）
 const resolveFileSrc = async function (fileSrc: string): Promise<string> {
 	if (!fileSrc || !fileSrc.includes('%')) return fileSrc;
 	const paths = await window.api.getPaths();
 	const dirMap: Record<string, string> = {
 		download: paths.downloads,
-		document: paths.documents
+		document: paths.documents,
+		user: paths.user
 	};
 	return fileSrc.replace(/%([^%]+)%/g, (_match, key: string) => {
 		const dir = dirMap[key.toLowerCase()];
-		if (!dir) throw new Error(`未知路径简写 %${key}%（当前支持 %download% / %document%）`);
+		if (!dir) throw new Error(`未知路径简写 %${key}%（当前支持 %download% / %document% / %user%）`);
 		return dir;
 	});
 };

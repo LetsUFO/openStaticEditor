@@ -30,7 +30,9 @@ const needFiles = computed(() => {
 				{{ key }}: {{ file.fileSrc }}
 			</li>
 		</ul>
-		<Button :type="'primary'" :size="'large'" :loading="loading" @click="emit('loadFiles')">加载文件</Button>
+		<Button :type="'primary'" :size="'large'" :loading="loading" @click="emit('loadFiles')"
+			>加载文件</Button
+		>
 	</div>
 </template>
 

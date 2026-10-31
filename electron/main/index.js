@@ -6,10 +6,11 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 // 示例：渲染进程可通过 window.api.ping() 调用
 ipcMain.handle('ping', () => 'pong');
 
-// 系统内置目录：渲染进程解析 fileSrc 里的简写（%download% / %document%）时使用
+// 系统内置目录：渲染进程解析 fileSrc 里的简写（%download% / %document% / %user%）时使用
 ipcMain.handle('app:paths', () => ({
 	downloads: app.getPath('downloads'),
-	documents: app.getPath('documents')
+	documents: app.getPath('documents'),
+	user: app.getPath('home')
 }));
 
 // custom/config.json —— 运行（dev）与打包后都要能加载到
