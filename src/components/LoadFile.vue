@@ -80,10 +80,12 @@ const onLoadFiles = function () {
 		:class="{ 'opacity-0 pointer-events-none': loaded }"
 	>
 		<ul class="dark-fcLv3">
-			<li v-for="(file, key) in needFiles" :key="key" class="mb-2 pb-2 border-b">
+			<li v-for="(file, key) in needFiles" :key="key" class="mb-4 pb-4 border-b">
 				<template v-if="file.fileSrc"> {{ key }}: {{ file.fileSrc }} </template>
 				<template v-else>
-					<div>{{ key }}: {{ file.filePath + (state.targetFileMap[key] || '') }}</div>
+					<div class="mb-2">
+						{{ key }}: {{ file.filePath + (state.targetFileMap[key] || '') }}
+					</div>
 					<Select
 						v-model:value="state.targetFileMap[key]"
 						:options="
@@ -92,6 +94,7 @@ const onLoadFiles = function () {
 								value: fileName
 							}))
 						"
+						class="w-full"
 					></Select>
 				</template>
 			</li>
