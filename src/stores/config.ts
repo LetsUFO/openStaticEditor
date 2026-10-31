@@ -28,6 +28,9 @@ interface IFunctionTextListObj {
 export const useConfigStore = defineStore('config', () => {
 	const config = ref<AppConfig | null>(null);
 	const fileData = ref<Record<string, any>>({}); //经过转换的文件数据
+	// dataKey -> 已解析的存档绝对路径（loadFiles 时把 fileSrc 的 %download% 等简写转换后存入，
+	// 保存脚本直接拿这个路径写回）
+	const filePaths = ref<Record<string, string>>({});
 	// fileData 每次写入自增。表单/下拉选项靠它触发刷新，
 	// 避免对整份存档数据做 deep watch（存档里属性条目多，深度监听开销大）
 	const dataVersion = ref(0);
@@ -59,5 +62,20 @@ export const useConfigStore = defineStore('config', () => {
 		});
 	}
 
-	return { config, menu, rootKeys, load, fileData, dataVersion, setFileData };
+	/** 记录某个 dataKey 解析后的存档绝对路径（供保存脚本写回使用） */
+	function setFilePath(fileKey: string, filePath: string): void {
+		if (filePath) filePaths.value[fileKey] = filePath;
+	}
+
+	return {
+		config,
+		menu,
+		rootKeys,
+		load,
+		fileData,
+		filePaths,
+		dataVersion,
+		setFileData,
+		setFilePath
+	};
 });

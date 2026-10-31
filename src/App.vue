@@ -70,7 +70,10 @@ const loadFiles = async function (files: Record<string, any>) {
 		const { fileSrc, readScriptSrc } = files[key] || {};
 		try {
 			// 先解析 fileSrc 里的系统目录简写，再由主进程在 Node 环境中加载脚本并运行，返回解析后的数据
-			const data = await window.api.readFile(await resolveFileSrc(fileSrc), readScriptSrc);
+			const filePath = await resolveFileSrc(fileSrc);
+			// 解析后的绝对路径存进 store，保存时直接取用
+			configStore.setFilePath(key, filePath);
+			const data = await window.api.readFile(filePath, readScriptSrc);
 			await setFileData(key, data);
 		} catch (err: any) {
 			errors.push(`${key}: ${err?.message || err}`);
@@ -124,9 +127,10 @@ const save = async function (saveCfg: any = {}) {
 		// 先做一次 JSON 往返，只保留可序列化的纯数据
 		const data = JSON.parse(JSON.stringify(formData));
 
-		// 写回目标 = 该分类对应 loadFiles 里的存档文件（fileSrc 支持 %download% 等简写）
-		const fileCfg = saveCfg.needFileKey ? needFiles.value[saveCfg.needFileKey] : null;
-		const filePath = fileCfg?.fileSrc ? await resolveFileSrc(fileCfg.fileSrc) : '';
+		// 写回目标 = 该分类 loadFiles 已解析好的存档绝对路径（存于 store.filePaths）
+		const filePath = saveCfg.needFileKey
+			? configStore.filePaths[saveCfg.needFileKey] || ''
+			: '';
 
 		await window.api.runScript({
 			scriptSrc: saveCfg.saveScript,
