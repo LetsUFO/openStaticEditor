@@ -12,6 +12,7 @@
 		"preview": "env -u ELECTRON_RUN_AS_NODE electron-vite preview",
 		"package": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder",
 		"dist": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder",
+		"build:win": "electron-vite build && electron-builder --win dir --x64",
 		"dist:win": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder --win",
 		"dist:mac": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder --mac",
 		"format": "prettier --write .",
