@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import { useConfigStore } from '@renderer/stores/config';
 
 import { Button, Select } from 'ant-design-vue';
@@ -16,10 +16,62 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const emit = defineEmits(['loadFiles']);
 
-const state = reactive({ targetFile: '', fileList: [] });
+// fileListMap / targetFileMap 的 key 与 config.json -> loadFiles 的 key 一一对应
+const state = reactive({
+	targetFileMap: {} as Record<string, string>,
+	fileListMap: {} as Record<string, string[]>
+});
 const needFiles = computed(() => {
 	return useConfigStore().config?.loadFiles || {};
 });
+
+// 各 key 解析后的目录（点「加载文件」拼接最终 fileSrc 时复用，避免重复解析简写）
+const resolvedDirMap: Record<string, string> = {};
+
+watch(
+	() => needFiles.value,
+	async (fileMap) => {
+		for (const key of Object.keys(fileMap)) {
+			const fileObj = fileMap[key];
+			if (!fileObj?.beforeScript) continue;
+			// 解析 filePath 里的系统目录简写（%download% / %document% / %user%）
+			let dir: string = fileObj.filePath || '';
+			if (dir.includes('%')) {
+				const paths = await window.api.getPaths();
+				const dirMap: Record<string, string> = {
+					download: paths.downloads,
+					document: paths.documents,
+					user: paths.user
+				};
+				dir = dir.replace(/%([^%]+)%/g, (_m, k: string) => dirMap[k.toLowerCase()] || '');
+			}
+			resolvedDirMap[key] = dir;
+			// 主进程 Node 环境运行 beforeScript，返回文件名列表
+			const list = await window.api.runScript({
+				scriptSrc: fileObj.beforeScript,
+				filePath: dir
+			});
+			state.fileListMap[key] = Array.isArray(list) ? list : [];
+			// 未选择或所选已不在列表中时，默认选中第一个
+			if (!state.fileListMap[key].includes(state.targetFileMap[key])) {
+				state.targetFileMap[key] = state.fileListMap[key][0] || '';
+			}
+		}
+	},
+	{ immediate: true }
+);
+
+// 点「加载文件」：把目录型条目（filePath + 选中文件名）拼成实际文件路径，
+// 以 fileSrc 字段写回 store.config.loadFiles[key]，之后由 App.vue 按 fileSrc 统一加载
+const onLoadFiles = function () {
+	for (const key of Object.keys(needFiles.value)) {
+		const fileObj = needFiles.value[key];
+		if (!fileObj?.filePath || fileObj?.fileSrc) continue;
+		const dir = resolvedDirMap[key] ?? fileObj.filePath;
+		fileObj.fileSrc = dir + (state.targetFileMap[key] || '');
+	}
+	emit('loadFiles');
+};
 </script>
 
 <template>
@@ -31,10 +83,11 @@ const needFiles = computed(() => {
 			<li v-for="(file, key) in needFiles" :key="key" class="mb-2 pb-2 border-b">
 				<template v-if="file.fileSrc"> {{ key }}: {{ file.fileSrc }} </template>
 				<template v-else>
-					<div>{{ key }}: {{ file.filePath + state.targetFile }}</div>
+					<div>{{ key }}: {{ file.filePath + (state.targetFileMap[key] || '') }}</div>
 					<Select
+						v-model:value="state.targetFileMap[key]"
 						:options="
-							state.fileList.map((fileName) => ({
+							(state.fileListMap[key] || []).map((fileName) => ({
 								label: fileName,
 								value: fileName
 							}))
@@ -43,7 +96,7 @@ const needFiles = computed(() => {
 				</template>
 			</li>
 		</ul>
-		<Button :type="'primary'" :size="'large'" :loading="loading" @click="emit('loadFiles')"
+		<Button :type="'primary'" :size="'large'" :loading="loading" @click="onLoadFiles"
 			>加载文件</Button
 		>
 	</div>

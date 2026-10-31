@@ -52,8 +52,19 @@ function main() {
 	console.log(`\n共 ${files.length} 个 .sav 文件，目录: ${dir}`);
 }
 
+/**
+ * 应用内调用入口（主进程 script:run 把本模块当函数调用）。
+ * ctx.filePath —— 渲染进程解析 %user% 等简写后的存档目录绝对路径
+ * 返回 .sav 文件名数组（供 LoadFile 下拉选择）
+ */
+function run(ctx = {}) {
+	const dir = ctx.filePath || DEFAULT_DIR;
+	return getSaveFiles(dir);
+}
+
 if (require.main === module) {
 	main();
 }
 
-module.exports = getSaveFiles;
+module.exports = run;
+module.exports.getSaveFiles = getSaveFiles;
