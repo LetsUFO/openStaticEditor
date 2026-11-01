@@ -145,10 +145,13 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 });
 
 function createWindow() {
+	// 窗口标题：custom/config.json 的 name + package.json 的 version（app.getVersion()）
+	const windowTitle = `${config.name} v${app.getVersion()}`;
+
 	const mainWindow = new BrowserWindow({
 		width: config.width,
 		height: config.height,
-		title: config.name,
+		title: windowTitle,
 		show: false,
 		autoHideMenuBar: true,
 		webPreferences: {
@@ -161,9 +164,9 @@ function createWindow() {
 	mainWindow.on('ready-to-show', () => mainWindow.show());
 
 	// 页面加载后，Electron 会用 HTML 的 <title> 覆盖窗口标题（page-title-updated），
-	// 这里阻止该行为，并把标题锁定为 custom/config.json 的 name。
+	// 这里阻止该行为，并把标题锁定为 windowTitle。
 	const applyWindowTitle = () => {
-		if (mainWindow.getTitle() !== config.name) mainWindow.setTitle(config.name);
+		if (mainWindow.getTitle() !== windowTitle) mainWindow.setTitle(windowTitle);
 	};
 	mainWindow.on('page-title-updated', (event) => {
 		event.preventDefault();
