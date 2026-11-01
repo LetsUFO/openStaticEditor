@@ -1,6 +1,6 @@
 {
 	"name": "openstaticeditor",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"description": "Vue3 + Pinia + Electron 桌面应用",
 	"author": "Azrael",
 	"license": "MIT",
@@ -12,7 +12,8 @@
 		"preview": "env -u ELECTRON_RUN_AS_NODE electron-vite preview",
 		"package": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder",
 		"dist": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder",
-		"build:win": "electron-vite build && electron-builder --win dir --x64",
+		"build:win": "electron-vite build && electron-builder --win dir --x64 && node scripts/organize-release.js",
+		"build:mac": "electron-vite build && electron-builder --mac dir --arm64 && node scripts/organize-release.js",
 		"dist:win": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder --win",
 		"dist:mac": "env -u ELECTRON_RUN_AS_NODE electron-vite build && env -u ELECTRON_RUN_AS_NODE electron-builder --mac",
 		"format": "prettier --write .",
