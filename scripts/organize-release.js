@@ -1,6 +1,6 @@
 /**
  * 构建后整理产物目录：
- * release/<version>/win-unpacked   -> release/<version>/win
+ * release/<version>/win-unpacked   -> release/<version>/<custom/config.json name> v<version>
  * release/<version>/mac-arm64      -> release/<version>/mac
  * release/<version>/mac            -> release/<version>/mac
  *
@@ -8,13 +8,24 @@
  */
 const { existsSync, readdirSync, renameSync, rmSync } = require('node:fs');
 const { join, resolve } = require('node:path');
+const { execFileSync } = require('node:child_process');
 
 const { version } = require('../package.json');
 const releaseDir = resolve(__dirname, '..', 'release', version);
 
+let configName = '';
+try {
+	const config = require('../custom/config.json');
+	if (typeof config.name === 'string') configName = config.name.trim();
+} catch (error) {
+	console.warn(`[organize] 读取 custom/config.json 失败，win 目录回退为默认名：${error.message}`);
+}
+
+const winTarget = configName ? `${configName} v${version}` : 'win';
+
 // electron-builder 的 dir 目标目录名：win-unpacked / win-arm64-unpacked / mac / mac-arm64 / mac-universal
 const RULES = [
-	{ target: 'win', pattern: /^win(?:-\w+)?-unpacked$/ },
+	{ target: winTarget, pattern: /^win(?:-\w+)?-unpacked$/ },
 	{ target: 'mac', pattern: /^mac(?:-\w+)?$/ }
 ];
 
@@ -44,4 +55,35 @@ for (const entry of readdirSync(releaseDir, { withFileTypes: true })) {
 	renameSync(from, to);
 	moved.add(rule.target);
 	console.log(`[organize] ${entry.name} -> ${rule.target}`);
+}
+
+// macOS 的 .app 名称由 productName 决定，这里按 config.json 的 name + version 重命名，
+// 并同步 Info.plist 里的 CFBundleName / CFBundleDisplayName（重命名 bundle 不会自动更新这两个键）。
+const macDir = join(releaseDir, 'mac');
+
+if (configName && existsSync(macDir)) {
+	const appName = `${configName} v${version}`;
+
+	for (const entry of readdirSync(macDir)) {
+		if (!entry.endsWith('.app')) continue;
+
+		const from = join(macDir, entry);
+		const to = join(macDir, `${appName}.app`);
+		if (from === to) continue;
+
+		const plistPath = join(from, 'Contents', 'Info.plist');
+		if (existsSync(plistPath)) {
+			for (const key of ['CFBundleName', 'CFBundleDisplayName']) {
+				try {
+					execFileSync('plutil', ['-replace', key, '-string', appName, plistPath]);
+				} catch (error) {
+					console.warn(`[organize] 更新 ${key} 失败：${error.message}`);
+				}
+			}
+		}
+
+		if (existsSync(to)) rmSync(to, { recursive: true, force: true });
+		renameSync(from, to);
+		console.log(`[organize] ${entry} -> ${appName}.app`);
+	}
 }
