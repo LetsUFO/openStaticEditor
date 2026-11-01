@@ -2,16 +2,19 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import { join, isAbsolute } from 'node:path';
 import { readFileSync, existsSync } from 'node:fs';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
+import {
+	createScriptEnv,
+	createSystemPaths,
+	executeScript,
+	resolveScriptPath
+} from '../../src/lib/lib';
 
 // 示例：渲染进程可通过 window.api.ping() 调用
 ipcMain.handle('ping', () => 'pong');
 
 // 系统内置目录：渲染进程解析 fileSrc 里的简写（%download% / %document% / %user%）时使用
-ipcMain.handle('app:paths', () => ({
-	downloads: app.getPath('downloads'),
-	documents: app.getPath('documents'),
-	user: app.getPath('home')
-}));
+const systemPaths = () => createSystemPaths((name) => app.getPath(name));
+ipcMain.handle('app:paths', () => systemPaths());
 
 // custom/config.json —— 运行（dev）与打包后都要能加载到
 const DEFAULT_CONFIG = { name: 'OpenStaticEditor', width: 960, height: 680 };
@@ -47,60 +50,48 @@ const config = loadConfig();
 ipcMain.handle('config:get', () => config);
 
 /**
- * 运行 custom 目录下的读取脚本，返回解析后的数据。
+ * 定位并加载 custom 目录下的脚本模块（每次清缓存，脚本改动后无需重启应用）。
+ * 路径解析规则见 src/lib/lib.ts -> resolveScriptPath。
+ */
+function loadScriptModule(scriptSrc) {
+	const customDir = getCustomDir();
+	const scriptPath = resolveScriptPath(scriptSrc, {
+		customDir,
+		projectRoot: app.isPackaged ? process.resourcesPath : join(__dirname, '../../'),
+		isAbsolute,
+		join,
+		exists: existsSync
+	});
+	// require 会缓存模块，脚本修改后需要清缓存才能重新加载
+	const resolved = require.resolve(scriptPath);
+	delete require.cache[resolved];
+	return { customDir, script: require(resolved) };
+}
+
+/**
+ * 运行读取脚本（readScriptSrc），返回解析后的数据。
  * 脚本约定（CommonJS）：
  *   module.exports = function (ctx) {
  *     // ctx.fileSrc       —— config.json 里配置的原始文件路径
  *     // ctx.filePath      —— 解析后的绝对路径（相对路径按 custom 目录解析）
  *     // ctx.customDir     —— custom 目录绝对路径，方便脚本读取同目录其它资源
- *     // ctx.downloadsPath —— 系统下载目录绝对路径（Electron 官方 getPath('downloads')）
- *     // ctx.documentsPath —— 系统文档目录绝对路径（Electron 官方 getPath('documents')）
+ *     // ctx.downloadsPath —— 系统下载目录绝对路径
+ *     // ctx.documentsPath —— 系统文档目录绝对路径
  *     // return 解析后的数据（同步或 Promise 均可）
  *   }
  * 若脚本直接导出数据（非函数），则原样返回。
- *
- * 脚本路径解析顺序（相对 readScriptSrc）：
- *   1. customDir 下（如 readScriptSrc = "read_base.js"）
- *   2. 项目根下（如 readScriptSrc = "custom/read_base.js"，打包后同 resources 目录）
- *   绝对路径直接使用。
  */
 ipcMain.handle('file:read', async (_event, { fileSrc, readScriptSrc } = {}) => {
-	const customDir = getCustomDir();
+	if (!readScriptSrc) throw new Error('未配置 readScriptSrc，无法加载读取脚本');
 
-	if (!readScriptSrc) {
-		throw new Error('未配置 readScriptSrc，无法加载读取脚本');
-	}
-
-	// 脚本路径：绝对路径直接用，否则依次尝试 customDir 下 与 项目根下
-	let scriptPath;
-	if (isAbsolute(readScriptSrc)) {
-		scriptPath = readScriptSrc;
-	} else {
-		const fromCustom = join(customDir, readScriptSrc);
-		const projectRoot = app.isPackaged ? process.resourcesPath : join(__dirname, '../../');
-		const fromRoot = join(projectRoot, readScriptSrc);
-		scriptPath = existsSync(fromCustom) ? fromCustom : fromRoot;
-	}
-
+	const { customDir, script } = loadScriptModule(readScriptSrc);
 	const filePath = fileSrc ? (isAbsolute(fileSrc) ? fileSrc : join(customDir, fileSrc)) : '';
 
-	// require 会缓存模块，脚本修改后需要清缓存才能重新加载
-	const resolved = require.resolve(scriptPath);
-	delete require.cache[resolved];
-	const script = require(resolved);
-
-	// 支持函数导出 与 直接数据导出
-	const reader = typeof script === 'function' ? script : script?.default;
-	const ctx = {
+	return executeScript(script, {
 		fileSrc,
 		filePath,
-		customDir,
-		downloadsPath: app.getPath('downloads'),
-		documentsPath: app.getPath('documents')
-	};
-	const data = typeof reader === 'function' ? await reader(ctx) : script;
-
-	return data;
+		...createScriptEnv(customDir, systemPaths())
+	});
 });
 
 /**
@@ -114,34 +105,15 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 
 	if (!scriptSrc) throw new Error('未配置 scriptSrc，无法运行脚本');
 
-	const customDir = getCustomDir();
-	let scriptPath;
-	if (isAbsolute(scriptSrc)) {
-		scriptPath = scriptSrc;
-	} else {
-		const fromCustom = join(customDir, scriptSrc);
-		const projectRoot = app.isPackaged ? process.resourcesPath : join(__dirname, '../../');
-		const fromRoot = join(projectRoot, scriptSrc);
-		scriptPath = existsSync(fromCustom) ? fromCustom : fromRoot;
-	}
+	const { customDir, script } = loadScriptModule(scriptSrc);
 
-	// require 会缓存模块，脚本修改后需要清缓存才能重新加载
-	const resolved = require.resolve(scriptPath);
-	delete require.cache[resolved];
-	const script = require(resolved);
-
-	const reader = typeof script === 'function' ? script : script?.default;
-	const ctx = {
+	return executeScript(script, {
 		scriptSrc,
 		dataKey,
 		filePath,
 		data,
-		customDir,
-		downloadsPath: app.getPath('downloads'),
-		documentsPath: app.getPath('documents')
-	};
-
-	return typeof reader === 'function' ? await reader(ctx) : script;
+		...createScriptEnv(customDir, systemPaths())
+	});
 });
 
 function createWindow() {

@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue';
+import { reactive, watch } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useConfigStore } from '@renderer/stores/config';
+import { resolvePathShorthand } from '@renderer/lib/lib';
 
 import { Button, Select } from 'ant-design-vue';
 
@@ -21,9 +23,7 @@ const state = reactive({
 	targetFileMap: {} as Record<string, string>,
 	fileListMap: {} as Record<string, string[]>
 });
-const needFiles = computed(() => {
-	return useConfigStore().config?.loadFiles || {};
-});
+const needFiles = storeToRefs(useConfigStore()).loadFiles;
 
 // 各 key 解析后的目录（点「加载文件」拼接最终 fileSrc 时复用，避免重复解析简写）
 const resolvedDirMap: Record<string, string> = {};
@@ -34,17 +34,9 @@ watch(
 		for (const key of Object.keys(fileMap)) {
 			const fileObj = fileMap[key];
 			if (!fileObj?.beforeScript) continue;
-			// 解析 filePath 里的系统目录简写（%download% / %document% / %user%）
+			// 解析 filePath 里的系统目录简写（%download% / %document% / %user%），规则见 @renderer/lib/lib
 			let dir: string = fileObj.filePath || '';
-			if (dir.includes('%')) {
-				const paths = await window.api.getPaths();
-				const dirMap: Record<string, string> = {
-					download: paths.downloads,
-					document: paths.documents,
-					user: paths.user
-				};
-				dir = dir.replace(/%([^%]+)%/g, (_m, k: string) => dirMap[k.toLowerCase()] || '');
-			}
+			if (dir.includes('%')) dir = resolvePathShorthand(dir, await window.api.getPaths());
 			resolvedDirMap[key] = dir;
 			// 主进程 Node 环境运行 beforeScript，返回文件名列表
 			const list = await window.api.runScript({

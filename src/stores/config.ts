@@ -37,6 +37,8 @@ export const useConfigStore = defineStore('config', () => {
 
 	/** 直接给 <Menu :items> 用 */
 	const menu = computed<ItemType[]>(() => toMenuItems(config.value?.menu ?? []));
+	/** config.json -> loadFiles（App.vue / LoadFile.vue 共用一个取值入口） */
+	const loadFiles = computed<Record<string, any>>(() => config.value?.loadFiles ?? {});
 
 	/** 顶层菜单 key 列表，可作为 openKeys 默认值 */
 	const rootKeys = computed<string[]>(() => (config.value?.menu ?? []).map((item) => item.label));
@@ -70,6 +72,7 @@ export const useConfigStore = defineStore('config', () => {
 	return {
 		config,
 		menu,
+		loadFiles,
 		rootKeys,
 		load,
 		fileData,

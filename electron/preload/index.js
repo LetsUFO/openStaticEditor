@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 
 // 自定义 bridge API（按需扩展）
+/** @type {import('../../src/lib/lib').Api} */
 const api = {
 	ping: () => ipcRenderer.invoke('ping'),
 	// 取主进程加载的 custom/config.json

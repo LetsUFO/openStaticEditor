@@ -8,6 +8,7 @@ import { Button, Menu, message } from 'ant-design-vue';
 import FormBuilder from './components/FormBuilder.vue';
 import LoadFile from './components/LoadFile.vue';
 import { DownloadOutlined, ReloadOutlined } from '@ant-design/icons-vue';
+import { resolvePathShorthand } from '@renderer/lib/lib';
 
 // 把 dark 的 fcLv 系列注入为 CSS 变量 --dark-fcLv*（单一来源 = theme.ts，供 style.scss 使用）
 for (const [key, value] of Object.entries(dark)) {
@@ -18,7 +19,7 @@ for (const [key, value] of Object.entries(dark)) {
 
 // menu 已在 store 里定义（store 负责把 config.json 的 menu 树转成 antd 需要的 items），
 const configStore = useConfigStore();
-const { menu } = storeToRefs(configStore);
+const { menu, loadFiles: needFiles } = storeToRefs(configStore);
 
 /**
  * 只用 menu 推导 openKeys（不依赖 store 的 rootKeys）。
@@ -58,26 +59,14 @@ const activateMenu = function (item: any) {
 };
 
 // ---- 文件加载（原 LoadFile.vue 内逻辑，挪到父级以便重新加载按钮复用）----
-const needFiles = computed(() => configStore.config?.loadFiles || {});
 const fileState = reactive({ loaded: false, loading: false });
 
-// fileSrc 系统目录简写（成对 %，不区分大小写）：
-//   %download% → 系统下载目录，%document% → 系统文档目录，%user% → 用户主目录
+// fileSrc 系统目录简写（%download% / %document% / %user%），解析规则见 @renderer/lib/lib
 // 例如 Windows 存档可写成 `%user%/AppData/Local/ES2/Saved/SaveGames/ufo.sav`
 // 替换后得到绝对路径，主进程会直接使用；无简写时原样返回（仍按 custom 目录解析）
 const resolveFileSrc = async function (fileSrc: string): Promise<string> {
 	if (!fileSrc || !fileSrc.includes('%')) return fileSrc;
-	const paths = await window.api.getPaths();
-	const dirMap: Record<string, string> = {
-		download: paths.downloads,
-		document: paths.documents,
-		user: paths.user
-	};
-	return fileSrc.replace(/%([^%]+)%/g, (_match, key: string) => {
-		const dir = dirMap[key.toLowerCase()];
-		if (!dir) throw new Error(`未知路径简写 %${key}%（当前支持 %download% / %document% / %user%）`);
-		return dir;
-	});
+	return resolvePathShorthand(fileSrc, await window.api.getPaths());
 };
 
 const loadFiles = async function (files: Record<string, any>) {

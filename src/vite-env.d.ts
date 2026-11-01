@@ -71,17 +71,6 @@ interface AppConfig {
 }
 
 interface Window {
-	// preload 通过 contextBridge 暴露的自定义 API
-	api: {
-		ping: () => Promise<string>;
-		getConfig: () => Promise<AppConfig>;
-		getPaths: () => Promise<{ downloads: string; documents: string; user: string }>;
-		readFile: (fileSrc: string, readScriptSrc: string) => Promise<any>;
-		runScript: (payload: {
-			scriptSrc: string;
-			dataKey?: string;
-			filePath?: string;
-			data?: any;
-		}) => Promise<any>;
-	};
+	// preload 通过 contextBridge 暴露的自定义 API（类型单一来源：src/lib/lib.ts -> Api）
+	api: import('./lib/lib').Api;
 }
