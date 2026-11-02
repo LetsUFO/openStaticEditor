@@ -85,6 +85,12 @@ function optionsOf(item: AppMenuFormField) {
 	return [];
 }
 
+/** 选项标记（如「已测」）：选项数据里 optionBeforeTag.key 为 truthy 时返回标记配置 */
+function optionTag(li: any, item: AppMenuFormField) {
+	const tag = item?.optionBeforeTag;
+	return tag && li?.[tag.key] ? tag : null;
+}
+
 /** 块级启停：外部直接传入数据路径，该路径值 truthy 时启用，否则禁用；路径为空则始终启用 */
 function isBlockEnabled(path?: string): boolean {
 	if (!path) return true;
@@ -166,9 +172,9 @@ defineExpose({ getFormData });
 							:value="li.value"
 						>
 							<span
-								v-if="li[item?.optionBeforeTag?.key]"
-								:class="item?.optionBeforeTag?.colorClass"
-								>{{ item?.optionBeforeTag?.text }}</span
+								v-if="optionTag(li, item)"
+								:class="item.optionBeforeTag?.colorClass"
+								>{{ item.optionBeforeTag?.text }}</span
 							>
 							{{ li.label }}</Select.Option
 						>

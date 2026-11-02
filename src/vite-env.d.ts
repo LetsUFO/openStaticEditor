@@ -26,6 +26,12 @@ interface AppMenuFormField {
 	/** 动态选项数据：store.fileData[dataKey] 下该路径的值（如 "skillMap"）。
 	 * 配了 optionFilterFn 时作为其第二参数传入；否则直接作为选项使用 */
 	optionUse?: string;
+	/** 选项前的标记（如「已测」）：选项数据里 key 对应值为 truthy 时展示 */
+	optionBeforeTag?: {
+		key: string;
+		text?: string;
+		colorClass?: string;
+	};
 	/** 选项过滤函数名（最高优先级）：store 里注入的同名函数，签名 (formData, optionUseData) => options */
 	optionFilterFn?: string;
 }
