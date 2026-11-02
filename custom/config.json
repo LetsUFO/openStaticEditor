@@ -41,24 +41,44 @@
 									"label": "附加属性1",
 									"type": "select",
 									"name": "currentShip.primaryWeapons[0].attributes[0].id",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性2",
 									"type": "select",
 									"name": "currentShip.primaryWeapons[0].attributes[1].id",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性3",
 									"type": "select",
 									"name": "currentShip.primaryWeapons[0].attributes[2].id",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性4",
 									"type": "select",
 									"name": "currentShip.primaryWeapons[0].attributes[3].id",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_mainWeapon"
 								}
 							]
@@ -79,24 +99,44 @@
 									"label": "附加属性1",
 									"name": "currentShip.primaryWeapons[1].attributes[0].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.primaryWeapons[1].attributes[1].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.primaryWeapons[1].attributes[2].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.primaryWeapons[1].attributes[3].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_mainWeapon"
 								}
 							]
@@ -117,24 +157,44 @@
 									"label": "附加属性1",
 									"name": "currentShip.primaryWeapons[2].attributes[0].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.primaryWeapons[2].attributes[1].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.primaryWeapons[2].attributes[2].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_mainWeapon"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.primaryWeapons[2].attributes[3].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_mainWeapon"
 								}
 							]
@@ -166,24 +226,44 @@
 									"label": "附加属性1",
 									"name": "currentShip.secondaryWeapons[0].attributes[0].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.secondaryWeapons[0].attributes[1].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.secondaryWeapons[0].attributes[2].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.secondaryWeapons[0].attributes[3].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_subWeapon"
 								}
 							]
@@ -204,24 +284,44 @@
 									"label": "附加属性1",
 									"name": "currentShip.secondaryWeapons[1].attributes[0].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.secondaryWeapons[1].attributes[1].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.secondaryWeapons[1].attributes[2].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.secondaryWeapons[1].attributes[3].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_subWeapon"
 								}
 							]
@@ -242,24 +342,44 @@
 									"label": "附加属性1",
 									"name": "currentShip.secondaryWeapons[2].attributes[0].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.secondaryWeapons[2].attributes[1].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.secondaryWeapons[2].attributes[2].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_subWeapon"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.secondaryWeapons[2].attributes[3].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_subWeapon"
 								}
 							]
@@ -290,24 +410,44 @@
 									"label": "附加属性1",
 									"name": "currentShip.modules.EnergyCores.attributes[0].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_energyCore"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.modules.EnergyCores.attributes[1].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_energyCore"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.modules.EnergyCores.attributes[2].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_energyCore"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.modules.EnergyCores.attributes[3].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_energyCore"
 								}
 							]
@@ -328,24 +468,44 @@
 									"label": "附加属性1",
 									"name": "currentShip.modules.Shields.attributes[0].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_shield"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.modules.Shields.attributes[1].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_shield"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.modules.Shields.attributes[2].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_shield"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.modules.Shields.attributes[3].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_shield"
 								}
 							]
@@ -366,24 +526,44 @@
 									"label": "附加属性1",
 									"name": "currentShip.modules.Platings.attributes[0].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_plating"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.modules.Platings.attributes[1].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_plating"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.modules.Platings.attributes[2].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_plating"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.modules.Platings.attributes[3].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_plating"
 								}
 							]
@@ -404,24 +584,44 @@
 									"label": "附加属性1",
 									"name": "currentShip.modules.Sensors.attributes[0].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_sensor"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.modules.Sensors.attributes[1].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_sensor"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.modules.Sensors.attributes[2].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_sensor"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.modules.Sensors.attributes[3].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_sensor"
 								}
 							]
@@ -442,24 +642,44 @@
 									"label": "附加属性1",
 									"name": "currentShip.modules.thrusters.attributes[0].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_thruster"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.modules.thrusters.attributes[1].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_thruster"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.modules.thrusters.attributes[2].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_thruster"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.modules.thrusters.attributes[3].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_thruster"
 								}
 							]
@@ -480,24 +700,44 @@
 									"label": "附加属性1",
 									"name": "currentShip.modules.CargoUnits.attributes[0].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_cargoUnit"
 								},
 								{
 									"label": "附加属性2",
 									"name": "currentShip.modules.CargoUnits.attributes[1].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_cargoUnit"
 								},
 								{
 									"label": "附加属性3",
 									"name": "currentShip.modules.CargoUnits.attributes[2].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_cargoUnit"
 								},
 								{
 									"label": "附加属性4",
 									"name": "currentShip.modules.CargoUnits.attributes[3].id",
 									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
 									"optionFilterFn": "attributeFilter_cargoUnit"
 								}
 							]

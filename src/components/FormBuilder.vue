@@ -152,7 +152,6 @@ defineExpose({ getFormData });
 					<Select
 						v-else-if="item.type == 'select'"
 						:value="read(item)"
-						:options="optionsOf(item)"
 						:disabled="item.disabled"
 						:placeholder="item.placeholder || '请选择'"
 						:show-search="true"
@@ -160,7 +159,20 @@ defineExpose({ getFormData });
 						:allowClear="true"
 						class="w-full!"
 						@update:value="(v) => write(item, v)"
-					></Select>
+					>
+						<Select.Option
+							v-for="li in optionsOf(item)"
+							:key="li.label"
+							:value="li.value"
+						>
+							<span
+								v-if="li[item?.optionBeforeTag?.key]"
+								:class="item?.optionBeforeTag?.colorClass"
+								>{{ item?.optionBeforeTag?.text }}</span
+							>
+							{{ li.label }}</Select.Option
+						>
+					</Select>
 					<Input
 						v-else
 						:value="read(item)"
