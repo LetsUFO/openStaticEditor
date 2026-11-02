@@ -22,7 +22,7 @@ const configStore = useConfigStore();
 const { menu, loadFiles: needFiles } = storeToRefs(configStore);
 
 /**
- * 只用 menu 推导 openKeys（不依赖 store 的 rootKeys）。
+ * 只用 menu 推导 openKeys。
  * ItemType 是联合类型且可能为 null，key 的类型是 `Key | undefined`（Key = string | number），
  * 所以分两步收窄：
  *   1. `li?.key` —— 可选链，挡掉 TS18047（'li' is possibly 'null'）

@@ -41,9 +41,6 @@ export const useConfigStore = defineStore('config', () => {
 	/** config.json -> loadFiles（App.vue / LoadFile.vue 共用一个取值入口） */
 	const loadFiles = computed<Record<string, any>>(() => config.value?.loadFiles ?? {});
 
-	/** 顶层菜单 key 列表，可作为 openKeys 默认值 */
-	const rootKeys = computed<string[]>(() => (config.value?.menu ?? []).map((item) => item.label));
-
 	async function load(): Promise<void> {
 		config.value = await window.api.getConfig();
 	}
@@ -74,7 +71,6 @@ export const useConfigStore = defineStore('config', () => {
 		config,
 		menu,
 		loadFiles,
-		rootKeys,
 		load,
 		fileData,
 		filePaths,
