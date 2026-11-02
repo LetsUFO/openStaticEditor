@@ -9,6 +9,7 @@ import FormBuilder from './components/FormBuilder.vue';
 import LoadFile from './components/LoadFile.vue';
 import { DownloadOutlined, ReloadOutlined } from '@ant-design/icons-vue';
 import { resolvePathShorthand } from '@renderer/lib/lib';
+import { version as uiVersion } from '../package.json';
 
 // 把 dark 的 fcLv 系列注入为 CSS 变量 --dark-fcLv*（单一来源 = theme.ts，供 style.scss 使用）
 for (const [key, value] of Object.entries(dark)) {
@@ -190,6 +191,7 @@ const save = async function (saveCfg: any = {}) {
 						}
 					"
 				></Menu>
+				<div class="ver">UI:{{ uiVersion }}<br />main:{{ configStore.config?.ver }}</div>
 			</div>
 			<div class="content flex-1 h-full overflow-y-auto">
 				<FormBuilder
@@ -230,6 +232,14 @@ const save = async function (saveCfg: any = {}) {
 		background: var(--app-bg-image) no-repeat center / cover;
 		filter: blur(var(--app-bg-blur, 0px));
 		opacity: var(--app-bg-alpha, 0.2);
+	}
+	.ver {
+		position: absolute;
+		z-index: 1;
+		bottom: 0.5rem;
+		left: 0.5rem;
+		// theme.ts -> dark.fcLv3（启动时已注入为 CSS 变量，见 style.scss 的 .dark-fcLv*）
+		color: var(--dark-fcLv1);
 	}
 }
 .content {

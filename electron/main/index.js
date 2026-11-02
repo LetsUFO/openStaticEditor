@@ -127,8 +127,8 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 });
 
 function createWindow() {
-	// 窗口标题：custom/config.json 的 name + ver（ver 缺省时回退 package.json 的 version）
-	const windowTitle = `${config.name} v${config.ver || app.getVersion()}`;
+	// 窗口标题：custom/config.json 的 name + ver（ver 自带 "v" 前缀；缺省回退 package.json version）
+	const windowTitle = `${config.name} ${config.ver || app.getVersion()}`;
 
 	const mainWindow = new BrowserWindow({
 		width: config.width,

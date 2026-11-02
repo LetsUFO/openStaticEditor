@@ -1,6 +1,6 @@
 /**
  * 构建后整理产物目录（版本号统一用 custom/config.json 的 ver）：
- * release/<ver>/win-unpacked   -> release/<ver>/<custom/config.json name> v<ver>
+ * release/<ver>/win-unpacked   -> release/<ver>/<custom/config.json name> <ver>
  * release/<ver>/mac-arm64      -> release/<ver>/mac
  * release/<ver>/mac            -> release/<ver>/mac
  *
@@ -14,7 +14,7 @@ const { getCustomMeta } = require('./custom-meta');
 const { name: configName, ver: version } = getCustomMeta();
 const releaseDir = resolve(__dirname, '..', 'release', version);
 
-const winTarget = configName ? `${configName} v${version}` : 'win';
+const winTarget = configName ? `${configName} ${version}` : 'win';
 
 // electron-builder 的 dir 目标目录名：win-unpacked / win-arm64-unpacked / mac / mac-arm64 / mac-universal
 const RULES = [
@@ -55,7 +55,7 @@ for (const entry of readdirSync(releaseDir, { withFileTypes: true })) {
 const macDir = join(releaseDir, 'mac');
 
 if (configName && existsSync(macDir)) {
-	const appName = `${configName} v${version}`;
+	const appName = `${configName} ${version}`;
 
 	for (const entry of readdirSync(macDir)) {
 		if (!entry.endsWith('.app')) continue;
