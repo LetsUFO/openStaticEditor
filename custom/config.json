@@ -1,10 +1,11 @@
 {
 	"name": "EVERSPACE2 永恒空间2 存档修改器",
 	"appIcon": "custom/Everspace2.ico",
+	"ver": "0.1.1",
 	"width": 1200,
 	"height": 740,
 	"background": {
-		"src": "",
+		"src": "custom/EVERSPACE 2 Wallpaper Pack 10.png",
 		"base64": "",
 		"blur": 10
 	},

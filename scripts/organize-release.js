@@ -1,25 +1,18 @@
 /**
- * 构建后整理产物目录：
- * release/<version>/win-unpacked   -> release/<version>/<custom/config.json name> v<version>
- * release/<version>/mac-arm64      -> release/<version>/mac
- * release/<version>/mac            -> release/<version>/mac
+ * 构建后整理产物目录（版本号统一用 custom/config.json 的 ver）：
+ * release/<ver>/win-unpacked   -> release/<ver>/<custom/config.json name> v<ver>
+ * release/<ver>/mac-arm64      -> release/<ver>/mac
+ * release/<ver>/mac            -> release/<ver>/mac
  *
- * 仅处理当前 package.json 的 version 目录，其它文件（如安装包）保持不动。
+ * 仅处理当前 ver 目录，其它文件（如安装包）保持不动。
  */
 const { existsSync, readdirSync, renameSync, rmSync } = require('node:fs');
 const { join, resolve } = require('node:path');
 const { execFileSync } = require('node:child_process');
+const { getCustomMeta } = require('./custom-meta');
 
-const { version } = require('../package.json');
+const { name: configName, ver: version } = getCustomMeta();
 const releaseDir = resolve(__dirname, '..', 'release', version);
-
-let configName = '';
-try {
-	const config = require('../custom/config.json');
-	if (typeof config.name === 'string') configName = config.name.trim();
-} catch (error) {
-	console.warn(`[organize] 读取 custom/config.json 失败，win 目录回退为默认名：${error.message}`);
-}
 
 const winTarget = configName ? `${configName} v${version}` : 'win';
 
@@ -57,7 +50,7 @@ for (const entry of readdirSync(releaseDir, { withFileTypes: true })) {
 	console.log(`[organize] ${entry.name} -> ${rule.target}`);
 }
 
-// macOS 的 .app 名称由 productName 决定，这里按 config.json 的 name + version 重命名，
+// macOS 的 .app 名称由 productName 决定，这里按 config.json 的 name + ver 重命名，
 // 并同步 Info.plist 里的 CFBundleName / CFBundleDisplayName（重命名 bundle 不会自动更新这两个键）。
 const macDir = join(releaseDir, 'mac');
 

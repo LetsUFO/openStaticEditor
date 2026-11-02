@@ -49,6 +49,11 @@ interface AppMenuItem {
 	dataKey: string;
 	// 由 store 补齐后回填：antd Menu 需要唯一 key，此处用 label 充当
 	key?: string;
+	// 该分类的保存配置（保存按钮点击时使用）
+	saveScript?: {
+		needFileKey: string;
+		saveScript: string;
+	};
 }
 
 /** config.json -> background */

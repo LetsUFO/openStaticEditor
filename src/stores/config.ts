@@ -16,6 +16,7 @@ function toMenuItems(list: AppMenuItem[]): ItemType[] {
 		tip: node.tip,
 		category: node.category,
 		dataKey: node.dataKey,
+		saveScript: node.saveScript,
 		...(node.children?.length ? { children: toMenuItems(node.children) } : {})
 	}));
 }
