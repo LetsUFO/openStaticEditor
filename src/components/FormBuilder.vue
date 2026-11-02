@@ -117,7 +117,7 @@ defineExpose({ getFormData });
 		<template v-for="(block, bi) in props.config" :key="`${block.label}-${bi}`">
 			<div
 				v-if="block.label"
-				class="px-4 pt-4 pb-2 text-fcLv1 text-base border-b border-split italic"
+				class="px-4 pt-4 pb-2 text-fcLv3 text-base border-b border-split italic"
 			>
 				{{ block.label }}
 				<span v-if="block.tip" class="ml-2 text-xs text-fcLv1 italic">{{ block.tip }}</span>

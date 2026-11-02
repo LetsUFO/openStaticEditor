@@ -7,13 +7,14 @@
 	"background": {
 		"src": "custom/EVERSPACE 2 Wallpaper Pack 10.png",
 		"base64": "",
-		"blur": 10
+		"blur": 20,
+		"alpha": 0.2
 	},
 	"loadFiles": {
 		"base": {
 			"beforeScript": "custom/getSaveFiles.js",
-			"filePath": "%user%/AppData/Local/ES2/Saved/SaveGames/",
-			"readScriptSrc": "custom/es2_loadout.js"
+			"filePath": "%download%/",
+			"readScript": "custom/es2_loadout.js"
 		}
 	},
 	"menu": [

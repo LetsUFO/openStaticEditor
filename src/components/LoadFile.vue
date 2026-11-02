@@ -68,7 +68,7 @@ const onLoadFiles = function () {
 
 <template>
 	<div
-		class="root fixed w-full h-full backdrop-blur-md z-1 grid place-content-center transition ease-in-out"
+		class="loadFile fixed w-full h-full backdrop-blur-md z-1 grid place-content-center transition ease-in-out"
 		:class="{ 'opacity-0 pointer-events-none': loaded }"
 	>
 		<ul class="dark-fcLv3">
@@ -98,7 +98,7 @@ const onLoadFiles = function () {
 </template>
 
 <style scoped>
-.root {
+.loadFile {
 	background-color: rgba(0, 0, 0, 0.8);
 }
 li {

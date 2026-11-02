@@ -65,7 +65,7 @@ export interface Api {
 	ping: () => Promise<string>;
 	getConfig: () => Promise<AppConfig>;
 	getPaths: () => Promise<SystemPaths>;
-	readFile: (fileSrc: string, readScriptSrc: string) => Promise<any>;
+	readFile: (fileSrc: string, readScript: string) => Promise<any>;
 	runScript: (payload: {
 		scriptSrc: string;
 		dataKey?: string;

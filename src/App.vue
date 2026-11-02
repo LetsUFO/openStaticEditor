@@ -44,6 +44,23 @@ const activeCategory = computed(() => {
 	return state.activeMenu.category || [];
 });
 
+// 背景图：config.json -> background.src（也可用 base64）。相对路径（如 custom/xxx.png）
+// 交给主进程的 app-asset 协议按 custom -> 项目根/resources 的顺序解析，dev 与打包后都能加载。
+// blur / alpha 通过 CSS 变量交给 .root::before，避免直接滤镜/透明度影响页面内容。
+const backgroundStyle = computed(() => {
+	const background = configStore.config?.background;
+	const src = background?.src || background?.base64;
+	if (!src) return {};
+	const url = /^(?:data:|blob:|http:|https:)/i.test(src)
+		? src
+		: `app-asset://local/?src=${encodeURIComponent(src)}`;
+	return {
+		'--app-bg-image': `url("${url}")`,
+		'--app-bg-blur': `${background?.blur ?? 0}px`,
+		'--app-bg-alpha': `${background?.alpha ?? 1}`
+	};
+});
+
 // 第一个叶子菜单项（有 children 就递归取第一个子项）
 const firstLeaf = function (items: any[]): any {
 	const first = items?.[0];
@@ -74,13 +91,13 @@ const loadFiles = async function (files: Record<string, any>) {
 	const setFileData = configStore.setFileData;
 	const errors: string[] = [];
 	const loadList = Object.keys(files).map(async (key) => {
-		const { fileSrc, readScriptSrc } = files[key] || {};
+		const { fileSrc, readScript } = files[key] || {};
 		try {
 			// 先解析 fileSrc 里的系统目录简写，再由主进程在 Node 环境中加载脚本并运行，返回解析后的数据
 			const filePath = await resolveFileSrc(fileSrc);
 			// 解析后的绝对路径存进 store，保存时直接取用
 			configStore.setFilePath(key, filePath);
-			const data = await window.api.readFile(filePath, readScriptSrc);
+			const data = await window.api.readFile(filePath, readScript);
 			await setFileData(key, data);
 		} catch (err: any) {
 			errors.push(`${key}: ${err?.message || err}`);
@@ -156,7 +173,7 @@ const save = async function (saveCfg: any = {}) {
 </script>
 
 <template>
-	<div class="h-full">
+	<div class="root h-full" :style="backgroundStyle">
 		<LoadFile :loading="fileState.loading" :loaded="fileState.loaded" @loadFiles="loadAll" />
 		<div class="flex justify-start h-full">
 			<div class="menu w-[10rem] bg-primary overflow-y-auto">
@@ -200,6 +217,21 @@ const save = async function (saveCfg: any = {}) {
 </template>
 
 <style lang="scss" scoped>
+.root {
+	position: relative;
+	isolation: isolate;
+	// 背景单独放在伪元素上：blur / alpha 只作用于背景，不影响页面内容
+	&::before {
+		content: '';
+		position: fixed;
+		// 向外扩出模糊半径，避免边缘露出透明缝
+		inset: calc(-2 * var(--app-bg-blur, 0px));
+		z-index: -1;
+		background: var(--app-bg-image) no-repeat center / cover;
+		filter: blur(var(--app-bg-blur, 0px));
+		opacity: var(--app-bg-alpha, 0.2);
+	}
+}
 .content {
 	//底下多一点留白
 	&::after {

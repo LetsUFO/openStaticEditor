@@ -36,16 +36,6 @@
 			"verified": true
 		},
 		{
-			"label": "武器射程提高",
-			"value": "weapon_range_buff",
-			"verified": true
-		},
-		{
-			"label": "武器射速提高",
-			"value": "weapon_fire_rate_buff",
-			"verified": true
-		},
-		{
 			"label": "武器对船体伤害提高",
 			"value": "weapon_hull_damage_buff",
 			"verified": true
@@ -96,11 +86,6 @@
 			"verified": true
 		},
 		{
-			"label": "弹丸飞行速度提高",
-			"value": "weapon_velocity_buff",
-			"verified": true
-		},
-		{
 			"label": "武器散布收窄（精度提高）",
 			"value": "weapon_spread_buff",
 			"verified": true
@@ -133,11 +118,6 @@
 		{
 			"label": "无伤害（特殊机制：造成伤害为0）",
 			"value": "no_damage",
-			"verified": true
-		},
-		{
-			"label": "全自动开火",
-			"value": "full_auto",
 			"verified": true
 		},
 		{

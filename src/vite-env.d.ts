@@ -60,7 +60,10 @@ interface AppMenuItem {
 interface AppBackground {
 	src?: string;
 	base64?: string;
+	/** 背景图模糊半径（px） */
 	blur?: number;
+	/** 背景图透明度（0~1） */
+	alpha?: number;
 }
 
 interface AppConfig {

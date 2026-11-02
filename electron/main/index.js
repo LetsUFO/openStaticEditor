@@ -1,6 +1,7 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, net, protocol } from 'electron';
 import { join, isAbsolute } from 'node:path';
 import { readFileSync, existsSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import {
 	createScriptEnv,
@@ -11,6 +12,15 @@ import {
 
 // 示例：渲染进程可通过 window.api.ping() 调用
 ipcMain.handle('ping', () => 'pong');
+
+// 自定义协议：渲染进程用 app-asset://local/?src=<相对路径> 加载 custom 下的图片等静态资源。
+// 必须在 app ready 前注册；dev（http 页面）下也能加载本地文件，避免 file:// 被浏览器拦截。
+protocol.registerSchemesAsPrivileged([
+	{
+		scheme: 'app-asset',
+		privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true }
+	}
+]);
 
 // 系统内置目录：渲染进程解析 fileSrc 里的简写（%download% / %document% / %user%）时使用
 const systemPaths = () => createSystemPaths((name) => app.getPath(name));
@@ -69,7 +79,7 @@ function loadScriptModule(scriptSrc) {
 }
 
 /**
- * 运行读取脚本（readScriptSrc），返回解析后的数据。
+ * 运行读取脚本（readScript），返回解析后的数据。
  * 脚本约定（CommonJS）：
  *   module.exports = function (ctx) {
  *     // ctx.fileSrc       —— config.json 里配置的原始文件路径
@@ -81,10 +91,10 @@ function loadScriptModule(scriptSrc) {
  *   }
  * 若脚本直接导出数据（非函数），则原样返回。
  */
-ipcMain.handle('file:read', async (_event, { fileSrc, readScriptSrc } = {}) => {
-	if (!readScriptSrc) throw new Error('未配置 readScriptSrc，无法加载读取脚本');
+ipcMain.handle('file:read', async (_event, { fileSrc, readScript } = {}) => {
+	if (!readScript) throw new Error('未配置 readScript，无法加载读取脚本');
 
-	const { customDir, script } = loadScriptModule(readScriptSrc);
+	const { customDir, script } = loadScriptModule(readScript);
 	const filePath = fileSrc ? (isAbsolute(fileSrc) ? fileSrc : join(customDir, fileSrc)) : '';
 
 	return executeScript(script, {
@@ -158,6 +168,20 @@ function createWindow() {
 
 app.whenReady().then(() => {
 	electronApp.setAppUserModelId('com.azrael.openstaticeditor');
+
+	// 路径解析规则与脚本一致：绝对路径直接用；相对路径先找 custom，再回退项目根/resources
+	protocol.handle('app-asset', (request) => {
+		const src = new URL(request.url).searchParams.get('src') || '';
+		if (!src) return new Response('Bad Request', { status: 400 });
+		const filePath = resolveScriptPath(src, {
+			customDir: getCustomDir(),
+			projectRoot: app.isPackaged ? process.resourcesPath : join(__dirname, '../../'),
+			isAbsolute,
+			join,
+			exists: existsSync
+		});
+		return net.fetch(pathToFileURL(filePath).toString());
+	});
 
 	app.on('browser-window-created', (_, window) => {
 		optimizer.watchWindowShortcuts(window);
