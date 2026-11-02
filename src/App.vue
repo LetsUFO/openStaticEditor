@@ -191,7 +191,9 @@ const save = async function (saveCfg: any = {}) {
 						}
 					"
 				></Menu>
-				<div class="ver">UI:{{ uiVersion }}<br />main:{{ configStore.config?.ver }}</div>
+				<div class="ver select-none">
+					UI:{{ uiVersion }}<br />main:{{ configStore.config?.ver }}
+				</div>
 			</div>
 			<div class="content flex-1 h-full overflow-y-auto">
 				<FormBuilder
