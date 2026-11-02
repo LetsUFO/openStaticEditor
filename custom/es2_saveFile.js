@@ -16,7 +16,7 @@
  *   2) 传奇(Legendary)装备的附加属性从未被抽取(attributes=[])，绝不拿空数组覆盖原属性。
  *      → JSON 里传奇 attributes 为空时保留存档原属性；只有非传奇、或 JSON 显式给了 attributes 才重建。
  *   3) 同名属性 ID 在同一件上只生效一条(规则6)。→ 写回时按 ID 去重，仅保留首条。
- *   4) 默认演练(dry-run)不写盘；真正写盘前生成带时间戳的 .bak；写后重新解析自检顶层属性数。
+ *   4) 默认演练(dry-run)不写盘；写后重新解析自检顶层属性数（不再生成 .bak 备份）。
  *   5) 按「槽位 + 模板ID」双重匹配；存档槽位当前模板与 JSON 不一致说明装备已换，跳过避免误改。
  *   6) 不动 PlayerLevel / 船体(ItemTemplateID) 等绑定字段。
  *
@@ -989,12 +989,6 @@ function parseArgs(argv) {
 	return o;
 }
 
-function ts() {
-	const d = new Date();
-	const p = (n) => String(n).padStart(2, '0');
-	return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`;
-}
-
 // ===================================================================
 //  主流程（应用内调用 / CLI 共用）
 // ===================================================================
@@ -1062,11 +1056,9 @@ function runWriteback(data, savePath, opts) {
 		return { write: false, savePath, changes, bytes: out.length, props: g2.props.length };
 	}
 
-	// 真正写盘：先备份
-	const bak = savePath + '.' + ts() + '.bak';
-	fs.copyFileSync(savePath, bak);
+	// 真正写盘（不再生成 .bak 备份）
 	const bytes = saveSav(savePath, out, meta.raw ? null : meta.ver);
-	return { write: true, savePath, backup: bak, bytes, changes, props: g2.props.length };
+	return { write: true, savePath, bytes, changes, props: g2.props.length };
 }
 
 /**
@@ -1092,7 +1084,6 @@ function saveFromData(ctx = {}) {
 	return {
 		ok: true,
 		savePath: res.savePath,
-		backup: res.backup,
 		bytes: res.bytes,
 		changes: res.changes
 	};
@@ -1122,14 +1113,13 @@ function main() {
 		console.log(
 			`\n演练完成：重建 ${res.bytes.toLocaleString()} 字节，重新解析 ${res.props} 个顶层属性 OK。`
 		);
-		console.log('确认无误后加 --write 真正写回（写前会自动备份）。');
+		console.log('确认无误后加 --write 真正写回。');
 		return;
 	}
 
 	console.log('==================== 已写回 ====================');
 	console.log(res.changes.join('\n'));
 	console.log(`\n已写回 -> ${res.savePath} (${res.bytes.toLocaleString()} 字节)`);
-	console.log(`备份   -> ${res.backup}`);
 	console.log('\n⚠️ 务必在游戏里【载入该存档】后再保存，否则游戏会用内存里的旧值覆盖你的修改。');
 	console.log('   载入 -> 保存 -> 再读盘，确认改动生效。');
 }
