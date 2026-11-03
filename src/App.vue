@@ -205,6 +205,10 @@ onMounted(async () => {
 			if (cfg?.width && cfg?.height) {
 				await window.api.setWindowSize(cfg.width, cfg.height);
 			}
+			// 窗口标题 = config.json 的 name + ' ' + ver（ver 自带 "v" 前缀）
+			if (cfg?.name) {
+				await window.api.setWindowTitle(`${cfg.name} ${cfg.ver}`.trim());
+			}
 			state.openKey = menu.value
 				.map((li) => li?.key)
 				.filter((k): k is string => typeof k === 'string');

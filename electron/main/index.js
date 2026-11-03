@@ -29,6 +29,9 @@ ipcMain.handle('app:paths', () => systemPaths());
 // custom/config.json —— 运行（dev）与打包后都要能加载到
 const DEFAULT_CONFIG = { name: 'OpenStaticEditor', width: 960, height: 680 };
 
+// 当前窗口标题（渲染进程加载 config.json 后可动态更新，见 window:setTitle）
+let windowTitle = '';
+
 /**
  * custom 目录根路径（config.json 与用户脚本都在这里）。
  * 打包后：extraResources 把 custom 内容复制到 resources 目录（app.asar 之外，便于用户直接改）
@@ -165,6 +168,17 @@ ipcMain.handle('window:setSize', (event, width, height) => {
 });
 
 /**
+ * 渲染进程加载 config.json 后设置窗口标题（name + ver）。
+ * 同步更新 windowTitle，避免页面标题事件（page-title-updated）把标题改回旧值。
+ */
+ipcMain.handle('window:setTitle', (event, title) => {
+	const win = BrowserWindow.fromWebContents(event.sender);
+	if (!win || typeof title !== 'string' || !title) return;
+	windowTitle = title;
+	win.setTitle(title);
+});
+
+/**
  * 定位并加载 custom 目录下的脚本模块（每次清缓存，脚本改动后无需重启应用）。
  * 路径解析规则见 src/lib/lib.ts -> resolveScriptPath。
  */
@@ -233,7 +247,7 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 
 function createWindow() {
 	// 窗口标题：custom/config.json 的 name + ver（ver 自带 "v" 前缀；缺省回退 package.json version）
-	const windowTitle = `${config.name} ${config.ver || app.getVersion()}`;
+	windowTitle = `${config.name} ${config.ver || app.getVersion()}`;
 
 	const mainWindow = new BrowserWindow({
 		width: config.width,

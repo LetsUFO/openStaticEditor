@@ -66,6 +66,7 @@ export interface Api {
 	getConfig: (subPath?: string) => Promise<AppConfig>;
 	listCustomDirs: () => Promise<string[]>;
 	setWindowSize: (width: number, height: number) => Promise<void>;
+	setWindowTitle: (title: string) => Promise<void>;
 	getPaths: () => Promise<SystemPaths>;
 	readFile: (fileSrc: string, readScript: string) => Promise<any>;
 	runScript: (payload: {
