@@ -1,8 +1,8 @@
 {
-	"name": "openstaticeditor-ui",
+	"name": "openStaticEditor",
 	"version": "v0.2.3",
 	"description": "Vue3 + Pinia + Electron 桌面应用",
-	"author": "Azrael",
+	"author": "Let's UFO",
 	"license": "MIT",
 	"main": "out/main/index.js",
 	"scripts": {

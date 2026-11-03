@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useConfigStore } from './stores/config';
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { dark } from './style/theme';
 
@@ -171,6 +171,10 @@ const save = async function (saveCfg: any = {}) {
 		state.loading = false;
 	}
 };
+
+onMounted(() => {
+	//todo在此处加载custom下的ES2下的config.json
+});
 </script>
 
 <template>
