@@ -5,8 +5,8 @@ import { electronAPI } from '@electron-toolkit/preload';
 /** @type {import('../../src/lib/lib').Api} */
 const api = {
 	ping: () => ipcRenderer.invoke('ping'),
-	// 取主进程加载的 custom/config.json
-	getConfig: () => ipcRenderer.invoke('config:get'),
+	// 取 custom 目录下的 config.json，可传相对子路径（如 'ES2/config.json'）
+	getConfig: (subPath) => ipcRenderer.invoke('config:get', subPath),
 	// 系统内置目录（downloads / documents），供渲染进程解析 fileSrc 简写
 	getPaths: () => ipcRenderer.invoke('app:paths'),
 	// 运行 custom 目录下的读取脚本，返回解析后的数据

@@ -63,7 +63,7 @@ export function createScriptEnv(customDir: string, paths: SystemPaths): ScriptEn
 /** preload 通过 contextBridge 暴露到 window.api 的接口（渲染进程与 preload 共用此类型） */
 export interface Api {
 	ping: () => Promise<string>;
-	getConfig: () => Promise<AppConfig>;
+	getConfig: (subPath?: string) => Promise<AppConfig>;
 	getPaths: () => Promise<SystemPaths>;
 	readFile: (fileSrc: string, readScript: string) => Promise<any>;
 	runScript: (payload: {

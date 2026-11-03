@@ -1,15 +1,15 @@
 /**
- * electron-builder 配置（JS 形式，便于按 custom/config.json 动态计算版本）。
+ * electron-builder 配置（JS 形式）。
  * 注意：package.json 若存在 "build" 字段会优先于本文件，因此配置只保留在这里。
- * 产物目录与安装包文件名里的版本号统一用 custom/config.json 的 ver。
+ * 产物目录、安装包文件名、productName 统一使用 package.json 的 name + version。
  */
 const { getCustomMeta } = require('./scripts/custom-meta');
 
-const { ver } = getCustomMeta();
+const { name, ver } = getCustomMeta();
 
 module.exports = {
 	appId: 'openstaticeditor',
-	productName: 'OpenStaticEditor',
+	productName: name,
 	copyright: "Copyright © 2026 Let's UFO",
 	directories: {
 		output: `release/${ver}`

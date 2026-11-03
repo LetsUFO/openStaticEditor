@@ -1,6 +1,6 @@
 /**
- * 构建后整理产物目录（版本号统一用 custom/config.json 的 ver）：
- * release/<ver>/win-unpacked   -> release/<ver>/<custom/config.json name> <ver>
+ * 构建后整理产物目录（name 与 ver 统一用 package.json）：
+ * release/<ver>/win-unpacked   -> release/<ver>/<name> <ver>
  * release/<ver>/mac-arm64      -> release/<ver>/mac
  * release/<ver>/mac            -> release/<ver>/mac
  *
@@ -50,7 +50,7 @@ for (const entry of readdirSync(releaseDir, { withFileTypes: true })) {
 	console.log(`[organize] ${entry.name} -> ${rule.target}`);
 }
 
-// macOS 的 .app 名称由 productName 决定，这里按 config.json 的 name + ver 重命名，
+// macOS 的 .app 名称由 productName 决定，这里按 package.json 的 name + ver 重命名，
 // 并同步 Info.plist 里的 CFBundleName / CFBundleDisplayName（重命名 bundle 不会自动更新这两个键）。
 const macDir = join(releaseDir, 'mac');
 

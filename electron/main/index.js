@@ -38,26 +38,90 @@ function getCustomDir() {
 	return app.isPackaged ? join(process.resourcesPath, 'custom') : join(__dirname, '../../custom');
 }
 
-function loadConfig() {
+/**
+ * 根据 subPath 算出 custom 子目录：'ES2/config.json' → 'ES2/'，undefined → ''
+ */
+function getBaseSrc(subPath) {
+	if (!subPath) return '';
+	const idx = subPath.lastIndexOf('/');
+	return idx >= 0 ? subPath.slice(0, idx + 1) : '';
+}
+
+/**
+ * 需要重写的路径字段名（末尾匹配，大小写不敏感）。
+ * 只有 key 命中这些关键字的 string 值才会加 baseSrc 前缀。
+ */
+const PATH_FIELD_SUFFIXES = [
+	'script', // getSaveFiles, es2_loadout, es2_saveFile 等脚本路径
+	'src', // background.src 图片路径
+	'icon' // appIcon 图标
+];
+function isPathField(key) {
+	if (typeof key !== 'string') return false;
+	const lower = key.toLowerCase();
+	return PATH_FIELD_SUFFIXES.some((suffix) => lower.endsWith(suffix));
+}
+
+/**
+ * 递归重写 config 对象中的路径字段：
+ *   在已知的路径字段（key 以 script/src/icon 结尾）上，
+ *   非空、不以 '/' / '%' / data: / blob: / http(s): 开头的值，
+ *   前面加上 baseSrc（custom 子目录，如 'ES2/'）。
+ *   Everspace2.ico + baseSrc='ES2/' → ES2/Everspace2.ico
+ *   getSaveFiles.js + baseSrc='ES2/' → ES2/getSaveFiles.js
+ * label、tip 等非路径字段原样保留。
+ */
+function rewriteCustomPaths(obj, baseSrc) {
+	if (!baseSrc) return obj;
+	const ABSOLUTE_PREFIXES = ['/', '%', 'data:', 'blob:', 'http:', 'https:'];
+	const walk = (value, key) => {
+		if (typeof value === 'string') {
+			if (!isPathField(key)) return value; // 只重写路径字段
+			if (!value || value.startsWith(baseSrc)) return value;
+			const isAbsolute = ABSOLUTE_PREFIXES.some((p) => value.startsWith(p));
+			return isAbsolute ? value : baseSrc + value;
+		}
+		if (Array.isArray(value)) return value.map((item) => walk(item, key));
+		if (value && typeof value === 'object') {
+			const result = {};
+			for (const [k, v] of Object.entries(value)) {
+				result[k] = walk(v, k);
+			}
+			return result;
+		}
+		return value;
+	};
+	return walk(obj);
+}
+
+/**
+ * 读取 custom 目录下的 config.json。
+ * @param {string} [subPath='config.json'] 相对 custom 目录的子路径（如 'ES2/config.json'）。
+ */
+function loadConfig(subPath = 'config.json') {
 	const files = app.isPackaged
-		? [join(getCustomDir(), 'config.json')]
-		: [join(getCustomDir(), 'config.json'), join(process.cwd(), 'custom/config.json')];
+		? [join(getCustomDir(), subPath)]
+		: [join(getCustomDir(), subPath), join(process.cwd(), 'custom', subPath)];
 
 	for (const file of files) {
 		try {
-			return { ...DEFAULT_CONFIG, ...JSON.parse(readFileSync(file, 'utf-8')) };
+			const raw = JSON.parse(readFileSync(file, 'utf-8'));
+			// 根据子目录重写所有 custom/ 路径，让后续脚本/资源加载直接用正确路径
+			const baseSrc = getBaseSrc(subPath);
+			return rewriteCustomPaths({ ...DEFAULT_CONFIG, ...raw }, baseSrc);
 		} catch (error) {
 			console.warn(`[config] 读取失败，尝试下一个：${file} (${error.message})`);
 		}
 	}
-	console.warn('[config] 未找到 custom/config.json，回退默认配置');
+	console.warn(`[config] 未找到 custom/${subPath}，回退默认配置`);
 	return { ...DEFAULT_CONFIG };
 }
 
+// 主进程自身先读顶层 config.json（用于窗口标题 fallback，渲染进程会按需加载子目录）
 const config = loadConfig();
 
-// 渲染进程（Pinia store）通过 window.api.getConfig() 取同一份数据
-ipcMain.handle('config:get', () => config);
+// 渲染进程（Pinia store）通过 window.api.getConfig(subPath) 加载指定子目录 config
+ipcMain.handle('config:get', (_event, subPath) => loadConfig(subPath));
 
 /**
  * 定位并加载 custom 目录下的脚本模块（每次清缓存，脚本改动后无需重启应用）。

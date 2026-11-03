@@ -36,13 +36,19 @@ export const useConfigStore = defineStore('config', () => {
 	// 避免对整份存档数据做 deep watch（存档里属性条目多，深度监听开销大）
 	const dataVersion = ref(0);
 
+	/** 当前加载的 custom 子目录（如 'ES2/'），用于路径重写 */
+	const baseSrc = ref<string>('');
+
 	/** 直接给 <Menu :items> 用 */
 	const menu = computed<ItemType[]>(() => toMenuItems(config.value?.menu ?? []));
 	/** config.json -> loadFiles（App.vue / LoadFile.vue 共用一个取值入口） */
 	const loadFiles = computed<Record<string, any>>(() => config.value?.loadFiles ?? {});
 
-	async function load(): Promise<void> {
-		config.value = await window.api.getConfig();
+	async function load(subPath?: string): Promise<void> {
+		config.value = await window.api.getConfig(subPath);
+	}
+	function setBaseSrc(src: string): void {
+		baseSrc.value = src;
 	}
 	function setFileData(fileKey: string, data: Record<string, any>): Promise<void> {
 		return new Promise((resolve) => {
@@ -69,9 +75,11 @@ export const useConfigStore = defineStore('config', () => {
 
 	return {
 		config,
+		baseSrc,
 		menu,
 		loadFiles,
 		load,
+		setBaseSrc,
 		fileData,
 		filePaths,
 		dataVersion,
