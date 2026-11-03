@@ -152,12 +152,16 @@ ipcMain.handle('window:setSize', (event, width, height) => {
 
 	// 以窗口当前所在显示器的可用区域（扣除菜单栏/Dock）为基准居中
 	const area = screen.getDisplayMatching(frame).workArea;
-	win.setBounds({
-		x: Math.round(area.x + (area.width - frameW) / 2),
-		y: Math.round(area.y + (area.height - frameH) / 2),
-		width: frameW,
-		height: frameH
-	});
+	win.setBounds(
+		{
+			x: Math.round(area.x + (area.width - frameW) / 2),
+			y: Math.round(area.y + (area.height - frameH) / 2),
+			width: frameW,
+			height: frameH
+		},
+		// macOS 支持原生窗口动画；位置和尺寸一次过渡，最终位置精确
+		process.platform === 'darwin'
+	);
 });
 
 /**
