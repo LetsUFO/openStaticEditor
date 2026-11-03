@@ -29,3 +29,9 @@ html{font-size: 16px;height:100%;
 .bgDarken{position: relative;
 	&::after{content:'';width:100%;height:100%;background-color: rgba(0,0,0,0.6);position: absolute;left:0;top:0;pointer-events: none;}
 }
+
+//覆盖样式
+// 1) --primary_darken 是完整颜色值，不能放进 rgba()，用 color-mix 与 transparent 混合得到 80% 透明度
+// 2) 双类选择器提高权重，压过 antd 运行时注入的 .ant-menu-dark
+.ant-menu.ant-menu-dark{background: unset;}
+.ant-menu-dark.ant-menu-inline .ant-menu-sub.ant-menu-inline{background-color: unset;}

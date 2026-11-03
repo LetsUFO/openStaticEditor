@@ -34,8 +34,11 @@ export const size: IThemeSize = {
 	fsLv3: '1.5rem'
 };
 
+// 主色：优先跟随 antd 注入的 CSS 变量，缺省回退 seed token（不写死 hex）
+const primary = `var(--ant-primary-color, ${seedToken.colorPrimary})`;
+
 export const light = {
-	primary: `var(--ant-primary-color, ${seedToken.colorPrimary})`,
+	primary,
 	success: `var(--ant-success-color, ${seedToken.colorSuccess})`,
 	error: `var(--ant-error-color, ${seedToken.colorError})`,
 	warning: `var(--ant-warning-color, ${seedToken.colorWarning})`,

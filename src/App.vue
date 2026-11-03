@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useConfigStore } from './stores/config';
-import { computed, reactive, ref, onMounted } from 'vue';
+import { computed, reactive, ref, onMounted, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
-import { dark } from './style/theme';
+import theme, { dark } from './style/theme';
 
 import { Button, Menu, message } from 'ant-design-vue';
 import FormBuilder from './components/FormBuilder.vue';
@@ -183,6 +183,13 @@ const save = async function (saveCfg: any = {}) {
 	}
 };
 
+onBeforeMount(() => {
+	// 把 theme.ts 默认导出（light）的颜色注入为 CSS 变量（直接以 key 命名，如 --primary），
+	// 供 scss 直接使用 var(--primary)，与 Tailwind 工具类共用同一份色值。
+	for (const [key, value] of Object.entries(theme)) {
+		document.documentElement.style.setProperty(`--color-${key}`, value as string);
+	}
+});
 onMounted(async () => {
 	// 先扫描 custom 下的子目录，根据数量决定加载策略
 	try {
@@ -213,8 +220,11 @@ onMounted(async () => {
 	<div class="root h-full" :style="backgroundStyle">
 		<LoadFile :loading="fileState.loading" :loaded="fileState.loaded" @loadFiles="loadAll" />
 		<div class="flex justify-start h-full">
-			<aside class="side flex flex-col w-[10rem] bg-primary">
-				<div class="h-[10rem] bg-contain bg-center bg-no-repeat" :style="appIconStyle"></div>
+			<aside class="side flex flex-col w-[10rem]">
+				<div
+					class="h-[10rem] bg-contain bg-center bg-no-repeat"
+					:style="appIconStyle"
+				></div>
 				<div class="menu flex-1 overflow-y-auto">
 					<Menu
 						v-model:open-keys="state.openKey"
@@ -263,6 +273,25 @@ onMounted(async () => {
 .root {
 	position: relative;
 	isolation: isolate;
+	aside {
+		position: relative;
+		// 建立层叠上下文，让下面 z-index:-1 的黑色遮罩落在 aside 背景之上、内容之下
+		isolation: isolate;
+		// --color-primary 是完整颜色值（var(--ant-primary-color, #1677ff)），
+		// 不能写 rgba(var(--x), .8)（那要求 x 是 "R,G,B" 分量），改用 color-mix 混透明度
+		background-color: color-mix(in srgb, var(--color-primary) 80%, transparent);
+		&::after {
+			content: '';
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.8);
+			position: absolute;
+			left: 0;
+			top: 0;
+			pointer-events: none;
+			z-index: -1;
+		}
+	}
 	// 背景单独放在伪元素上：blur / alpha 只作用于背景，不影响页面内容
 	&::before {
 		content: '';
