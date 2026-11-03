@@ -1,0 +1,1786 @@
+{
+	"meta": {
+		"saveFile": "ufo.sav",
+		"generatedAt": "2026-10-29T09:26:33.799Z",
+		"note": "每件装备输出 templateId + level(ItemLevel) + effectiveLevel(ItemLevel+VirtualLevelOffset，界面显示等级) + attributes。attributes 采用负向剔除：去掉各品类固有核心属性(weapon_*/secondary_*/device_*/sensor_range_*/energy_core_regen_*/shield 基础值/cargo_slots_buff/armor 等)与隐藏标记(no_random_drop/min_level/blueprintable/item_price/ascendant_rank 等)，其余全部视为占槽附加词缀，覆盖传说特效(legendary_*)、导弹专属词缀、okkar 催化剂增益、all_modules_*、*_buff 等。.position 为 0~1 归一化位置，非真实数值。modules 每种模块只装备一件，直接输出单件对象(未装备为 null)；主/副武器为数组。携带货物(cargo)固定为空数组。特别说明：所有传奇(Legendary)装备(主武器/副武器/模块/装置)的附加属性暂不抽取(attributes=[]，能否更换待确认)，其等级字段仍照常输出。"
+	},
+	"currentShip": {
+		"index": 0,
+		"templateId": "ship_light_rogue",
+		"shipType": "Rogue",
+		"primaryWeapons": [
+			{
+				"templateId": "pulse_laser_okkar",
+				"level": 60,
+				"effectiveLevel": 66,
+				"attributes": [
+					{
+						"id": "shield_piercing",
+						"position": 0.49253058433532715
+					},
+					{
+						"id": "armor_piercing",
+						"position": 0.1318567991256714
+					},
+					{
+						"id": "anti_armor",
+						"position": 0.1318567991256714
+					},
+					{
+						"id": "destabilizer",
+						"position": 0.8880668878555298
+					}
+				]
+			},
+			{
+				"templateId": "flak_legendary_backer_1",
+				"level": 60,
+				"effectiveLevel": 66,
+				"attributes": []
+			}
+		],
+		"secondaryWeapons": [
+			{
+				"templateId": "launcher_homing_legendary_battery",
+				"level": 60,
+				"effectiveLevel": 66,
+				"attributes": []
+			},
+			{
+				"templateId": "launcher_homing_missile_okkar",
+				"level": 60,
+				"effectiveLevel": 63.8,
+				"attributes": [
+					{
+						"id": "fire_missile_critical",
+						"position": 0.33803510665893555
+					},
+					{
+						"id": "missile_damage_flytime",
+						"position": 0.18730580806732178
+					},
+					{
+						"id": "missiles_hit_closest_target",
+						"position": 0.9951633214950562
+					}
+				]
+			}
+		],
+		"modules": {
+			"EnergyCores": {
+				"templateId": "energy_core",
+				"level": 90,
+				"effectiveLevel": 96,
+				"attributes": [
+					{
+						"id": "utility",
+						"position": 1
+					},
+					{
+						"id": "tractor_beam_range_buff",
+						"position": 1
+					},
+					{
+						"id": "all_modules_reduced_device_cooldowns",
+						"position": 1
+					},
+					{
+						"id": "all_modules_increased_primary_weapon_range",
+						"position": 1
+					},
+					{
+						"id": "okkar_catalyst_energycore2_buff",
+						"position": 0.6383715867996216
+					},
+					{
+						"id": "okkar_catalyst_energycore2_debuff",
+						"position": 0.3685251474380493
+					}
+				]
+			},
+			"Sensors": {
+				"templateId": "sensor_resources",
+				"level": 60,
+				"effectiveLevel": 66,
+				"attributes": [
+					{
+						"id": "expertise",
+						"position": 1
+					},
+					{
+						"id": "all_modules_reduced_device_cooldowns",
+						"position": 1
+					},
+					{
+						"id": "all_modules_increased_primary_weapon_range",
+						"position": 1
+					},
+					{
+						"id": "all_modules_increased_secondary_weapon_range",
+						"position": 1
+					},
+					{
+						"id": "okkar_catalyst_sensor1_buff",
+						"position": 0.8191907405853271
+					},
+					{
+						"id": "okkar_catalyst_sensor1_debuff",
+						"position": 0.6458134651184082
+					}
+				]
+			},
+			"Shields": {
+				"templateId": "shield_autonomous",
+				"level": 60,
+				"effectiveLevel": 66,
+				"attributes": [
+					{
+						"id": "utility",
+						"position": 1
+					},
+					{
+						"id": "instant_shield_restore",
+						"position": 0.5263260006904602
+					},
+					{
+						"id": "all_modules_reduced_device_cooldowns",
+						"position": 1
+					},
+					{
+						"id": "all_modules_increased_primary_weapon_range",
+						"position": 1
+					},
+					{
+						"id": "all_modules_increased_secondary_weapon_range",
+						"position": 1
+					}
+				]
+			},
+			"CargoUnits": {
+				"templateId": "cargo_unit_legendary_bob",
+				"level": 60,
+				"effectiveLevel": 66,
+				"attributes": []
+			},
+			"Platings": {
+				"templateId": "plating_opulence",
+				"level": 60,
+				"effectiveLevel": 66,
+				"attributes": [
+					{
+						"id": "armor_per_kill",
+						"position": 1
+					},
+					{
+						"id": "expertise",
+						"position": 1
+					},
+					{
+						"id": "opulence_increase_hitpoints_per_credit",
+						"position": 1
+					},
+					{
+						"id": "all_modules_reduced_device_cooldowns",
+						"position": 1
+					},
+					{
+						"id": "all_modules_increased_primary_weapon_range",
+						"position": 1
+					},
+					{
+						"id": "all_modules_increased_secondary_weapon_range",
+						"position": 1
+					},
+					{
+						"id": "okkar_catalyst_plating1_buff",
+						"position": 0.7427123785018921
+					},
+					{
+						"id": "okkar_catalyst_plating1_debuff",
+						"position": 0.31659889221191406
+					}
+				]
+			},
+			"thrusters": {
+				"templateId": "thrusters_boost",
+				"level": 30,
+				"effectiveLevel": 36,
+				"attributes": [
+					{
+						"id": "expertise",
+						"position": 1
+					},
+					{
+						"id": "all_modules_reduced_device_cooldowns",
+						"position": 1
+					},
+					{
+						"id": "all_modules_increased_primary_weapon_range",
+						"position": 1
+					},
+					{
+						"id": "all_modules_increased_secondary_weapon_range",
+						"position": 1
+					},
+					{
+						"id": "okkar_catalyst_booster1_buff",
+						"position": 0.06289327144622803
+					},
+					{
+						"id": "okkar_catalyst_booster1_debuff",
+						"position": 0.7877719402313232
+					}
+				]
+			}
+		},
+		"cargo": [],
+		"skills": [
+			"rogue_passive_perk",
+			"rogue_support_cooldowns",
+			"rogue_swarm_radius",
+			"rogue_device_powers_shield",
+			"rogue_ult_reduce_energy_consumption",
+			"rogue_warfare_cooldowns",
+			"rogue_increased_corrosion_damage"
+		]
+	},
+	"ships": [
+		{
+			"index": 0,
+			"templateId": "ship_light_rogue",
+			"shipType": "Rogue",
+			"isCurrent": true
+		},
+		{
+			"index": 1,
+			"templateId": "ship_okkar_medium_ship1",
+			"shipType": "Okkar",
+			"isCurrent": false
+		},
+		{
+			"index": 2,
+			"templateId": "None",
+			"shipType": null,
+			"isCurrent": false
+		},
+		{
+			"index": 3,
+			"templateId": "None",
+			"shipType": null,
+			"isCurrent": false
+		},
+		{
+			"index": 4,
+			"templateId": "None",
+			"shipType": null,
+			"isCurrent": false
+		},
+		{
+			"index": 5,
+			"templateId": "None",
+			"shipType": null,
+			"isCurrent": false
+		}
+	],
+	"skillMap": {
+		"Scout": [
+			{
+				"label": "武器射程 +30%",
+				"value": "scout_passive_range"
+			},
+			{
+				"label": "暗影突袭期间推进能量回复 +100%",
+				"value": "scout_shadow_strike_boost_regen"
+			},
+			{
+				"label": "暗影突袭期间不会被地雷侦测",
+				"value": "scout_shadow_strike_mine_undetect"
+			},
+			{
+				"label": "暗影突袭结束后获得 5 秒无敌",
+				"value": "scout_shadow_strike_invincibility"
+			},
+			{
+				"label": "敌人侦测范围 -25%",
+				"value": "scout_enemy_detection_range"
+			},
+			{
+				"label": "装置启动距离 +20%",
+				"value": "scout_device_activation_range"
+			},
+			{
+				"label": "隐形持续时间 +20%",
+				"value": "scout_cloak_duration"
+			},
+			{
+				"label": "所有主武器弹速 +50%",
+				"value": "scout_increased_projectile_speed"
+			},
+			{
+				"label": "所有主武器散布 -50%",
+				"value": "scout_reduced_weapon_spread"
+			}
+		],
+		"Rogue": [
+			{
+				"label": "支援装置冷却 -20%",
+				"value": "rogue_support_cooldowns"
+			},
+			{
+				"label": "作战装置冷却 -20%",
+				"value": "rogue_warfare_cooldowns"
+			},
+			{
+				"label": "虚空蜂群半径 +25%",
+				"value": "rogue_swarm_radius"
+			},
+			{
+				"label": "护盾耗尽后隐形 5 秒（签名被动）",
+				"value": "rogue_passive_perk"
+			},
+			{
+				"label": "使用装置回复 15% 护盾",
+				"value": "rogue_device_powers_shield"
+			},
+			{
+				"label": "使用装置回复 25% 推进能量",
+				"value": "rogue_ult_reduce_energy_consumption"
+			},
+			{
+				"label": "腐蚀伤害 +25%",
+				"value": "rogue_increased_corrosion_damage"
+			},
+			{
+				"label": "EMP 持续时间 +25%",
+				"value": "rogue_increased_emp_duration"
+			}
+		],
+		"Vanguard": [
+			{
+				"label": "附近有敌人时也能启用巡航驱动",
+				"value": "vanguard_cruise_drive_enemy_proximity"
+			},
+			{
+				"label": "网/缠绕效果 -50%",
+				"value": "vanguard_reduced_net_effect"
+			},
+			{
+				"label": "依过载百分比最高 -20% 支援装置冷却",
+				"value": "vanguard_overcharge_reduces_cooldowns"
+			},
+			{
+				"label": "时间延长器立即回满武器与推进能量",
+				"value": "vanguard_time_extender_full_energy"
+			},
+			{
+				"label": "紧跟敌机后方时武器伤害 +20%",
+				"value": "vanguard_rear_damage_bonus"
+			},
+			{
+				"label": "200m 内主武器获得 20% 穿盾穿甲",
+				"value": "vanguard_close_range_piercing"
+			},
+			{
+				"label": "护盾过载时暴击伤害 +25%",
+				"value": "vanguard_overcharge_crit_damage"
+			},
+			{
+				"label": "过载充能速度 +25%",
+				"value": "vanguard_overcharge_charge_speed"
+			},
+			{
+				"label": "过载永不衰减",
+				"value": "vanguard_overcharge_no_decay"
+			}
+		],
+		"Interceptor": [
+			{
+				"label": "朝 1500m 外锁定目标飞行时速度 +15%",
+				"value": "interceptor_long_range_speed"
+			},
+			{
+				"label": "主武器伤害 +10%",
+				"value": "interceptor_increased_primary_damage"
+			},
+			{
+				"label": "拾取能量球 6 秒内暴击率 +1%（最多 20%）",
+				"value": "interceptor_energy_orb_crit_chance"
+			},
+			{
+				"label": "主武器命中返还 30% 能量消耗",
+				"value": "interceptor_hit_energy_return"
+			},
+			{
+				"label": "暴击有 20% 几率为武器超载充能 1%",
+				"value": "interceptor_crit_charges_overdrive"
+			},
+			{
+				"label": "进入区域后 60 秒内推进与射速 +20%",
+				"value": "interceptor_zone_speed_bonus"
+			},
+			{
+				"label": "持续开火每秒暴击伤害 +1%（最多 20%）",
+				"value": "interceptor_sustained_fire_crit_damage"
+			},
+			{
+				"label": "武器超载期间能量球拾取范围 +100%",
+				"value": "interceptor_overdrive_energy_pickup_range"
+			},
+			{
+				"label": "武器超载期间副武器 50% 几率不消耗",
+				"value": "interceptor_overdrive_secondary_free"
+			}
+		],
+		"Sentinel": [
+			{
+				"label": "作战装置冷却 -20%",
+				"value": "sentinel_warfare_cooldowns"
+			},
+			{
+				"label": "护盾值 +15%",
+				"value": "sentinel_increased_shield_capacity"
+			},
+			{
+				"label": "用静电过载击杀回复 10% 护盾",
+				"value": "sentinel_static_overload_shield_restore"
+			},
+			{
+				"label": "静电过载每秒 10% 几率施加 EMP",
+				"value": "sentinel_static_overload_emp_chance"
+			},
+			{
+				"label": "护盾耗尽立即重置所有支援装置冷却（每 2 分钟一次）",
+				"value": "sentinel_shield_depleted_reset_support"
+			},
+			{
+				"label": "每次击杀使随机一个装置冷却 -1 秒",
+				"value": "sentinel_kill_reduces_random_cooldown"
+			},
+			{
+				"label": "拾取能量球生成 2 秒能量护盾",
+				"value": "sentinel_energy_orb_shield_buff"
+			},
+			{
+				"label": "使用消耗品立即触发护盾充能",
+				"value": "sentinel_consumable_shield_charge"
+			},
+			{
+				"label": "护盾 ≥50% 时免疫腐蚀",
+				"value": "sentinel_shield_threshold_corrosion_immunity"
+			},
+			{
+				"label": "护盾满充时推进与武器能耗 -20%",
+				"value": "sentinel_full_shield_energy_reduction"
+			}
+		],
+		"Striker": [
+			{
+				"label": "被导弹锁定时推进速度 +30%",
+				"value": "striker_missile_lock_boost"
+			},
+			{
+				"label": "锁定的敌人减速 20%",
+				"value": "striker_lock_target_slow"
+			},
+			{
+				"label": "可抓取并投掷无人机",
+				"value": "striker_grab_drones"
+			},
+			{
+				"label": "启动量子系绳瞬间修复 50% 装甲",
+				"value": "striker_quantum_tether_armor_repair"
+			},
+			{
+				"label": "300m 内敌人无法回复护盾",
+				"value": "striker_close_range_shield_regen_block"
+			},
+			{
+				"label": "自身受到的溅射伤害 -60%",
+				"value": "striker_reduced_splash_damage"
+			},
+			{
+				"label": "1km 内敌人伤害 -20%",
+				"value": "striker_nearby_enemy_damage_reduction"
+			},
+			{
+				"label": "减益持续时间 -20%",
+				"value": "striker_reduced_debuff_duration"
+			},
+			{
+				"label": "舰体伤害减免 20%",
+				"value": "striker_hull_damage_reduction"
+			}
+		],
+		"Okkar": [
+			{
+				"label": "量子契约（签名被动）：击杀敌人掉落残响碎片，拾取获得空灵共振层数，提升移动速度并对附近敌人造成每秒持续伤害（锁定目标双倍）",
+				"value": "okkar_passive_perk"
+			},
+			{
+				"label": "消耗品使用时 30% 几率不被消耗",
+				"value": "okkar_free_consumable_chance"
+			},
+			{
+				"label": "舰体伤害 25% 几率被完全无视",
+				"value": "okkar_hull_damage_ignore_chance"
+			},
+			{
+				"label": "进入幽灵形态回满武器与推进能量",
+				"value": "okkar_restore_energy"
+			},
+			{
+				"label": "每层空灵共振使幽灵形态舰体衰减 -10%",
+				"value": "okkar_stacks_reduce_hull_decay"
+			},
+			{
+				"label": "奥卡尔单位仅在视野内且距离 <1000m 时才会发现",
+				"value": "okkar_detection_range"
+			}
+		],
+		"Gunship": [
+			{
+				"label": "炮塔也会攻击地雷",
+				"value": "gunship_turret_attacks_mines"
+			},
+			{
+				"label": "对无人机伤害 +30%",
+				"value": "gunship_drone_damage"
+			},
+			{
+				"label": "推进速度 +15%",
+				"value": "gunship_increased_boost_speed"
+			},
+			{
+				"label": "10 秒未受击后每秒回复 2% 装甲（至多一半）",
+				"value": "gunship_armor_regen_after_damage"
+			},
+			{
+				"label": "使用消耗品回复 8% 装甲",
+				"value": "gunship_consumable_armor_restore"
+			},
+			{
+				"label": "装甲耗尽立即重置所有作战装置冷却（每 2 分钟一次）",
+				"value": "gunship_armor_depleted_reset_warfare"
+			},
+			{
+				"label": "舰体 ≤50% 时伤害减免 40%",
+				"value": "gunship_low_hull_damage_reduction"
+			},
+			{
+				"label": "每次击杀装甲修复 +20%",
+				"value": "gunship_kill_armor_repair_bonus"
+			},
+			{
+				"label": "脉冲激光炮塔",
+				"value": "gunship_pulse_laser_turret"
+			},
+			{
+				"label": "线圈炮炮塔",
+				"value": "gunship_coilgun_turret"
+			}
+		],
+		"Bomber": [
+			{
+				"label": "锁定所需时间 -50%",
+				"value": "bomber_reduced_lock_duration"
+			},
+			{
+				"label": "受到敌人爆炸伤害 -20%",
+				"value": "bomber_reduced_explosive_damage"
+			},
+			{
+				"label": "不加速近距飞过时转化地雷而非引爆",
+				"value": "bomber_mine_conversion"
+			},
+			{
+				"label": "自身 ARC-9000 爆炸伤害 -50%",
+				"value": "bomber_arc_self_damage_reduction"
+			},
+			{
+				"label": "ARC-9000 发射后每秒伤害 +2%",
+				"value": "bomber_arc_scaling_damage"
+			},
+			{
+				"label": "目标锁定在屏幕外仍保持",
+				"value": "bomber_offscreen_lock_hold"
+			},
+			{
+				"label": "所有副武器能量消耗 -20%",
+				"value": "bomber_reduced_secondary_energy"
+			},
+			{
+				"label": "启动 ARC-9000 回满副武器能量",
+				"value": "bomber_arc_full_secondary_energy"
+			},
+			{
+				"label": "手动引爆 ARC-9000 时冲击波伤害 +40%",
+				"value": "bomber_arc_manual_detonation_damage"
+			}
+		],
+		"Vindicator": [
+			{
+				"label": "无人机上限 +1",
+				"value": "vindicator_drone_increase"
+			},
+			{
+				"label": "方阵期间无人机无敌",
+				"value": "vindicator_drone_debuff_immunity"
+			},
+			{
+				"label": "无人机每秒回复 1% 舰体",
+				"value": "vindicator_drone_regen"
+			},
+			{
+				"label": "受到敌方无人机伤害 -50%",
+				"value": "vindicator_enemy_drone_damage"
+			},
+			{
+				"label": "无人机死亡时爆炸，伤害并减速附近敌人",
+				"value": "vindicator_drone_explosion"
+			},
+			{
+				"label": "无人机被摧毁后 6 秒内武器伤害 +20%",
+				"value": "vindicator_drone_death_bonus"
+			},
+			{
+				"label": "收集残骸回复 10% 护盾",
+				"value": "vindicator_collect_wreckage_shield_restore"
+			},
+			{
+				"label": "无人机被摧毁时 20% 几率立即重建",
+				"value": "vindicator_drone_instant_revive"
+			},
+			{
+				"label": "锁定目标受到无人机伤害 +20%",
+				"value": "vindicator_locked_target_drone_damage_buff"
+			},
+			{
+				"label": "2km 内敌方支援无人机被动被干扰失效",
+				"value": "vindicator_enemy_drone_disable_passive"
+			}
+		]
+	},
+	"attributeMap": {
+		"mainWeapon": [
+			{
+				"label": "穿盾（无视部分护盾直接造成伤害）",
+				"value": "shield_piercing",
+				"verified": true
+			},
+			{
+				"label": "穿甲（无视部分装甲直接造成伤害）",
+				"value": "armor_piercing",
+				"verified": true
+			},
+			{
+				"label": "对装甲目标伤害加成",
+				"value": "anti_armor",
+				"verified": true
+			},
+			{
+				"label": "失稳（使目标易伤，受创加深）",
+				"value": "destabilizer",
+				"verified": true
+			},
+			{
+				"label": "击杀后恢复船体生命",
+				"value": "heal_on_kill",
+				"verified": true
+			},
+			{
+				"label": "击杀后返还弹药",
+				"value": "ammo_refund_on_kill",
+				"verified": true
+			},
+			{
+				"label": "暴击时回复武器能量",
+				"value": "critical_hit_recharge_weapon_energy",
+				"verified": true
+			},
+			{
+				"label": "武器射程提高",
+				"value": "weapon_range_buff",
+				"verified": true
+			},
+			{
+				"label": "武器射速提高",
+				"value": "weapon_fire_rate_buff",
+				"verified": true
+			},
+			{
+				"label": "武器对船体伤害提高",
+				"value": "weapon_hull_damage_buff",
+				"verified": true
+			},
+			{
+				"label": "武器对护盾伤害提高",
+				"value": "weapon_shield_damage_buff",
+				"verified": true
+			},
+			{
+				"label": "武器蓄力时间缩短",
+				"value": "weapon_charge_duration_buff",
+				"verified": true
+			},
+			{
+				"label": "武器蓄力伤害提高",
+				"value": "weapon_charge_damage_increase_buff",
+				"verified": true
+			},
+			{
+				"label": "每轮射弹数增加",
+				"value": "weapon_shots_per_burst_buff",
+				"verified": true
+			},
+			{
+				"label": "额外弹丸数增加",
+				"value": "weapon_additional_projectiles_buff",
+				"verified": true
+			},
+			{
+				"label": "连发间隔缩短",
+				"value": "weapon_burst_delay_buff",
+				"verified": true
+			},
+			{
+				"label": "蓄力连发数增加",
+				"value": "weapon_charge_burst_increase_buff",
+				"verified": true
+			},
+			{
+				"label": "蓄力弹丸数增加",
+				"value": "weapon_charge_projectile_increase_buff",
+				"verified": true
+			},
+			{
+				"label": "武器伤害半径扩大",
+				"value": "weapon_damage_radius_buff",
+				"verified": true
+			},
+			{
+				"label": "弹丸飞行速度提高",
+				"value": "weapon_velocity_buff",
+				"verified": true
+			},
+			{
+				"label": "武器散布收窄（精度提高）",
+				"value": "weapon_spread_buff",
+				"verified": true
+			},
+			{
+				"label": "武器能量上限提高",
+				"value": "weapon_energy_capacity_buff",
+				"verified": true
+			},
+			{
+				"label": "武器能量消耗降低",
+				"value": "weapon_energy_consumption_buff",
+				"verified": true
+			},
+			{
+				"label": "武器能量回充延迟缩短",
+				"value": "weapon_energy_recharge_delay_buff",
+				"verified": true
+			},
+			{
+				"label": "武器预热时间缩短",
+				"value": "weapon_ramp_up_duration_buff",
+				"verified": true
+			},
+			{
+				"label": "破盾（削弱目标护盾）",
+				"value": "shield_disrupt",
+				"verified": true
+			},
+			{
+				"label": "无伤害（特殊机制：造成伤害为0）",
+				"value": "no_damage",
+				"verified": true
+			},
+			{
+				"label": "全自动开火",
+				"value": "full_auto",
+				"verified": true
+			},
+			{
+				"label": "对炮塔伤害加成",
+				"value": "anti_turret_bonus_damage",
+				"verified": true
+			},
+			{
+				"label": "对上古者（Ancient）伤害加成",
+				"value": "anti_ancient_bonus_damage",
+				"verified": true
+			},
+			{
+				"label": "对主力舰伤害加成",
+				"value": "anti_capital_bonus_damage",
+				"verified": true
+			},
+			{
+				"label": "对 GNB 伤害加成",
+				"value": "anti_gnb_bonus_damage",
+				"verified": true
+			},
+			{
+				"label": "对奥卡尔（Okkar）伤害加成",
+				"value": "anti_okkar_bonus_damage",
+				"verified": true
+			},
+			{
+				"label": "对不法之徒（Outlaw）伤害加成",
+				"value": "anti_outlaw_bonus_damage",
+				"verified": true
+			}
+		],
+		"subWeapon": [
+			{
+				"label": "导弹可暴击",
+				"value": "fire_missile_critical",
+				"verified": true
+			},
+			{
+				"label": "导弹滞空越久伤害越高",
+				"value": "missile_damage_flytime",
+				"verified": true
+			},
+			{
+				"label": "导弹锁定最近目标",
+				"value": "missiles_hit_closest_target",
+				"verified": true
+			},
+			{
+				"label": "弹匣最后数发导弹伤害提高",
+				"value": "last_missiles_more_damage",
+				"verified": true
+			},
+			{
+				"label": "导弹弹药返还",
+				"value": "missile_ammo_refund",
+				"verified": true
+			},
+			{
+				"label": "导弹锁定时间减半",
+				"value": "missile_lock_duration_halfed",
+				"verified": true
+			},
+			{
+				"label": "副武器锁定时间调整",
+				"value": "secondary_lock_duration",
+				"verified": true
+			},
+			{
+				"label": "无伤害（特殊机制）",
+				"value": "no_damage",
+				"verified": true
+			}
+		],
+		"energyCore": [
+			{
+				"label": "牵引光束作用距离增加",
+				"value": "tractor_beam_range_buff",
+				"verified": true
+			},
+			{
+				"label": "推进（加速）能量回复提高",
+				"value": "energy_core_regen_boost_buff",
+				"verified": true
+			},
+			{
+				"label": "护盾能量回复提高",
+				"value": "energy_core_regen_shield_buff",
+				"verified": true
+			},
+			{
+				"label": "武器能量回复提高",
+				"value": "energy_core_regen_weapons_buff",
+				"verified": true
+			},
+			{
+				"label": "待机时能量加成提高",
+				"value": "energy_core_stand_bonus_buff",
+				"verified": true
+			},
+			{
+				"label": "护盾偏低时回复推进能量",
+				"value": "low_shield_recharges_boost_energy",
+				"verified": true
+			}
+		],
+		"shield": [
+			{
+				"label": "腐蚀免疫（护盾免受腐蚀性伤害）",
+				"value": "hazard_shield_corrosion_immunity",
+				"verified": true
+			},
+			{
+				"label": "瞬间恢复护盾",
+				"value": "instant_shield_restore",
+				"verified": true
+			},
+			{
+				"label": "护盾容量提高",
+				"value": "shield_capacity_buff",
+				"verified": true
+			},
+			{
+				"label": "护盾回充速度提高",
+				"value": "shield_recharge_speed_buff",
+				"verified": true
+			},
+			{
+				"label": "护盾回充延迟缩短",
+				"value": "shield_recharge_delay_buff",
+				"verified": true
+			},
+			{
+				"label": "护盾宕机时间缩短",
+				"value": "shield_shutdown_duration_buff",
+				"verified": true
+			},
+			{
+				"label": "装备辅助装置时护盾容量提高",
+				"value": "increased_shield_capacity_for_support_device",
+				"verified": true
+			}
+		],
+		"plating": [
+			{
+				"label": "每击杀叠加装甲值",
+				"value": "armor_per_kill",
+				"verified": true
+			},
+			{
+				"label": "每持有信用点提升船体生命",
+				"value": "opulence_increase_hitpoints_per_credit",
+				"verified": true
+			},
+			{
+				"label": "装甲值提高",
+				"value": "armor",
+				"verified": true
+			},
+			{
+				"label": "装备作战装置时装甲容量提高",
+				"value": "increased_armor_capacity_for_warfare_device",
+				"verified": true
+			},
+			{
+				"label": "修理损害（维修类效果）",
+				"value": "repair_damage_item",
+				"verified": true
+			}
+		],
+		"sensor": [
+			{
+				"label": "舰船探测距离提高",
+				"value": "sensor_range_ships_buff",
+				"verified": true
+			},
+			{
+				"label": "战利品探测距离提高",
+				"value": "sensor_range_loot_buff",
+				"verified": true
+			},
+			{
+				"label": "资源探测距离提高",
+				"value": "sensor_range_resources_buff",
+				"verified": true
+			},
+			{
+				"label": "装备 Scout 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_scout",
+				"verified": true
+			},
+			{
+				"label": "装备 Interceptor 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_interceptor",
+				"verified": true
+			},
+			{
+				"label": "装备 Stinger 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_stinger",
+				"verified": true
+			},
+			{
+				"label": "装备 Striker 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_striker",
+				"verified": true
+			},
+			{
+				"label": "装备 Vanguard 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_vanguard",
+				"verified": true
+			},
+			{
+				"label": "装备 Gunship 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_gunship",
+				"verified": true
+			},
+			{
+				"label": "装备 Bomber 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_bomber",
+				"verified": true
+			},
+			{
+				"label": "装备 Sentinel 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_sentinel",
+				"verified": true
+			},
+			{
+				"label": "装备 Vindicator 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_vindicator",
+				"verified": true
+			}
+		],
+		"thruster": [
+			{
+				"label": "推进（加速）速度提高",
+				"value": "boost_speed_buff",
+				"verified": true
+			},
+			{
+				"label": "推进加速度提高",
+				"value": "boost_acceleration_buff",
+				"verified": true
+			},
+			{
+				"label": "推进能量回复速度提高",
+				"value": "boost_recharge_speed_buff",
+				"verified": true
+			},
+			{
+				"label": "推进能量回充延迟缩短",
+				"value": "boost_recharge_delay_buff",
+				"verified": true
+			},
+			{
+				"label": "推进能量容量提高",
+				"value": "boost_energy_capacity_buff",
+				"verified": true
+			},
+			{
+				"label": "推进能量消耗降低",
+				"value": "boost_energy_consumption_buff",
+				"verified": true
+			},
+			{
+				"label": "侧向推进速度提高",
+				"value": "increased_lateral_boost_speed",
+				"verified": true
+			}
+		],
+		"cargoUnit": [
+			{
+				"label": "牵引光束作用距离增加",
+				"value": "tractor_beam_range_buff",
+				"verified": true
+			},
+			{
+				"label": "巡航速度提高",
+				"value": "cruise_speed_buff",
+				"verified": true
+			},
+			{
+				"label": "操控性提高",
+				"value": "handling_buff",
+				"verified": true
+			},
+			{
+				"label": "货舱格数增加",
+				"value": "cargo_slots_buff",
+				"verified": true
+			},
+			{
+				"label": "装备 Scout 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_scout",
+				"verified": true
+			},
+			{
+				"label": "装备 Interceptor 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_interceptor",
+				"verified": true
+			},
+			{
+				"label": "装备 Stinger 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_stinger",
+				"verified": true
+			},
+			{
+				"label": "装备 Striker 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_striker",
+				"verified": true
+			},
+			{
+				"label": "装备 Vanguard 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_vanguard",
+				"verified": true
+			},
+			{
+				"label": "装备 Gunship 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_gunship",
+				"verified": true
+			},
+			{
+				"label": "装备 Bomber 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_bomber",
+				"verified": true
+			},
+			{
+				"label": "装备 Sentinel 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_sentinel",
+				"verified": true
+			},
+			{
+				"label": "装备 Vindicator 货舱时船体生命值提高",
+				"value": "increased_hull_cargo_unit_vindicator",
+				"verified": true
+			}
+		],
+		"public": [
+			{
+				"label": "提升船体结构值（基础生命/装甲上限）",
+				"value": "structure",
+				"verified": true
+			},
+			{
+				"label": "提升武器伤害（火力）百分比",
+				"value": "firepower",
+				"verified": true
+			},
+			{
+				"label": "提升精准度（暴击率/命中）",
+				"value": "precision",
+				"verified": true
+			},
+			{
+				"label": "提升伤害减免（抗性）百分比",
+				"value": "resistance",
+				"verified": true
+			},
+			{
+				"label": "提升功能性（能量回复/速度等综合增益）",
+				"value": "utility",
+				"verified": true
+			},
+			{
+				"label": "提升专精综合加成（多维度全属性）",
+				"value": "expertise",
+				"verified": true
+			},
+			{
+				"label": "全船主武器射程提高",
+				"value": "all_modules_increased_primary_weapon_range",
+				"verified": true
+			},
+			{
+				"label": "全船副武器射程提高",
+				"value": "all_modules_increased_secondary_weapon_range",
+				"verified": true
+			},
+			{
+				"label": "全船装置冷却时间缩短",
+				"value": "all_modules_reduced_device_cooldowns",
+				"verified": true
+			},
+			{
+				"label": "暴击连锁（连续暴击叠加）",
+				"value": "critical_hit_chain",
+				"verified": true
+			},
+			{
+				"label": "全船主武器伤害提高",
+				"value": "all_modules_increased_primary_weapon_damage",
+				"verified": true
+			},
+			{
+				"label": "全船副武器伤害提高",
+				"value": "all_modules_increased_secondary_weapon_damage",
+				"verified": true
+			},
+			{
+				"label": "全船装置作用距离提高",
+				"value": "all_modules_increased_device_range",
+				"verified": true
+			},
+			{
+				"label": "全船装置伤害提高",
+				"value": "all_modules_increased_device_damage",
+				"verified": true
+			},
+			{
+				"label": "全船船体生命值提高",
+				"value": "all_modules_increased_hull_hitpoints",
+				"verified": true
+			},
+			{
+				"label": "全船船体修复量提高",
+				"value": "all_modules_increased_hull_repair",
+				"verified": true
+			},
+			{
+				"label": "全船装甲值提高",
+				"value": "all_modules_increased_armor_hitpoints",
+				"verified": true
+			},
+			{
+				"label": "全船装甲修复量提高",
+				"value": "all_modules_increased_armor_repair",
+				"verified": true
+			},
+			{
+				"label": "全船护盾值提高",
+				"value": "all_modules_increased_shield_hitpoints",
+				"verified": true
+			},
+			{
+				"label": "全船武器能量消耗降低",
+				"value": "all_modules_reduced_weapon_energy_consumption",
+				"verified": true
+			},
+			{
+				"label": "全船推进能量消耗降低",
+				"value": "all_modules_reduced_boost_energy_consumption",
+				"verified": true
+			},
+			{
+				"label": "全船受到的船体伤害减免",
+				"value": "all_modules_hull_damage_reduction",
+				"verified": true
+			},
+			{
+				"label": "全船受到的装甲伤害减免",
+				"value": "all_modules_armor_damage_reduction",
+				"verified": true
+			},
+			{
+				"label": "全船受到的护盾伤害减免",
+				"value": "all_modules_shield_damage_reduction",
+				"verified": true
+			},
+			{
+				"label": "全船动能伤害提高",
+				"value": "all_modules_increased_kinetic_damage",
+				"verified": true
+			},
+			{
+				"label": "全船能量伤害提高",
+				"value": "all_modules_increased_energy_damage",
+				"verified": true
+			},
+			{
+				"label": "全船腐蚀伤害提高",
+				"value": "all_modules_increased_corrosion_damage",
+				"verified": true
+			},
+			{
+				"label": "全船对失稳目标伤害提高",
+				"value": "all_modules_increased_destabilized_damage",
+				"verified": true
+			},
+			{
+				"label": "隐形状态下全船伤害提高",
+				"value": "all_modules_increased_damage_cloaked",
+				"verified": true
+			},
+			{
+				"label": "直击暴击率提高",
+				"value": "all_modules_increased_critical_hit_chance_direct",
+				"verified": true
+			},
+			{
+				"label": "暴击伤害提高",
+				"value": "all_modules_increased_critical_hit_damage",
+				"verified": true
+			},
+			{
+				"label": "EMP 效果持续时间提高",
+				"value": "all_modules_increased_emp_duration",
+				"verified": true
+			},
+			{
+				"label": "终极技能伤害提高",
+				"value": "all_modules_increased_ult_damage",
+				"verified": true
+			},
+			{
+				"label": "终极技能持续时间提高",
+				"value": "all_modules_increased_ult_duration",
+				"verified": true
+			},
+			{
+				"label": "终极技能充能速度提高",
+				"value": "all_modules_increased_ult_generation",
+				"verified": true
+			},
+			{
+				"label": "击杀后获得伤害加成",
+				"value": "bonus_damage_on_kill",
+				"verified": true
+			},
+			{
+				"label": "全动能伤害提高",
+				"value": "all_kinetic_damage_buff",
+				"verified": true
+			},
+			{
+				"label": "全能量伤害提高",
+				"value": "all_energy_damage_buff",
+				"verified": true
+			},
+			{
+				"label": "撞击伤害提高",
+				"value": "collision_damage_buff",
+				"verified": true
+			},
+			{
+				"label": "终极技能伤害提高",
+				"value": "ult_damage_buff",
+				"verified": true
+			},
+			{
+				"label": "拆解品质提高",
+				"value": "dismantling_quality_buff",
+				"verified": true
+			},
+			{
+				"label": "拆解产出提高",
+				"value": "dismantling_yield_buff",
+				"verified": true
+			},
+			{
+				"label": "降低敌人侦测范围（潜行）",
+				"value": "reduced_enemy_detection_range",
+				"verified": true
+			},
+			{
+				"label": "护盾激活时能量球拾取范围提高",
+				"value": "increased_orb_range_shield_active",
+				"verified": true
+			},
+			{
+				"label": "范围内有敌人时能量回复提高",
+				"value": "increased_energy_recharge_for_enemy_in_range",
+				"verified": true
+			},
+			{
+				"label": "按舰船速度提升伤害与弹速",
+				"value": "increased_damage_and_velocity_for_ship_speed",
+				"verified": true
+			},
+			{
+				"label": "对被网住目标能量伤害提高",
+				"value": "increased_energy_damage_to_webbed_targets",
+				"verified": true
+			},
+			{
+				"label": "对被网住目标动能伤害提高",
+				"value": "increased_kinetic_damage_to_webbed_targets",
+				"verified": true
+			},
+			{
+				"label": "腐蚀注射器伤害提高",
+				"value": "increased_corrosion_injector_damage",
+				"verified": true
+			},
+			{
+				"label": "干扰（使目标失效）",
+				"value": "jamming",
+				"verified": true
+			},
+			{
+				"label": "修理损害（维修类效果）",
+				"value": "repair_damage_item",
+				"verified": true
+			},
+			{
+				"label": "隐形时武器能耗降低",
+				"value": "reduced_weapon_energy_consumption_cloaked",
+				"verified": true
+			},
+			{
+				"label": "装置作用距离提高",
+				"value": "device_range_buff",
+				"verified": true
+			},
+			{
+				"label": "装置作用距离2提高（第二距离参数）",
+				"value": "device_range_2_buff",
+				"verified": true
+			},
+			{
+				"label": "装置冷却时间缩短",
+				"value": "device_cooldown_buff",
+				"verified": true
+			},
+			{
+				"label": "装置持续时间延长",
+				"value": "device_duration_buff",
+				"verified": true
+			},
+			{
+				"label": "装置计时（参数）调整",
+				"value": "device_time_buff",
+				"verified": true
+			},
+			{
+				"label": "装置效果增强",
+				"value": "device_effect_buff",
+				"verified": true
+			},
+			{
+				"label": "装置效果2增强（第二效果参数）",
+				"value": "device_effect_2_buff",
+				"verified": true
+			},
+			{
+				"label": "装置效果持续时间延长",
+				"value": "device_effect_duration_buff",
+				"verified": true
+			},
+			{
+				"label": "装置效果范围扩大",
+				"value": "device_effect_range_buff",
+				"verified": true
+			},
+			{
+				"label": "装置生命值提高",
+				"value": "device_hitpoints_buff",
+				"verified": true
+			},
+			{
+				"label": "装置能量伤害提高",
+				"value": "device_energy_damage_buff",
+				"verified": true
+			},
+			{
+				"label": "装置动能伤害提高",
+				"value": "device_kinetic_damage_buff",
+				"verified": true
+			},
+			{
+				"label": "游荡者（Rogue）第三武器专精",
+				"value": "rogue_expertise_3rd_weapon",
+				"verified": true
+			},
+			{
+				"label": "奥卡尔专精",
+				"value": "okkar_expertise",
+				"verified": true
+			},
+			{
+				"label": "奥卡尔距离专精",
+				"value": "okkar_expertise_range",
+				"verified": true
+			},
+			{
+				"label": "复仇者（Vindicator）距离专精",
+				"value": "vindicator_expertise_range",
+				"verified": true
+			},
+			{
+				"label": "复仇者伤害专精",
+				"value": "vindicator_expertise_dmg",
+				"verified": true
+			},
+			{
+				"label": "复仇者生命专精",
+				"value": "vindicator_expertise_hp",
+				"verified": true
+			},
+			{
+				"label": "装甲值提高",
+				"value": "armor_buff",
+				"verified": true
+			},
+			{
+				"label": "船体生命值提高",
+				"value": "hull_hitpoints_buff",
+				"verified": true
+			},
+			{
+				"label": "巡航速度（基础值）",
+				"value": "cruise_speed",
+				"verified": true
+			},
+			{
+				"label": "操控性（基础值）",
+				"value": "handling",
+				"verified": true
+			},
+			{
+				"label": "巡航模式充能时间",
+				"value": "cruise_charge_duration",
+				"verified": true
+			},
+			{
+				"label": "巡航模式敌距参数",
+				"value": "cruise_enemy_distance",
+				"verified": true
+			},
+			{
+				"label": "巡航模式速度提高",
+				"value": "increased_cruise_mode_speed",
+				"verified": true
+			},
+			{
+				"label": "奥卡尔催化剂·能量核心2 增益（未实测）",
+				"value": "okkar_catalyst_energycore2_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·能量核心2 减益（未实测）",
+				"value": "okkar_catalyst_energycore2_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·传感器1 增益（未实测）",
+				"value": "okkar_catalyst_sensor1_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·传感器1 减益（未实测）",
+				"value": "okkar_catalyst_sensor1_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·装甲板1 增益（未实测）",
+				"value": "okkar_catalyst_plating1_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·装甲板1 减益（未实测）",
+				"value": "okkar_catalyst_plating1_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·推进器1 增益（未实测）",
+				"value": "okkar_catalyst_booster1_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·推进器1 减益（未实测）",
+				"value": "okkar_catalyst_booster1_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·能量核心1 增益（未实测）",
+				"value": "okkar_catalyst_energycore1_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·能量核心1 减益（未实测）",
+				"value": "okkar_catalyst_energycore1_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·传感器2 增益（未实测）",
+				"value": "okkar_catalyst_sensor2_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·传感器2 减益（未实测）",
+				"value": "okkar_catalyst_sensor2_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·装甲板2 增益（未实测）",
+				"value": "okkar_catalyst_plating2_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·装甲板2 减益（未实测）",
+				"value": "okkar_catalyst_plating2_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·护盾1 增益（未实测）",
+				"value": "okkar_catalyst_shield1_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·护盾1 减益（未实测）",
+				"value": "okkar_catalyst_shield1_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·护盾2 增益（未实测）",
+				"value": "okkar_catalyst_shield2_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·护盾2 减益（未实测）",
+				"value": "okkar_catalyst_shield2_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·货舱1 增益（未实测）",
+				"value": "okkar_catalyst_cargounit1_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·货舱1 减益（未实测）",
+				"value": "okkar_catalyst_cargounit1_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·货舱2 增益（未实测）",
+				"value": "okkar_catalyst_cargounit2_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·货舱2 减益（未实测）",
+				"value": "okkar_catalyst_cargounit2_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·主武器1 增益（未实测）",
+				"value": "okkar_catalyst_pw1_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·主武器1 减益（未实测）",
+				"value": "okkar_catalyst_pw1_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·主武器2 增益（未实测）",
+				"value": "okkar_catalyst_pw2_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·主武器2 减益（未实测）",
+				"value": "okkar_catalyst_pw2_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·副武器1 增益（未实测）",
+				"value": "okkar_catalyst_sw1_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·副武器1 减益（未实测）",
+				"value": "okkar_catalyst_sw1_debuff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·副武器2 增益（未实测）",
+				"value": "okkar_catalyst_sw2_buff",
+				"verified": false
+			},
+			{
+				"label": "奥卡尔催化剂·副武器2 减益（未实测）",
+				"value": "okkar_catalyst_sw2_debuff",
+				"verified": false
+			},
+			{
+				"label": "Scout 型号被动专精（未实测）",
+				"value": "scout_passive_perk",
+				"verified": false
+			},
+			{
+				"label": "Interceptor 型号被动专精（未实测）",
+				"value": "interceptor_passive_perk",
+				"verified": false
+			},
+			{
+				"label": "Striker 型号被动专精（未实测）",
+				"value": "striker_passive_perk",
+				"verified": false
+			},
+			{
+				"label": "Vanguard 型号被动专精（未实测）",
+				"value": "vanguard_passive_perk",
+				"verified": false
+			},
+			{
+				"label": "Gunship 型号被动专精（未实测）",
+				"value": "gunship_passive_perk",
+				"verified": false
+			},
+			{
+				"label": "Bomber 型号被动专精（未实测）",
+				"value": "bomber_passive_perk",
+				"verified": false
+			},
+			{
+				"label": "Sentinel 型号被动专精（未实测）",
+				"value": "sentinel_passive_perk",
+				"verified": false
+			},
+			{
+				"label": "Vindicator 型号被动专精（未实测）",
+				"value": "vindicator_passive_perk",
+				"verified": false
+			},
+			{
+				"label": "Okkar 型号被动专精（未实测）",
+				"value": "okkar_passive_perk",
+				"verified": false
+			},
+			{
+				"label": "Rogue 型号被动专精（未实测）",
+				"value": "rogue_passive_perk",
+				"verified": false
+			},
+			{
+				"label": "进化催化剂（未实测）",
+				"value": "evolution_catalyst_buff",
+				"verified": false
+			},
+			{
+				"label": "拦截机（Interceptor）入场催化剂增益（未实测）",
+				"value": "interceptor_location_enter_buff",
+				"verified": false
+			},
+			{
+				"label": "复仇者锁定目标无人机伤害提高（未实测）",
+				"value": "vindicator_locked_target_drone_damage_buff",
+				"verified": false
+			},
+			{
+				"label": "未知专项 buff（未实测）",
+				"value": "bf_buff",
+				"verified": false
+			}
+		]
+	},
+	"functionTextList": [
+		{
+			"name": "skillFilter",
+			"function": "function (store, typeSkillMap) {\n\t\t\t\t\treturn typeSkillMap[store.currentShip.shipType];\n\t\t\t\t}"
+		},
+		{
+			"name": "attributeFilter_mainWeapon",
+			"function": "function (store) {\n\t\t\t\t\tconst map = store.attributeMap || {};\n\t\t\t\t\treturn [...(map.mainWeapon || [])];\n\t\t\t\t}"
+		},
+		{
+			"name": "attributeFilter_subWeapon",
+			"function": "function (store) {\n\t\t\t\t\tconst map = store.attributeMap || {};\n\t\t\t\t\treturn [...(map.subWeapon || [])];\n\t\t\t\t}"
+		},
+		{
+			"name": "attributeFilter_energyCore",
+			"function": "function (store) {\n\t\t\t\t\tconst map = store.attributeMap || {};\n\t\t\t\t\treturn [...(map.energyCore || []), ...(map.public || [])];\n\t\t\t\t}"
+		},
+		{
+			"name": "attributeFilter_shield",
+			"function": "function (store) {\n\t\t\t\t\tconst map = store.attributeMap || {};\n\t\t\t\t\treturn [...(map.shield || []), ...(map.public || [])];\n\t\t\t\t}"
+		},
+		{
+			"name": "attributeFilter_plating",
+			"function": "function (store) {\n\t\t\t\t\tconst map = store.attributeMap || {};\n\t\t\t\t\treturn [...(map.plating || []), ...(map.public || [])];\n\t\t\t\t}"
+		},
+		{
+			"name": "attributeFilter_sensor",
+			"function": "function (store) {\n\t\t\t\t\tconst map = store.attributeMap || {};\n\t\t\t\t\treturn [...(map.sensor || []), ...(map.public || [])];\n\t\t\t\t}"
+		},
+		{
+			"name": "attributeFilter_thruster",
+			"function": "function (store) {\n\t\t\t\t\tconst map = store.attributeMap || {};\n\t\t\t\t\treturn [...(map.thruster || []), ...(map.public || [])];\n\t\t\t\t}"
+		},
+		{
+			"name": "attributeFilter_cargoUnit",
+			"function": "function (store) {\n\t\t\t\t\tconst map = store.attributeMap || {};\n\t\t\t\t\treturn [...(map.cargoUnit || []), ...(map.public || [])];\n\t\t\t\t}"
+		}
+	]
+}
