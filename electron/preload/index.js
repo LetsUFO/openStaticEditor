@@ -7,6 +7,10 @@ const api = {
 	ping: () => ipcRenderer.invoke('ping'),
 	// 取 custom 目录下的 config.json，可传相对子路径（如 'ES2/config.json'）
 	getConfig: (subPath) => ipcRenderer.invoke('config:get', subPath),
+	// 扫描 custom 下的一级子目录，返回目录名数组
+	listCustomDirs: () => ipcRenderer.invoke('config:scanSubdirs'),
+	// 按 config.json 的 width / height 调整窗口内容尺寸
+	setWindowSize: (width, height) => ipcRenderer.invoke('window:setSize', width, height),
 	// 系统内置目录（downloads / documents），供渲染进程解析 fileSrc 简写
 	getPaths: () => ipcRenderer.invoke('app:paths'),
 	// 运行 custom 目录下的读取脚本，返回解析后的数据

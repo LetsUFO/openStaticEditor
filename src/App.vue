@@ -173,16 +173,27 @@ const save = async function (saveCfg: any = {}) {
 };
 
 onMounted(async () => {
-	// 按需加载 custom/ES2/config.json（custom 目录结构调整后，每个游戏配置独立子目录）
-	// 主进程 loadConfig 已自动重写路径，store 侧 baseSrc 需手动同步（后续支持动态切换）
+	// 先扫描 custom 下的子目录，根据数量决定加载策略
 	try {
-		configStore.setBaseSrc('ES2/');
-		await configStore.load('ES2/config.json');
-		state.openKey = menu.value
-			.map((li) => li?.key)
-			.filter((k): k is string => typeof k === 'string');
+		const dirs = await window.api.listCustomDirs();
+		if (dirs.length === 1) {
+			// 只有 1 个子目录 → 自动加载
+			const subPath = `${dirs[0]}/config.json`;
+			const baseSrc = `${dirs[0]}/`;
+			configStore.setBaseSrc(baseSrc);
+			await configStore.load(subPath);
+			// 按本次加载的 config.json 的 width / height 调整窗口尺寸
+			const cfg = configStore.config;
+			if (cfg?.width && cfg?.height) {
+				await window.api.setWindowSize(cfg.width, cfg.height);
+			}
+			state.openKey = menu.value
+				.map((li) => li?.key)
+				.filter((k): k is string => typeof k === 'string');
+		}
+		// 多个子目录 → 保留，稍后处理（让用户选择）
 	} catch (error) {
-		console.error('[App] 加载 ES2/config.json 失败：', error);
+		console.error('[App] 扫描 custom 子目录失败：', error);
 	}
 });
 </script>

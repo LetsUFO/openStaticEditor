@@ -1,6 +1,6 @@
-import { app, BrowserWindow, ipcMain, net, protocol } from 'electron';
+import { app, BrowserWindow, ipcMain, net, protocol, screen } from 'electron';
 import { join, isAbsolute } from 'node:path';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import {
@@ -124,6 +124,43 @@ const config = loadConfig();
 ipcMain.handle('config:get', (_event, subPath) => loadConfig(subPath));
 
 /**
+ * 扫描 custom 下的一级子目录（每个游戏一个），返回目录名列表。
+ * 渲染进程根据数量决定：只有 1 个 → 自动加载；多个 → 稍后让用户选择。
+ */
+ipcMain.handle('config:scanSubdirs', () => {
+	const customDir = getCustomDir();
+	if (!existsSync(customDir)) return [];
+	const entries = readdirSync(customDir, { withFileTypes: true });
+	return entries.filter((e) => e.isDirectory()).map((e) => e.name);
+});
+
+/**
+ * 渲染进程加载 config.json 后，按其中的 width / height 调整窗口内容尺寸并重新居中。
+ * 窗口创建时开启了 useContentSize，这里需要把内容尺寸换算成外框尺寸，
+ * 再用一次 setBounds 同时设置位置和尺寸 —— 避免「先改尺寸、再 center」产生跳变或位置偏差。
+ */
+ipcMain.handle('window:setSize', (event, width, height) => {
+	const win = BrowserWindow.fromWebContents(event.sender);
+	if (!win) return;
+	if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return;
+
+	// 外框尺寸 = 内容尺寸 + 边框/标题栏差值（getBounds 为外框，getContentBounds 为内容区）
+	const frame = win.getBounds();
+	const content = win.getContentBounds();
+	const frameW = Math.round(width) + (frame.width - content.width);
+	const frameH = Math.round(height) + (frame.height - content.height);
+
+	// 以窗口当前所在显示器的可用区域（扣除菜单栏/Dock）为基准居中
+	const area = screen.getDisplayMatching(frame).workArea;
+	win.setBounds({
+		x: Math.round(area.x + (area.width - frameW) / 2),
+		y: Math.round(area.y + (area.height - frameH) / 2),
+		width: frameW,
+		height: frameH
+	});
+});
+
+/**
  * 定位并加载 custom 目录下的脚本模块（每次清缓存，脚本改动后无需重启应用）。
  * 路径解析规则见 src/lib/lib.ts -> resolveScriptPath。
  */
@@ -199,6 +236,7 @@ function createWindow() {
 		height: config.height,
 		title: windowTitle,
 		show: false,
+		center: true,
 		autoHideMenuBar: true,
 		webPreferences: {
 			preload: join(__dirname, '../preload/index.js'),
