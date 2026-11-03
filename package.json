@@ -1,6 +1,6 @@
 {
 	"name": "openStaticEditor",
-	"version": "v0.2.3",
+	"version": "v0.3.0",
 	"description": "Vue3 + Pinia + Electron 桌面应用",
 	"author": "Let's UFO",
 	"license": "MIT",

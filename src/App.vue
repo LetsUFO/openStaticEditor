@@ -62,6 +62,17 @@ const backgroundStyle = computed(() => {
 	};
 });
 
+// 侧栏图标：config.json -> appIcon。相对路径（主进程已按 custom 子目录重写，如 ES2/Everspace2.ico）
+// 同样走 app-asset 协议，dev 与打包后都能加载；base64 / http(s) 直接使用。
+const appIconStyle = computed(() => {
+	const src = configStore.config?.appIcon;
+	if (!src) return {};
+	const url = /^(?:data:|blob:|http:|https:)/i.test(src)
+		? src
+		: `app-asset://local/?src=${encodeURIComponent(src)}`;
+	return { backgroundImage: `url("${url}")` };
+});
+
 // 第一个叶子菜单项（有 children 就递归取第一个子项）
 const firstLeaf = function (items: any[]): any {
 	const first = items?.[0];
@@ -202,24 +213,27 @@ onMounted(async () => {
 	<div class="root h-full" :style="backgroundStyle">
 		<LoadFile :loading="fileState.loading" :loaded="fileState.loaded" @loadFiles="loadAll" />
 		<div class="flex justify-start h-full">
-			<div class="menu w-[10rem] bg-primary overflow-y-auto">
-				<Menu
-					v-model:open-keys="state.openKey"
-					v-model:selected-keys="state.selectedKey"
-					:theme="'dark'"
-					:items="menu"
-					:mode="'inline'"
-					class="relative select-none h-full"
-					@select="
-						({ item }) => {
-							state.activeMenu = item;
-						}
-					"
-				></Menu>
-				<div class="ver select-none">
-					UI:{{ uiVersion }}<br />main:{{ configStore.config?.ver }}
+			<aside class="side flex flex-col w-[10rem] bg-primary">
+				<div class="h-[10rem] bg-contain bg-center bg-no-repeat" :style="appIconStyle"></div>
+				<div class="menu flex-1 overflow-y-auto">
+					<Menu
+						v-model:open-keys="state.openKey"
+						v-model:selected-keys="state.selectedKey"
+						:theme="'dark'"
+						:items="menu"
+						:mode="'inline'"
+						class="relative select-none h-full"
+						@select="
+							({ item }) => {
+								state.activeMenu = item;
+							}
+						"
+					></Menu>
+					<div class="ver select-none">
+						UI:{{ uiVersion }}<br />main:{{ configStore.config?.ver }}
+					</div>
 				</div>
-			</div>
+			</aside>
 			<div class="content flex-1 h-full overflow-y-auto">
 				<FormBuilder
 					:config="activeCategory"
