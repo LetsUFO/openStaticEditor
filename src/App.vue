@@ -2,7 +2,7 @@
 import { useConfigStore } from './stores/config';
 import { computed, reactive, ref, onMounted, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
-import { version as uiVersion } from '../package.json';
+import { name as appName, version as uiVersion } from '../package.json';
 import theme, { dark } from './style/theme';
 import { resolvePathShorthand } from '@renderer/lib/lib';
 
@@ -229,6 +229,9 @@ onBeforeMount(() => {
 	}
 });
 onMounted(async () => {
+	// 初始窗口标题：package.json 的 name + version（尚未选中任何项目时显示）
+	// 选中项目后由 loadProject 覆盖为对应 config.json 的 name + ver
+	await window.api.setWindowTitle(`${appName} ${uiVersion}`.trim());
 	// 先扫描 custom 下的子目录，根据数量决定加载策略
 	try {
 		const dirs = await window.api.listCustomDirs();
