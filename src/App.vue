@@ -2,14 +2,15 @@
 import { useConfigStore } from './stores/config';
 import { computed, reactive, ref, onMounted, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
+import { version as uiVersion } from '../package.json';
 import theme, { dark } from './style/theme';
+import { resolvePathShorthand } from '@renderer/lib/lib';
 
 import { Button, Menu, message } from 'ant-design-vue';
 import FormBuilder from './components/FormBuilder.vue';
 import LoadFile from './components/LoadFile.vue';
+import LoadProject from './components/LoadProject.vue';
 import { DownloadOutlined, ReloadOutlined } from '@ant-design/icons-vue';
-import { resolvePathShorthand } from '@renderer/lib/lib';
-import { version as uiVersion } from '../package.json';
 
 // 把 dark 的 fcLv 系列注入为 CSS 变量 --dark-fcLv*（单一来源 = theme.ts，供 style.scss 使用）
 for (const [key, value] of Object.entries(dark)) {
@@ -44,6 +45,16 @@ const state = reactive<IState>({
 const activeCategory = computed(() => {
 	return state.activeMenu.category || [];
 });
+
+// 多个 custom 子目录时，让用户在 LoadProject 里选择加载哪一个
+const projectState = reactive({
+	// custom 下扫描到的子目录名列表（由 listCustomDirs 返回）
+	dirs: [] as string[],
+	// 是否展示项目选择遮罩（仅多目录时为 true）
+	show: false
+});
+// 模板里 <LoadProject :projectDirList="projectList" /> 用的变量名
+const projectList = computed(() => projectState.dirs);
 
 // 背景图：config.json -> background.src（也可用 base64）。相对路径（如 custom/xxx.png）
 // 交给主进程的 app-asset 协议按 custom -> 项目根/resources 的顺序解析，dev 与打包后都能加载。
@@ -183,6 +194,33 @@ const save = async function (saveCfg: any = {}) {
 	}
 };
 
+// 加载指定 custom 子目录的 config.json，并按其配置调整窗口尺寸/标题、展开菜单。
+// 单目录自动加载 与 LoadProject 选中后加载 共用此函数。
+const loadProject = async function (dir: string) {
+	const subPath = `${dir}/config.json`;
+	const baseSrc = `${dir}/`;
+	configStore.setBaseSrc(baseSrc);
+	await configStore.load(subPath);
+	// 按本次加载的 config.json 的 width / height 调整窗口尺寸
+	const cfg = configStore.config;
+	if (cfg?.width && cfg?.height) {
+		await window.api.setWindowSize(cfg.width, cfg.height);
+	}
+	// 窗口标题 = config.json 的 name + ' ' + ver（ver 自带 "v" 前缀）
+	if (cfg?.name) {
+		await window.api.setWindowTitle(`${cfg.name} ${cfg.ver}`.trim());
+	}
+	state.openKey = menu.value
+		.map((li) => li?.key)
+		.filter((k): k is string => typeof k === 'string');
+};
+
+// LoadProject 选中某个项目后：关闭选择遮罩并加载该项目
+const onSelectProject = async function (dir: string) {
+	projectState.show = false;
+	await loadProject(dir);
+};
+
 onBeforeMount(() => {
 	// 把 theme.ts 默认导出（light）的颜色注入为 CSS 变量（直接以 key 命名，如 --primary），
 	// 供 scss 直接使用 var(--primary)，与 Tailwind 工具类共用同一份色值。
@@ -196,24 +234,12 @@ onMounted(async () => {
 		const dirs = await window.api.listCustomDirs();
 		if (dirs.length === 1) {
 			// 只有 1 个子目录 → 自动加载
-			const subPath = `${dirs[0]}/config.json`;
-			const baseSrc = `${dirs[0]}/`;
-			configStore.setBaseSrc(baseSrc);
-			await configStore.load(subPath);
-			// 按本次加载的 config.json 的 width / height 调整窗口尺寸
-			const cfg = configStore.config;
-			if (cfg?.width && cfg?.height) {
-				await window.api.setWindowSize(cfg.width, cfg.height);
-			}
-			// 窗口标题 = config.json 的 name + ' ' + ver（ver 自带 "v" 前缀）
-			if (cfg?.name) {
-				await window.api.setWindowTitle(`${cfg.name} ${cfg.ver}`.trim());
-			}
-			state.openKey = menu.value
-				.map((li) => li?.key)
-				.filter((k): k is string => typeof k === 'string');
+			await loadProject(dirs[0]);
+		} else if (dirs.length > 1) {
+			// 多个子目录 → 展示 LoadProject 让用户选择
+			projectState.dirs = dirs;
+			projectState.show = true;
 		}
-		// 多个子目录 → 保留，稍后处理（让用户选择）
 	} catch (error) {
 		console.error('[App] 扫描 custom 子目录失败：', error);
 	}
@@ -222,6 +248,7 @@ onMounted(async () => {
 
 <template>
 	<div class="root h-full" :style="backgroundStyle">
+		<LoadProject v-if="projectState.show" :projectDirList="projectList" @select="onSelectProject" />
 		<LoadFile :loading="fileState.loading" :loaded="fileState.loaded" @loadFiles="loadAll" />
 		<div class="flex justify-start h-full">
 			<aside class="side flex flex-col w-[10rem]">
