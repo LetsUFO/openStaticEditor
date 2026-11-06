@@ -56,13 +56,37 @@ const iconUrl = (src: string): string => {
 </script>
 
 <template>
-	<ul class="selectProject flex h-full">
-		<li v-for="p in list" :key="p.dir" class="w-1/4 text-center" @click="emit('select', p.dir)">
-			<img v-if="p.appIcon" class="block mx-auto" :src="iconUrl(p.appIcon)" />
+	<ul class="selectProject h-full text-center text-fcLv2">
+		<li
+			v-for="p in list"
+			:key="p.dir"
+			class="w-1/4 mt-20 px-4 inline-block cursor-pointer"
+			@click="emit('select', p.dir)"
+		>
+			<img
+				v-if="p.appIcon"
+				class="icon block mx-auto mb-4 rounded-xl transition ease-in-out"
+				:src="iconUrl(p.appIcon)"
+			/>
 			<div>{{ p.name }}</div>
-			<div class="text-fcLv2">{{ p.ver }}</div>
+			<div class="text-fcLv1 mt-1">{{ p.ver }}</div>
 		</li>
 	</ul>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.selectProject {
+	li:hover {
+		.icon {
+			opacity: 1;
+			transform: scale(1.1);
+		}
+	}
+}
+.icon {
+	width: 10rem;
+	height: 10rem;
+	box-shadow: 0 4rem 8rem rgba(0, 0, 0, 0.4);
+	opacity: 0.6;
+}
+</style>

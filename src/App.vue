@@ -248,9 +248,18 @@ onMounted(async () => {
 
 <template>
 	<div class="root h-full" :style="backgroundStyle">
-		<LoadProject v-if="projectState.show" :projectDirList="projectList" @select="onSelectProject" />
-		<LoadFile :loading="fileState.loading" :loaded="fileState.loaded" @loadFiles="loadAll" />
-		<div class="flex justify-start h-full">
+		<LoadProject
+			v-if="projectState.show"
+			:projectDirList="projectList"
+			@select="onSelectProject"
+		/>
+		<LoadFile
+			v-if="configStore.baseSrc"
+			:loading="fileState.loading"
+			:loaded="fileState.loaded"
+			@loadFiles="loadAll"
+		/>
+		<div v-if="configStore.baseSrc" class="flex justify-start h-full">
 			<aside class="side flex flex-col w-[10rem]">
 				<div
 					class="h-[10rem] bg-contain bg-center bg-no-repeat"
