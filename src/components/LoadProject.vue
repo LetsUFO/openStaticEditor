@@ -68,7 +68,7 @@ const iconUrl = (src: string): string => {
 				class="icon block mx-auto mb-4 rounded-xl transition ease-in-out"
 				:src="iconUrl(p.appIcon)"
 			/>
-			<div>{{ p.name }}</div>
+			<div class="name">{{ p.name }}</div>
 			<div class="text-fcLv1 mt-1">{{ p.ver }}</div>
 		</li>
 	</ul>
@@ -80,6 +80,9 @@ const iconUrl = (src: string): string => {
 		.icon {
 			opacity: 1;
 			transform: scale(1.1);
+		}
+		.name {
+			color: var(--color-primary);
 		}
 	}
 }
