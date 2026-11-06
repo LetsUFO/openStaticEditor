@@ -3,7 +3,7 @@
 	"version": "v0.4.0",
 	"description": "Vue3 + Pinia + Electron 桌面应用",
 	"author": "Let's UFO",
-	"license": "MIT",
+	"license": "PolyForm-Noncommercial-1.0.0",
 	"main": "out/main/index.js",
 	"scripts": {
 		"dev": "env -u ELECTRON_RUN_AS_NODE electron-vite dev",
