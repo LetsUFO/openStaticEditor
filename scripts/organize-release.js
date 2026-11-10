@@ -1,5 +1,5 @@
 /**
- * 构建后整理产物目录（name 与 ver 统一用 package.json）：
+ * 构建后整理产物目录（name 与 ver 统一用 package.json，ver 自带 "v" 前缀）：
  * release/<ver>/win-unpacked   -> release/<ver>/<name> <ver>
  * release/<ver>/mac-arm64      -> release/<ver>/mac
  * release/<ver>/mac            -> release/<ver>/mac

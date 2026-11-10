@@ -2,7 +2,7 @@
 import { useConfigStore } from './stores/config';
 import { computed, reactive, ref, onMounted, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
-import { name as appName, version as uiVersion } from '../package.json';
+import { name as appName, version as pkgVersion } from '../package.json';
 import theme, { dark } from './style/theme';
 import { resolvePathShorthand } from '@renderer/lib/lib';
 
@@ -11,6 +11,10 @@ import FormBuilder from './components/FormBuilder.vue';
 import LoadFile from './components/LoadFile.vue';
 import LoadProject from './components/LoadProject.vue';
 import { DownloadOutlined, ReloadOutlined } from '@ant-design/icons-vue';
+
+// package.json 的 version 是纯 semver（0.4.0）；界面展示与初始窗口标题统一带 "v" 前缀，
+// 在这里一次性补齐，下面两处使用点（.ver 标签 / setWindowTitle）直接复用。
+const uiVersion = `v${pkgVersion}`;
 
 // 把 dark 的 fcLv 系列注入为 CSS 变量 --dark-fcLv*（单一来源 = theme.ts，供 style.scss 使用）
 for (const [key, value] of Object.entries(dark)) {

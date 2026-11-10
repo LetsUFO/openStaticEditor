@@ -76,7 +76,7 @@ interface AppConfig {
 	name: string;
 	/** 应用图标路径，主进程用于设置窗口图标 */
 	appIcon?: string;
-	/** 配置版本号 */
+	/** 配置版本号（约定带 "v" 前缀，如 v0.1.3） */
 	ver: string;
 	width: number;
 	height: number;

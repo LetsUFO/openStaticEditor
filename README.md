@@ -38,7 +38,11 @@ npm run build        # 仅编译到 out/
 ```bash
 npm run dist:win
 ```
-产物位于 `release/<version>/OpenStaticEditor-<version>-setup.exe`。
+产物位于 `release/v<version>/<name>-v<version>-setup.exe`，例如 `release/v0.4.0/openStaticEditor-v0.4.0-setup.exe`。
+
+> `package.json` 的 `version` 必须写成纯 semver（如 `0.4.0`），供 npm / electron-builder 解析。
+> `v` 前缀只加在展示与产物命名上：构建脚本由 `scripts/custom-meta.js` 统一补齐，
+> UI 由 `src/App.vue`、窗口标题回退由 `electron/main/index.js` 各自补齐。
 
 macOS 上打包 dmg：
 ```bash
