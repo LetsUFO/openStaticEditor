@@ -19,6 +19,7 @@ interface ProjectMeta {
 }
 
 // 每个子目录的展示信息（name / ver / appIcon 来自各自的 config.json）
+// ver 已由主进程 loadConfig 规范化成带 "v" 的形式，这里直接展示，不要再拼前缀
 const list = ref<ProjectMeta[]>([]);
 
 watch(

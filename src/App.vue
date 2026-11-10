@@ -210,7 +210,7 @@ const loadProject = async function (dir: string) {
 	if (cfg?.width && cfg?.height) {
 		await window.api.setWindowSize(cfg.width, cfg.height);
 	}
-	// 窗口标题 = config.json 的 name + ' ' + ver（ver 自带 "v" 前缀）
+	// 窗口标题 = config.json 的 name + ' ' + ver（ver 已由主进程 loadConfig 补 "v" 前缀）
 	if (cfg?.name) {
 		await window.api.setWindowTitle(`${cfg.name} ${cfg.ver}`.trim());
 	}

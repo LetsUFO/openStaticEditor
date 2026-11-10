@@ -43,6 +43,8 @@ npm run dist:win
 > `package.json` 的 `version` 必须写成纯 semver（如 `0.4.0`），供 npm / electron-builder 解析。
 > `v` 前缀只加在展示与产物命名上：构建脚本由 `scripts/custom-meta.js` 统一补齐，
 > UI 由 `src/App.vue`、窗口标题回退由 `electron/main/index.js` 各自补齐。
+> `custom/*/config.json` 的 `ver` 同样只写纯 semver（如 `0.1.3`），
+> 由 `electron/main/index.js` 的 `loadConfig()` 在读取时统一补 `v`（兼容历史带 `v` 的写法）。
 
 macOS 上打包 dmg：
 ```bash

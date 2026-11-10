@@ -98,6 +98,19 @@ function rewriteCustomPaths(obj, baseSrc) {
 }
 
 /**
+ * 规范化 config.json 的 ver：统一成「恰好一个 v 前缀」的展示值。
+ *   配置里写 '0.1.3' / 'v0.1.3' / 'V0.1.3' → 一律返回 'v0.1.3'；未配置 → 原样返回。
+ * 约定：config.json（用户可改区）只写纯 semver，v 是展示细节，由主进程读取时统一补齐。
+ * 兼容历史配置已带 v 的写法，也兼容打包后用户手上的旧 custom 目录，避免出现 vv0.1.3。
+ * 所有下游（窗口标题 / Pinia store / LoadProject 列表）拿到的 ver 都带 v，无需各自拼接。
+ */
+function normalizeConfigVer(cfg) {
+	const raw = typeof cfg.ver === 'string' ? cfg.ver.trim() : '';
+	if (!raw) return cfg;
+	return { ...cfg, ver: `v${raw.replace(/^v+/i, '')}` };
+}
+
+/**
  * 读取 custom 目录下的 config.json。
  * @param {string} [subPath='config.json'] 相对 custom 目录的子路径（如 'ES2/config.json'）。
  */
@@ -111,13 +124,13 @@ function loadConfig(subPath = 'config.json') {
 			const raw = JSON.parse(readFileSync(file, 'utf-8'));
 			// 根据子目录重写所有 custom/ 路径，让后续脚本/资源加载直接用正确路径
 			const baseSrc = getBaseSrc(subPath);
-			return rewriteCustomPaths({ ...DEFAULT_CONFIG, ...raw }, baseSrc);
+			return normalizeConfigVer(rewriteCustomPaths({ ...DEFAULT_CONFIG, ...raw }, baseSrc));
 		} catch (error) {
 			console.warn(`[config] 读取失败，尝试下一个：${file} (${error.message})`);
 		}
 	}
 	console.warn(`[config] 未找到 custom/${subPath}，回退默认配置`);
-	return { ...DEFAULT_CONFIG };
+	return normalizeConfigVer({ ...DEFAULT_CONFIG });
 }
 
 // 主进程自身先读顶层 config.json（用于窗口标题 fallback，渲染进程会按需加载子目录）
@@ -246,7 +259,7 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 });
 
 function createWindow() {
-	// 窗口标题：config.json 的 name + ver（ver 自带 "v" 前缀）；
+	// 窗口标题：config.json 的 name + ver（ver 已由 loadConfig 规范化为带 "v"）；
 	// 缺省回退 package.json version —— app.getVersion() 返回纯 semver，这里补 "v" 保持展示一致
 	const fallbackVer = `v${app.getVersion()}`;
 	windowTitle = `${config.name} ${config.ver || fallbackVer}`;
