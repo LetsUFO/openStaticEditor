@@ -19,7 +19,8 @@ module.exports = {
 	extraResources: [
 		{
 			from: 'custom',
-			to: 'custom'
+			to: 'custom',
+			filter: ['**/*', '!_*', '!_*/**']
 		}
 	],
 	mac: {
