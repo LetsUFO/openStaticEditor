@@ -7,3 +7,4 @@ release
 .workbuddy
 *.log
 .DS_Store
+/custom/_*/
