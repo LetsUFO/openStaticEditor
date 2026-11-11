@@ -71,6 +71,7 @@ const onLoadFiles = function () {
 		class="loadFile fixed w-full h-full backdrop-blur-md z-1 grid place-content-center transition ease-in-out"
 		:class="{ 'opacity-0 pointer-events-none': loaded }"
 	>
+		<div class="text-center pb-4 mb-8 text-white text-2xl border-b">加载文件</div>
 		<ul class="dark-fcLv3">
 			<li v-for="(file, key) in needFiles" :key="key" class="mb-4 pb-4 border-b">
 				<template v-if="file.fileSrc"> {{ key }}: {{ file.fileSrc }} </template>

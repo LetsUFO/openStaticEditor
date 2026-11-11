@@ -61,7 +61,7 @@ const iconUrl = (src: string): string => {
 		<li
 			v-for="p in list"
 			:key="p.dir"
-			class="w-1/4 mt-20 px-4 inline-block cursor-pointer"
+			class="w-1/4 mt-20 px-4 inline-block cursor-pointer align-top"
 			@click="emit('select', p.dir)"
 		>
 			<img
@@ -77,11 +77,24 @@ const iconUrl = (src: string): string => {
 
 <style lang="scss" scoped>
 .selectProject {
+	li {
+		height: 16rem;
+		> * {
+			position: relative;
+			z-index: 1;
+		}
+		img {
+			z-index: -1;
+		}
+	}
 	li:hover {
 		.icon {
 			opacity: 1;
 			transform: scale(1.1);
 			box-shadow: 0 2rem 8rem color-mix(in srgb, var(--color-primary) 100%, transparent);
+		}
+		.name {
+			text-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
 		}
 	}
 }
