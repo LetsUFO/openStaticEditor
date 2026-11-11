@@ -13,7 +13,7 @@
 	"loadFiles": {
 		"base": {
 			"beforeScript": "getSaveFiles.js",
-			"filePath": "%download%/",
+			"filePath": "%user%/AppData/Local/ES2/Saved/SaveGames/",
 			"readScript": "es2_loadout.js"
 		}
 	},
