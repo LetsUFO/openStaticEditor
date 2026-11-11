@@ -81,9 +81,7 @@ const iconUrl = (src: string): string => {
 		.icon {
 			opacity: 1;
 			transform: scale(1.1);
-		}
-		.name {
-			color: var(--color-primary);
+			box-shadow: 0 2rem 8rem color-mix(in srgb, var(--color-primary) 100%, transparent);
 		}
 	}
 }
