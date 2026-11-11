@@ -1,6 +1,6 @@
 # OpenStaticEditor
 
-Vue 3 + Pinia + Electron 桌面应用骨架，使用 electron-vite 构建，可打包成 Windows `.exe` 安装包。
+Vue 3 + Pinia + Electron 桌面应用骨架，使用 electron-vite 构建，可打包成 Windows `.exe` 直接运行。
 
 ## 技术栈
 - Vue 3（`<script setup lang="ts">`）
@@ -33,13 +33,6 @@ npm run dev          # 开发模式（带 HMR）
 npm run build        # 仅编译到 out/
 ```
 
-## 打包成 exe（Windows 安装包）
-> ⚠️ 在 **Windows** 机器上执行（macOS 无法直接产出 nsis exe 安装包）：
-```bash
-npm run dist:win
-```
-产物位于 `release/v<version>/<name>-v<version>-setup.exe`，例如 `release/v0.4.0/openStaticEditor-v0.4.0-setup.exe`。
-
 > `package.json` 的 `version` 必须写成纯 semver（如 `0.4.0`），供 npm / electron-builder 解析。
 > `v` 前缀只加在展示与产物命名上：构建脚本由 `scripts/custom-meta.js` 统一补齐，
 > UI 由 `src/App.vue`、窗口标题回退由 `electron/main/index.js` 各自补齐。
@@ -71,9 +64,17 @@ Copyright 2026 Let's UFO
 ### 无需授权：个人非商业使用
 
 个人出于研究、学习、实验、测试、私人娱乐、兴趣项目等**非商业目的**，
-可以查看、下载、使用、修改本项目，并在同等条件下再分发副本。
+可以查看、下载、使用、修改本项目。
 为上述非商业目的进行的**修改与二次开发同样允许**。
-再分发时必须随附许可证条款（或条款 URL）以及 `Required Notice:` 版权声明行。
+
+我们**鼓励**你基于本程序的能力，在 `custom/` 目录下开发各类脚本、配置与数据文件。
+对于**改动仅限于 `custom/` 目录**的副本，可在同等条件下自由再分发或共享，
+但须随附许可证条款（或条款 URL）以及 `Required Notice:` 版权声明行。
+
+改动涉及 `custom/` 以外内容的副本，**禁止再分发或共享**；
+如需分发，须另行取得版权所有者书面授权。
+无论改动范围如何，本许可证的其他条款（包括非商业限制）均持续适用，
+不因修改主程序而解除。
 
 `LICENSE` 的 *Noncommercial Organizations* 一节所列非商业组织
 （慈善机构、教育机构、公共研究机构、公共安全 / 卫生机构、环保组织、政府机构）
