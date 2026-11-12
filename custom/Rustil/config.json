@@ -1,0 +1,851 @@
+{
+	"name": "Rustil: Eternal Labyrinth Castle 无限的迷宫城",
+	"appIcon": "Rustil_ELC.png",
+	"ver": "0.0.1",
+	"width": 1200,
+	"height": 740,
+	"background": {
+		"src": "EVERSPACE 2 Wallpaper Pack 10.png",
+		"base64": "",
+		"blur": 20,
+		"alpha": 0.2
+	},
+	"loadFiles": {
+		"base": {
+			"beforeScript": "getSaveFiles.js",
+			"filePath": "%download%/",
+			"readScript": "es2_loadout.js"
+		}
+	},
+	"menu": [
+		{
+			"label": "舰船装备",
+			"children": [
+				{
+					"label": "主武器",
+					"tip": "重复选择相同的属性只生效1条",
+					"category": [
+						{
+							"label": "武器1",
+							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.primaryWeapons[0].level",
+							"items": [
+								{
+									"label": "等级",
+									"name": "currentShip.primaryWeapons[0].level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"type": "select",
+									"name": "currentShip.primaryWeapons[0].attributes[0].id",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_mainWeapon"
+								},
+								{
+									"label": "附加属性2",
+									"type": "select",
+									"name": "currentShip.primaryWeapons[0].attributes[1].id",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_mainWeapon"
+								},
+								{
+									"label": "附加属性3",
+									"type": "select",
+									"name": "currentShip.primaryWeapons[0].attributes[2].id",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_mainWeapon"
+								},
+								{
+									"label": "附加属性4",
+									"type": "select",
+									"name": "currentShip.primaryWeapons[0].attributes[3].id",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_mainWeapon"
+								}
+							]
+						},
+						{
+							"label": "武器2",
+							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.primaryWeapons[1].level",
+							"items": [
+								{
+									"label": "等级",
+									"name": "currentShip.primaryWeapons[1].level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"name": "currentShip.primaryWeapons[1].attributes[0].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_mainWeapon"
+								},
+								{
+									"label": "附加属性2",
+									"name": "currentShip.primaryWeapons[1].attributes[1].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_mainWeapon"
+								},
+								{
+									"label": "附加属性3",
+									"name": "currentShip.primaryWeapons[1].attributes[2].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_mainWeapon"
+								},
+								{
+									"label": "附加属性4",
+									"name": "currentShip.primaryWeapons[1].attributes[3].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_mainWeapon"
+								}
+							]
+						},
+						{
+							"label": "武器3",
+							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.primaryWeapons[2].level",
+							"items": [
+								{
+									"label": "等级",
+									"name": "currentShip.primaryWeapons[2].level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"name": "currentShip.primaryWeapons[2].attributes[0].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_mainWeapon"
+								},
+								{
+									"label": "附加属性2",
+									"name": "currentShip.primaryWeapons[2].attributes[1].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_mainWeapon"
+								},
+								{
+									"label": "附加属性3",
+									"name": "currentShip.primaryWeapons[2].attributes[2].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_mainWeapon"
+								},
+								{
+									"label": "附加属性4",
+									"name": "currentShip.primaryWeapons[2].attributes[3].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_mainWeapon"
+								}
+							]
+						}
+					],
+					"dataKey": "base",
+					"saveScript": {
+						"needFileKey": "base",
+						"saveScript": "es2_saveFile.js"
+					}
+				},
+				{
+					"label": "副武器",
+					"tip": "",
+					"category": [
+						{
+							"label": "武器1",
+							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.secondaryWeapons[0].level",
+							"items": [
+								{
+									"label": "等级",
+									"name": "currentShip.secondaryWeapons[0].level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"name": "currentShip.secondaryWeapons[0].attributes[0].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_subWeapon"
+								},
+								{
+									"label": "附加属性2",
+									"name": "currentShip.secondaryWeapons[0].attributes[1].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_subWeapon"
+								},
+								{
+									"label": "附加属性3",
+									"name": "currentShip.secondaryWeapons[0].attributes[2].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_subWeapon"
+								},
+								{
+									"label": "附加属性4",
+									"name": "currentShip.secondaryWeapons[0].attributes[3].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_subWeapon"
+								}
+							]
+						},
+						{
+							"label": "武器2",
+							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.secondaryWeapons[1].level",
+							"items": [
+								{
+									"label": "等级",
+									"name": "currentShip.secondaryWeapons[1].level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"name": "currentShip.secondaryWeapons[1].attributes[0].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_subWeapon"
+								},
+								{
+									"label": "附加属性2",
+									"name": "currentShip.secondaryWeapons[1].attributes[1].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_subWeapon"
+								},
+								{
+									"label": "附加属性3",
+									"name": "currentShip.secondaryWeapons[1].attributes[2].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_subWeapon"
+								},
+								{
+									"label": "附加属性4",
+									"name": "currentShip.secondaryWeapons[1].attributes[3].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_subWeapon"
+								}
+							]
+						},
+						{
+							"label": "武器3",
+							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.secondaryWeapons[2].level",
+							"items": [
+								{
+									"label": "等级",
+									"name": "currentShip.secondaryWeapons[2].level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"name": "currentShip.secondaryWeapons[2].attributes[0].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_subWeapon"
+								},
+								{
+									"label": "附加属性2",
+									"name": "currentShip.secondaryWeapons[2].attributes[1].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_subWeapon"
+								},
+								{
+									"label": "附加属性3",
+									"name": "currentShip.secondaryWeapons[2].attributes[2].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_subWeapon"
+								},
+								{
+									"label": "附加属性4",
+									"name": "currentShip.secondaryWeapons[2].attributes[3].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_subWeapon"
+								}
+							]
+						}
+					],
+					"dataKey": "base",
+					"saveScript": {
+						"needFileKey": "base",
+						"saveScript": "es2_saveFile.js"
+					}
+				},
+				{
+					"label": "模块",
+					"category": [
+						{
+							"label": "能量核心",
+							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.modules.EnergyCores.level",
+							"items": [
+								{
+									"label": "等级",
+									"name": "currentShip.modules.EnergyCores.level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"name": "currentShip.modules.EnergyCores.attributes[0].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_energyCore"
+								},
+								{
+									"label": "附加属性2",
+									"name": "currentShip.modules.EnergyCores.attributes[1].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_energyCore"
+								},
+								{
+									"label": "附加属性3",
+									"name": "currentShip.modules.EnergyCores.attributes[2].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_energyCore"
+								},
+								{
+									"label": "附加属性4",
+									"name": "currentShip.modules.EnergyCores.attributes[3].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_energyCore"
+								}
+							]
+						},
+						{
+							"label": "护盾",
+							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.modules.Shields.level",
+							"items": [
+								{
+									"label": "等级",
+									"name": "currentShip.modules.Shields.level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"name": "currentShip.modules.Shields.attributes[0].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_shield"
+								},
+								{
+									"label": "附加属性2",
+									"name": "currentShip.modules.Shields.attributes[1].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_shield"
+								},
+								{
+									"label": "附加属性3",
+									"name": "currentShip.modules.Shields.attributes[2].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_shield"
+								},
+								{
+									"label": "附加属性4",
+									"name": "currentShip.modules.Shields.attributes[3].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_shield"
+								}
+							]
+						},
+						{
+							"label": "装甲板",
+							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.modules.Platings.level",
+							"items": [
+								{
+									"label": "等级",
+									"name": "currentShip.modules.Platings.level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"name": "currentShip.modules.Platings.attributes[0].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_plating"
+								},
+								{
+									"label": "附加属性2",
+									"name": "currentShip.modules.Platings.attributes[1].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_plating"
+								},
+								{
+									"label": "附加属性3",
+									"name": "currentShip.modules.Platings.attributes[2].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_plating"
+								},
+								{
+									"label": "附加属性4",
+									"name": "currentShip.modules.Platings.attributes[3].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_plating"
+								}
+							]
+						},
+						{
+							"label": "传感器",
+							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.modules.Sensors.level",
+							"items": [
+								{
+									"label": "等级",
+									"name": "currentShip.modules.Sensors.level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"name": "currentShip.modules.Sensors.attributes[0].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_sensor"
+								},
+								{
+									"label": "附加属性2",
+									"name": "currentShip.modules.Sensors.attributes[1].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_sensor"
+								},
+								{
+									"label": "附加属性3",
+									"name": "currentShip.modules.Sensors.attributes[2].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_sensor"
+								},
+								{
+									"label": "附加属性4",
+									"name": "currentShip.modules.Sensors.attributes[3].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_sensor"
+								}
+							]
+						},
+						{
+							"label": "推进器",
+							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.modules.thrusters.level",
+							"items": [
+								{
+									"label": "等级",
+									"name": "currentShip.modules.thrusters.level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"name": "currentShip.modules.thrusters.attributes[0].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_thruster"
+								},
+								{
+									"label": "附加属性2",
+									"name": "currentShip.modules.thrusters.attributes[1].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_thruster"
+								},
+								{
+									"label": "附加属性3",
+									"name": "currentShip.modules.thrusters.attributes[2].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_thruster"
+								},
+								{
+									"label": "附加属性4",
+									"name": "currentShip.modules.thrusters.attributes[3].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_thruster"
+								}
+							]
+						},
+						{
+							"label": "货物单元",
+							"tip": "即使选择相同的效果，只能生效一个",
+							"enableKey": "currentShip.modules.CargoUnits.level",
+							"items": [
+								{
+									"label": "等级",
+									"name": "currentShip.modules.CargoUnits.level",
+									"type": "number",
+									"min": 1,
+									"max": 99
+								},
+								{
+									"label": "附加属性1",
+									"name": "currentShip.modules.CargoUnits.attributes[0].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_cargoUnit"
+								},
+								{
+									"label": "附加属性2",
+									"name": "currentShip.modules.CargoUnits.attributes[1].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_cargoUnit"
+								},
+								{
+									"label": "附加属性3",
+									"name": "currentShip.modules.CargoUnits.attributes[2].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_cargoUnit"
+								},
+								{
+									"label": "附加属性4",
+									"name": "currentShip.modules.CargoUnits.attributes[3].id",
+									"type": "select",
+									"optionBeforeTag": {
+										"key": "verified",
+										"text": "已测",
+										"colorClass": "text-success border border-success rounded"
+									},
+									"optionFilterFn": "attributeFilter_cargoUnit"
+								}
+							]
+						}
+					],
+					"dataKey": "base",
+					"saveScript": {
+						"needFileKey": "base",
+						"saveScript": "es2_saveFile.js"
+					}
+				}
+			]
+		},
+		{
+			"label": "舰船被动技能",
+			"category": [
+				{
+					"label": "仅列出当前飞船适合的被动技能",
+					"tip": "即使选择相同的效果，只能生效一个",
+					"items": [
+						{
+							"label": "1",
+							"name": "currentShip.skills[0]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "2",
+							"name": "currentShip.skills[1]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "3",
+							"name": "currentShip.skills[2]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "4",
+							"name": "currentShip.skills[3]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "5",
+							"name": "currentShip.skills[4]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "6",
+							"name": "currentShip.skills[5]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "7",
+							"name": "currentShip.skills[6]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "8",
+							"name": "currentShip.skills[7]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "9",
+							"name": "currentShip.skills[8]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "10",
+							"name": "currentShip.skills[9]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "11",
+							"name": "currentShip.skills[10]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						}
+					]
+				}
+			],
+			"dataKey": "base",
+			"saveScript": {
+				"needFileKey": "base",
+				"saveScript": "es2_saveFile.js"
+			}
+		}
+	],
+	"i18n": {
+		"zh": {}
+	}
+}
