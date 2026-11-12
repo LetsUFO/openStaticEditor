@@ -42,7 +42,7 @@ const resizeWindowToContent = async () => {
 	const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
 	await window.api.setWindowSize(
 		Math.round(window.innerWidth),
-		Math.ceil(contentHeight + 4 * rem)
+		Math.ceil(contentHeight + 6 * rem)
 	);
 };
 
