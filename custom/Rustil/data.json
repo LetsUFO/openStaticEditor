@@ -1,11 +1,137 @@
 {
-	"主武器": { "改造等级": 999, "最大改造等级": 999, "附加属性": ["暴击率 +19%", "技能冷却时间缩短 +7%", "智力 +7", "暴击率 +5%"], "是否投保": true },
-	"铠甲": { "改造等级": 143, "最大改造等级": 999, "附加属性": ["每秒恢复 10% 生命值", "移动速度提升 +50%", "普通攻击速度提升 +50%", "暴击率 +50%"], "是否投保": true },
-	"同伴使魔1": { "物理攻击力": 9999, "魔法攻击力": 9999, "物理防御力": 16, "魔法防御力": 166 },
-	"同伴使魔2": { "物理攻击力": 9, "魔法攻击力": 5, "物理防御力": 7, "魔法防御力": 19 },
-	"待命使魔1": { "物理攻击力": 9999, "魔法攻击力": 9999, "物理防御力": 9999, "魔法防御力": 9999 },
-	"待命使魔2": { "物理攻击力": 9999, "魔法攻击力": 9999, "物理防御力": 9999, "魔法防御力": 9999 },
-	"待命使魔3": { "物理攻击力": 9999, "魔法攻击力": 9999, "物理防御力": 9999, "魔法防御力": 9999 },
-	"待命使魔4": { "物理攻击力": 9999, "魔法攻击力": 9999, "物理防御力": 9999, "魔法防御力": 9999 },
-	"待命使魔5": { "物理攻击力": 9999, "魔法攻击力": 9999, "物理防御力": 9999, "魔法防御力": 9999 }
+	"MainWeapon": {
+		"Enhancement": 999,
+		"MaxEnhancement": 999,
+		"_passiveEffectList": [
+			{
+				"class": "Passive_AddCriticalRate",
+				"data": {
+					"EffectDescriptionString": "暴击率 + 19%",
+					"_addRate": {
+						"_value": 0.19433817267417908
+					}
+				}
+			},
+			{
+				"class": "Passive_CoolTimeReduction",
+				"data": {
+					"EffectDescriptionString": "技能冷却时间缩短 + 7%",
+					"_coolTimeReduction": {
+						"_value": 0.07090876996517181
+					}
+				}
+			},
+			{
+				"class": "Passive_AddInt",
+				"data": {
+					"EffectDescriptionString": "智力 + 7",
+					"_add": {
+						"_value": 7
+					}
+				}
+			},
+			{
+				"class": "Passive_AddCriticalRate",
+				"data": {
+					"EffectDescriptionString": "暴击率 + 5%",
+					"_addRate": {
+						"_value": 0.056937918066978455
+					}
+				}
+			}
+		],
+		"Insured": true
+	},
+	"Armor": {
+		"Enhancement": 143,
+		"MaxEnhancement": 999,
+		"_passiveEffectList": [
+			{
+				"class": "Buff_RegeneHP",
+				"data": {
+					"EffectDescriptionString": "每秒恢复 10% 生命值",
+					"_recoveryValue": 0,
+					"_recoveryPer": 0.10000000149011612,
+					"_interval": 1.0
+				}
+			},
+			{
+				"class": "Passive_AddMoveSpeed",
+				"data": {
+					"EffectDescriptionString": "移动速度提升 + 50%",
+					"_addMoveSpeed": {
+						"_value": 0.5
+					}
+				}
+			},
+			{
+				"class": "Passive_AddAttackSpeed",
+				"data": {
+					"EffectDescriptionString": "普通攻击速度提升 + 50%",
+					"_addAttackSpeed": {
+						"_value": 0.5
+					}
+				}
+			},
+			{
+				"class": "Passive_AddCriticalRate",
+				"data": {
+					"EffectDescriptionString": "暴击率 + 50%",
+					"_addRate": {
+						"_value": 0.5
+					}
+				}
+			}
+		],
+		"Insured": true
+	},
+	"Otomo1": {
+		"EnemyID": 86,
+		"Str": 9999,
+		"Int": 9999,
+		"Vit": 16,
+		"Men": 166
+	},
+	"Otomo2": {
+		"EnemyID": 68,
+		"Str": 9,
+		"Int": 5,
+		"Vit": 7,
+		"Men": 19
+	},
+	"Sub1": {
+		"EnemyID": 111,
+		"Str": 9999,
+		"Int": 9999,
+		"Vit": 9999,
+		"Men": 9999
+	},
+	"Sub2": {
+		"EnemyID": 85,
+		"Str": 9999,
+		"Int": 9999,
+		"Vit": 9999,
+		"Men": 9999
+	},
+	"Sub3": {
+		"EnemyID": 84,
+		"Str": 9999,
+		"Int": 9999,
+		"Vit": 9999,
+		"Men": 9999
+	},
+	"Sub4": {
+		"EnemyID": 61,
+		"Str": 9999,
+		"Int": 9999,
+		"Vit": 9999,
+		"Men": 9999
+	},
+	"Sub5": {
+		"EnemyID": 85,
+		"Str": 9999,
+		"Int": 9999,
+		"Vit": 9999,
+		"Men": 9999
+	}
 }
