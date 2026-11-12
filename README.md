@@ -1,6 +1,9 @@
 # OpenStaticEditor
 这是一个静态文件的修改器前端工具，目前着力于提供游戏静态修改器的UI界面，提升玩家们的视觉和交互体验，也方便开发者不用解决UI问题。
 
+## 目前已完成的游戏存档修改器
+- 2026.11.01 永恒空间2
+
 ## 技术栈
 Vue 3 + Pinia + Electron 桌面应用骨架，使用 electron-vite 构建，可打包成 Windows `.exe` 直接运行。
 - Vue 3（`<script setup lang="ts">`）
