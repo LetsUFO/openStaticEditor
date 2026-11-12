@@ -1,8 +1,8 @@
 # OpenStaticEditor
-
-Vue 3 + Pinia + Electron 桌面应用骨架，使用 electron-vite 构建，可打包成 Windows `.exe` 直接运行。
+这是一个静态文件的修改器前端工具，目前着力于提供游戏静态修改器的UI界面，提升玩家们的视觉和交互体验，也方便开发者不用解决UI问题。
 
 ## 技术栈
+Vue 3 + Pinia + Electron 桌面应用骨架，使用 electron-vite 构建，可打包成 Windows `.exe` 直接运行。
 - Vue 3（`<script setup lang="ts">`）
 - Pinia（状态管理，已接入）
 - Vite（构建工具，经 electron-vite 驱动）
