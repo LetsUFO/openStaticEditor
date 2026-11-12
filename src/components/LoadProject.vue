@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 
 const props = defineProps<{
 	// custom 下扫描到的子目录名列表（由 App.vue 通过 listCustomDirs 传入）
@@ -21,6 +21,9 @@ interface ProjectMeta {
 // 每个子目录的展示信息（name / ver / appIcon 来自各自的 config.json）
 // ver 已由主进程 loadConfig 规范化成带 "v" 的形式，这里直接展示，不要再拼前缀
 const list = ref<ProjectMeta[]>([]);
+const state = reactive({
+	colLimit: 4 //列数量
+});
 
 watch(
 	() => props.projectDirList,
@@ -61,7 +64,8 @@ const iconUrl = (src: string): string => {
 		<li
 			v-for="p in list"
 			:key="p.dir"
-			class="w-1/4 mt-20 px-4 inline-block cursor-pointer align-top"
+			class="mt-20 px-4 inline-block cursor-pointer align-top"
+			:class="[`w-1/${state.colLimit}`]"
 			@click="emit('select', p.dir)"
 		>
 			<img
