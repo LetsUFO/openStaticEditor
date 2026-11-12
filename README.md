@@ -48,8 +48,12 @@ npm run dist:mac
 ```
 
 ## 数据对接
-needFileKey和loadFiles下key匹配
-saveScript:指定所需的文件key，传给脚本
+- needFileKey和loadFiles下key匹配
+- saveScript:指定所需的文件key，传给脚本
+
+## 联系我
+22788038@qq.com
+如果需要什么帮助、反馈、合作可联系我。
 
 ## 授权说明
 
