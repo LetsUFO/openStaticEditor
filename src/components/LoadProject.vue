@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue';
+import { nextTick, reactive, ref, watch } from 'vue';
 
 const props = defineProps<{
 	// custom 下扫描到的子目录名列表（由 App.vue 通过 listCustomDirs 传入）
@@ -21,9 +21,30 @@ interface ProjectMeta {
 // 每个子目录的展示信息（name / ver / appIcon 来自各自的 config.json）
 // ver 已由主进程 loadConfig 规范化成带 "v" 的形式，这里直接展示，不要再拼前缀
 const list = ref<ProjectMeta[]>([]);
+const rootRef = ref<HTMLElement | null>(null);
 const state = reactive({
 	colLimit: 4 //列数量
 });
+
+// 列表渲染完成后，把窗口高度调整为列表实际高度 + 16rem 留白。
+// ul 是 h-full，直接用 offsetHeight 量到的是窗口高度，
+// 所以改为量最后一个 li 底边相对 ul 顶部的距离，得到列表内容真正占用的高度。
+const resizeWindowToContent = async () => {
+	await nextTick();
+	const el = rootRef.value;
+	if (!el) return;
+	const top = el.getBoundingClientRect().top;
+	let contentHeight = 0;
+	el.querySelectorAll('li').forEach((li) => {
+		contentHeight = Math.max(contentHeight, li.getBoundingClientRect().bottom - top);
+	});
+	if (!contentHeight) contentHeight = el.offsetHeight;
+	const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+	await window.api.setWindowSize(
+		Math.round(window.innerWidth),
+		Math.ceil(contentHeight + 4 * rem)
+	);
+};
 
 watch(
 	() => props.projectDirList,
@@ -45,6 +66,8 @@ watch(
 			}
 		}
 		list.value = items;
+		// 项目列表渲染完成后，按实际内容高度重新调整窗口
+		await resizeWindowToContent();
 	},
 	{ immediate: true }
 );
@@ -60,7 +83,7 @@ const iconUrl = (src: string): string => {
 </script>
 
 <template>
-	<ul class="selectProject h-full text-center text-fcLv2">
+	<ul ref="rootRef" class="selectProject h-full text-center text-fcLv2">
 		<li
 			v-for="p in list"
 			:key="p.dir"
