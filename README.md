@@ -47,11 +47,6 @@ macOS 上打包 dmg：
 npm run dist:mac
 ```
 
-## 镜像说明
-默认 npm 源（nexus / 华为云）对 `electron` 返回 502，本项目 `.npmrc` 已切换到
-npmmirror（`registry.npmmirror.com`）并配置 `ELECTRON_MIRROR`，确保 electron 二进制可下载。
-若你的网络能直连官方源，可删除 `.npmrc` 改用默认。
-
 ## 数据对接
 needFileKey和loadFiles下key匹配
 saveScript:指定所需的文件key，传给脚本
