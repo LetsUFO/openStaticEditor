@@ -5,10 +5,10 @@
 	"width": 1200,
 	"height": 740,
 	"background": {
-		"src": "EVERSPACE 2 Wallpaper Pack 10.png",
+		"src": "TitleBack__2880x2575__1da10995__5386095984950615011.jpg",
 		"base64": "",
-		"blur": 20,
-		"alpha": 0.2
+		"blur": 10,
+		"alpha": 0.4
 	},
 	"loadFiles": {
 		"base": {
