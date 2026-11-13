@@ -132,63 +132,65 @@ defineExpose({ getFormData });
 				class="mt-2 px-4 flex flex-wrap"
 				:class="{ 'opacity-20 pointer-events-none': !isBlockEnabled(block.enableKey) }"
 			>
-				<Form.Item
+				<div
 					v-for="(item, ii) in block.items || []"
 					:key="`${item.name || item.label}-${ii}`"
-					class="!pr-4"
-					:class="[`w-1/${block.col || 3}`]"
+					:style="{ width: `${100 / (block.col || 3)}%` }"
 				>
-					<template #label>
-						<AppstoreAddOutlined
-							class="text-fcLv1! mr-2"
-							:style="{ fontSize: '1rem' }"
-						/>{{ item.label }}
-					</template>
-					<InputNumber
-						v-if="item.type == 'number'"
-						:value="read(item)"
-						:min="item.min"
-						:max="item.max"
-						:step="item.step"
-						:precision="item.precision || 0"
-						:disabled="item.disabled"
-						class="w-full!"
-						@update:value="(v) => write(item, v)"
-						@blur="() => onNumberBlur(item)"
-					></InputNumber>
-					<Select
-						v-else-if="item.type == 'select'"
-						:value="read(item)"
-						:disabled="item.disabled"
-						:placeholder="item.placeholder || '请选择'"
-						:show-search="true"
-						:option-filter-prop="'label'"
-						:allowClear="true"
-						class="w-full!"
-						@update:value="(v) => write(item, v)"
-					>
-						<Select.Option
-							v-for="li in optionsOf(item)"
-							:key="li.label"
-							:value="li.value"
+					<Form.Item class="!pr-4 !box-border">
+						<template #label>
+							<AppstoreAddOutlined
+								class="text-fcLv1! mr-2"
+								:style="{ fontSize: '1rem' }"
+							/>{{ item.label }}
+						</template>
+						<InputNumber
+							v-if="item.type == 'number'"
+							:value="read(item)"
+							:min="item.min"
+							:max="item.max"
+							:step="item.step"
+							:precision="item.precision || 0"
+							:disabled="item.disabled"
+							class="w-full!"
+							@update:value="(v) => write(item, v)"
+							@blur="() => onNumberBlur(item)"
+						></InputNumber>
+						<Select
+							v-else-if="item.type == 'select'"
+							:value="read(item)"
+							:disabled="item.disabled"
+							:placeholder="item.placeholder || '请选择'"
+							:show-search="true"
+							:option-filter-prop="'label'"
+							:allowClear="true"
+							class="w-full!"
+							@update:value="(v) => write(item, v)"
 						>
-							<span
-								v-if="optionTag(li, item)"
-								:class="item.optionBeforeTag?.colorClass"
-								>{{ item.optionBeforeTag?.text }}</span
+							<Select.Option
+								v-for="li in optionsOf(item)"
+								:key="li.label"
+								:value="li.value"
 							>
-							{{ li.label }}</Select.Option
-						>
-					</Select>
-					<Input
-						v-else
-						:value="read(item)"
-						:disabled="item.disabled"
-						:placeholder="item.placeholder || ''"
-						class="w-full!"
-						@update:value="(v) => write(item, v)"
-					></Input>
-				</Form.Item>
+								<span
+									v-if="optionTag(li, item)"
+									:class="item.optionBeforeTag?.colorClass"
+									>{{ item.optionBeforeTag?.text }}</span
+								>
+								{{ li.label }}</Select.Option
+							>
+						</Select>
+						<Input
+							v-else-if="item.type == 'input'"
+							:value="read(item)"
+							:disabled="item.disabled"
+							:placeholder="item.placeholder || ''"
+							class="w-full!"
+							@update:value="(v) => write(item, v)"
+						></Input>
+						<template v-else>{{ read(item) }}</template>
+					</Form.Item>
+				</div>
 			</div>
 		</template>
 	</Form>

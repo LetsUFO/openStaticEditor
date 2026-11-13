@@ -63,8 +63,14 @@
 				{
 					"label": "同伴1",
 					"tip": "",
-					"col": 4,
+					"col": 5,
 					"items": [
+						{
+							"label": "同伴类型",
+							"name": "Otomo1.EnemyID",
+							"type": "enumText",
+							"useEnumMap": "enemyIdMap"
+						},
 						{
 							"label": "物理攻击力",
 							"name": "Otomo1.Str",
@@ -99,8 +105,14 @@
 				{
 					"label": "同伴2",
 					"tip": "",
-					"col": 4,
+					"col": 5,
 					"items": [
+						{
+							"label": "同伴类型",
+							"name": "Otomo2.EnemyID",
+							"type": "enumText",
+							"useEnumMap": "enemyIdMap"
+						},
 						{
 							"label": "物理攻击力",
 							"name": "Otomo2.Str",
@@ -135,8 +147,14 @@
 				{
 					"label": "待命1",
 					"tip": "",
-					"col": 4,
+					"col": 5,
 					"items": [
+						{
+							"label": "同伴类型",
+							"name": "Sub1.EnemyID",
+							"type": "enumText",
+							"useEnumMap": "enemyIdMap"
+						},
 						{
 							"label": "物理攻击力",
 							"name": "Sub1.Str",
@@ -175,8 +193,14 @@
 				{
 					"label": "待命2",
 					"tip": "",
-					"col": 4,
+					"col": 5,
 					"items": [
+						{
+							"label": "同伴类型",
+							"name": "Sub2.EnemyID",
+							"type": "enumText",
+							"useEnumMap": "enemyIdMap"
+						},
 						{
 							"label": "物理攻击力",
 							"name": "Sub2.Str",
@@ -215,8 +239,14 @@
 				{
 					"label": "待命3",
 					"tip": "",
-					"col": 4,
+					"col": 5,
 					"items": [
+						{
+							"label": "同伴类型",
+							"name": "Sub3.EnemyID",
+							"type": "enumText",
+							"useEnumMap": "enemyIdMap"
+						},
 						{
 							"label": "物理攻击力",
 							"name": "Sub3.Str",
@@ -255,8 +285,14 @@
 				{
 					"label": "待命4",
 					"tip": "",
-					"col": 4,
+					"col": 5,
 					"items": [
+						{
+							"label": "同伴类型",
+							"name": "Sub4.EnemyID",
+							"type": "enumText",
+							"useEnumMap": "enemyIdMap"
+						},
 						{
 							"label": "物理攻击力",
 							"name": "Sub4.Str",
@@ -295,8 +331,14 @@
 				{
 					"label": "待命5",
 					"tip": "",
-					"col": 4,
+					"col": 5,
 					"items": [
+						{
+							"label": "同伴类型",
+							"name": "Sub5.EnemyID",
+							"type": "enumText",
+							"useEnumMap": "enemyIdMap"
+						},
 						{
 							"label": "物理攻击力",
 							"name": "Sub5.Str",
