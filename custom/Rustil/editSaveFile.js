@@ -6,6 +6,8 @@
  * 配置文件结构（示例见 Desktop/data.json）：
  *   {
  *     "MainWeapon": { "Enhancement": 999, "MaxEnhancement": 999, "Insured": true },
+ *     "SubWeapon0": { "Enhancement": 3,   "MaxEnhancement": 13,  "Insured": false },
+ *     "SubWeapon1": { ... }, "SubWeapon2": { ... }, "SubWeapon3": { ... }, "SubWeapon4": { ... },
  *     "Armor":      { "Enhancement": 143, "MaxEnhancement": 999, "Insured": true },
  *     "Otomo1":     { "EnemyID": 86, "Str": 9999, "Int": 9999, "Vit": 16, "Men": 166 },
  *     ...
@@ -13,21 +15,23 @@
  *   }
  *
  * 映射规则：
- *   装备槽  MainWeapon=0, SubWeapon0..4=1..5, Shield=6, Armor=7, Accessory0/1=8/9
+ *   装备槽  MainWeapon=0, SubWeapon0..4=1..5（浮游武器）, Shield=6, Armor=7, Accessory0/1=8/9
  *           通过 Equipment.EquipGuids[n] 的 GUID 去 references.RefIds 找实例
  *   伙伴槽  Otomo1/2 = Familiar.Otomos[0/1]，Sub1..5 = Familiar.Subs[0..4]
  *           通过 GUID 去 Familiar.Familiars 找对象，写 IndividualDiferenceParam
  *   EnemyID 默认只作校验键，防止编成变动后把数值写到错误的伙伴身上
+ *   只读数据：loadSaveFile.js 输出的 _passiveEffectList / enemyIdMap 会被安全忽略，
+ *             所以「完整解析结果」也可以直接当配置喂进来，不必先精简
  *
  * 用法：
- *   node write_save.js                                  # 预演（默认，不写任何文件）
- *   node write_save.js --config D:\data.json            # 指定配置
- *   node write_save.js --apply                         # 真正写回主档（自动备份）
- *   node write_save.js --emit out.svd                   # 只导出加密产物，不动主档
- *   node write_save.js --ignore-enemy-id               # 忽略 EnemyID 校验（仍不改 EnemyID）
- *   node write_save.js --set-enemy-id                  # 连 EnemyID 一起写（换物种有配套数据风险）
- *   node write_save.js --dump-plain out.json            # 导出修改后的明文，便于人工检查
- *   node write_save.js --save <path> --force           # 指定存档 / 跳过安全检查
+ *   node editSaveFile.js                                  # 预演（默认，不写任何文件）
+ *   node editSaveFile.js --config D:\data.json            # 指定配置
+ *   node editSaveFile.js --apply                         # 真正写回主档（自动备份）
+ *   node editSaveFile.js --emit out.svd                   # 只导出加密产物，不动主档
+ *   node editSaveFile.js --ignore-enemy-id               # 忽略 EnemyID 校验（仍不改 EnemyID）
+ *   node editSaveFile.js --set-enemy-id                  # 连 EnemyID 一起写（换物种有配套数据风险）
+ *   node editSaveFile.js --dump-plain out.json            # 导出修改后的明文，便于人工检查
+ *   node editSaveFile.js --save <path> --force           # 指定存档 / 跳过安全检查
  *
  * 前置条件：游戏完全退出、4 个中断档为空，否则退出游戏时会把改动覆盖掉。
  * 加密：AES-128-CBC / PKCS7，Key = IV = ASCII "rustil20210401kd"。
@@ -52,6 +56,15 @@ const EQUIP_SLOTS = {
   Shield: 6, Armor: 7, Accessory0: 8, Accessory1: 9
 };
 const EQUIP_FIELDS = ['Enhancement', 'MaxEnhancement', 'Insured'];
+// 浮游武器槽（EquipGuids[1..5]），键名与 loadSaveFile.js 的输出一致
+const FLOAT_WEAPON_KEYS = ['SubWeapon0', 'SubWeapon1', 'SubWeapon2', 'SubWeapon3', 'SubWeapon4'];
+// 解析脚本附带、但存档回写不涉及的只读展示数据：忽略而不是报错
+const TOP_LEVEL_READ_ONLY = new Set(['enemyIdMap']);
+const READ_ONLY_FIELDS = new Set(['_passiveEffectList', 'EffectDescriptionString']);
+// 映射自检：5 个浮游槽必须依次对应 EquipGuids[1..5]
+FLOAT_WEAPON_KEYS.forEach((key, i) => {
+  if (EQUIP_SLOTS[key] !== i + 1) fail('浮游槽映射与 EquipGuids 不一致');
+});
 const FAMILIAR_SLOTS = {
   Otomo1: ['Otomos', 0], Otomo2: ['Otomos', 1],
   Sub1: ['Subs', 0], Sub2: ['Subs', 1], Sub3: ['Subs', 2], Sub4: ['Subs', 3], Sub5: ['Subs', 4]
@@ -239,12 +252,14 @@ function validateConfig(cfg) {
   if (!cfg || typeof cfg !== 'object' || Array.isArray(cfg)) fail('配置根节点必须是对象');
   const isInt = v => Number.isInteger(v);
   for (const [key, spec] of Object.entries(cfg)) {
+    if (TOP_LEVEL_READ_ONLY.has(key)) continue; // enemyIdMap 等解析附加数据
     if (!spec || typeof spec !== 'object' || Array.isArray(spec)) fail(`${key} 必须是对象`);
     const equip = key in EQUIP_SLOTS;
     const fam = key in FAMILIAR_SLOTS;
     if (!equip && !fam) fail(`未知配置键 ${key}；可用键：${[...Object.keys(EQUIP_SLOTS), ...Object.keys(FAMILIAR_SLOTS)].join(', ')}`);
     const allowed = equip ? EQUIP_FIELDS : [...FAMILIAR_FIELDS, 'EnemyID'];
     for (const [f, v] of Object.entries(spec)) {
+      if (READ_ONLY_FIELDS.has(f)) continue; // 词条 / 效果文案属于只读展示数据
       if (!allowed.includes(f)) fail(`${key}.${f} 不是可写字段（允许：${allowed.join(', ')}）`);
       if (f === 'Insured') { if (typeof v !== 'boolean') fail(`${key}.Insured 必须是 true/false`); }
       else if (!isInt(v)) fail(`${key}.${f} 必须是整数，收到 ${JSON.stringify(v)}`);
@@ -270,8 +285,11 @@ function buildPlan(src, root, cfg, opts) {
 
   const mismatch = [];
   for (const [key, spec] of Object.entries(cfg)) {
+    if (TOP_LEVEL_READ_ONLY.has(key)) continue;
     if (key in EQUIP_SLOTS) {
-      const fields = Object.keys(spec);
+      // 装备对象可能带 _passiveEffectList 等只读字段，只取真正可写的标量
+      const fields = Object.keys(spec).filter(f => EQUIP_FIELDS.includes(f));
+      if (!fields.length) continue;
       const t = findEquipData(root, EQUIP_SLOTS[key], fields);
       const ctx = { target: key, where: `槽${EQUIP_SLOTS[key]} rid${root.value.references.RefIds[t.idx].rid}`, guid: t.guid.slice(0, 12), path: t.path };
       for (const f of fields) push(t.node, f, spec[f], ctx);
@@ -298,7 +316,12 @@ function buildPlan(src, root, cfg, opts) {
       }
     }
   }
-  return { reps, rows, expectPaths, mismatch };
+  // 已处理但值本来就一致的槽（含浮游槽），单独列出，便于确认能力确实覆盖到了
+  const touched = new Set(rows.map(r => r.target));
+  const skipped = Object.keys(cfg).filter(
+    k => !TOP_LEVEL_READ_ONLY.has(k) && !touched.has(k)
+  );
+  return { reps, rows, expectPaths, mismatch, skipped };
 }
 
 /** 递归列出两份 JSON 的所有值差异路径，用来确认"只改了该改的字段"。 */
@@ -343,7 +366,7 @@ function runWriteback(cfg, savePath, opts = {}) {
 
   const src = decrypt(fs.readFileSync(savePath));
   const root = parseWithSpans(src);
-  const { reps, rows, expectPaths, mismatch } = buildPlan(src, root, cfg, opts);
+  const { reps, rows, expectPaths, mismatch, skipped } = buildPlan(src, root, cfg, opts);
 
   console.log(`存档  : ${savePath}  (${fs.statSync(savePath).size} B)`);
   if (opts.config) console.log(`配置  : ${opts.config}`);
@@ -358,6 +381,7 @@ function runWriteback(cfg, savePath, opts = {}) {
     console.log('改动计划：无（存档已与配置一致）');
   }
   console.log(`\n共 ${rows.length} 个字段变更，涉及 ${new Set(rows.map(r => r.path)).size} 个对象。`);
+  if (skipped.length) console.log(`已处理且与存档一致（无需改动）：${skipped.join(', ')}`);
 
   if (mismatch.length) {
     console.log('\n[EnemyID 不一致] 配置与当前存档编成不符：');
