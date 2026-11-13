@@ -1,14 +1,14 @@
 {
 	"name": "Rustil: Eternal Labyrinth Castle 无限的迷宫城",
 	"appIcon": "Rustil_ELC.png",
-	"ver": "0.0.5",
+	"ver": "0.0.6",
 	"width": 1200,
 	"height": 740,
 	"background": {
 		"src": "TitleBack__2880x2575__1da10995__5386095984950615011.jpg",
 		"base64": "",
 		"blur": 10,
-		"alpha": 0.4
+		"alpha": 0.2
 	},
 	"loadFiles": {
 		"base": {
@@ -24,7 +24,7 @@
 			"category": [
 				{
 					"label": "主武器",
-					"tip": "",
+					"tip": "可能4星装备才支持5条附加效果",
 					"items": [
 						{
 							"label": "是否已投保",
@@ -46,8 +46,68 @@
 							"max": 9999
 						},
 						{
-							"label": "附加属性",
+							"label": "附加效果1",
 							"name": "MainWeapon._passiveEffectList[0]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "附加效果2",
+							"name": "MainWeapon._passiveEffectList[1]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "附加效果3",
+							"name": "MainWeapon._passiveEffectList[2]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "附加效果4",
+							"name": "MainWeapon._passiveEffectList[3]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						},
+						{
+							"label": "附加效果5",
+							"name": "MainWeapon._passiveEffectList[4]",
+							"type": "select",
+							"optionUse": "skillMap",
+							"optionFilterFn": "skillFilter"
+						}
+					]
+				},
+				{
+					"label": "铠甲",
+					"tip": "可能4星装备才支持5条附加效果",
+					"items": [
+						{
+							"label": "是否已投保",
+							"name": "Armor.Insured",
+							"type": "switch"
+						},
+						{
+							"label": "当前改造等级",
+							"name": "Armor.Enhancement",
+							"type": "number",
+							"min": 0,
+							"max": 9999
+						},
+						{
+							"label": "最大改造等级",
+							"name": "Armor.MaxEnhancement",
+							"type": "number",
+							"min": 0,
+							"max": 9999
+						},
+						{
+							"label": "附加效果",
+							"name": "Armor._passiveEffectList[0]",
 							"type": "select",
 							"optionUse": "skillMap",
 							"optionFilterFn": "skillFilter"
@@ -66,7 +126,7 @@
 			"category": [
 				{
 					"label": "同伴1",
-					"tip": "",
+					"tip": "拿到对应技能才能将部分数据给角色进行加成",
 					"col": 5,
 					"items": [
 						{
@@ -108,7 +168,7 @@
 				},
 				{
 					"label": "同伴2",
-					"tip": "",
+					"tip": "拿到对应技能才能将部分数据给角色进行加成",
 					"col": 5,
 					"items": [
 						{
@@ -150,7 +210,7 @@
 				},
 				{
 					"label": "待命1",
-					"tip": "",
+					"tip": "拿到对应技能才能将部分数据给角色进行加成",
 					"col": 5,
 					"items": [
 						{
@@ -196,7 +256,7 @@
 				},
 				{
 					"label": "待命2",
-					"tip": "",
+					"tip": "拿到对应技能才能将部分数据给角色进行加成",
 					"col": 5,
 					"items": [
 						{
@@ -242,7 +302,7 @@
 				},
 				{
 					"label": "待命3",
-					"tip": "",
+					"tip": "拿到对应技能才能将部分数据给角色进行加成",
 					"col": 5,
 					"items": [
 						{
@@ -288,7 +348,7 @@
 				},
 				{
 					"label": "待命4",
-					"tip": "",
+					"tip": "拿到对应技能才能将部分数据给角色进行加成",
 					"col": 5,
 					"items": [
 						{
@@ -334,7 +394,7 @@
 				},
 				{
 					"label": "待命5",
-					"tip": "",
+					"tip": "拿到对应技能才能将部分数据给角色进行加成",
 					"col": 5,
 					"items": [
 						{
