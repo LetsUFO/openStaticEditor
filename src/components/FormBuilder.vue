@@ -3,7 +3,7 @@ import { computed, watch } from 'vue';
 import { get, set } from 'lodash';
 import { useConfigStore } from '@renderer/stores/config';
 
-import { Form, Input, InputNumber, Select } from 'ant-design-vue';
+import { Form, Input, InputNumber, Select, Switch } from 'ant-design-vue';
 import { AppstoreAddOutlined } from '@ant-design/icons-vue';
 
 interface Props {
@@ -197,6 +197,12 @@ defineExpose({ getFormData });
 								{{ li.label }}</Select.Option
 							>
 						</Select>
+						<Switch
+							v-else-if="item.type == 'switch'"
+							:checked="!!read(item)"
+							:disabled="item.disabled"
+							@change="(v) => write(item, v)"
+						></Switch>
 						<Input
 							v-else-if="item.type == 'input'"
 							:value="read(item)"

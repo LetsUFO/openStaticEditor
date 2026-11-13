@@ -27,6 +27,11 @@
 					"tip": "",
 					"items": [
 						{
+							"label": "是否已投保",
+							"name": "MainWeapon.Insured",
+							"type": "switch"
+						},
+						{
 							"label": "当前改造等级",
 							"name": "MainWeapon.Enhancement",
 							"type": "number",
