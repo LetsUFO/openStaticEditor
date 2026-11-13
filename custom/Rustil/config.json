@@ -75,7 +75,7 @@
 			"dataKey": "base",
 			"saveScript": {
 				"needFileKey": "base",
-				"saveScript": "es2_saveFile.js"
+				"saveScript": "editSaveFile.js"
 			}
 		},
 		{
@@ -407,7 +407,7 @@
 			"dataKey": "base",
 			"saveScript": {
 				"needFileKey": "base",
-				"saveScript": "es2_saveFile.js"
+				"saveScript": "editSaveFile.js"
 			}
 		}
 	],
