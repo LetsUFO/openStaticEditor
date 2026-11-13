@@ -1,7 +1,7 @@
 {
 	"name": "Rustil: Eternal Labyrinth Castle 无限的迷宫城",
 	"appIcon": "Rustil_ELC.png",
-	"ver": "0.0.3",
+	"ver": "0.0.4",
 	"width": 1200,
 	"height": 740,
 	"background": {
@@ -91,6 +91,242 @@
 							"label": "魔法防御力",
 							"name": "Otomo1.Men",
 							"type": "number",
+							"min": 1,
+							"max": 60000
+						}
+					]
+				},
+				{
+					"label": "同伴2",
+					"tip": "",
+					"col": 4,
+					"items": [
+						{
+							"label": "物理攻击力",
+							"name": "Otomo2.Str",
+							"type": "number",
+							"min": 1,
+							"max": 60000,
+							"precision": 0
+						},
+						{
+							"label": "魔法攻击力",
+							"name": "Otomo2.Int",
+							"type": "number",
+							"min": 1,
+							"max": 60000
+						},
+						{
+							"label": "物理防御力",
+							"name": "Otomo2.Vit",
+							"type": "number",
+							"min": 1,
+							"max": 60000
+						},
+						{
+							"label": "魔法防御力",
+							"name": "Otomo2.Men",
+							"type": "number",
+							"min": 1,
+							"max": 60000
+						}
+					]
+				},
+				{
+					"label": "待命1",
+					"tip": "",
+					"col": 4,
+					"items": [
+						{
+							"label": "物理攻击力",
+							"name": "Sub1.Str",
+							"type": "number",
+							"enableKey": "Sub1.EnemyID",
+							"min": 1,
+							"max": 60000,
+							"precision": 0
+						},
+						{
+							"label": "魔法攻击力",
+							"name": "Sub1.Int",
+							"type": "number",
+							"enableKey": "Sub1.EnemyID",
+							"min": 1,
+							"max": 60000
+						},
+						{
+							"label": "物理防御力",
+							"name": "Sub1.Vit",
+							"type": "number",
+							"enableKey": "Sub1.EnemyID",
+							"min": 1,
+							"max": 60000
+						},
+						{
+							"label": "魔法防御力",
+							"name": "Sub1.Men",
+							"type": "number",
+							"enableKey": "Sub1.EnemyID",
+							"min": 1,
+							"max": 60000
+						}
+					]
+				},
+				{
+					"label": "待命2",
+					"tip": "",
+					"col": 4,
+					"items": [
+						{
+							"label": "物理攻击力",
+							"name": "Sub2.Str",
+							"type": "number",
+							"enableKey": "Sub2.EnemyID",
+							"min": 1,
+							"max": 60000,
+							"precision": 0
+						},
+						{
+							"label": "魔法攻击力",
+							"name": "Sub2.Int",
+							"type": "number",
+							"enableKey": "Sub2.EnemyID",
+							"min": 1,
+							"max": 60000
+						},
+						{
+							"label": "物理防御力",
+							"name": "Sub2.Vit",
+							"type": "number",
+							"enableKey": "Sub2.EnemyID",
+							"min": 1,
+							"max": 60000
+						},
+						{
+							"label": "魔法防御力",
+							"name": "Sub2.Men",
+							"type": "number",
+							"enableKey": "Sub2.EnemyID",
+							"min": 1,
+							"max": 60000
+						}
+					]
+				},
+				{
+					"label": "待命3",
+					"tip": "",
+					"col": 4,
+					"items": [
+						{
+							"label": "物理攻击力",
+							"name": "Sub3.Str",
+							"type": "number",
+							"enableKey": "Sub3.EnemyID",
+							"min": 1,
+							"max": 60000,
+							"precision": 0
+						},
+						{
+							"label": "魔法攻击力",
+							"name": "Sub3.Int",
+							"type": "number",
+							"enableKey": "Sub3.EnemyID",
+							"min": 1,
+							"max": 60000
+						},
+						{
+							"label": "物理防御力",
+							"name": "Sub3.Vit",
+							"type": "number",
+							"enableKey": "Sub3.EnemyID",
+							"min": 1,
+							"max": 60000
+						},
+						{
+							"label": "魔法防御力",
+							"name": "Sub3.Men",
+							"type": "number",
+							"enableKey": "Sub3.EnemyID",
+							"min": 1,
+							"max": 60000
+						}
+					]
+				},
+				{
+					"label": "待命4",
+					"tip": "",
+					"col": 4,
+					"items": [
+						{
+							"label": "物理攻击力",
+							"name": "Sub4.Str",
+							"type": "number",
+							"enableKey": "Sub4.EnemyID",
+							"min": 1,
+							"max": 60000,
+							"precision": 0
+						},
+						{
+							"label": "魔法攻击力",
+							"name": "Sub4.Int",
+							"type": "number",
+							"enableKey": "Sub4.EnemyID",
+							"min": 1,
+							"max": 60000
+						},
+						{
+							"label": "物理防御力",
+							"name": "Sub4.Vit",
+							"type": "number",
+							"enableKey": "Sub4.EnemyID",
+							"min": 1,
+							"max": 60000
+						},
+						{
+							"label": "魔法防御力",
+							"name": "Sub4.Men",
+							"type": "number",
+							"enableKey": "Sub4.EnemyID",
+							"min": 1,
+							"max": 60000
+						}
+					]
+				},
+				{
+					"label": "待命5",
+					"tip": "",
+					"col": 4,
+					"items": [
+						{
+							"label": "物理攻击力",
+							"name": "Sub5.Str",
+							"type": "number",
+							"enableKey": "Sub5.EnemyID",
+							"min": 1,
+							"max": 60000,
+							"precision": 0
+						},
+						{
+							"label": "魔法攻击力",
+							"name": "Sub5.Int",
+							"type": "number",
+							"enableKey": "Sub5.EnemyID",
+							"min": 1,
+							"max": 60000
+						},
+						{
+							"label": "物理防御力",
+							"name": "Sub5.Vit",
+							"type": "number",
+							"enableKey": "Sub5.EnemyID",
+							"min": 1,
+							"max": 60000
+						},
+						{
+							"label": "魔法防御力",
+							"name": "Sub5.Men",
+							"type": "number",
+							"enableKey": "Sub5.EnemyID",
 							"min": 1,
 							"max": 60000
 						}

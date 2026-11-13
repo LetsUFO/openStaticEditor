@@ -364,7 +364,7 @@ onMounted(async () => {
 	&::after {
 		content: '';
 		display: block;
-		height: 1rem;
+		height: 3rem;
 	}
 }
 </style>
