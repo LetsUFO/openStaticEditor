@@ -85,6 +85,31 @@
 		],
 		"Insured": true
 	},
+	"SubWeapon0": {
+		"Enhancement": 3,
+		"MaxEnhancement": 13,
+		"Insured": false
+	},
+	"SubWeapon1": {
+		"Enhancement": 4,
+		"MaxEnhancement": 999,
+		"Insured": false
+	},
+	"SubWeapon2": {
+		"Enhancement": 999,
+		"MaxEnhancement": 18,
+		"Insured": true
+	},
+	"SubWeapon3": {
+		"Enhancement": 999,
+		"MaxEnhancement": 999,
+		"Insured": true
+	},
+	"SubWeapon4": {
+		"Enhancement": 15,
+		"MaxEnhancement": 999,
+		"Insured": false
+	},
 	"Otomo1": {
 		"EnemyID": 86,
 		"Str": 9999,

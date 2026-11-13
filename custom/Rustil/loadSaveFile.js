@@ -5,7 +5,8 @@
  *
  * 存档格式：AES-128-CBC，Key = IV = ASCII "rustil20210401kd"，PKCS7 填充，
  *           明文是 Newtonsoft.Json 的 JSON（含 references.RefIds 引用表）。
- * 输出格式：与桌面 data.json 一致（扁平 9 键 / 纯英文字段名 / 词条精简）。
+ * 输出格式：与桌面 data.json 兼容（扁平键 / 纯英文字段名 / 词条精简）。
+ *           装备槽输出 MainWeapon / Armor / SubWeapon0..4（浮游槽，结构与主武器一致）。
  *
  * 模块用法（由主进程 file:read 调用，数据写入 store）：
  *   module.exports = function (ctx) {
@@ -31,10 +32,17 @@ const crypto = require('node:crypto');
 
 const KEY = Buffer.from('rustil20210401kd', 'ascii');
 
-// EquipGuids 的槽位下标：0 = 主武器，7 = 铠甲
+// EquipGuids 的槽位下标：0 = 主武器，1..5 = 浮游武器，7 = 铠甲
+// SubWeapon0..4 与 write_save.js 的装备键名一致（0-based），
+// 避免和待命使魔 Sub1..5 混淆；追加在原有两键之后，保持旧输出顺序不变。
 const EQUIP_SLOTS = [
 	['MainWeapon', 0],
-	['Armor', 7]
+	['Armor', 7],
+	['SubWeapon0', 1],
+	['SubWeapon1', 2],
+	['SubWeapon2', 3],
+	['SubWeapon3', 4],
+	['SubWeapon4', 5]
 ];
 const STAT_FIELDS = ['Str', 'Int', 'Vit', 'Men'];
 
