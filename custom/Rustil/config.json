@@ -1,7 +1,7 @@
 {
 	"name": "Rustil: Eternal Labyrinth Castle 无限的迷宫城",
 	"appIcon": "Rustil_ELC.png",
-	"ver": "0.0.6",
+	"ver": "0.0.7",
 	"width": 1200,
 	"height": 740,
 	"background": {
@@ -96,6 +96,7 @@
 							"label": "物理攻击力",
 							"name": "Otomo1.Str",
 							"type": "number",
+							"enableKey": "Otomo1.EnemyID",
 							"min": 1,
 							"max": 60000,
 							"precision": 0
@@ -104,6 +105,7 @@
 							"label": "魔法攻击力",
 							"name": "Otomo1.Int",
 							"type": "number",
+							"enableKey": "Otomo1.EnemyID",
 							"min": 1,
 							"max": 60000
 						},
@@ -111,6 +113,7 @@
 							"label": "物理防御力",
 							"name": "Otomo1.Vit",
 							"type": "number",
+							"enableKey": "Otomo1.EnemyID",
 							"min": 1,
 							"max": 60000
 						},
@@ -118,6 +121,7 @@
 							"label": "魔法防御力",
 							"name": "Otomo1.Men",
 							"type": "number",
+							"enableKey": "Otomo1.EnemyID",
 							"min": 1,
 							"max": 60000
 						}
@@ -138,6 +142,7 @@
 							"label": "物理攻击力",
 							"name": "Otomo2.Str",
 							"type": "number",
+							"enableKey": "Otomo2.EnemyID",
 							"min": 1,
 							"max": 60000,
 							"precision": 0
@@ -146,6 +151,7 @@
 							"label": "魔法攻击力",
 							"name": "Otomo2.Int",
 							"type": "number",
+							"enableKey": "Otomo2.EnemyID",
 							"min": 1,
 							"max": 60000
 						},
@@ -153,6 +159,7 @@
 							"label": "物理防御力",
 							"name": "Otomo2.Vit",
 							"type": "number",
+							"enableKey": "Otomo2.EnemyID",
 							"min": 1,
 							"max": 60000
 						},
@@ -160,6 +167,7 @@
 							"label": "魔法防御力",
 							"name": "Otomo2.Men",
 							"type": "number",
+							"enableKey": "Otomo2.EnemyID",
 							"min": 1,
 							"max": 60000
 						}
