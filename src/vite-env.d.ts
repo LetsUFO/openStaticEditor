@@ -13,7 +13,10 @@ interface AppMenuFormField {
 	 * 也兼容扁平 key："skillFilter"
 	 */
 	name?: string;
-	type?: 'number' | 'select' | 'text' | string;
+	type?: 'number' | 'select' | 'text' | 'enumText' | string;
+	/** type=enumText 时生效：store.fileData[dataKey] 下的映射表名（如 "enemyIdMap"），
+	 *  用 name 路径取出的原始值（ID）去查 label 显示 */
+	useEnumMap?: string;
 	/** type=number 时生效 */
 	min?: number;
 	max?: number;

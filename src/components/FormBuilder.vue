@@ -38,7 +38,24 @@ const source = computed<any>(() => (props.dataKey ? configStore.fileData[props.d
 const model = computed<Record<string, any>>(() => source.value || {});
 
 function read(item: AppMenuFormField): any {
-	return item?.name ? get(source.value, item.name) : undefined;
+	let out = '';
+	switch (item.type) {
+		case 'enumText': {
+			// 从 store 里按 name 路径取原始值（ID），再去 useEnumMap 指定的映射表找 label
+			const raw = item?.name ? get(source.value, item.name) : undefined;
+			const map = item?.useEnumMap ? get(source.value, item.useEnumMap) : null;
+			if (raw != null && map && typeof map === 'object') {
+				out = map[String(raw)] ?? raw; // 找不到时原样回显原始值
+			} else {
+				out = raw; // 无映射表时直接显示原始值
+			}
+			break;
+		}
+		default:
+			out = item?.name ? get(source.value, item.name) : undefined;
+			break;
+	}
+	return out;
 }
 
 function write(item: AppMenuFormField, value: any): void {
@@ -188,6 +205,7 @@ defineExpose({ getFormData });
 							class="w-full!"
 							@update:value="(v) => write(item, v)"
 						></Input>
+						<template v-else-if="item.type == 'enumText'">{{ read(item) }}</template>
 						<template v-else>{{ read(item) }}</template>
 					</Form.Item>
 				</div>
