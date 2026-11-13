@@ -85,6 +85,10 @@ function buildIcns(source) {
 async function buildIcons() {
 	const source = resolveAppIcon();
 	if (!source) {
+		// 清掉历史生成的图标，否则 electron-builder 仍会优先使用 build 下的残留文件
+		for (const file of [icoTarget, icnsTarget, join(buildDir, 'icon.png')]) {
+			rmSync(file, { force: true });
+		}
 		log('未生成自定义图标，打包将使用 electron-builder 默认图标');
 		return;
 	}
