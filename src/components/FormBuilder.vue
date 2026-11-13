@@ -135,7 +135,8 @@ defineExpose({ getFormData });
 				<Form.Item
 					v-for="(item, ii) in block.items || []"
 					:key="`${item.name || item.label}-${ii}`"
-					class="w-1/3 !pr-4"
+					class="!pr-4"
+					:class="[`w-1/${block.col || 3}`]"
 				>
 					<template #label>
 						<AppstoreAddOutlined
@@ -149,7 +150,7 @@ defineExpose({ getFormData });
 						:min="item.min"
 						:max="item.max"
 						:step="item.step"
-						:precision="item.precision"
+						:precision="item.precision || 0"
 						:disabled="item.disabled"
 						class="w-full!"
 						@update:value="(v) => write(item, v)"
