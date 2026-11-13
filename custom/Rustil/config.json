@@ -44,41 +44,6 @@
 							"type": "number",
 							"min": 0,
 							"max": 9999
-						},
-						{
-							"label": "附加效果1",
-							"name": "MainWeapon._passiveEffectList[0]",
-							"type": "select",
-							"optionUse": "skillMap",
-							"optionFilterFn": "skillFilter"
-						},
-						{
-							"label": "附加效果2",
-							"name": "MainWeapon._passiveEffectList[1]",
-							"type": "select",
-							"optionUse": "skillMap",
-							"optionFilterFn": "skillFilter"
-						},
-						{
-							"label": "附加效果3",
-							"name": "MainWeapon._passiveEffectList[2]",
-							"type": "select",
-							"optionUse": "skillMap",
-							"optionFilterFn": "skillFilter"
-						},
-						{
-							"label": "附加效果4",
-							"name": "MainWeapon._passiveEffectList[3]",
-							"type": "select",
-							"optionUse": "skillMap",
-							"optionFilterFn": "skillFilter"
-						},
-						{
-							"label": "附加效果5",
-							"name": "MainWeapon._passiveEffectList[4]",
-							"type": "select",
-							"optionUse": "skillMap",
-							"optionFilterFn": "skillFilter"
 						}
 					]
 				},
@@ -104,13 +69,6 @@
 							"type": "number",
 							"min": 0,
 							"max": 9999
-						},
-						{
-							"label": "附加效果",
-							"name": "Armor._passiveEffectList[0]",
-							"type": "select",
-							"optionUse": "skillMap",
-							"optionFilterFn": "skillFilter"
 						}
 					]
 				}
