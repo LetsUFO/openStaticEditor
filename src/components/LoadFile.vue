@@ -18,12 +18,14 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const emit = defineEmits(['loadFiles']);
 
+const configStore = useConfigStore();
+const needFiles = storeToRefs(configStore).loadFiles;
+
 // fileListMap / targetFileMap 的 key 与 config.json -> loadFiles 的 key 一一对应
 const state = reactive({
 	targetFileMap: {} as Record<string, string>,
 	fileListMap: {} as Record<string, string[]>
 });
-const needFiles = storeToRefs(useConfigStore()).loadFiles;
 
 // 各 key 解析后的目录（点「加载文件」拼接最终 fileSrc 时复用，避免重复解析简写）
 const resolvedDirMap: Record<string, string> = {};
@@ -41,7 +43,8 @@ watch(
 			// 主进程 Node 环境运行 beforeScript，返回文件名列表
 			const list = await window.api.runScript({
 				scriptSrc: fileObj.beforeScript,
-				filePath: dir
+				filePath: dir,
+				baseSrc: configStore.baseSrc
 			});
 			state.fileListMap[key] = Array.isArray(list) ? list : [];
 			// 未选择或所选已不在列表中时，默认选中第一个

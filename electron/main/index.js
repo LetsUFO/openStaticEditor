@@ -193,12 +193,18 @@ ipcMain.handle('window:setTitle', (event, title) => {
 
 /**
  * 定位并加载 custom 目录下的脚本模块（每次清缓存，脚本改动后无需重启应用）。
- * 路径解析规则见 src/lib/lib.ts -> resolveScriptPath。
+ * @param {string} scriptSrc 脚本相对路径（如 'Rustil/loadSaveFile.js'，已由 getConfig 重写）
+ * @param {string} [baseSrc] 当前 custom 子目录（如 'Rustil/'），由渲染层从 store 里传入
+ *   - 有 baseSrc：customDir = join(customRoot, baseSrc) → 脚本所在子目录，脚本可读同目录辅助文件
+ *   - 无 baseSrc：customDir = customRoot → 兼容旧调用方
  */
-function loadScriptModule(scriptSrc) {
-	const customDir = getCustomDir();
+function loadScriptModule(scriptSrc, baseSrc) {
+	const customRoot = getCustomDir();
+	// customDir：脚本运行时的工作目录，脚本里读同目录文件用它
+	const customDir = baseSrc ? join(customRoot, baseSrc) : customRoot;
+
 	const scriptPath = resolveScriptPath(scriptSrc, {
-		customDir,
+		customDir: customRoot, // 脚本定位始终从 customRoot 开始（scriptSrc 已经带了子目录前缀）
 		projectRoot: app.isPackaged ? process.resourcesPath : join(__dirname, '../../'),
 		isAbsolute,
 		join,
@@ -223,10 +229,10 @@ function loadScriptModule(scriptSrc) {
  *   }
  * 若脚本直接导出数据（非函数），则原样返回。
  */
-ipcMain.handle('file:read', async (_event, { fileSrc, readScript } = {}) => {
+ipcMain.handle('file:read', async (_event, { fileSrc, readScript, baseSrc } = {}) => {
 	if (!readScript) throw new Error('未配置 readScript，无法加载读取脚本');
 
-	const { customDir, script } = loadScriptModule(readScript);
+	const { customDir, script } = loadScriptModule(readScript, baseSrc);
 	const filePath = fileSrc ? (isAbsolute(fileSrc) ? fileSrc : join(customDir, fileSrc)) : '';
 
 	return executeScript(script, {
@@ -243,11 +249,11 @@ ipcMain.handle('file:read', async (_event, { fileSrc, readScript } = {}) => {
  * （下拉选项过滤已移到渲染进程 store 内完成，不再走这里）
  */
 ipcMain.handle('script:run', async (_event, payload = {}) => {
-	const { scriptSrc, dataKey, filePath, data } = payload;
+	const { scriptSrc, dataKey, filePath, data, baseSrc } = payload;
 
 	if (!scriptSrc) throw new Error('未配置 scriptSrc，无法运行脚本');
 
-	const { customDir, script } = loadScriptModule(scriptSrc);
+	const { customDir, script } = loadScriptModule(scriptSrc, baseSrc);
 
 	return executeScript(script, {
 		scriptSrc,

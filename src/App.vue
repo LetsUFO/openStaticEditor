@@ -124,7 +124,7 @@ const loadFiles = async function (files: Record<string, any>) {
 			const filePath = await resolveFileSrc(fileSrc);
 			// 解析后的绝对路径存进 store，保存时直接取用
 			configStore.setFilePath(key, filePath);
-			const data = await window.api.readFile(filePath, readScript);
+			const data = await window.api.readFile(filePath, readScript, configStore.baseSrc);
 			await setFileData(key, data);
 		} catch (err: any) {
 			errors.push(`${key}: ${err?.message || err}`);
@@ -188,7 +188,8 @@ const save = async function (saveCfg: any = {}) {
 			scriptSrc: saveCfg.saveScript,
 			dataKey: saveCfg.needFileKey,
 			filePath,
-			data
+			data,
+			baseSrc: configStore.baseSrc
 		});
 		message.success('保存成功！');
 	} catch (error: any) {

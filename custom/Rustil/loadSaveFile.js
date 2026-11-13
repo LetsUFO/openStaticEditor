@@ -240,12 +240,11 @@ const replacer = (key, value) => {
 const ENEMY_JSON = 'enemy.json';
 
 /**
- * 读取 custom 目录下的 enemy.json，返回 { enemyIdMap: {...} }。
- * 文件缺失时不报错（只是没有映射表）。
+ * 读取同级目录下的 enemy.json（用 __dirname 定位，不依赖框架注入）。
+ * 文件缺失时返回 null，不报错。
  */
-function loadEnemyMap(customDir) {
-	if (!customDir) return null;
-	const p = path.join(customDir, ENEMY_JSON);
+function loadEnemyMap() {
+	const p = path.join(__dirname, ENEMY_JSON);
 	if (!fs.existsSync(p)) return null;
 	try {
 		const raw = fs.readFileSync(p, 'utf-8');
@@ -257,13 +256,11 @@ function loadEnemyMap(customDir) {
 
 /**
  * 应用内调用入口（主进程 file:read 把本模块当函数调用）。
- * ctx.filePath —— 渲染进程解析 %download% / %user% 等简写后的存档绝对路径
- * ctx.customDir —— custom/Rustil/ 目录绝对路径（用来读 enemy.json 等辅助数据）
  * 返回解析后的数据对象，由主进程回传给渲染进程写入 store。
  */
 function run(ctx = {}) {
 	const result = loadSave(ctx.filePath);
-	const enemyMap = loadEnemyMap(ctx.customDir);
+	const enemyMap = loadEnemyMap();
 	if (enemyMap) result.enemyIdMap = enemyMap;
 	return result;
 }
