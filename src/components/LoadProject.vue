@@ -87,8 +87,8 @@ const iconUrl = (src: string): string => {
 		<li
 			v-for="p in list"
 			:key="p.dir"
-			class="mt-20 px-4 inline-block cursor-pointer align-top"
-			:class="[`w-1/${state.colLimit}`]"
+			class="mt-20 px-4 inline-block cursor-pointer align-top box-border"
+			:style="{ width: `${100 / state.colLimit}%` }"
 			@click="emit('select', p.dir)"
 		>
 			<img
