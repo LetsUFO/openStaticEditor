@@ -80,6 +80,8 @@ export interface Api {
 	setWindowSize: (width: number, height: number) => Promise<void>;
 	setWindowTitle: (title: string) => Promise<void>;
 	getPaths: () => Promise<SystemPaths>;
+	/** 用系统浏览器打开外部链接（主进程校验 https + 淘宝/天猫域名白名单） */
+	openExternal: (url: string) => Promise<boolean>;
 	/** baseSrc: 当前 custom 子目录（如 'Rustil/'），由主进程 join(customRoot, baseSrc) 算出脚本子目录 */
 	readFile: (fileSrc: string, readScript: string, baseSrc?: string) => Promise<any>;
 	runScript: (payload: {

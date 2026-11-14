@@ -10,6 +10,8 @@ import { Button, Menu, message } from 'ant-design-vue';
 import FormBuilder from './components/FormBuilder.vue';
 import LoadFile from './components/LoadFile.vue';
 import LoadProject from './components/LoadProject.vue';
+import AdSlot from './components/AdSlot.vue';
+import SponsorSlot from './components/SponsorSlot.vue';
 import { DownloadOutlined, ReloadOutlined } from '@ant-design/icons-vue';
 
 // package.json 的 version 是纯 semver（0.4.0）；界面展示与初始窗口标题统一带 "v" 前缀，
@@ -87,6 +89,11 @@ const appIconStyle = computed(() => {
 		: `app-asset://local/?src=${encodeURIComponent(src)}`;
 	return { backgroundImage: `url("${url}")` };
 });
+
+// 侧栏底部图片推广位：config.json -> ads（未配置则不渲染，见 AdSlot.vue）
+const ads = computed(() => configStore.config?.ads ?? []);
+// 侧栏底部赞助入口：config.json -> sponsor（未配置则不渲染，见 SponsorSlot.vue）
+const sponsor = computed(() => configStore.config?.sponsor ?? null);
 
 // 第一个叶子菜单项（有 children 就递归取第一个子项）
 const firstLeaf = function (items: any[]): any {
@@ -303,6 +310,9 @@ onMounted(async () => {
 						UI:{{ uiVersion }}<br />main:{{ configStore.config?.ver }}
 					</div>
 				</div>
+				<SponsorSlot v-if="sponsor" :sponsor="sponsor" class="shrink-0" />
+				<!-- pb 给绝对定位的 .ver 留出空间，避免广告压住版本号 -->
+				<AdSlot v-if="ads.length" :items="ads" class="shrink-0 pb-[2.75rem]" />
 			</aside>
 			<div class="content flex-1 h-full overflow-y-auto">
 				<FormBuilder

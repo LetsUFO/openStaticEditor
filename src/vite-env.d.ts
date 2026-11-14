@@ -77,6 +77,26 @@ interface AppBackground {
 	alpha?: number;
 }
 
+/** config.json -> ads 的一项：图片推广位（淘宝联盟 CPS 等） */
+interface AppAd {
+	/** 图片路径：相对 custom 子目录时主进程会自动补前缀；也支持 http(s) / data: / blob: */
+	src: string;
+	/** 点击后打开的外部链接：仅 https，且限淘宝/天猫域名（白名单见主进程 shell:openExternal） */
+	link: string;
+	/** 图片替代文本，同时作为 hover 提示 */
+	alt?: string;
+}
+
+/** config.json -> sponsor：赞助入口（爱发电等） */
+interface AppSponsor {
+	/** 二维码图片路径（可选）：相对 custom 子目录时主进程会自动补前缀；也支持 http(s) / data: / blob: */
+	src?: string;
+	/** 赞助主页链接：仅 https，域名白名单见主进程 shell:openExternal */
+	link: string;
+	/** 入口文案，默认「赞助支持」 */
+	text?: string;
+}
+
 interface AppConfig {
 	name: string;
 	/** 应用图标路径，主进程用于设置窗口图标 */
@@ -88,6 +108,10 @@ interface AppConfig {
 	loadFiles: Record<string>;
 	menu: AppMenuItem[];
 	background?: AppBackground;
+	/** 侧栏底部图片推广位，按顺序纵向排列；不配置则不渲染 */
+	ads?: AppAd[];
+	/** 侧栏底部赞助入口（配了 src 则点击放大二维码）；不配置则不渲染 */
+	sponsor?: AppSponsor;
 	i18n?: Record<string, unknown>;
 	// config.json 可自行扩展字段，都会原样带过来
 	[key: string]: unknown;

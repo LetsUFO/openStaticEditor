@@ -15,6 +15,8 @@ const api = {
 	setWindowTitle: (title) => ipcRenderer.invoke('window:setTitle', title),
 	// 系统内置目录（downloads / documents），供渲染进程解析 fileSrc 简写
 	getPaths: () => ipcRenderer.invoke('app:paths'),
+	// 用系统浏览器打开外部链接（图片推广位跳转），主进程会校验域名白名单
+	openExternal: (url) => ipcRenderer.invoke('shell:openExternal', url),
 	// 运行 custom 目录下的读取脚本，返回解析后的数据
 	// baseSrc: 当前 custom 子目录（如 'Rustil/'），主进程会据此算出脚本子目录传给脚本
 	readFile: (fileSrc, readScript, baseSrc) =>

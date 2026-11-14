@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, net, protocol, screen } from 'electron';
+import { app, BrowserWindow, ipcMain, net, protocol, screen, shell } from 'electron';
 import { join, isAbsolute } from 'node:path';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
@@ -189,6 +189,41 @@ ipcMain.handle('window:setTitle', (event, title) => {
 	if (!win || typeof title !== 'string' || !title) return;
 	windowTitle = title;
 	win.setTitle(title);
+});
+
+/**
+ * 图片推广位的跳转域名白名单。
+ * config.json 属于用户可改区，如果直接透传 URL 给 shell.openExternal，
+ * 配置被篡改后就会变成任意链接/本地文件跳转入口，所以这里只放行 https 的淘宝/天猫域名。
+ */
+const EXTERNAL_HOST_SUFFIXES = ['taobao.com', 'tmall.com', 'tmall.hk', 'afdian.com', 'afdian.net'];
+
+/**
+ * 用系统浏览器打开外部链接（目前用于侧栏图片推广位）。
+ * 校验失败返回 false，由渲染层决定是否提示。
+ */
+ipcMain.handle('shell:openExternal', async (_event, url) => {
+	if (typeof url !== 'string') return false;
+
+	let target;
+	try {
+		target = new URL(url);
+	} catch {
+		return false;
+	}
+	if (target.protocol !== 'https:') return false;
+
+	const host = target.hostname.toLowerCase();
+	const allowed = EXTERNAL_HOST_SUFFIXES.some(
+		(domain) => host === domain || host.endsWith(`.${domain}`)
+	);
+	if (!allowed) {
+		console.warn(`[shell] 拒绝打开非白名单链接：${url}`);
+		return false;
+	}
+
+	await shell.openExternal(url);
+	return true;
 });
 
 /**
