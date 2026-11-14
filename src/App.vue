@@ -310,7 +310,7 @@ onMounted(async () => {
 					:dataKey="state.activeMenu.dataKey"
 					ref="$FormBuilder"
 				/>
-				<div class="absolute bottom-4 right-4">
+				<div class="absolute bottom-4 right-6">
 					<Button :loading="fileState.loading" @click="reload()">
 						<ReloadOutlined />重新加载</Button
 					>
