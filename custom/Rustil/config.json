@@ -12,7 +12,7 @@
 	},
 	"loadFiles": {
 		"base": {
-			"fileSrc": "%user%/AppData/LocalLow/KTMG_LLC/Rustil_ELC/rstl_stm.svd",
+			"fileSrc": "%user%/AppData/LocalLow/KTMG_LLC/Rustil_ELC/rstl_stm.svd|%download%/rstl_stm.svd",
 			"filePath": "",
 			"readScript": "loadSaveFile.js"
 		}

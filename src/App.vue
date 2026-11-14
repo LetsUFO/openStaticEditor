@@ -4,7 +4,7 @@ import { computed, reactive, ref, onMounted, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { name as appName, version as pkgVersion } from '../package.json';
 import theme, { dark } from './style/theme';
-import { resolvePathShorthand } from '@renderer/lib/lib';
+import { resolvePathShorthand, splitFileSrcCandidates } from '@renderer/lib/lib';
 
 import { Button, Menu, message } from 'ant-design-vue';
 import FormBuilder from './components/FormBuilder.vue';
@@ -119,16 +119,28 @@ const loadFiles = async function (files: Record<string, any>) {
 	const errors: string[] = [];
 	const loadList = Object.keys(files).map(async (key) => {
 		const { fileSrc, readScript } = files[key] || {};
-		try {
-			// 先解析 fileSrc 里的系统目录简写，再由主进程在 Node 环境中加载脚本并运行，返回解析后的数据
-			const filePath = await resolveFileSrc(fileSrc);
-			// 解析后的绝对路径存进 store，保存时直接取用
-			configStore.setFilePath(key, filePath);
-			const data = await window.api.readFile(filePath, readScript, configStore.baseSrc);
-			await setFileData(key, data);
-		} catch (err: any) {
-			errors.push(`${key}: ${err?.message || err}`);
+		const candidates = splitFileSrcCandidates(fileSrc);
+		if (!candidates.length) {
+			errors.push(`${key}: 未配置 fileSrc`);
+			return;
 		}
+
+		const attemptErrors: string[] = [];
+		for (const candidate of candidates) {
+			try {
+				// 先解析 fileSrc 里的系统目录简写，再由主进程在 Node 环境中加载脚本并运行，返回解析后的数据
+				const filePath = await resolveFileSrc(candidate);
+				const data = await window.api.readFile(filePath, readScript, configStore.baseSrc);
+				// 只有成功加载的候选路径才存进 store，保存时直接取用
+				configStore.setFilePath(key, filePath);
+				await setFileData(key, data);
+				return;
+			} catch (err: any) {
+				attemptErrors.push(`${candidate} -> ${err?.message || err}`);
+			}
+		}
+
+		errors.push(`${key}:\n${attemptErrors.join('\n')}`);
 	});
 	await Promise.all(loadList);
 	fileState.loading = false;

@@ -45,6 +45,18 @@ export function resolvePathShorthand(fileSrc: string, paths: SystemPaths): strin
 	});
 }
 
+/**
+ * 把 fileSrc 按 `|` 拆成多个备选文件路径，并去掉首尾空白。
+ * 例如 `%download%/a.svd|%download%/b.svd` => [a, b]。
+ */
+export function splitFileSrcCandidates(fileSrc: string): string[] {
+	if (!fileSrc) return [];
+	return fileSrc
+		.split('|')
+		.map((item) => item.trim())
+		.filter(Boolean);
+}
+
 /** 外部脚本 ctx 的通用字段（每个脚本都会收到） */
 export interface ScriptEnv {
 	customDir: string;
