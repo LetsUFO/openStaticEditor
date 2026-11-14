@@ -1,7 +1,7 @@
 {
 	"name": "Rustil: Eternal Labyrinth Castle 无限的迷宫城",
 	"appIcon": "Rustil_ELC.png",
-	"ver": "0.0.9",
+	"ver": "0.0.11",
 	"width": 1200,
 	"height": 740,
 	"background": {
@@ -65,6 +65,131 @@
 						{
 							"label": "最大改造等级",
 							"name": "Armor.MaxEnhancement",
+							"type": "number",
+							"min": 0,
+							"max": 9999
+						}
+					]
+				},
+				{
+					"label": "浮游槽1",
+					"tip": "可能4星装备才支持5条附加效果",
+					"items": [
+						{
+							"label": "是否已投保",
+							"name": "SubWeapon0.Insured",
+							"type": "switch"
+						},
+						{
+							"label": "当前改造等级",
+							"name": "SubWeapon0.Enhancement",
+							"type": "number",
+							"min": 0,
+							"max": 9999
+						},
+						{
+							"label": "最大改造等级",
+							"name": "SubWeapon0.MaxEnhancement",
+							"type": "number",
+							"min": 0,
+							"max": 9999
+						}
+					]
+				},
+				{
+					"label": "浮游槽2",
+					"tip": "可能4星装备才支持5条附加效果",
+					"items": [
+						{
+							"label": "是否已投保",
+							"name": "SubWeapon1.Insured",
+							"type": "switch"
+						},
+						{
+							"label": "当前改造等级",
+							"name": "SubWeapon1.Enhancement",
+							"type": "number",
+							"min": 0,
+							"max": 9999
+						},
+						{
+							"label": "最大改造等级",
+							"name": "SubWeapon1.MaxEnhancement",
+							"type": "number",
+							"min": 0,
+							"max": 9999
+						}
+					]
+				},
+				{
+					"label": "浮游槽3",
+					"tip": "可能4星装备才支持5条附加效果",
+					"items": [
+						{
+							"label": "是否已投保",
+							"name": "SubWeapon2.Insured",
+							"type": "switch"
+						},
+						{
+							"label": "当前改造等级",
+							"name": "SubWeapon2.Enhancement",
+							"type": "number",
+							"min": 0,
+							"max": 9999
+						},
+						{
+							"label": "最大改造等级",
+							"name": "SubWeapon2.MaxEnhancement",
+							"type": "number",
+							"min": 0,
+							"max": 9999
+						}
+					]
+				},
+				{
+					"label": "浮游槽4",
+					"tip": "可能4星装备才支持5条附加效果",
+					"items": [
+						{
+							"label": "是否已投保",
+							"name": "SubWeapon3.Insured",
+							"type": "switch"
+						},
+						{
+							"label": "当前改造等级",
+							"name": "SubWeapon3.Enhancement",
+							"type": "number",
+							"min": 0,
+							"max": 9999
+						},
+						{
+							"label": "最大改造等级",
+							"name": "SubWeapon3.MaxEnhancement",
+							"type": "number",
+							"min": 0,
+							"max": 9999
+						}
+					]
+				},
+				{
+					"label": "浮游槽5",
+					"tip": "可能4星装备才支持5条附加效果",
+					"items": [
+						{
+							"label": "是否已投保",
+							"name": "SubWeapon4.Insured",
+							"type": "switch"
+						},
+						{
+							"label": "当前改造等级",
+							"name": "SubWeapon4.Enhancement",
+							"type": "number",
+							"min": 0,
+							"max": 9999
+						},
+						{
+							"label": "最大改造等级",
+							"name": "SubWeapon4.MaxEnhancement",
 							"type": "number",
 							"min": 0,
 							"max": 9999
