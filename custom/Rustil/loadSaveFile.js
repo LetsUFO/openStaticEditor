@@ -270,6 +270,7 @@ function run(ctx = {}) {
 	const result = loadSave(ctx.filePath);
 	const enemyMap = loadEnemyMap();
 	if (enemyMap) result.enemyIdMap = enemyMap;
+	Object.assign(result, { functionTextList: [] });
 	return result;
 }
 
