@@ -5,39 +5,31 @@
 		"_passiveEffectList": [
 			{
 				"class": "Passive_AddCriticalRate",
-				"data": {
-					"EffectDescriptionString": "暴击率 + 19%",
-					"_addRate": {
-						"_value": 0.19433817267417908
-					}
-				}
+				"EffectDescriptionString": "暴击率 + 19%",
+				"valueList": [
+					{ "valueField": "_addRate", "value": 0.19433817267417908 }
+				]
 			},
 			{
 				"class": "Passive_CoolTimeReduction",
-				"data": {
-					"EffectDescriptionString": "技能冷却时间缩短 + 7%",
-					"_coolTimeReduction": {
-						"_value": 0.07090876996517181
-					}
-				}
+				"EffectDescriptionString": "技能冷却时间缩短 + 7%",
+				"valueList": [
+					{ "valueField": "_coolTimeReduction", "value": 0.07090876996517181 }
+				]
 			},
 			{
 				"class": "Passive_AddInt",
-				"data": {
-					"EffectDescriptionString": "智力 + 7",
-					"_add": {
-						"_value": 7
-					}
-				}
+				"EffectDescriptionString": "智力 + 7",
+				"valueList": [
+					{ "valueField": "_add", "value": 7 }
+				]
 			},
 			{
 				"class": "Passive_AddCriticalRate",
-				"data": {
-					"EffectDescriptionString": "暴击率 + 5%",
-					"_addRate": {
-						"_value": 0.056937918066978455
-					}
-				}
+				"EffectDescriptionString": "暴击率 + 5%",
+				"valueList": [
+					{ "valueField": "_addRate", "value": 0.056937918066978455 }
+				]
 			}
 		],
 		"Insured": true
@@ -48,39 +40,33 @@
 		"_passiveEffectList": [
 			{
 				"class": "Buff_RegeneHP",
-				"data": {
-					"EffectDescriptionString": "每秒恢复 10% 生命值",
-					"_recoveryValue": 0,
-					"_recoveryPer": 0.10000000149011612,
-					"_interval": 1.0
-				}
+				"EffectDescriptionString": "每秒恢复 10% 生命值",
+				"valueList": [
+					{ "valueField": "_recoveryValue", "value": 0 },
+					{ "valueField": "_recoveryPer", "value": 0.10000000149011612 },
+					{ "valueField": "_interval", "value": 1.0 }
+				]
 			},
 			{
 				"class": "Passive_AddMoveSpeed",
-				"data": {
-					"EffectDescriptionString": "移动速度提升 + 50%",
-					"_addMoveSpeed": {
-						"_value": 0.5
-					}
-				}
+				"EffectDescriptionString": "移动速度提升 + 50%",
+				"valueList": [
+					{ "valueField": "_addMoveSpeed", "value": 0.5 }
+				]
 			},
 			{
 				"class": "Passive_AddAttackSpeed",
-				"data": {
-					"EffectDescriptionString": "普通攻击速度提升 + 50%",
-					"_addAttackSpeed": {
-						"_value": 0.5
-					}
-				}
+				"EffectDescriptionString": "普通攻击速度提升 + 50%",
+				"valueList": [
+					{ "valueField": "_addAttackSpeed", "value": 0.5 }
+				]
 			},
 			{
 				"class": "Passive_AddCriticalRate",
-				"data": {
-					"EffectDescriptionString": "暴击率 + 50%",
-					"_addRate": {
-						"_value": 0.5
-					}
-				}
+				"EffectDescriptionString": "暴击率 + 50%",
+				"valueList": [
+					{ "valueField": "_addRate", "value": 0.5 }
+				]
 			}
 		],
 		"Insured": true

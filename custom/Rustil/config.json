@@ -43,6 +43,12 @@
 							"type": "number",
 							"min": 0,
 							"max": 9999
+						},
+						{
+							"label": "附加效果1",
+							"name": "MainWeapon._passiveEffectList[0]",
+							"type": "templateSelect",
+							"useOptions": ""
 						}
 					]
 				},

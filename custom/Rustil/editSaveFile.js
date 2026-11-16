@@ -20,8 +20,9 @@
  *   伙伴槽  Otomo1/2 = Familiar.Otomos[0/1]，Sub1..5 = Familiar.Subs[0..4]
  *           通过 GUID 去 Familiar.Familiars 找对象，写 IndividualDiferenceParam
  *   EnemyID 默认只作校验键，防止编成变动后把数值写到错误的伙伴身上
- *   只读数据：loadSaveFile.js 输出的 _passiveEffectList / enemyIdMap 会被安全忽略，
- *             所以「完整解析结果」也可以直接当配置喂进来，不必先精简
+ *   装备词条：_passiveEffectList[].valueList 中的数值会写回；class 用于校验，
+ *             防止词条顺序或类型变化后误写，EffectDescriptionString 为只读展示数据。
+ *           enemyIdMap 等附加数据会被安全忽略，完整解析结果可直接作为配置输入。
  *
  * 用法：
  *   node editSaveFile.js                                  # 预演（默认，不写任何文件）
@@ -60,7 +61,7 @@ const EQUIP_FIELDS = ['Enhancement', 'MaxEnhancement', 'Insured'];
 const FLOAT_WEAPON_KEYS = ['SubWeapon0', 'SubWeapon1', 'SubWeapon2', 'SubWeapon3', 'SubWeapon4'];
 // 解析脚本附带、但存档回写不涉及的只读展示数据：忽略而不是报错
 const TOP_LEVEL_READ_ONLY = new Set(['enemyIdMap']);
-const READ_ONLY_FIELDS = new Set(['_passiveEffectList', 'EffectDescriptionString']);
+const READ_ONLY_FIELDS = new Set(['EffectDescriptionString']);
 // 映射自检：5 个浮游槽必须依次对应 EquipGuids[1..5]
 FLOAT_WEAPON_KEYS.forEach((key, i) => {
   if (EQUIP_SLOTS[key] !== i + 1) fail('浮游槽映射与 EquipGuids 不一致');
@@ -227,6 +228,42 @@ function findEquipData(root, slotIndex, fields) {
   return { node: hit, guid, idx: hitIdx, path: `references.RefIds.${hitIdx}.data` };
 }
 
+// 兼容 { rid: N } / { $ref: N } 引用，以及直接内嵌的对象；返回的 path 与解密 JSON 差分路径一致。
+function resolveNode(root, node, key, parentPath, label) {
+  const path = `${parentPath}.${key}`;
+  if (!node || node.type !== 'object') fail(`${label} 结构异常`);
+  const ridNode = node.props.get('rid') ?? node.props.get('$ref');
+  if (!ridNode) return { node, path };
+  const refs = at(root, ['references', 'RefIds']);
+  const idx = refs.items.findIndex(
+    e => e.type === 'object' && Number(e.props.get('rid')?.value) === Number(ridNode.value)
+  );
+  if (idx < 0) fail(`${label} 引用的 rid ${ridNode.value} 不存在`);
+  return { node: refs.items[idx], path: `references.RefIds.${idx}` };
+}
+
+function resolveData(root, node, key, parentPath, label) {
+  const resolved = resolveNode(root, node, key, parentPath, label);
+  const data = resolved.node.props.get('data');
+  if (data && data.type === 'object') return { ref: resolved.node, data, path: `${resolved.path}.data` };
+  return { ref: resolved.node, data: resolved.node, path: resolved.path };
+}
+
+/** 定位装备 BuffMgr 下的词条实例，路径与解密 JSON 的差分路径保持一致。 */
+function findPassiveEffects(root, equipNode, equipPath, key) {
+  const buffMgr = equipNode.props.get('BuffMgr');
+  if (!buffMgr || buffMgr.value == null) return [];
+  const mgr = resolveData(root, buffMgr, 'BuffMgr', equipPath, `${key}.BuffMgr`);
+  const list = mgr.data.props.get('_passiveEffectList');
+  if (!list) return [];
+  if (list.type !== 'array') fail(`${key}.BuffMgr._passiveEffectList 必须是数组`);
+
+  return list.items.map((refNode, i) => {
+    const label = `${key}._passiveEffectList[${i}]`;
+    return resolveData(root, refNode, i, `${mgr.path}._passiveEffectList`, label);
+  });
+}
+
 function findFamiliar(root, listName, slotIndex) {
   const guid = guidHex(at(root, ['Familiar', listName, slotIndex]));
   const arr = at(root, ['Familiar', 'Familiars']);
@@ -248,6 +285,32 @@ function findFamiliar(root, listName, slotIndex) {
 }
 
 // ---------------------------------------------------------------- 配置校验
+function validateAffixList(key, list) {
+  if (!Array.isArray(list)) fail(`${key}._passiveEffectList 必须是数组`);
+  list.forEach((affix, i) => {
+    const label = `${key}._passiveEffectList[${i}]`;
+    if (affix == null) return; // 空槽位 / 未提交词条跳过，避免稀疏数组误报
+    if (typeof affix !== 'object' || Array.isArray(affix)) fail(`${label} 必须是对象`);
+    if (affix.class !== undefined && affix.class !== null && (typeof affix.class !== 'string' || !affix.class)) {
+      fail(`${label}.class 必须是非空字符串`);
+    }
+    if (affix.EffectDescriptionString !== undefined && typeof affix.EffectDescriptionString !== 'string') {
+      fail(`${label}.EffectDescriptionString 必须是字符串`);
+    }
+    const valueList = affix.valueList ?? [];
+    if (!Array.isArray(valueList)) fail(`${label}.valueList 必须是数组`);
+    const fields = new Set();
+    valueList.forEach((item, j) => {
+      const valueLabel = `${label}.valueList[${j}]`;
+      if (!item || typeof item !== 'object' || Array.isArray(item)) fail(`${valueLabel} 必须是对象`);
+      if (typeof item.valueField !== 'string' || !item.valueField) fail(`${valueLabel}.valueField 必须是非空字符串`);
+      if (typeof item.value !== 'number' || !Number.isFinite(item.value)) fail(`${valueLabel}.value 必须是有限数值`);
+      if (fields.has(item.valueField)) fail(`${label}.valueList 中字段 ${item.valueField} 重复`);
+      fields.add(item.valueField);
+    });
+  });
+}
+
 function validateConfig(cfg) {
   if (!cfg || typeof cfg !== 'object' || Array.isArray(cfg)) fail('配置根节点必须是对象');
   const isInt = v => Number.isInteger(v);
@@ -259,7 +322,8 @@ function validateConfig(cfg) {
     if (!equip && !fam) fail(`未知配置键 ${key}；可用键：${[...Object.keys(EQUIP_SLOTS), ...Object.keys(FAMILIAR_SLOTS)].join(', ')}`);
     const allowed = equip ? EQUIP_FIELDS : [...FAMILIAR_FIELDS, 'EnemyID'];
     for (const [f, v] of Object.entries(spec)) {
-      if (READ_ONLY_FIELDS.has(f)) continue; // 词条 / 效果文案属于只读展示数据
+      if (equip && f === '_passiveEffectList') { validateAffixList(key, v); continue; }
+      if (READ_ONLY_FIELDS.has(f)) continue; // 效果文案属于只读展示数据
       if (!allowed.includes(f)) fail(`${key}.${f} 不是可写字段（允许：${allowed.join(', ')}）`);
       if (f === 'Insured') { if (typeof v !== 'boolean') fail(`${key}.Insured 必须是 true/false`); }
       else if (!isInt(v)) fail(`${key}.${f} 必须是整数，收到 ${JSON.stringify(v)}`);
@@ -271,15 +335,14 @@ function validateConfig(cfg) {
 function buildPlan(src, root, cfg, opts) {
   const reps = [], rows = [], expectPaths = new Set();
 
-  function push(node, field, value, ctx) {
+  function push(node, field, value, ctx, displayField = field) {
     const v = node.props.get(field);
     if (!v) fail(`${ctx.path} 缺少字段 ${field}`);
     if (typeof v.value !== typeof value) fail(`${ctx.path}.${field} 类型不符：存档 ${typeof v.value} / 配置 ${typeof value}`);
-    const oldRaw = src.slice(v.start, v.end);
+    if (v.value === value) return; // 保留 1.0 等原始数字字面量，不做无意义替换
     const newRaw = JSON.stringify(value);
-    if (oldRaw === newRaw) return;
     reps.push({ start: v.start, end: v.end, text: newRaw });
-    rows.push({ ...ctx, field, old: v.value, now: value });
+    rows.push({ ...ctx, field: displayField, old: v.value, now: value });
     expectPaths.add(`${ctx.path}.${field}`);
   }
 
@@ -287,12 +350,35 @@ function buildPlan(src, root, cfg, opts) {
   for (const [key, spec] of Object.entries(cfg)) {
     if (TOP_LEVEL_READ_ONLY.has(key)) continue;
     if (key in EQUIP_SLOTS) {
-      // 装备对象可能带 _passiveEffectList 等只读字段，只取真正可写的标量
       const fields = Object.keys(spec).filter(f => EQUIP_FIELDS.includes(f));
-      if (!fields.length) continue;
-      const t = findEquipData(root, EQUIP_SLOTS[key], fields);
+      const affixes = spec._passiveEffectList;
+      if (!fields.length && affixes === undefined) continue;
+      const t = findEquipData(root, EQUIP_SLOTS[key], fields.length ? fields : ['Enhancement']);
       const ctx = { target: key, where: `槽${EQUIP_SLOTS[key]} rid${root.value.references.RefIds[t.idx].rid}`, guid: t.guid.slice(0, 12), path: t.path };
       for (const f of fields) push(t.node, f, spec[f], ctx);
+
+      if (affixes !== undefined) {
+        const effects = findPassiveEffects(root, t.node, t.path, key);
+        affixes.forEach((affix, i) => {
+          if (affix == null) return; // 未提交或被清空的词条跳过
+          const effect = effects[i];
+          const label = `${key}._passiveEffectList[${i}]`;
+          if (!effect) fail(`${label} 在存档中不存在；仅支持修改现有词条数值，不支持新增词条`);
+          const actualClass = effect.ref.props.get('type')?.props?.get('class')?.value ?? null;
+          if (affix.class != null && affix.class !== actualClass) {
+            fail(`${label}.class 与存档不一致：配置 ${affix.class} / 存档 ${actualClass}，已拒绝写入`);
+          }
+          for (const { valueField, value } of affix.valueList ?? []) {
+            const valueNode = effect.data.props.get(valueField);
+            if (!valueNode) fail(`${label} 的存档数据中缺少字段 ${valueField}`);
+            if (valueNode.type === 'object' && valueNode.props.has('_value')) {
+              push(valueNode, '_value', value, { ...ctx, path: `${effect.path}.${valueField}` }, valueField);
+            } else {
+              push(effect.data, valueField, value, { ...ctx, path: effect.path }, valueField);
+            }
+          }
+        });
+      }
     } else {
       const [list, idx] = FAMILIAR_SLOTS[key];
       const t = findFamiliar(root, list, idx);
@@ -493,14 +579,14 @@ function main() {
 }
 
 // ---------------------------------------------------------------- 应用内入口
-/** 只提取界面允许编辑的字段，忽略 enemyIdMap、_passiveEffectList 等只读数据。 */
+/** 提取装备标量、词条数值与伙伴字段，忽略 enemyIdMap 等附加数据。 */
 function pickWritableConfig(data) {
   const cfg = {};
   for (const key of [...Object.keys(EQUIP_SLOTS), ...Object.keys(FAMILIAR_SLOTS)]) {
     const spec = data[key];
     if (spec == null) continue; // 空装备/伙伴槽不写入
     if (typeof spec !== 'object' || Array.isArray(spec)) fail(`${key} 必须是对象`);
-    const fields = key in EQUIP_SLOTS ? EQUIP_FIELDS : [...FAMILIAR_FIELDS, 'EnemyID'];
+    const fields = key in EQUIP_SLOTS ? [...EQUIP_FIELDS, '_passiveEffectList'] : [...FAMILIAR_FIELDS, 'EnemyID'];
     const picked = {};
     for (const field of fields) {
       if (Object.hasOwn(spec, field)) picked[field] = spec[field];

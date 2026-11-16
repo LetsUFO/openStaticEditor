@@ -134,10 +134,11 @@ class SaveIndex {
 
 const stripTags = (s) => s.replace(/<[^>]*>/g, '').trim();
 
-// 词条：只保留原生文案（去富文本标签、改单数字段）与真正生效的数值
+// 词条：只保留原生文案（去富文本标签）与真正生效的数值，数值统一放入 valueList
 function trimAffix(entry) {
 	const src = entry?.data ?? {};
-	const data = {};
+	const affix = { class: entry?.type?.class ?? null };
+	const valueList = [];
 
 	const desc = src.EffectDescriptionStringList;
 	const raw = Array.isArray(desc)
@@ -145,7 +146,7 @@ function trimAffix(entry) {
 		: typeof desc === 'string' && desc.trim()
 			? desc
 			: null;
-	if (raw) data.EffectDescriptionString = stripTags(raw);
+	if (raw) affix.EffectDescriptionString = stripTags(raw);
 
 	for (const [key, value] of Object.entries(src)) {
 		if (key === 'EffectDescriptionStringList') continue;
@@ -155,14 +156,15 @@ function trimAffix(entry) {
 			!Array.isArray(value) &&
 			Object.hasOwn(value, '_value')
 		) {
-			data[key] = { _value: value._value }; // FloatEx / IntEx 包装值
+			valueList.push({ valueField: key, value: value._value }); // FloatEx / IntEx 包装值
 		} else if (PLAIN_VALUE_FIELDS.has(key)) {
-			data[key] = value; // 无容器的标量参数
+			valueList.push({ valueField: key, value }); // 无容器的标量参数
 		}
 		// 其余为元数据：_uniqueID / _disableVFX / _duration / Guid / 抽值范围等，一律丢弃
 	}
 
-	return { class: entry?.type?.class ?? null, data };
+	affix.valueList = valueList;
+	return affix;
 }
 
 function readEquip(save, index, slot) {
@@ -238,12 +240,17 @@ function loadSave(savePath) {
 	return parseSave(save);
 }
 
-const replacer = (key, value) => {
-	if (FLOAT_LITERAL_FIELDS.has(key) && typeof value === 'number' && Number.isInteger(value)) {
+function replacer(key, value) {
+	if (
+		key === 'value' &&
+		FLOAT_LITERAL_FIELDS.has(this?.valueField) &&
+		typeof value === 'number' &&
+		Number.isInteger(value)
+	) {
 		return typeof JSON.rawJSON === 'function' ? JSON.rawJSON(`${value}.0`) : value;
 	}
 	return value;
-};
+}
 
 const ENEMY_JSON = 'enemy.json';
 
@@ -270,7 +277,7 @@ function run(ctx = {}) {
 	const result = loadSave(ctx.filePath);
 	const enemyMap = loadEnemyMap();
 	if (enemyMap) result.enemyIdMap = enemyMap;
-	Object.assign(result, { functionTextList: [] });
+	Object.assign(result, { effectTemplateList: [], inputGroupMap: {}, functionTextList: [] });
 	return result;
 }
 

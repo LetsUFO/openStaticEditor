@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import type { ItemType } from 'ant-design-vue/es/menu';
+import { isObject } from 'lodash';
 
 // AppConfig / AppMenuItem 为全局类型，定义在 src/vite-env.d.ts（单一来源，避免字段两处漂移）
 
@@ -56,11 +57,15 @@ export const useConfigStore = defineStore('config', () => {
 				fileData.value[fileKey] = {};
 			}
 			Object.assign(fileData.value[fileKey], data);
+			//处理functionTextList，这是允许自建的方法库
 			if (Array.isArray(data?.functionTextList)) {
 				data.functionTextList.forEach((li: IFunctionTextListObj) => {
 					// 外层括号让 eval 把 "function (...)" 按函数表达式处理（直接 eval 会被当声明，返回 undefined）
 					fileData.value[fileKey][li.name] = eval(`(${li.function})`);
 				});
+			}
+			//处理输入模板索引
+			if (isObject(data?.inputGroupMap)) {
 			}
 			dataVersion.value++;
 			console.log(fileData.value);
