@@ -1,0 +1,66 @@
+[
+	{
+		"value": "Buff_RegeneHP",
+		"label": "定时恢复 {value}% 生命值",
+		"valueField": [
+			{ "key": "_recoveryValue", "rate": 1 },
+			{ "key": "_recoveryPer", "rate": 100 },
+			{ "key": "_interval", "rate": 1 }
+		]
+	},
+	{
+		"value": "Buff_RegistDOTArea",
+		"label": "持续伤害（DOT）区域减伤 + {value}%",
+		"valueField": [{ "key": "_addRate", "rate": 100 }]
+	},
+	{
+		"value": "Passive_AddAttackSpeed",
+		"label": "普通攻击速度提升 + {value}%",
+		"valueField": [{ "key": "_addAttackSpeed", "rate": 100 }]
+	},
+	{
+		"value": "Passive_AddCriticalDamageRate",
+		"label": "暴击伤害倍率 + {value}%",
+		"valueField": [{ "key": "_addRate", "rate": 100 }]
+	},
+	{
+		"value": "Passive_AddCriticalRate",
+		"label": "暴击率 + {value}%",
+		"valueField": [{ "key": "_addRate", "rate": 100 }]
+	},
+	{
+		"value": "Passive_AddInt",
+		"label": "智力 + {value}",
+		"valueField": [{ "key": "_add", "rate": 1 }]
+	},
+	{
+		"value": "Passive_AddMen",
+		"label": "精神 + {value}",
+		"valueField": [{ "key": "_add", "rate": 1 }]
+	},
+	{
+		"value": "Passive_AddMoveSpeed",
+		"label": "移动速度提升 + {value}%",
+		"valueField": [{ "key": "_addMoveSpeed", "rate": 100 }]
+	},
+	{
+		"value": "Passive_AddStr",
+		"label": "力量 + {value}",
+		"valueField": [{ "key": "_addStr", "rate": 1 }]
+	},
+	{
+		"value": "Passive_AddVit",
+		"label": "体质 + {value}",
+		"valueField": [{ "key": "_add", "rate": 1 }]
+	},
+	{
+		"value": "Passive_CoolTimeReduction",
+		"label": "技能冷却时间缩短 + {value}%",
+		"valueField": [{ "key": "_coolTimeReduction", "rate": 100 }]
+	},
+	{
+		"value": "Passive_IncreasedStaminaRecoveryRate",
+		"label": "耐力恢复速度 + {value}%",
+		"valueField": [{ "key": "_addRate", "rate": 100 }]
+	}
+]

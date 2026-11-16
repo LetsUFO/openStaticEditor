@@ -46,9 +46,33 @@
 						},
 						{
 							"label": "附加效果1",
-							"name": "MainWeapon._passiveEffectList[0]",
+							"name": "MainWeapon._passiveEffectList[0].class",
 							"type": "templateSelect",
-							"useOptions": ""
+							"optionUse": "effectList"
+						},
+						{
+							"label": "附加效果2",
+							"name": "MainWeapon._passiveEffectList[1].class",
+							"type": "templateSelect",
+							"optionUse": "effectList"
+						},
+						{
+							"label": "附加效果3",
+							"name": "MainWeapon._passiveEffectList[2].class",
+							"type": "templateSelect",
+							"optionUse": "effectList"
+						},
+						{
+							"label": "附加效果4",
+							"name": "MainWeapon._passiveEffectList[3].class",
+							"type": "templateSelect",
+							"optionUse": "effectList"
+						},
+						{
+							"label": "附加效果5",
+							"name": "MainWeapon._passiveEffectList[4].class",
+							"type": "templateSelect",
+							"optionUse": "effectList"
 						}
 					]
 				},

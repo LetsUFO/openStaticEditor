@@ -197,6 +197,31 @@ defineExpose({ getFormData });
 								{{ li.label }}</Select.Option
 							>
 						</Select>
+						<div v-else-if="item.type == 'templateSelect'">
+							<Select
+								:value="read(item)"
+								:disabled="item.disabled"
+								:placeholder="item.placeholder || '请选择'"
+								:show-search="true"
+								:option-filter-prop="'label'"
+								:allowClear="true"
+								class="w-full!"
+								@update:value="(v) => write(item, v)"
+							>
+								<Select.Option
+									v-for="li in optionsOf(item)"
+									:key="li.label"
+									:value="li.value"
+								>
+									<span
+										v-if="optionTag(li, item)"
+										:class="item.optionBeforeTag?.colorClass"
+										>{{ item.optionBeforeTag?.text }}</span
+									>
+									{{ li.label }}</Select.Option
+								>
+							</Select>
+						</div>
 						<Switch
 							v-else-if="item.type == 'switch'"
 							:checked="!!read(item)"

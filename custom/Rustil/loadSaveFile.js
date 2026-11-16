@@ -253,6 +253,7 @@ function replacer(key, value) {
 }
 
 const ENEMY_JSON = 'enemy.json';
+const EFFECT_JSON = 'effect.json';
 
 /**
  * 读取同级目录下的 enemy.json（用 __dirname 定位，不依赖框架注入）。
@@ -270,6 +271,21 @@ function loadEnemyMap() {
 }
 
 /**
+ * 读取同级目录下的 effect.json（效果模板列表）。
+ * 文件缺失或解析失败时返回 null，不报错。
+ */
+function loadEffectList() {
+	const p = path.join(__dirname, EFFECT_JSON);
+	if (!fs.existsSync(p)) return null;
+	try {
+		const raw = fs.readFileSync(p, 'utf-8');
+		return JSON.parse(raw);
+	} catch {
+		return null;
+	}
+}
+
+/**
  * 应用内调用入口（主进程 file:read 把本模块当函数调用）。
  * 返回解析后的数据对象，由主进程回传给渲染进程写入 store。
  */
@@ -277,7 +293,11 @@ function run(ctx = {}) {
 	const result = loadSave(ctx.filePath);
 	const enemyMap = loadEnemyMap();
 	if (enemyMap) result.enemyIdMap = enemyMap;
-	Object.assign(result, { effectTemplateList: [], inputGroupMap: {}, functionTextList: [] });
+	Object.assign(result, {
+		effectList: loadEffectList() ?? [],
+		inputGroupMap: {},
+		functionTextList: []
+	});
 	return result;
 }
 
