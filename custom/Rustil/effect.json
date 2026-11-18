@@ -1,11 +1,18 @@
 [
 	{
 		"value": "Buff_RegeneHP",
-		"label": "定时恢复 {value}% 生命值",
+		"label": "每秒恢复 {value}% 生命值",
 		"valueField": [
-			{ "key": "_recoveryValue", "rate": 1 },
-			{ "key": "_recoveryPer", "rate": 100 },
-			{ "key": "_interval", "rate": 1 }
+			{ "key": "_recoveryValue", "rate": 1, "value": 0, "show": false },
+			{
+				"label": "基数为最大生命值",
+				"key": "_recoveryPer",
+				"rate": 100,
+				"inputType": "number",
+				"min": 1,
+				"max": 100
+			},
+			{ "key": "_interval", "rate": 1, "value": 1, "show": false }
 		]
 	},
 	{

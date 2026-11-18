@@ -65,7 +65,7 @@ function write(item: AppMenuFormField, value: any): void {
 }
 
 // ------------------------------------------------------------------ 下拉选项
-function normalizeOptions(list: any): { label: string; value: any }[] {
+function normalizeOptions(list: any): { label: string; value: any; [key: string]: any }[] {
 	if (!Array.isArray(list)) return [];
 	return list.map((opt) =>
 		opt && typeof opt === 'object' && 'value' in opt ? opt : { label: String(opt), value: opt }
@@ -106,6 +106,89 @@ function optionsOf(item: AppMenuFormField) {
 function optionTag(li: any, item: AppMenuFormField) {
 	const tag = item?.optionBeforeTag;
 	return tag && li?.[tag.key] ? tag : null;
+}
+
+interface TemplateValueField {
+	key: string;
+	label?: string;
+	rate?: number;
+	show?: boolean;
+	min?: number;
+	max?: number;
+	step?: number;
+	precision?: number;
+	defaultValue?: number;
+	value?: number;
+}
+
+/** templateSelect 对应的效果对象路径，如 MainWeapon._passiveEffectList[0] */
+function templateEffectPath(item: AppMenuFormField): string {
+	const path = item.name?.replace(/\.class$/, '') ?? '';
+	if (!path || item.index == null) return path;
+	return path.replace(/\[\d+\]$/, `[${item.index}]`);
+}
+
+/** templateSelect 当前选中的原始 option；选项来自 effect.json -> effectList */
+function selectedOption(item: AppMenuFormField): any {
+	const path = templateEffectPath(item);
+	const value = path ? get(source.value, `${path}.class`) : undefined;
+	return optionsOf(item).find((li) => li.value === value) ?? null;
+}
+
+/** 当前选中效果模板声明的数值字段（effect.json 的 valueField） */
+function templateValueFields(item: AppMenuFormField): TemplateValueField[] {
+	const fields = selectedOption(item)?.valueField;
+	return Array.isArray(fields) ? fields : [];
+}
+
+function templateValueListPath(item: AppMenuFormField): string {
+	const path = templateEffectPath(item);
+	return path ? `${path}.valueList` : '';
+}
+
+/** 输入框展示值 = store 原始值 × rate；未初始化的字段显示为空 */
+function templateValue(item: AppMenuFormField, field: TemplateValueField): number | undefined {
+	const path = templateValueListPath(item);
+	const list = path ? get(source.value, path) : [];
+	if (!Array.isArray(list)) return undefined;
+	const entry = list.find((li) => li?.valueField === field.key);
+	return typeof entry?.value === 'number' ? entry.value * (field.rate ?? 1) : undefined;
+}
+
+/** 输入框写回：展示值 ÷ rate 后写入当前效果 valueList 中 valueField 对应的子项 */
+function writeTemplateValue(
+	item: AppMenuFormField,
+	field: TemplateValueField,
+	value: number | string | null | undefined
+): void {
+	const path = templateValueListPath(item);
+	if (!path || !source.value) return;
+	const numericValue = value == null || value === '' ? Number.NaN : Number(value);
+	let displayValue = Number.isNaN(numericValue) ? (field.min ?? 0) : numericValue;
+	if (field.min != null) displayValue = Math.max(field.min, displayValue);
+	if (field.max != null) displayValue = Math.min(field.max, displayValue);
+
+	const current = get(source.value, path);
+	const list = Array.isArray(current) ? [...current] : [];
+	const index = list.findIndex((li) => li?.valueField === field.key);
+	const entry = { valueField: field.key, value: displayValue / (field.rate ?? 1) };
+	if (index >= 0) list[index] = entry;
+	else list.push(entry);
+	set(source.value, path, list);
+}
+
+/** 切换效果时，按新模板的 valueField 全量重建当前索引的 valueList */
+function onTemplateChange(item: AppMenuFormField, value: any): void {
+	write(item, value);
+	const path = templateValueListPath(item);
+	if (!path || !source.value) return;
+	const option = optionsOf(item).find((li) => li.value === value);
+	const fields: TemplateValueField[] = Array.isArray(option?.valueField) ? option.valueField : [];
+	const list = fields.map((field) => {
+		const displayValue = field.defaultValue ?? field.value ?? field.min ?? 0;
+		return { valueField: field.key, value: displayValue / (field.rate ?? 1) };
+	});
+	set(source.value, path, list);
 }
 
 /** 块级启停：外部直接传入数据路径，该路径值 truthy 时启用，否则禁用；路径为空则始终启用 */
@@ -206,7 +289,7 @@ defineExpose({ getFormData });
 								:option-filter-prop="'label'"
 								:allowClear="true"
 								class="w-full!"
-								@update:value="(v) => write(item, v)"
+								@update:value="(v) => onTemplateChange(item, v)"
 							>
 								<Select.Option
 									v-for="li in optionsOf(item)"
@@ -218,9 +301,28 @@ defineExpose({ getFormData });
 										:class="item.optionBeforeTag?.colorClass"
 										>{{ item.optionBeforeTag?.text }}</span
 									>
-									{{ li.label }}</Select.Option
-								>
+									{{ li.label }}
+								</Select.Option>
 							</Select>
+							<ul class="flex pr-2 gap-1">
+								<li
+									v-for="vf in templateValueFields(item)"
+									:key="vf.key"
+									v-show="vf.show != false"
+									class="flex-1"
+								>
+									<div class="text-fcLv1 mt-2 mb-1">{{ vf.label }}</div>
+									<InputNumber
+										:value="templateValue(item, vf)"
+										:min="vf.min"
+										:max="vf.max"
+										:step="vf.step"
+										:precision="vf.precision"
+										class="w-full!"
+										@update:value="(v) => writeTemplateValue(item, vf, v)"
+									></InputNumber>
+								</li>
+							</ul>
 						</div>
 						<Switch
 							v-else-if="item.type == 'switch'"

@@ -48,31 +48,36 @@
 							"label": "附加效果1",
 							"name": "MainWeapon._passiveEffectList[0].class",
 							"type": "templateSelect",
-							"optionUse": "effectList"
+							"optionUse": "effectList",
+							"index": 0
 						},
 						{
 							"label": "附加效果2",
 							"name": "MainWeapon._passiveEffectList[1].class",
 							"type": "templateSelect",
-							"optionUse": "effectList"
+							"optionUse": "effectList",
+							"index": 1
 						},
 						{
 							"label": "附加效果3",
 							"name": "MainWeapon._passiveEffectList[2].class",
 							"type": "templateSelect",
-							"optionUse": "effectList"
+							"optionUse": "effectList",
+							"index": 2
 						},
 						{
 							"label": "附加效果4",
 							"name": "MainWeapon._passiveEffectList[3].class",
 							"type": "templateSelect",
-							"optionUse": "effectList"
+							"optionUse": "effectList",
+							"index": 3
 						},
 						{
 							"label": "附加效果5",
 							"name": "MainWeapon._passiveEffectList[4].class",
 							"type": "templateSelect",
-							"optionUse": "effectList"
+							"optionUse": "effectList",
+							"index": 4
 						}
 					]
 				},
@@ -98,6 +103,41 @@
 							"type": "number",
 							"min": 0,
 							"max": 9999
+						},
+						{
+							"label": "附加效果1",
+							"name": "Armor._passiveEffectList[0].class",
+							"type": "templateSelect",
+							"optionUse": "effectList",
+							"index": 0
+						},
+						{
+							"label": "附加效果2",
+							"name": "Armor._passiveEffectList[1].class",
+							"type": "templateSelect",
+							"optionUse": "effectList",
+							"index": 1
+						},
+						{
+							"label": "附加效果3",
+							"name": "Armor._passiveEffectList[2].class",
+							"type": "templateSelect",
+							"optionUse": "effectList",
+							"index": 2
+						},
+						{
+							"label": "附加效果4",
+							"name": "Armor._passiveEffectList[3].class",
+							"type": "templateSelect",
+							"optionUse": "effectList",
+							"index": 3
+						},
+						{
+							"label": "附加效果5",
+							"name": "Armor._passiveEffectList[4].class",
+							"type": "templateSelect",
+							"optionUse": "effectList",
+							"index": 4
 						}
 					]
 				},

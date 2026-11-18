@@ -29,6 +29,8 @@ interface AppMenuFormField {
 	/** 动态选项数据：store.fileData[dataKey] 下该路径的值（如 "skillMap"）。
 	 * 配了 optionFilterFn 时作为其第二参数传入；否则直接作为选项使用 */
 	optionUse?: string;
+	/** type=templateSelect 时生效：对应 _passiveEffectList 的数组下标 */
+	index?: number;
 	/** 选项前的标记（如「已测」）：选项数据里 key 对应值为 truthy 时展示 */
 	optionBeforeTag?: {
 		key: string;
