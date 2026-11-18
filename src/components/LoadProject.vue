@@ -91,11 +91,13 @@ const iconUrl = (src: string): string => {
 			:style="{ width: `${100 / state.colLimit}%` }"
 			@click="emit('select', p.dir)"
 		>
-			<img
+			<div
 				v-if="p.appIcon"
-				class="icon block mx-auto mb-4 rounded-xl transition ease-in-out"
-				:src="iconUrl(p.appIcon)"
-			/>
+				class="icon mx-auto mb-4 rounded-xl transition ease-in-out overflow-hidden flex items-center"
+			>
+				<img class="w-full h-auto" :src="iconUrl(p.appIcon)" />
+			</div>
+
 			<div class="name">{{ p.name }}</div>
 			<div class="text-fcLv1 mt-1">{{ p.ver }}</div>
 		</li>

@@ -1,0 +1,49 @@
+{
+	"name": "",
+	"appIcon": "",
+	"ver": "0.0.1",
+	"width": 1200,
+	"height": 760,
+	"background": {
+		"src": "",
+		"base64": "",
+		"blur": 20,
+		"alpha": 0.2
+	},
+	"loadFiles": {
+		"base": {
+			"beforeScript": "",
+			"fileSrc": "",
+			"filePath": "",
+			"readScript": ""
+		}
+	},
+	"menu": [
+		{
+			"label": "",
+			"tip": "",
+			"category": [
+				{
+					"label": "",
+					"tip": "",
+					"col": 3,
+					"items": [
+						{
+							"label": "",
+							"name": "",
+							"type": "text"
+						}
+					]
+				}
+			],
+			"dataKey": "base",
+			"saveScript": {
+				"needFileKey": "base",
+				"saveScript": ""
+			}
+		}
+	],
+	"i18n": {
+		"zh": {}
+	}
+}
