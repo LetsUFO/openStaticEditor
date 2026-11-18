@@ -2,7 +2,7 @@
 import { reactive, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useConfigStore } from '@renderer/stores/config';
-import { resolvePathShorthand } from '@renderer/lib/lib';
+import { resolvePathShorthand, splitFileSrcCandidates } from '@renderer/lib/lib';
 
 import { Button, Select } from 'ant-design-vue';
 
@@ -21,14 +21,21 @@ const emit = defineEmits(['loadFiles']);
 const configStore = useConfigStore();
 const needFiles = storeToRefs(configStore).loadFiles;
 
-// fileListMap / targetFileMap 的 key 与 config.json -> loadFiles 的 key 一一对应
+// fileListMap / targetFileMap / dirMap 的 key 与 config.json -> loadFiles 的 key 一一对应
 const state = reactive({
 	targetFileMap: {} as Record<string, string>,
-	fileListMap: {} as Record<string, string[]>
+	fileListMap: {} as Record<string, string[]>,
+	// 各 key 实际选中的目录（点「加载文件」拼接最终 fileSrc 时复用，避免重复解析简写）
+	dirMap: {} as Record<string, string>
 });
 
-// 各 key 解析后的目录（点「加载文件」拼接最终 fileSrc 时复用，避免重复解析简写）
-const resolvedDirMap: Record<string, string> = {};
+// filePath 支持用 `|` 配置多个备选目录，先拆分再逐个解析系统目录简写
+const resolveDirCandidates = async function (filePath: string): Promise<string[]> {
+	const candidates = splitFileSrcCandidates(filePath);
+	if (!candidates.some((item) => item.includes('%'))) return candidates;
+	const paths = await window.api.getPaths();
+	return candidates.map((item) => resolvePathShorthand(item, paths));
+};
 
 watch(
 	() => needFiles.value,
@@ -36,20 +43,37 @@ watch(
 		for (const key of Object.keys(fileMap)) {
 			const fileObj = fileMap[key];
 			if (!fileObj?.beforeScript) continue;
-			// 解析 filePath 里的系统目录简写（%download% / %document% / %user%），规则见 @renderer/lib/lib
-			let dir: string = fileObj.filePath || '';
-			if (dir.includes('%')) dir = resolvePathShorthand(dir, await window.api.getPaths());
-			resolvedDirMap[key] = dir;
-			// 主进程 Node 环境运行 beforeScript，返回文件名列表
-			const list = await window.api.runScript({
-				scriptSrc: fileObj.beforeScript,
-				filePath: dir,
-				baseSrc: configStore.baseSrc
-			});
-			state.fileListMap[key] = Array.isArray(list) ? list : [];
+			// filePath 里的系统目录简写（%download% / %document% / %user%），规则见 @renderer/lib/lib
+			const candidates = await resolveDirCandidates(fileObj.filePath || '');
+			// 依次探测各备选目录，取第一个有文件的目录；都为空则退回第一个能访问的目录
+			let dir = candidates[0] || '';
+			let list: string[] = [];
+			let fallbackDir = '';
+			for (const candidate of candidates) {
+				try {
+					// 主进程 Node 环境运行 beforeScript，返回文件名列表
+					const files = await window.api.runScript({
+						scriptSrc: fileObj.beforeScript,
+						filePath: candidate,
+						baseSrc: configStore.baseSrc
+					});
+					const fileList = Array.isArray(files) ? files : [];
+					if (fileList.length) {
+						dir = candidate;
+						list = fileList;
+						break;
+					}
+					if (!fallbackDir) fallbackDir = candidate;
+				} catch {
+					// 目录不存在等异常，继续尝试下一个备选目录
+				}
+			}
+			if (!list.length && fallbackDir) dir = fallbackDir;
+			state.dirMap[key] = dir;
+			state.fileListMap[key] = list;
 			// 未选择或所选已不在列表中时，默认选中第一个
-			if (!state.fileListMap[key].includes(state.targetFileMap[key])) {
-				state.targetFileMap[key] = state.fileListMap[key][0] || '';
+			if (!list.includes(state.targetFileMap[key])) {
+				state.targetFileMap[key] = list[0] || '';
 			}
 		}
 	},
@@ -62,7 +86,7 @@ const onLoadFiles = function () {
 	for (const key of Object.keys(needFiles.value)) {
 		const fileObj = needFiles.value[key];
 		if (!fileObj?.filePath || fileObj?.fileSrc) continue;
-		const dir = resolvedDirMap[key] ?? fileObj.filePath;
+		const dir = state.dirMap[key] ?? fileObj.filePath;
 		fileObj.fileSrc = dir + (state.targetFileMap[key] || '');
 	}
 	emit('loadFiles');
@@ -80,7 +104,7 @@ const onLoadFiles = function () {
 				<template v-if="file.fileSrc"> {{ key }}: {{ file.fileSrc }} </template>
 				<template v-else>
 					<div class="mb-2">
-						{{ key }}: {{ file.filePath + (state.targetFileMap[key] || '') }}
+						{{ key }}: {{ (state.dirMap[key] ?? file.filePath) + (state.targetFileMap[key] || '') }}
 					</div>
 					<Select
 						v-model:value="state.targetFileMap[key]"
