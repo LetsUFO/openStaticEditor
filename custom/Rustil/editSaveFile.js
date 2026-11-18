@@ -250,18 +250,240 @@ function resolveData(root, node, key, parentPath, label) {
 }
 
 /** 定位装备 BuffMgr 下的词条实例，路径与解密 JSON 的差分路径保持一致。 */
-function findPassiveEffects(root, equipNode, equipPath, key) {
+function getPassiveEffectList(root, equipNode, equipPath, key) {
   const buffMgr = equipNode.props.get('BuffMgr');
-  if (!buffMgr || buffMgr.value == null) return [];
+  if (!buffMgr || buffMgr.value == null) return null;
   const mgr = resolveData(root, buffMgr, 'BuffMgr', equipPath, `${key}.BuffMgr`);
   const list = mgr.data.props.get('_passiveEffectList');
-  if (!list) return [];
+  if (!list) return null;
   if (list.type !== 'array') fail(`${key}.BuffMgr._passiveEffectList 必须是数组`);
 
-  return list.items.map((refNode, i) => {
-    const label = `${key}._passiveEffectList[${i}]`;
-    return resolveData(root, refNode, i, `${mgr.path}._passiveEffectList`, label);
+  const effects = list.items.map((node, i) => {
+    const refNode = node.type === 'object' ? (node.props.get('rid') ?? node.props.get('$ref')) : null;
+    const effect = resolveData(root, node, i, `${mgr.path}._passiveEffectList`, `${key}._passiveEffectList[${i}]`);
+    return { ...effect, node, rid: refNode ? Number(refNode.value) : null };
   });
+  return { node: list, path: `${mgr.path}._passiveEffectList`, effects };
+}
+
+function effectClass(effect) {
+  return effect.ref.props.get('type')?.props?.get('class')?.value ?? null;
+}
+
+/** 少数效果字段直接存标量，其余为 { _value } 包装 */
+const PLAIN_VALUE_FIELDS = new Set(['_recoveryValue', '_recoveryPer', '_interval']);
+const EFFECT_JSON = 'effect.json';
+
+let effectTemplateCache = null;
+function loadEffectTemplates() {
+  if (effectTemplateCache) return effectTemplateCache;
+  effectTemplateCache = {};
+  const p = path.join(WORK_DIR, EFFECT_JSON);
+  if (!fs.existsSync(p)) return effectTemplateCache;
+  try {
+    for (const item of JSON.parse(fs.readFileSync(p, 'utf8'))) {
+      if (item && typeof item.value === 'string') effectTemplateCache[item.value] = item;
+    }
+  } catch { /* 模板文件损坏时退化为按 class 名生成 */ }
+  return effectTemplateCache;
+}
+
+function describeAffix(className, affix) {
+  const tpl = loadEffectTemplates()[className];
+  if (!tpl || typeof tpl.label !== 'string') return null;
+  const fields = Array.isArray(tpl.valueField) ? tpl.valueField : [];
+  for (const f of fields) {
+    if (f.show === false) continue;
+    const entry = (affix.valueList ?? []).find(v => v.valueField === f.key);
+    if (entry && typeof entry.value === 'number') {
+      return tpl.label.replace(/\{value\}/g, String(entry.value * (f.rate ?? 1)));
+    }
+  }
+  return tpl.label.replace(/\{value\}/g, '');
+}
+
+function applyAffixValues(data, affix) {
+  for (const { valueField, value } of affix.valueList ?? []) {
+    const cur = data[valueField];
+    if (cur && typeof cur === 'object' && !Array.isArray(cur) && Object.hasOwn(cur, '_value')) {
+      data[valueField] = { ...cur, _value: value };
+    } else if (PLAIN_VALUE_FIELDS.has(valueField) || Object.hasOwn(data, valueField)) {
+      data[valueField] = value;
+    } else {
+      data[valueField] = { _value: value };
+    }
+  }
+}
+
+function findTypeShape(root) {
+  const refs = at(root, ['references', 'RefIds']);
+  for (const e of refs.items) {
+    if (e.type !== 'object') continue;
+    const t = e.props.get('type');
+    if (t && t.type === 'object' && t.props.has('class')) return t.value;
+  }
+  return null;
+}
+
+/** 新建词条：优先克隆存档中同类词条（保留该类的元数据），否则按模板最小构造 */
+function buildNewEffect(root, className, affix) {
+  const refs = at(root, ['references', 'RefIds']);
+  let obj = null;
+  for (const e of refs.items) {
+    if (e.type !== 'object') continue;
+    if (e.props.get('type')?.props?.get('class')?.value !== className) continue;
+    const data = e.props.get('data');
+    if (!data || data.type !== 'object') continue;
+    obj = JSON.parse(JSON.stringify(e.value));
+    break;
+  }
+  if (obj) {
+    delete obj.rid;
+    if (obj.type && typeof obj.type === 'object') obj.type.class = className;
+  } else {
+    const shape = findTypeShape(root);
+    const type = shape ? JSON.parse(JSON.stringify(shape)) : {};
+    type.class = className;
+    const desc = describeAffix(className, affix);
+    obj = { type, data: desc == null ? {} : { EffectDescriptionStringList: [desc] } };
+  }
+  if (!obj.data || typeof obj.data !== 'object') obj.data = {};
+  applyAffixValues(obj.data, affix);
+  // 克隆会把源对象的 Guid 一起带过来，这里重新生成避免重复标识
+  if (obj.data.Guid && typeof obj.data.Guid === 'object' && Array.isArray(obj.data.Guid._serializedGuid)) {
+    obj.data.Guid = { _serializedGuid: Array.from(crypto.randomBytes(16)) };
+  }
+  return obj;
+}
+
+function nextRidOf(root) {
+  const refs = at(root, ['references', 'RefIds']);
+  let max = 0;
+  for (const e of refs.items) {
+    if (e.type !== 'object') continue;
+    const rid = Number(e.props.get('rid')?.value);
+    if (Number.isFinite(rid)) max = Math.max(max, rid);
+  }
+  return max + 1;
+}
+
+function valueAtPath(obj, p) {
+  return p.split('.').reduce((cur, k) => (cur == null ? undefined : cur[k]), obj);
+}
+
+/**
+ * 把配置里的 _passiveEffectList 同步到存档：
+ * 按 class 匹配保留原词条（只改数值），匹配不到的新建词条，未使用的删除。
+ */
+function syncPassiveEffects(root, src, equipNode, equipPath, key, affixes, out) {
+  const desired = (affixes ?? []).filter(
+    a => a && typeof a === 'object' && !Array.isArray(a) && typeof a.class === 'string' && a.class
+  );
+  const list = getPassiveEffectList(root, equipNode, equipPath, key);
+  if (!desired.length && !list) return;
+  if (desired.length && !list) fail(`${key}.BuffMgr._passiveEffectList 在存档中不存在，无法写入附加效果`);
+
+  const effects = list ? list.effects : [];
+  const used = new Set();
+  const matches = new Array(desired.length).fill(-1);
+  const valuesOf = (effect) => {
+    const out = {};
+    for (const [k, v] of effect.data.props) {
+      if (v.type === 'object' && v.props.has('_value')) out[k] = v.props.get('_value').value;
+      else if (PLAIN_VALUE_FIELDS.has(k) && v.type === 'primitive') out[k] = v.value;
+    }
+    return out;
+  };
+  const sameValues = (effect, affix) => {
+    const values = valuesOf(effect);
+    const fields = (affix.valueList ?? []).filter(v => typeof v.value === 'number');
+    return fields.length > 0 && fields.every(v => values[v.valueField] === v.value);
+  };
+
+  // 匹配顺序：同下标同类 → 同类且数值一致 → 同类兜底；避免同 class 的重复词条错位
+  const tryMatch = (i, j) => {
+    if (used.has(i) || matches[j] !== -1) return false;
+    if (effectClass(effects[i]) !== desired[j].class) return false;
+    used.add(i);
+    matches[j] = i;
+    return true;
+  };
+  desired.forEach((affix, j) => { if (effects[j]) tryMatch(j, j); });
+  desired.forEach((affix, j) => {
+    if (matches[j] !== -1) return;
+    for (let i = 0; i < effects.length; i++) if (sameValues(effects[i], affix) && tryMatch(i, j)) break;
+  });
+  desired.forEach((affix, j) => {
+    if (matches[j] !== -1) return;
+    for (let i = 0; i < effects.length; i++) if (tryMatch(i, j)) break;
+  });
+
+  const items = [];
+  const created = [];
+
+  for (let j = 0; j < desired.length; j++) {
+    const affix = desired[j];
+    const match = matches[j];
+    if (match < 0) {
+      const obj = buildNewEffect(root, affix.class, affix);
+      items.push({ newObj: obj });
+      created.push(obj);
+      out.rows.push({ ...out.ctx, field: 'class', old: null, now: affix.class });
+      continue;
+    }
+
+    const effect = effects[match];
+    const label = `${key}._passiveEffectList[${match}]`;
+    if (effect.rid != null) {
+      for (const { valueField, value } of affix.valueList ?? []) {
+        const valueNode = effect.data.props.get(valueField);
+        if (!valueNode) fail(`${label} 的存档数据中缺少字段 ${valueField}`);
+        if (valueNode.type === 'object' && valueNode.props.has('_value')) {
+          out.push(valueNode, '_value', value, { ...out.ctx, path: `${effect.path}.${valueField}` }, valueField);
+        } else {
+          out.push(effect.data, valueField, value, { ...out.ctx, path: effect.path }, valueField);
+        }
+      }
+      items.push({ effect });
+    } else {
+      // 内嵌词条：整体重建文本，避免与字段替换区间重叠
+      const obj = JSON.parse(JSON.stringify(effect.ref.value));
+      if (!obj.data || typeof obj.data !== 'object') fail(`${label} 缺少 data 对象`);
+      applyAffixValues(obj.data, affix);
+      items.push({ inline: obj });
+    }
+  }
+
+  for (let i = 0; i < effects.length; i++) {
+    if (!used.has(i)) out.rows.push({ ...out.ctx, field: 'class', old: effectClass(effects[i]), now: null });
+  }
+
+  // 存档里的词条以 { rid } 引用为主；无既有词条时也按引用写入
+  const useRefs = effects.length === 0 || effects.every(e => e.rid != null);
+  if (useRefs && created.length) {
+    let rid = nextRidOf(root);
+    for (const obj of created) obj.rid = rid++;
+  }
+
+  const oldTexts = effects.map(e => src.slice(e.node.start, e.node.end));
+  const newTexts = items.map((it) => {
+    if (it.effect) return src.slice(it.effect.node.start, it.effect.node.end);
+    if (it.inline) return JSON.stringify(it.inline);
+    return JSON.stringify(useRefs ? { rid: it.newObj.rid } : it.newObj);
+  });
+
+  if (JSON.stringify(oldTexts) !== JSON.stringify(newTexts)) {
+    out.reps.push({ start: list.node.start, end: list.node.end, text: `[${newTexts.join(',')}]` });
+    out.listChecks.push({ path: list.path, value: newTexts.map(t => JSON.parse(t)) });
+  }
+
+  if (useRefs && created.length) {
+    const refs = at(root, ['references', 'RefIds']);
+    const begin = refs.end - 1;
+    const text = created.map(o => JSON.stringify(o)).join(',');
+    out.reps.push({ start: begin, end: begin, text: `${refs.items.length ? ',' : ''}${text}` });
+    created.forEach((_, i) => out.expectPaths.add(`references.RefIds.${refs.items.length + i}`));
+  }
 }
 
 function findFamiliar(root, listName, slotIndex) {
@@ -333,7 +555,7 @@ function validateConfig(cfg) {
 
 // ---------------------------------------------------------------- 生成替换计划
 function buildPlan(src, root, cfg, opts) {
-  const reps = [], rows = [], expectPaths = new Set();
+  const reps = [], rows = [], expectPaths = new Set(), listChecks = [];
 
   function push(node, field, value, ctx, displayField = field) {
     const v = node.props.get(field);
@@ -358,25 +580,8 @@ function buildPlan(src, root, cfg, opts) {
       for (const f of fields) push(t.node, f, spec[f], ctx);
 
       if (affixes !== undefined) {
-        const effects = findPassiveEffects(root, t.node, t.path, key);
-        affixes.forEach((affix, i) => {
-          if (affix == null) return; // 未提交或被清空的词条跳过
-          const effect = effects[i];
-          const label = `${key}._passiveEffectList[${i}]`;
-          if (!effect) fail(`${label} 在存档中不存在；仅支持修改现有词条数值，不支持新增词条`);
-          const actualClass = effect.ref.props.get('type')?.props?.get('class')?.value ?? null;
-          if (affix.class != null && affix.class !== actualClass) {
-            fail(`${label}.class 与存档不一致：配置 ${affix.class} / 存档 ${actualClass}，已拒绝写入`);
-          }
-          for (const { valueField, value } of affix.valueList ?? []) {
-            const valueNode = effect.data.props.get(valueField);
-            if (!valueNode) fail(`${label} 的存档数据中缺少字段 ${valueField}`);
-            if (valueNode.type === 'object' && valueNode.props.has('_value')) {
-              push(valueNode, '_value', value, { ...ctx, path: `${effect.path}.${valueField}` }, valueField);
-            } else {
-              push(effect.data, valueField, value, { ...ctx, path: effect.path }, valueField);
-            }
-          }
+        syncPassiveEffects(root, src, t.node, t.path, key, affixes, {
+          reps, rows, expectPaths, listChecks, push, ctx
         });
       }
     } else {
@@ -407,7 +612,7 @@ function buildPlan(src, root, cfg, opts) {
   const skipped = Object.keys(cfg).filter(
     k => !TOP_LEVEL_READ_ONLY.has(k) && !touched.has(k)
   );
-  return { reps, rows, expectPaths, mismatch, skipped };
+  return { reps, rows, expectPaths, mismatch, skipped, listChecks };
 }
 
 /** 递归列出两份 JSON 的所有值差异路径，用来确认"只改了该改的字段"。 */
@@ -452,7 +657,7 @@ function runWriteback(cfg, savePath, opts = {}) {
 
   const src = decrypt(fs.readFileSync(savePath));
   const root = parseWithSpans(src);
-  const { reps, rows, expectPaths, mismatch, skipped } = buildPlan(src, root, cfg, opts);
+  const { reps, rows, expectPaths, mismatch, skipped, listChecks } = buildPlan(src, root, cfg, opts);
 
   console.log(`存档  : ${savePath}  (${fs.statSync(savePath).size} B)`);
   if (opts.config) console.log(`配置  : ${opts.config}`);
@@ -492,9 +697,18 @@ function runWriteback(cfg, savePath, opts = {}) {
   // 结构化 diff：除计划内字段外，全档必须完全一致
   const after = parseWithSpans(dst).value;
   const diffs = diffPaths(root.value, after);
-  const unexpected = diffs.filter(d => !expectPaths.has(d.path));
-  const missing = [...expectPaths].filter(p => !diffs.some(d => d.path === p));
+  // 词条列表的增删/重排会整体替换数组文本，单独按结构校验，不逐条比对 diff 路径
+  const underSyncList = p => listChecks.some(c => p === c.path || p.startsWith(`${c.path}.`));
+  const unexpected = diffs.filter(d => !expectPaths.has(d.path) && !underSyncList(d.path));
+  const missing = [...expectPaths].filter(p => !diffs.some(d => d.path === p) && !underSyncList(p));
+  for (const c of listChecks) {
+    const actual = valueAtPath(after, c.path);
+    if (JSON.stringify(actual) !== JSON.stringify(c.value)) {
+      fail(`附加效果列表校验失败：${c.path} 与预期不一致`);
+    }
+  }
   console.log(`\n全量差分：实际 ${diffs.length} 处 / 计划 ${expectPaths.size} 处，越界 ${unexpected.length} 处，漏改 ${missing.length} 处`);
+  if (listChecks.length) console.log(`附加效果列表校验：${listChecks.length} 个装备槽通过`);
   if (unexpected.length || missing.length) {
     for (const d of unexpected) console.log(`  越界 ${d.path}: ${JSON.stringify(d.from)} -> ${JSON.stringify(d.to)}`);
     for (const p of missing) console.log(`  漏改 ${p}`);

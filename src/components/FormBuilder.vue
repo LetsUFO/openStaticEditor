@@ -40,6 +40,11 @@ const model = computed<Record<string, any>>(() => source.value || {});
 function read(item: AppMenuFormField): any {
 	let out = '';
 	switch (item.type) {
+		case 'templateSelect': {
+			const path = templateEffectPath(item);
+			out = path ? get(source.value, `${path}.class`) : undefined;
+			break;
+		}
 		case 'enumText': {
 			// 从 store 里按 name 路径取原始值（ID），再去 useEnumMap 指定的映射表找 label
 			const raw = item?.name ? get(source.value, item.name) : undefined;
@@ -121,11 +126,23 @@ interface TemplateValueField {
 	value?: number;
 }
 
+/** templateSelect 在 _passiveEffectList 中的下标；配置缺省时退回 name 里的下标 */
+function templateEffectIndex(item: AppMenuFormField): number {
+	if (item.index != null) return item.index;
+	const m = /\[(\d+)\]/.exec(item.name ?? '');
+	return m ? Number(m[1]) : 0;
+}
+
 /** templateSelect 对应的效果对象路径，如 MainWeapon._passiveEffectList[0] */
 function templateEffectPath(item: AppMenuFormField): string {
 	const path = item.name?.replace(/\.class$/, '') ?? '';
-	if (!path || item.index == null) return path;
-	return path.replace(/\[\d+\]$/, `[${item.index}]`);
+	if (!path) return '';
+	return path.replace(/\[\d+\]$/, `[${templateEffectIndex(item)}]`);
+}
+
+/** templateSelect 对应的效果列表路径，如 MainWeapon._passiveEffectList */
+function templateEffectListPath(item: AppMenuFormField): string {
+	return templateEffectPath(item).replace(/\[\d+\]$/, '');
 }
 
 /** templateSelect 当前选中的原始 option；选项来自 effect.json -> effectList */
@@ -177,18 +194,56 @@ function writeTemplateValue(
 	set(source.value, path, list);
 }
 
-/** 切换效果时，按新模板的 valueField 全量重建当前索引的 valueList */
+/** 按模板生成词条说明文案，如「暴击率 + {value}%」 */
+function describeTemplate(
+	option: any,
+	fields: TemplateValueField[],
+	valueList: Array<{ valueField: string; value: number }>
+): string | undefined {
+	const label = option?.label;
+	if (typeof label !== 'string') return undefined;
+	const visible = fields.find((f) => f.show !== false) ?? fields[0];
+	if (!visible) return label;
+	const entry = valueList.find((li) => li.valueField === visible.key);
+	if (!entry) return label;
+	return label.replace(/\{value\}/g, String(entry.value * (visible.rate ?? 1)));
+}
+
+/**
+ * 切换效果：
+ * - 清空（删除）：从 _passiveEffectList 中移除该下标，后续词条前移
+ * - 新增/替换：按新模板的 valueField 重建 valueList；已有下标原地替换，超出则追加
+ */
 function onTemplateChange(item: AppMenuFormField, value: any): void {
-	write(item, value);
-	const path = templateValueListPath(item);
-	if (!path || !source.value) return;
+	const listPath = templateEffectListPath(item);
+	if (!listPath || !source.value) return;
+
+	const current = get(source.value, listPath);
+	const list: any[] = Array.isArray(current)
+		? current.filter((li) => li && typeof li === 'object')
+		: [];
+	const index = templateEffectIndex(item);
+
+	if (value == null) {
+		if (index >= list.length) return;
+		list.splice(index, 1);
+		set(source.value, listPath, list);
+		return;
+	}
+
 	const option = optionsOf(item).find((li) => li.value === value);
 	const fields: TemplateValueField[] = Array.isArray(option?.valueField) ? option.valueField : [];
-	const list = fields.map((field) => {
+	const valueList = fields.map((field) => {
 		const displayValue = field.defaultValue ?? field.value ?? field.min ?? 0;
 		return { valueField: field.key, value: displayValue / (field.rate ?? 1) };
 	});
-	set(source.value, path, list);
+	const entry: Record<string, any> = { class: value, valueList };
+	const description = describeTemplate(option, fields, valueList);
+	if (description != null) entry.EffectDescriptionString = description;
+
+	if (index < list.length) list[index] = entry;
+	else list.push(entry);
+	set(source.value, listPath, list);
 }
 
 /** 块级启停：外部直接传入数据路径，该路径值 truthy 时启用，否则禁用；路径为空则始终启用 */
