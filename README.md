@@ -67,11 +67,6 @@ npm run build        # 仅编译到 out/
 > `custom/*/config.json` 的 `ver` 同样只写纯 semver（如 `0.1.3`），
 > 由 `electron/main/index.js` 的 `loadConfig()` 在读取时统一补 `v`（兼容历史带 `v` 的写法）。
 
-macOS 上打包 dmg：
-```bash
-npm run dist:mac
-```
-
 ## 数据对接
 - needFileKey和loadFiles下key匹配
 - saveScript:指定所需的文件key，传给脚本
