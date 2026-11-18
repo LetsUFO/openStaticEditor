@@ -2,7 +2,8 @@
 这是一个静态文件的修改器前端工具，目前着力于提供游戏静态修改器的UI界面，提升玩家们的视觉和交互体验，也方便开发者不用解决UI问题。
 
 ## 目前已完成的游戏存档修改器
-- 2026.11.01 永恒空间2
+- 2026.11.01 永恒空间 2（Everspace 2）
+- 2026.11.18 Rustil: Eternal Labyrinth Castle 无限的迷宫城
 
 ## 技术栈
 Vue 3 + Pinia + Electron 桌面应用骨架，使用 electron-vite 构建，可打包成 Windows `.exe` 直接运行。
@@ -17,16 +18,40 @@ Vue 3 + Pinia + Electron 桌面应用骨架，使用 electron-vite 构建，可�
 openStaticEditor/
 ├── .npmrc                      # 使用 npmmirror 镜像，解决私有源 502
 ├── electron.vite.config.js     # electron-vite 配置
+├── electron-builder.js         # 打包配置（exe / dmg）
+├── tailwind.config.js
+├── tsconfig.json
+├── tsconfig.node.json
 ├── package.json
 ├── electron/
-│   ├── main/index.js           # 主进程
+│   ├── main/index.js           # 主进程：窗口、配置加载、脚本执行
 │   └── preload/index.js        # 预加载桥接
-└── src/                        # 渲染进程（Vue 应用）
-    ├── index.html
-    ├── main.js                 # 入口：createApp + Pinia
-    ├── App.vue
-    ├── stores/counter.js       # Pinia store 示例
-    └── components/HelloWorld.vue
+├── scripts/
+│   ├── build-icons.js          # 图标生成
+│   ├── custom-meta.js          # 读取 custom 元信息、补齐版本号
+│   └── organize-release.js     # 整理发布产物
+├── src/                        # 渲染进程（Vue 应用）
+│   ├── index.html
+│   ├── main.ts                 # 入口：createApp + Pinia
+│   ├── App.vue
+│   ├── style.scss
+│   ├── components/
+│   │   ├── FormBuilder.vue     # 根据配置动态生成表单
+│   │   ├── LoadFile.vue        # 存档文件选择
+│   │   └── LoadProject.vue     # 项目 / 游戏选择
+│   ├── lib/lib.ts              # 通用工具方法
+│   ├── stores/config.ts        # Pinia store：全局配置与状态
+│   ├── style/
+│   │   ├── antd-theme.d.ts
+│   │   └── theme.ts
+│   └── vite-env.d.ts
+├── custom/                     # 各游戏修改器资源，每个子目录对应一款游戏
+│   ├── ES2/                    # 永恒空间 2（Everspace 2）
+│   ├── Rustil/                 # Rustil: 无限的迷宫城
+│   └── _ES2/                   # ES2 备份副本（前缀 _ 不参与加载）
+├── build/                      # 打包用资源（自动生成）
+├── out/                        # electron-vite 编译输出
+└── release/                    # electron-builder 发布产物
 ```
 
 ## 开发 / 构建
