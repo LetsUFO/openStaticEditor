@@ -1,10 +1,15 @@
 'use strict';
 
 // EXVSFB (NPJB00512) RPCS3 内存修改器 Node.js 版。
-// 需要 Node.js 18+，首次运行前执行 npm install。
+// 需要 Node.js 18+，独立运行前执行 npm install；由主程序调用时无需（主程序注册全局 NODE_PATH）。
+// 主程序约定：require 本模块后，开/关分别调用导出的 on()/off()（config.json 的 script/on/off），
+// 模块常驻、on/off 共享 running 标志；日志写 exvs_trainer.log。独立命令行运行见文件末尾。
 const koffi = require('koffi');
 const { execFileSync } = require('child_process');
 const { performance } = require('perf_hooks');
+const fs = require('fs');
+const path = require('path');
+const { format } = require('util');
 
 const BASE = 0x340000000;
 const SIZE = 0x10000000;
@@ -19,19 +24,26 @@ const SCAN_BASE = 0x341000000;
 const SCAN_SIZE = 0x1200000;
 const BOOST_MAX = 10000;
 const EX_MAX = 100.0;
+const HP_MAX_SANE = 5000;
 
 const PROCESS_VM_OPERATION = 0x0008;
 const PROCESS_VM_WRITE = 0x0020;
 const PROCESS_VM_READ = 0x0010;
 const PROCESS_QUERY_INFORMATION = 0x0400;
 
-const kernel32 = koffi.load('kernel32.dll');
-const OpenProcess = kernel32.func(
-    'void* __stdcall OpenProcess(uint32_t access, int inherit, uint32_t pid)');
-const ReadProcessMemory = kernel32.func(
-    'int __stdcall ReadProcessMemory(void* process, uint64_t address, _Out_ void* buffer, size_t size, _Out_ size_t* read)');
-const WriteProcessMemory = kernel32.func(
-    'int __stdcall WriteProcessMemory(void* process, uint64_t address, const void* buffer, size_t size, _Out_ size_t* written)');
+// 原生接口延迟到真正开启时加载：主进程 require 本模块不触碰平台库，
+// 非 Windows 环境（如开发机）也能安全加载模块，只有 on() 时才会报平台错误。
+let OpenProcess, ReadProcessMemory, WriteProcessMemory;
+function initNative() {
+    if (OpenProcess) return;
+    const kernel32 = koffi.load('kernel32.dll');
+    OpenProcess = kernel32.func(
+        'void* __stdcall OpenProcess(uint32_t access, int inherit, uint32_t pid)');
+    ReadProcessMemory = kernel32.func(
+        'int __stdcall ReadProcessMemory(void* process, uint64_t address, _Out_ void* buffer, size_t size, _Out_ size_t* read)');
+    WriteProcessMemory = kernel32.func(
+        'int __stdcall WriteProcessMemory(void* process, uint64_t address, const void* buffer, size_t size, _Out_ size_t* written)');
+}
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const monotonic = () => performance.now() / 1000;
@@ -145,6 +157,38 @@ function formatWeaponIds(ids) {
     return ids.map(id => id === null ? '?' : id).join('/');
 }
 
+// 检查一个候选机体结构是否像“正常可操控机体”:
+// 结构特征完整, HP 在 1..5000, 气槽不超过 10000, EX 是 0..100 的有限浮点。
+// 用于过滤扫描误命中的垃圾结构(例如 HP=0xFFFFFFFF)。
+function slotOneCandidate(mem, unit) {
+    if (!unitValid(mem, unit)) return false;
+    const hpData = mem.read(unit + OFF_HP, 4);
+    if (hpData.length !== 4) return false;
+    const hp = hpData.readUInt32BE(0);
+    if (hp < 1 || hp > HP_MAX_SANE) return false;
+    const boostData = mem.read(unit + OFF_BOOST, 4);
+    if (boostData.length !== 4) return false;
+    const boost = boostData.readUInt32BE(0);
+    // 普通机体气槽上限固定 10000; 超过的是 BOSS 类单位, 不能当作 1 号位。
+    if (boost > BOOST_MAX) return false;
+    const exData = mem.read(unit + OFF_EX, 4);
+    if (exData.length !== 4) return false;
+    const ex = exData.readFloatBE(0);
+    if (!Number.isFinite(ex) || ex < 0 || ex > EX_MAX) return false;
+    return true;
+}
+
+// 1 号位判定: 过滤不合理结构后按地址顺序取第 target 台。
+// 已经锁定且仍合格时保持不变, 避免中途把 boost 改写到敌方。
+function pickPlayerUnit(mem, units, target, previous = null) {
+    const candidates = units.filter(unit => slotOneCandidate(mem, unit));
+    if (!candidates.length) {
+        return units.length ? units[Math.min(target, units.length) - 1] : null;
+    }
+    if (previous && candidates.includes(previous)) return previous;
+    return candidates[Math.min(target, candidates.length) - 1];
+}
+
 function pairEquals(a, b) {
     return Boolean(a && b && a.ammo.equals(b.ammo) && a.gauge.equals(b.gauge));
 }
@@ -194,6 +238,7 @@ async function findSyncCopies(mem, primary, maximum) {
 function printHelp() {
     console.log(`用法: node exvs_trainer.js [选项]
   不带参数时自动启用 HP / Boost / EX / 弹药，并在内部判断是否可用
+  主程序通过导出方法 on()/off() 启停；日志见 exvs_trainer.log
   --boost          气槽锁定为满 (10000)
   --hp             血量锁定为进入战斗时的值
   --ex             EX 槽锁定为满 (100)
@@ -206,6 +251,12 @@ function printHelp() {
 function parseArgs(argv) {
     const args = { boost: false, hp: false, ex: false, ammo: false,
         all: false, list: false, target: 1, help: false };
+    if (argv.length === 0) {
+        args.boost = true;
+        args.hp = true;
+        args.ex = true;
+        args.ammo = true;
+    }
     for (let i = 0; i < argv.length; i++) {
         const arg = argv[i];
         if (arg === '--target') {
@@ -224,28 +275,40 @@ function parseArgs(argv) {
     return args;
 }
 
-async function main() {
-    const args = parseArgs(process.argv.slice(2));
-    if (args.help || !(args.boost || args.hp || args.ex || args.ammo || args.list)) {
-        printHelp();
-        return;
-    }
+// ---------------------------------------------------------------- 主程序调用（on/off）
+// 主程序 require 本模块后，开/关分别调用导出的 on()/off()，模块实例常驻：
+// - on()：启动锁定循环（已在运行则忽略），日志写 exvs_trainer.log（每次开启清空）；
+// - off()：仅置 running=false，循环下一轮自行退出，主程序不干预常驻细节。
+const LOG_FILE = path.join(__dirname, 'exvs_trainer.log');
+let running = false;
+// 当前常驻循环的收尾 Promise：off() 等它完成后才返回，保证调用方拿到「已停止」
+let currentRun = null;
+
+for (const method of ['log', 'error']) {
+    const original = console[method].bind(console);
+    console[method] = (...args) => {
+        original(...args);
+        try { fs.appendFileSync(LOG_FILE, format(...args) + '\n'); } catch { /* 日志失败不影响主流程 */ }
+    };
+}
+
+async function run(args, onStarted) {
     if (args.ammo && (args.all || args.target !== 1)) {
         throw new Error('--ammo 目前只支持默认的第 1 台强袭自由，不能配合 --all/--target');
     }
 
+    try { fs.writeFileSync(LOG_FILE, ''); } catch { /* 忽略 */ }
+    initNative();
     const pid = findPid();
     if (!pid) {
-        console.log('[x] 没找到 rpcs3.exe，请先启动游戏');
-        return;
+        throw new Error('没找到 rpcs3.exe，请先启动游戏');
     }
     const mem = new Mem(pid);
     console.log('[+] rpcs3 pid =', pid);
 
     let units = findUnits(mem);
     if (!units.length) {
-        console.log('[x] 没找到机体结构，请确认已经进入战斗且游戏未暂停');
-        return;
+        throw new Error('没找到机体结构，请确认已经进入战斗且游戏未暂停');
     }
     console.log(`[+] 找到 ${units.length} 台机体:`);
     let hpMax = new Map();
@@ -267,13 +330,20 @@ async function main() {
     });
     if (args.list) return;
 
-    let targets = args.all ? units : [units[Math.min(args.target, units.length) - 1]];
+    let targets = args.all ? units :
+        (() => {
+            const unit = pickPlayerUnit(mem, units, args.target);
+            return unit ? [unit] : [];
+        })();
     const mode = [];
     if (args.boost) mode.push('气槽');
     if (args.hp) mode.push('血量');
     if (args.ex) mode.push('EX');
     if (args.ammo) mode.push('强袭自由主射/齐射/浮游炮');
     console.log(`[+] 已开启: ${mode.join(', ')}  (换局自动重扫, Ctrl+C 停止)`);
+    if (!args.all && targets.length) {
+        console.log(`[+] 目标机体: ${hex(targets[0])}`);
+    }
 
     const ammoGroups = new Map();
     const ammoRetry = Array(AMMO_FIELDS.length).fill(0);
@@ -282,16 +352,20 @@ async function main() {
     let lastWeaponCheck = 0;
     if (args.ammo) console.log('[+] 弹药写入前校验武器ID，首次装填时自动定位同步副本');
 
-    let running = true;
-    process.once('SIGINT', () => { running = false; });
+    running = true;
+    onStarted?.();
     let lastCheck = 0;
     while (running) {
         const now = monotonic();
         if (now - lastCheck >= 1.0) {
             if (!targets.length || targets.some(unit => !unitValid(mem, unit))) {
                 units = findUnits(mem);
+                const prevTarget = targets[0];
                 targets = args.all ? units :
-                    (units.length ? [units[Math.min(args.target, units.length) - 1]] : []);
+                    (() => {
+                        const unit = pickPlayerUnit(mem, units, args.target, prevTarget);
+                        return unit ? [unit] : [];
+                    })();
                 ammoGroups.clear();
                 ammoRetry.fill(0);
                 ammoAllowed = false;
@@ -303,6 +377,20 @@ async function main() {
                     hpMax.set(unit, d.length === 4 ? d.readUInt32BE(0) : 0);
                 }
                 if (targets.length) console.log('[+] 检测到结构变化，已自动重新定位');
+            }
+            // 只有结构本身消失(被回收/换局)才重新判定; HP=0 只是阵亡, 不能因此改锁到敌方。
+            if (!args.all && targets.length && !unitValid(mem, targets[0])) {
+                const best = pickPlayerUnit(mem, units, args.target, targets[0]);
+                if (best && best !== targets[0]) {
+                    targets = [best];
+                    hpMax = new Map([[best, 0]]);
+                    ammoGroups.clear();
+                    ammoRetry.fill(0);
+                    ammoAllowed = false;
+                    weaponKey = '';
+                    lastWeaponCheck = 0;
+                    console.log('[+] 1 号位判定变化，切换为 ' + hex(best));
+                }
             }
             for (const unit of targets) {
                 if (args.hp && (hpMax.get(unit) || 0) <= 0) {
@@ -316,6 +404,8 @@ async function main() {
         }
 
         for (const unit of targets) {
+            // 结构已被回收时不写入, 防止把数值写到后续占用该地址的其它机体上。
+            if (!unitValid(mem, unit)) continue;
             if (args.boost) mem.write(unit + OFF_BOOST, BOOST_BUFFER);
             if (args.hp && (hpMax.get(unit) || 0) > 0) {
                 mem.write(unit + OFF_HP, u32be(hpMax.get(unit)));
@@ -379,7 +469,49 @@ async function main() {
     console.log('\n[+] 已停止');
 }
 
-main().catch(error => {
-    console.error('[x]', error.message || error);
-    process.exitCode = 1;
-});
+/** 主程序「开」：返回 Promise，常驻循环启动成功后完成；启动失败则 reject，运行期异常记录日志 */
+function on() {
+    if (process.platform !== 'win32') {
+        return Promise.reject(new Error('该修改器仅支持 Windows，请在 Windows 主程序中配合 RPCS3 使用'));
+    }
+    if (running) return Promise.resolve();
+
+    let resolveStart;
+    let rejectStart;
+    const started = new Promise((resolve, reject) => {
+        resolveStart = resolve;
+        rejectStart = reject;
+    });
+    let startSucceeded = false;
+    currentRun = run(parseArgs([]), () => {
+        startSucceeded = true;
+        resolveStart();
+    }).catch(error => {
+        console.error('[x]', error.message || error);
+        running = false;
+        if (!startSucceeded) rejectStart(error);
+    });
+    return started;
+}
+
+/** 主程序「关」：置标志位并返回 Promise，常驻循环真正退出后完成 */
+async function off() {
+    running = false;
+    if (currentRun) await currentRun;
+}
+
+module.exports = { on, off };
+
+// 独立命令行运行：node exvs_trainer.js [选项]（主程序 require 时不走这里）
+if (require.main === module) {
+    process.once('SIGINT', () => { running = false; });
+    const args = parseArgs(process.argv.slice(2));
+    if (args.help || !(args.boost || args.hp || args.ex || args.ammo || args.list)) {
+        printHelp();
+    } else {
+        run(args).catch(error => {
+            console.error('[x]', error.message || error);
+            process.exitCode = 1;
+        });
+    }
+}

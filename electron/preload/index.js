@@ -20,7 +20,10 @@ const api = {
 	readFile: (fileSrc, readScript, baseSrc) =>
 		ipcRenderer.invoke('file:read', { fileSrc, readScript, baseSrc }),
 	// 运行 custom 目录下的通用脚本（保存等），返回脚本结果
-	runScript: (payload) => ipcRenderer.invoke('script:run', payload)
+	runScript: (payload) => ipcRenderer.invoke('script:run', payload),
+	// 调用 switch 的 script 模块导出方法（payload.method 为 on/off 配置的方法名）：
+	// 模块在主进程常驻缓存，只调用一次、不等待完成，常驻由脚本自控
+	invokeScript: (payload) => ipcRenderer.invoke('script:invoke', payload)
 };
 
 if (process.contextIsolated) {

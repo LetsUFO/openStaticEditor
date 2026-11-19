@@ -16,6 +16,10 @@ module.exports = {
 		output: `release/${ver}`
 	},
 	files: ['out/**/*'],
+	// koffi 及其平台原生二进制（@koromix/koffi-*）需解出 asar：
+	// 训练器脚本在子进程（ELECTRON_RUN_AS_NODE）里 require('koffi')，
+	// 而 plain Node 无法读取 app.asar 内部文件，必须让它们以真实文件存在。
+	asarUnpack: ['node_modules/koffi/**', 'node_modules/@koromix/**'],
 	extraResources: [
 		{
 			from: 'custom',

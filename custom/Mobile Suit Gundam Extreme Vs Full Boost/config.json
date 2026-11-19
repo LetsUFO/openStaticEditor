@@ -32,7 +32,9 @@
 							"label": "锁定EX、Boost、HP、弹药",
 							"name": "full",
 							"type": "switch",
-							"runScript": "exvs_trainer.js"
+							"script": "exvs_trainer.js",
+							"on": "on",
+							"off": "off"
 						}
 					]
 				}

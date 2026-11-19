@@ -1,7 +1,8 @@
 import { app, BrowserWindow, ipcMain, net, protocol, screen } from 'electron';
-import { join, isAbsolute } from 'node:path';
+import { join, isAbsolute, delimiter } from 'node:path';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import Module from 'node:module';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import {
 	createScriptEnv,
@@ -9,6 +10,19 @@ import {
 	executeScript,
 	resolveScriptPath
 } from '../../src/lib/lib';
+
+// 让 custom 下的外部脚本也能 require 到主程序依赖（如 koffi）：
+// 打包后脚本位于 resources/custom（app.asar 之外），按自身路径向上找不到 node_modules，
+// 这里把依赖目录注册为全局解析路径（NODE_PATH + 重新初始化全局路径）。
+//   - dev：项目根 node_modules
+//   - 打包后：原生依赖被 asarUnpack 到 app.asar.unpacked/node_modules（真实文件，可 dlopen）
+{
+	const depsDir = app.isPackaged
+		? join(process.resourcesPath, 'app.asar.unpacked', 'node_modules')
+		: join(__dirname, '../../node_modules');
+	process.env.NODE_PATH = [depsDir, process.env.NODE_PATH].filter(Boolean).join(delimiter);
+	Module._initPaths();
+}
 
 // 示例：渲染进程可通过 window.api.ping() 调用
 ipcMain.handle('ping', () => 'pong');
@@ -192,13 +206,14 @@ ipcMain.handle('window:setTitle', (event, title) => {
 });
 
 /**
- * 定位并加载 custom 目录下的脚本模块（每次清缓存，脚本改动后无需重启应用）。
+ * 解析 custom 脚本的位置（不 require），返回脚本运行工作目录与脚本绝对路径。
+ * 一次性脚本（loadScriptModule）与 switch 常驻模块（loadSwitchScriptModule）共用此解析逻辑。
  * @param {string} scriptSrc 脚本相对路径（如 'Rustil/loadSaveFile.js'，已由 getConfig 重写）
  * @param {string} [baseSrc] 当前 custom 子目录（如 'Rustil/'），由渲染层从 store 里传入
  *   - 有 baseSrc：customDir = join(customRoot, baseSrc) → 脚本所在子目录，脚本可读同目录辅助文件
  *   - 无 baseSrc：customDir = customRoot → 兼容旧调用方
  */
-function loadScriptModule(scriptSrc, baseSrc) {
+function resolveScriptLocation(scriptSrc, baseSrc) {
 	const customRoot = getCustomDir();
 	// customDir：脚本运行时的工作目录，脚本里读同目录文件用它
 	const customDir = baseSrc ? join(customRoot, baseSrc) : customRoot;
@@ -210,10 +225,33 @@ function loadScriptModule(scriptSrc, baseSrc) {
 		join,
 		exists: existsSync
 	});
+	return { customDir, scriptPath };
+}
+
+/**
+ * 定位并加载 custom 目录下的脚本模块（每次清缓存，脚本改动后无需重启应用）。
+ */
+function loadScriptModule(scriptSrc, baseSrc) {
+	const { customDir, scriptPath } = resolveScriptLocation(scriptSrc, baseSrc);
 	// require 会缓存模块，脚本修改后需要清缓存才能重新加载
 	const resolved = require.resolve(scriptPath);
 	delete require.cache[resolved];
 	return { customDir, script: require(resolved) };
+}
+
+/**
+ * switch 的 script 模块缓存：模块必须常驻，on/off 才能共享模块内部状态（如 running 标志）。
+ * 与 loadScriptModule（每次清缓存重载）刻意不同——这里要的是「同一实例上的方法调用」。
+ * @type {Map<string, any>} scriptPath -> 模块 exports
+ */
+const switchScriptModules = new Map();
+function loadSwitchScriptModule(scriptSrc, baseSrc) {
+	const { customDir, scriptPath } = resolveScriptLocation(scriptSrc, baseSrc);
+	if (!existsSync(scriptPath)) throw new Error(`脚本不存在：${scriptPath}`);
+	if (!switchScriptModules.has(scriptPath)) {
+		switchScriptModules.set(scriptPath, require(scriptPath));
+	}
+	return { customDir, script: switchScriptModules.get(scriptPath) };
 }
 
 /**
@@ -262,6 +300,25 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 		data,
 		...createScriptEnv(customDir, systemPaths())
 	});
+});
+
+/**
+ * 调用 switch 配置 script 模块里 on/off 字段指定的方法（每次切换各调用一次）。
+ * 模块常驻缓存，on/off 共享模块内部状态；等待方法及其 Promise 成功后才返回，
+ * 同步异常和异步拒绝均透传给渲染层。
+ * 请求参数：{ scriptSrc, method, baseSrc? }
+ */
+ipcMain.handle('script:invoke', async (_event, payload = {}) => {
+	const { scriptSrc, method, baseSrc } = payload;
+	if (!scriptSrc) throw new Error('未配置 script，无法调用');
+	if (!method) throw new Error('未配置 on/off 方法名，无法调用');
+
+	const { customDir, script } = loadSwitchScriptModule(scriptSrc, baseSrc);
+	const fn = script?.[method];
+	if (typeof fn !== 'function') throw new Error(`脚本未导出方法：${method}`);
+
+	await fn({ scriptSrc, ...createScriptEnv(customDir, systemPaths()) });
+	return { ok: true };
 });
 
 function createWindow() {
@@ -338,3 +395,4 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') app.quit();
 });
+

@@ -102,6 +102,16 @@ export interface Api {
 		/** baseSrc: 当前 custom 子目录（如 'Rustil/'），由主进程 join(customRoot, baseSrc) 算出脚本子目录 */
 		baseSrc?: string;
 	}) => Promise<any>;
+	/**
+	 * 调用 switch 配置 script 模块导出的方法（method 取 on/off 字段配置的方法名）。
+	 * 主进程常驻缓存该模块（on/off 共享模块内部状态），只调用一次、不等待执行完成；
+	 * 是否常驻由脚本自行控制（如 on 启动循环、off 置标志位结束）。
+	 */
+	invokeScript: (payload: {
+		scriptSrc: string;
+		method: string;
+		baseSrc?: string;
+	}) => Promise<{ ok: boolean }>;
 }
 
 export interface ScriptPathEnv {

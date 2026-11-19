@@ -3,7 +3,7 @@ import { computed, watch } from 'vue';
 import { get, set } from 'lodash';
 import { useConfigStore } from '@renderer/stores/config';
 
-import { Form, Input, InputNumber, Select, Switch } from 'ant-design-vue';
+import { Form, Input, InputNumber, Select, Switch, message } from 'ant-design-vue';
 import { AppstoreAddOutlined } from '@ant-design/icons-vue';
 
 interface Props {
@@ -266,6 +266,27 @@ function onNumberBlur(item: AppMenuFormField) {
 	}
 }
 
+// ------------------------------------------------------------------ 开关（script + on/off 方法）
+// 配置了 script 的 switch：开/关时主进程调用该模块里 on/off 字段指定的方法（各一次）。
+// 等待方法及其 Promise 成功后才写入 store；失败时只展示错误，保留原值。
+async function onSwitchChange(item: any, checked: boolean): Promise<void> {
+	const method = checked ? item?.on : item?.off;
+	if (!item?.script || !method) {
+		write(item, checked);
+		return;
+	}
+	try {
+		await window.api.invokeScript({
+			scriptSrc: item.script,
+			method,
+			baseSrc: configStore.baseSrc
+		});
+		write(item, checked);
+	} catch (error: any) {
+		message.error(`${item.label} 调用失败：${error?.message || error}`);
+	}
+}
+
 /** 供父组件（保存按钮）取当前分类的表单数据 */
 function getFormData(): Record<string, any> {
 	return source.value || {};
@@ -383,7 +404,7 @@ defineExpose({ getFormData });
 							v-else-if="item.type == 'switch'"
 							:checked="!!read(item)"
 							:disabled="item.disabled"
-							@change="(v) => write(item, v)"
+							@change="(v) => onSwitchChange(item, !!v)"
 						></Switch>
 						<Input
 							v-else-if="item.type == 'input'"
@@ -401,5 +422,3 @@ defineExpose({ getFormData });
 		</template>
 	</Form>
 </template>
-
-<style scoped></style>

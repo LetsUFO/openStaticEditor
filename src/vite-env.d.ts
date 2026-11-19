@@ -39,6 +39,15 @@ interface AppMenuFormField {
 	};
 	/** 选项过滤函数名（最高优先级）：store 里注入的同名函数，签名 (formData, optionUseData) => options */
 	optionFilterFn?: string;
+	/**
+	 * type=switch 时生效：配置后，开关切换会由主进程调用该脚本模块里 on/off 字段指定的方法。
+	 * 路径相对 custom 目录；模块在主进程常驻缓存，on/off 共享模块内部状态，常驻由脚本自控。
+	 */
+	script?: string;
+	/** 开关切到「开」时调用的脚本导出方法名（如 "on"） */
+	on?: string;
+	/** 开关切到「关」时调用的脚本导出方法名（如 "off"） */
+	off?: string;
 }
 
 /** 一个表单块，如 { "label": "主武器1", "items": [...] } */
