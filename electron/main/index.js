@@ -302,12 +302,18 @@ ipcMain.handle('script:invoke', async (_event, payload = {}) => {
 	const { customDir, scriptPath } = resolveScriptLocation(scriptSrc, baseSrc);
 	if (!existsSync(scriptPath)) throw new Error(`脚本不存在：${scriptPath}`);
 
-	await runScriptInWorker({
-		scriptPath,
-		method,
-		reload,
-		ctx: { scriptSrc, ...createScriptEnv(customDir, systemPaths()) }
-	});
+	console.log(`[script:invoke] ${method} reload=${reload} -> ${scriptPath}`);
+	try {
+		await runScriptInWorker({
+			scriptPath,
+			method,
+			reload,
+			ctx: { scriptSrc, ...createScriptEnv(customDir, systemPaths()) }
+		});
+	} catch (error) {
+		console.warn(`[script:invoke] ${method} 失败：${error?.message || error}`);
+		throw error;
+	}
 	return { ok: true };
 });
 

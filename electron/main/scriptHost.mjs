@@ -60,6 +60,13 @@ export function stopScriptWorker() {
 	rejectAllPending(new Error('脚本进程已结束'));
 }
 
+/** 脚本子进程输出转发到主进程终端，便于确认触发是否生效 */
+function forwardLog(chunk, stream) {
+	for (const line of String(chunk).split(/\r?\n/)) {
+		if (line) stream.write(`[script] ${line}\n`);
+	}
+}
+
 function ensureScriptWorker() {
 	if (scriptWorker) return scriptWorker;
 
@@ -68,10 +75,14 @@ function ensureScriptWorker() {
 	if (process.versions.electron) env.ELECTRON_RUN_AS_NODE = '1';
 
 	const worker = spawn(process.execPath, ['-e', SCRIPT_WORKER_CODE], {
-		stdio: ['ignore', 'ignore', 'ignore', 'ipc'],
+		// stdin 忽略；stdout/stderr 转发；IPC 承载调用结果
+		stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
 		windowsHide: true,
 		env
 	});
+
+	worker.stdout.on('data', (chunk) => forwardLog(chunk, process.stdout));
+	worker.stderr.on('data', (chunk) => forwardLog(chunk, process.stderr));
 
 	worker.on('message', (message) => {
 		const pending = scriptPending.get(message?.id);

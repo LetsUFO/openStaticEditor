@@ -9,6 +9,16 @@ const CONFIG_FILE = path.join(DIR, 'config.json');
 const RESULT_FILE = path.join(DIR, 'test.log');
 const TIMEOUT = 500; // 本地模拟「没有反馈」的超时阈值（毫秒）
 
+// ---------------------------------------------------------------- 可调整的测试行为
+// 改完保存即可，重新打开开关会重新加载脚本（每次开启都会读到最新文件）。
+//   'ok'    正常返回 Promise
+//   'error' 返回一个 reject 的 Promise
+//   'throw' 同步抛出异常
+//   'delay' 延迟 DELAY 毫秒后成功
+//   'hang'  返回永不完成的 Promise（模拟没有反馈，主程序会按超时处理）
+const MODE = 'ok';
+const DELAY = 2000;
+
 /** 递归收集所有 switch 且配置了脚本的字段项 */
 function collectSwitchItems(node, out = []) {
 	if (!node || typeof node !== 'object') return out;
@@ -41,30 +51,46 @@ function appendResult(lines) {
 	fs.appendFileSync(RESULT_FILE, lines.join('\n') + '\n');
 }
 
+// 每次开启都会重新加载本文件，因此计数从 1 开始；累计执行次数以 test.log 为准
+let runCount = 0;
+
 // ---------------------------------------------------------------- 主程序调用（真实场景）
 // 主程序通过隔离执行器加载本脚本并调用 onFnName/offFnName。
 function on() {
+	runCount += 1;
+	console.log(`run${runCount} mode=${MODE}`);
+
+	let item = null;
 	try {
 		const config = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
-		const item = collectSwitchItems(config).find((li) => li.script === 'test.js');
-		const lines = [
-			`[test] on 执行 ${new Date().toISOString()} pid=${process.pid} platform=${process.platform}`,
-			item
-				? `[test] 命中配置项「${item.label}」，方法 ${item.onFnName}/${item.offFnName}`
-				: '[test] 配置中未找到 test.js 对应的 switch',
-			'[test] PASS 主程序已加载本脚本并成功调用 on'
-		];
-		appendResult(lines);
-		console.log(lines.join('\n'));
-		return Promise.resolve();
+		item = collectSwitchItems(config).find((li) => li.script === 'test.js') || null;
 	} catch (error) {
-		appendResult([`[test] FAIL on 执行异常：${error.message}`]);
-		return Promise.reject(error);
+		appendResult([`[test] FAIL 读取 config.json：${error.message}`]);
+	}
+
+	appendResult([
+		`[test] on 执行 ${new Date().toISOString()} pid=${process.pid} mode=${MODE}`,
+		item
+			? `[test] 命中配置项「${item.label}」，方法 ${item.onFnName}/${item.offFnName}`
+			: '[test] 配置中未找到 test.js 对应的 switch'
+	]);
+
+	switch (MODE) {
+		case 'throw':
+			throw new Error('模拟同步异常');
+		case 'error':
+			return Promise.reject(new Error('模拟异步异常'));
+		case 'delay':
+			return new Promise((resolve) => setTimeout(resolve, DELAY));
+		case 'hang':
+			return new Promise(() => {});
+		default:
+			return Promise.resolve();
 	}
 }
 
 function off() {
-	appendResult([`[test] off 执行 ${new Date().toISOString()} pid=${process.pid}`]);
+	appendResult([`[test] off 执行 ${new Date().toISOString()} pid=${process.pid} mode=${MODE}`]);
 	return Promise.resolve();
 }
 
@@ -80,8 +106,18 @@ if (require.main === module) {
 
 	(async () => {
 		// 1. 导出契约
-		check('导出 on/off 函数', typeof module.exports.on === 'function' && typeof module.exports.off === 'function');
-		check('on/off 返回 Promise', module.exports.on() instanceof Promise, 'on');
+		check(
+			'导出 on/off 函数',
+			typeof module.exports.on === 'function' && typeof module.exports.off === 'function'
+		);
+		let onResult;
+		try {
+			onResult = module.exports.on();
+		} catch (error) {
+			onResult = error;
+		}
+		check('on 返回 Promise（MODE=ok）', onResult instanceof Promise, `mode=${MODE}`);
+		if (onResult instanceof Promise) onResult.catch(() => {});
 		module.exports.off();
 
 		// 2. 配置绑定：config.json 里的方法名必须与导出方法一致
