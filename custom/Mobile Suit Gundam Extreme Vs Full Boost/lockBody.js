@@ -178,8 +178,27 @@ function parseArgs(argv) {
 
 // ---------------------------------------------------------------- 日志 & 开关
 const LOG_FILE = path.join(__dirname, 'exvs_trainer.log');
+const LOCK_FILE = path.join(__dirname, 'exvs_trainer.lock');
 let running = false;
 let currentRun = null;
+let lockFd = null;
+
+function acquireLock() {
+    try {
+        lockFd = fs.openSync(LOCK_FILE, 'wx');
+        fs.writeSync(lockFd, String(process.pid));
+        return true;
+    } catch {
+        return false;
+    }
+}
+function releaseLock() {
+    if (lockFd !== null) {
+        try { fs.closeSync(lockFd); } catch {}
+        try { fs.unlinkSync(LOCK_FILE); } catch {}
+        lockFd = null;
+    }
+}
 
 for (const method of ['log', 'error']) {
     const original = console[method].bind(console);
@@ -191,6 +210,13 @@ for (const method of ['log', 'error']) {
 
 // ---------------------------------------------------------------- 主状态机
 async function run(args) {
+    // 文件锁：防止多个父程序进程各自跑一份，互相并发写 RPCS3 导致崩溃
+    if (!acquireLock()) {
+        console.log('[+] 已有另一实例持有锁，自动退出');
+        running = false;
+        return;
+    }
+    console.log('[+] 获取文件锁成功, pid =', process.pid);
     try { fs.writeFileSync(LOG_FILE, ''); } catch {}
     initNative();
 
@@ -308,6 +334,7 @@ async function run(args) {
             await sleep(1000);
         }
     }
+    releaseLock();
     console.log('[+] run() 退出');
 }
 
