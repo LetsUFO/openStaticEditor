@@ -4,6 +4,7 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import Module from 'node:module';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
+import { runScriptInWorker, stopScriptWorker } from './scriptHost.mjs';
 import {
 	createScriptEnv,
 	createSystemPaths,
@@ -207,7 +208,7 @@ ipcMain.handle('window:setTitle', (event, title) => {
 
 /**
  * 解析 custom 脚本的位置（不 require），返回脚本运行工作目录与脚本绝对路径。
- * 一次性脚本（loadScriptModule）与 switch 常驻模块（loadSwitchScriptModule）共用此解析逻辑。
+ * 一次性脚本（loadScriptModule）与 switch 脚本（隔离子进程执行）共用此解析逻辑。
  * @param {string} scriptSrc 脚本相对路径（如 'Rustil/loadSaveFile.js'，已由 getConfig 重写）
  * @param {string} [baseSrc] 当前 custom 子目录（如 'Rustil/'），由渲染层从 store 里传入
  *   - 有 baseSrc：customDir = join(customRoot, baseSrc) → 脚本所在子目录，脚本可读同目录辅助文件
@@ -237,24 +238,6 @@ function loadScriptModule(scriptSrc, baseSrc) {
 	const resolved = require.resolve(scriptPath);
 	delete require.cache[resolved];
 	return { customDir, script: require(resolved) };
-}
-
-/**
- * switch 脚本实例缓存：开（reload=true）时清缓存重新读取文件，让脚本改动立即生效；
- * 关（reload=false）不重载，复用开启时加载的同一实例，保证关闭调用的是同一份脚本状态。
- * @type {Map<string, any>} resolvedPath -> 模块 exports
- */
-const switchScriptModules = new Map();
-
-function loadSwitchScriptModule(scriptSrc, baseSrc, reload) {
-	const { customDir, scriptPath } = resolveScriptLocation(scriptSrc, baseSrc);
-	if (!existsSync(scriptPath)) throw new Error(`脚本不存在：${scriptPath}`);
-	const resolved = require.resolve(scriptPath);
-	if (reload || !switchScriptModules.has(resolved)) {
-		delete require.cache[resolved];
-		switchScriptModules.set(resolved, require(resolved));
-	}
-	return { customDir, script: switchScriptModules.get(resolved) };
 }
 
 /**
@@ -308,7 +291,7 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 /**
  * 调用 switch 配置 script 模块里 onFnName/offFnName 指定的方法（每次切换各调用一次）。
  * 开（reload=true）时重新读取脚本文件，关（reload=false）复用开启时加载的实例。
- * 等待方法及其 Promise 成功后才返回，同步异常和异步拒绝均透传给渲染层。
+ * 脚本在隔离子进程中执行，卡死只会触发超时结束子进程，不会拖住主进程。
  * 请求参数：{ scriptSrc, method, reload?, baseSrc? }
  */
 ipcMain.handle('script:invoke', async (_event, payload = {}) => {
@@ -316,11 +299,15 @@ ipcMain.handle('script:invoke', async (_event, payload = {}) => {
 	if (!scriptSrc) throw new Error('未配置 script，无法调用');
 	if (!method) throw new Error('未配置 onFnName/offFnName 方法名，无法调用');
 
-	const { customDir, script } = loadSwitchScriptModule(scriptSrc, baseSrc, reload);
-	const fn = script?.[method];
-	if (typeof fn !== 'function') throw new Error(`脚本未导出方法：${method}`);
+	const { customDir, scriptPath } = resolveScriptLocation(scriptSrc, baseSrc);
+	if (!existsSync(scriptPath)) throw new Error(`脚本不存在：${scriptPath}`);
 
-	await fn({ scriptSrc, ...createScriptEnv(customDir, systemPaths()) });
+	await runScriptInWorker({
+		scriptPath,
+		method,
+		reload,
+		ctx: { scriptSrc, ...createScriptEnv(customDir, systemPaths()) }
+	});
 	return { ok: true };
 });
 
@@ -398,4 +385,7 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') app.quit();
 });
+
+// 退出时清理脚本子进程，避免残留
+app.on('before-quit', () => stopScriptWorker());
 

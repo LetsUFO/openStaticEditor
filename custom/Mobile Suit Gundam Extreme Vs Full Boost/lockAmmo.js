@@ -2,10 +2,15 @@
 
 // EXVSFB (NPJB00512) RPCS3 内存修改器 — 武器弹药无限
 // 由主程序（openStaticEditor）通过 on()/off() 调用；独立运行也可。
+// 架构：状态机 + 外层无限循环 + 全面 try/catch
+//   状态机：WAITING_PID → WAITING_BATTLE → LOCKING
+//   任何阶段崩了（模拟器崩溃、mem 句柄失效、扫描异常）→ 自动滚回 WAITING_PID
+//   只有 off() 才真正停掉。
 // 锁定对象：
-//   1) 武器槽 +0x04 弹药数（通用，每个槽）
-//   2) 独立弹药计数器 +0x2518 / +0x251C / +0x254C / +0x2560（第三武器/齐射机制真实扣减位置）
-// 只锁玩家机体（slotOneCandidate 过滤 HP 1~5000 + EX 0~100 的正常机体），绝不作用于敌方。
+//   1) 武器槽 +0x04 弹药数（HUD 显示层，所有机体通用）
+//   2) 自动扫描的「独立弹药计数器」—— 开火时真正扣减的地址
+// 只锁玩家机体，绝不作用于敌方。
+
 const koffi = require('koffi');
 const { execFileSync } = require('child_process');
 const fs = require('fs');
@@ -22,17 +27,31 @@ const HP_MAX_SANE = 5000;
 const BOOST_MAX = 10000;
 const EX_MAX = 100.0;
 
-// 武器槽起点：从机体基址 +0x0BD8 起，每槽 0x20 字节
 const OFF_WEAPON_BASE = 0x0BD8;
 const WEAPON_SLOT_SIZE = 0x20;
 const MAX_WEAPON_SLOTS = 6;
-const WEAPON_AMMO_OFFSET = 0x04;  // 槽内弹药计数
-const WEAPON_ID_OFFSET = 0x00;    // 槽内武器 ID，非 0 视为已装备
+const WEAPON_AMMO_OFFSET = 0x04;
+const WEAPON_ID_OFFSET = 0x00;
 
-// 独立弹药计数器（之前 diff 确认：第三武器/齐射机制真实扣减位置）
-const INDEPENDENT_AMMO_OFFSETS = [0x2518, 0x251C, 0x254C, 0x2560];
+// 独立弹药计数器：硬编码种子 + 自动扫描追加
+const HARDCODED_OFFSETS = [0x2518, 0x251C, 0x254C, 0x2560];
+const independentOffsets = new Set(HARDCODED_OFFSETS);
 
-// 锁定值：999 足够（EXVSFB 所有武器实际上限 ≤ 200）
+const SCAN_WINDOW_SIZE = 0x30000;
+const SCAN_INTERVAL_MS = 2000;
+const EXCLUDE_RANGES = [
+    [0x0BD8, 0x0BD8 + MAX_WEAPON_SLOTS * WEAPON_SLOT_SIZE - 1],
+    [0x164, 0x164 + 3],
+    [0x998, 0x998 + 3],
+    [0x9D8, 0x9D8 + 3],
+];
+function inExcludedRange(off) {
+    for (const [lo, hi] of EXCLUDE_RANGES) {
+        if (off >= lo && off <= hi) return true;
+    }
+    return false;
+}
+
 const LOCK_AMMO = 999;
 
 const PROCESS_VM_OPERATION = 0x0008;
@@ -54,13 +73,11 @@ function initNative() {
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const hex = value => '0x' + value.toString(16).toUpperCase();
-
-function u32be(value) {
+const u32be = value => {
     const b = Buffer.allocUnsafe(4);
     b.writeUInt32BE(value >>> 0, 0);
     return b;
-}
-
+};
 const AMMO_BUFFER = u32be(LOCK_AMMO);
 
 function findPid() {
@@ -87,18 +104,15 @@ class Mem {
         this.handle = OpenProcess(
             PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_VM_READ | PROCESS_QUERY_INFORMATION,
             0, pid);
-        if (!this.handle) {
-            throw new Error('OpenProcess 失败');
-        }
+        if (!this.handle) throw new Error('OpenProcess 失败, pid=' + pid);
     }
-
     read(address, size) {
         const buffer = Buffer.allocUnsafe(size);
         const read = [0];
         const ok = ReadProcessMemory(this.handle, address, buffer, size, read);
-        return ok ? buffer.subarray(0, Number(read[0])) : Buffer.alloc(0);
+        if (!ok) return Buffer.alloc(0);
+        return buffer.subarray(0, Number(read[0]));
     }
-
     write(address, data) {
         const written = [0];
         return Boolean(WriteProcessMemory(
@@ -154,16 +168,13 @@ function slotOneCandidate(mem, unit) {
     return true;
 }
 
-function pickPlayerUnit(mem, units, target, previous = null) {
+function pickPlayerUnit(mem, units) {
     const candidates = units.filter(unit => slotOneCandidate(mem, unit));
-    if (!candidates.length) {
-        return units.length ? units[Math.min(target, units.length) - 1] : null;
-    }
-    if (previous && candidates.includes(previous)) return previous;
-    return candidates[Math.min(target, candidates.length) - 1];
+    if (!candidates.length) return null;
+    return candidates[0];
 }
 
-// ---------------------------------------------------------------- 主程序调用（on/off）
+// ------------------------------------------------------------------- 日志 & 开关
 const LOG_FILE = path.join(__dirname, 'exvs_ammo.log');
 let running = false;
 let currentRun = null;
@@ -172,127 +183,195 @@ for (const method of ['log', 'error']) {
     const original = console[method].bind(console);
     console[method] = (...args) => {
         original(...args);
-        try { fs.appendFileSync(LOG_FILE, format(...args) + '\n'); } catch { /* noop */ }
+        try { fs.appendFileSync(LOG_FILE, format(...args) + '\n'); } catch {}
     };
 }
 
-async function run() {
-    try { fs.writeFileSync(LOG_FILE, ''); } catch { /* noop */ }
-    initNative();
-
-    let mem = null;
-    let units = [];
-    let target = null;
-    let lastTarget = null;
-
-    // ---- 阶段 A: 等模拟器启动 ----
-    while (running) {
-        const pid = findPid();
-        if (pid) {
-            try {
-                mem = new Mem(pid);
-                console.log('[ammo] rpcs3 pid =', pid);
-                break;
-            } catch { /* 继续等 */ }
+// ------------------------------------------------------------------- 扫描函数
+function scanOnce(mem, target, snapshotA) {
+    try {
+        const snapshotB = mem.read(target, SCAN_WINDOW_SIZE);
+        if (!snapshotA || !snapshotB || snapshotA.length < 4 || snapshotB.length < 4) {
+            return { found: [], nextBaseline: snapshotB };
         }
-        await sleep(1000);
-    }
-    if (!running) return;
-
-    // ---- 阶段 B: 等进入战斗 ----
-    while (running) {
-        units = findUnits(mem);
-        if (units.length > 0) break;
-        if (!findPid()) {
-            console.log('[ammo] 模拟器连接断开，重新等待...');
-            mem = null;
-            while (running) {
-                const pid = findPid();
-                if (pid) { try { mem = new Mem(pid); break; } catch {} }
-                await sleep(1000);
-            }
-            if (!running) return;
-        }
-        await sleep(1000);
-    }
-    if (!running) return;
-
-    // ---- 阶段 C: 找到玩家机体 ----
-    target = pickPlayerUnit(mem, units, 1);
-    if (!target) { console.log('[ammo] 没找到玩家机体'); return; }
-    console.log('[ammo] target =', hex(target));
-    console.log('[ammo] 弹药无限已开启, 锁值 =', LOCK_AMMO);
-
-    // ---- 阶段 D: tight loop 锁定 ----
-    // 不放 sleep，让循环尽可能快；单次 read/write 约 1~5us，实测 800~1000Hz
-    // 武器槽 6 个 + 独立计数器 4 个 = 每个机体最多 10 次 write/轮
-    let cycles = 0;
-    let unitRecheckCounter = 0;
-
-    while (running) {
-        // 每 ~500 次循环重新检测一次机体结构
-        // （换局/阵亡后自动重新定位，频率够低不影响锁定性能）
-        if (++unitRecheckCounter >= 500) {
-            unitRecheckCounter = 0;
-            units = findUnits(mem);
-            if (units.length > 0) {
-                const newTarget = pickPlayerUnit(mem, units, 1, target);
-                if (newTarget && newTarget !== target) {
-                    console.log('[ammo] 切换目标:', hex(target), '->', hex(newTarget));
-                    target = newTarget;
-                } else if (newTarget) {
-                    target = newTarget;  // 保持同基址（可能 findUnits 每次地址不同但 pick 命中同一个）
-                }
-            }
-            if (!target || !unitValid(mem, target)) {
-                // 等待新的机体出现
-                let waited = 0;
-                while (running) {
-                    await sleep(200);
-                    waited += 200;
-                    units = findUnits(mem);
-                    target = pickPlayerUnit(mem, units, 1);
-                    if (target && unitValid(mem, target)) {
-                        console.log('[ammo] 重新锁定:', hex(target));
-                        break;
-                    }
-                    if (waited >= 5000) {
-                        // 模拟器可能崩了
-                        if (!findPid()) {
-                            console.log('[ammo] 模拟器已退出');
-                            return;
-                        }
-                        waited = 0;
-                    }
-                }
-                if (!running) return;
-                continue;
+        const found = [];
+        for (let off = 0; off + 4 <= Math.min(SCAN_WINDOW_SIZE, snapshotA.length, snapshotB.length); off += 4) {
+            if (inExcludedRange(off)) continue;
+            const old = snapshotA.readUInt32BE(off);
+            const now = snapshotB.readUInt32BE(off);
+            if (old > now && now > 0
+                    && old >= 1 && old <= 300
+                    && (old - now) >= 1 && (old - now) <= 5
+                    && off >= 0x0C00) {
+                found.push({ off, old, now });
             }
         }
-
-        // 写独立弹药计数器（第三武器/齐射机制真实扣减位置）
-        for (const off of INDEPENDENT_AMMO_OFFSETS) {
-            mem.write(target + off, AMMO_BUFFER);
-        }
-
-        // 写武器槽弹药（槽内 +0x04）
-        for (let k = 0; k < MAX_WEAPON_SLOTS; k++) {
-            const slotBase = OFF_WEAPON_BASE + k * WEAPON_SLOT_SIZE;
-            const idBuf = mem.read(target + slotBase + WEAPON_ID_OFFSET, 4);
-            if (idBuf.length !== 4) continue;
-            const weaponId = idBuf.readUInt32BE(0);
-            if (!weaponId) continue;  // 空槽，跳过
-            mem.write(target + slotBase + WEAPON_AMMO_OFFSET, AMMO_BUFFER);
-        }
-
-        // 偶尔打个日志让父程序知道还活着
-        if (++cycles % 5000 === 0) {
-            console.log('[ammo] locked cycles =', cycles, 'target =', hex(target));
-        }
+        return { found, nextBaseline: snapshotB };
+    } catch {
+        return { found: [], nextBaseline: null };
     }
-    console.log('[ammo] 已停止, 共运行', cycles, '次写入');
 }
 
+// ------------------------------------------------------------------- 主状态机
+async function run() {
+    try { fs.writeFileSync(LOG_FILE, ''); } catch {}
+    initNative();
+
+    // 外层无限循环：任何异常/崩溃/模拟器退出都回到这里重新走一遍
+    while (running) {
+        try {
+            // ========= 阶段 1: 等 PID =========
+            let pid = null;
+            let mem = null;
+            while (running && !pid) {
+                pid = findPid();
+                if (pid) {
+                    try { mem = new Mem(pid); }
+                    catch (err) {
+                        console.log('[ammo] OpenProcess 失败:', err.message, '继续等待...');
+                        pid = null; mem = null;
+                    }
+                }
+                if (!pid) await sleep(1000);
+            }
+            if (!running) return;
+            console.log('[ammo] rpcs3 pid =', pid);
+
+            // ========= 阶段 2: 等机体（进入战斗） =========
+            let units = [];
+            let target = null;
+            while (running && !target) {
+                if (!findPid()) {
+                    console.log('[ammo] 模拟器已退出，回到阶段 1 重新等 pid');
+                    mem = null; pid = null; break;
+                }
+                try {
+                    units = findUnits(mem);
+                    target = pickPlayerUnit(mem, units);
+                } catch (err) {
+                    console.log('[ammo] 找机体异常:', err.message);
+                    target = null;
+                }
+                if (!target) await sleep(1000);
+            }
+            if (!running) return;
+            if (!target) continue;  // pid 丢了，回阶段 1
+            console.log('[ammo] target =', hex(target));
+            console.log('[ammo] 弹药无限已开启, 锁值 =', LOCK_AMMO);
+
+            // 每次新 target 清空独立计数器（新机体结构不同）
+            independentOffsets.clear();
+            HARDCODED_OFFSETS.forEach(o => independentOffsets.add(o));
+            let snapshotA = null;
+            try { snapshotA = mem.read(target, SCAN_WINDOW_SIZE); } catch {}
+            let lastScanTime = Date.now();
+
+            // ========= 阶段 3: 锁定循环（tight loop + 后台扫描） =========
+            let cycles = 0;
+            let unitRecheckCounter = 0;
+            let lastPidCheck = Date.now();
+
+            while (running) {
+                // 每 5 秒检查一次 pid，模拟器崩了就回阶段 1
+                const now = Date.now();
+                if (now - lastPidCheck >= 5000) {
+                    lastPidCheck = now;
+                    if (!findPid()) {
+                        console.log('[ammo] 模拟器已退出，回到阶段 1');
+                        mem = null; pid = null; target = null; units = [];
+                        break;  // 跳出阶段 3，回外层 while
+                    }
+                }
+
+                // 每 ~500 次重扫一次机体结构
+                if (++unitRecheckCounter >= 500) {
+                    unitRecheckCounter = 0;
+                    try {
+                        units = findUnits(mem);
+                        const newTarget = pickPlayerUnit(mem, units);
+                        if (newTarget && newTarget !== target) {
+                            console.log('[ammo] 切换目标:', hex(target), '->', hex(newTarget),
+                                '独立计数器清空重扫');
+                            target = newTarget;
+                            independentOffsets.clear();
+                            HARDCODED_OFFSETS.forEach(o => independentOffsets.add(o));
+                            try { snapshotA = mem.read(target, SCAN_WINDOW_SIZE); } catch { snapshotA = null; }
+                        }
+                    } catch (err) {
+                        console.log('[ammo] 重扫异常:', err.message);
+                    }
+                }
+
+                // 每 2 秒触发一次独立计数器扫描
+                if (now - lastScanTime >= SCAN_INTERVAL_MS) {
+                    lastScanTime = now;
+                    // 等 50ms 让玩家开火后再拍 B
+                    await sleep(50).catch(() => {});
+                    if (!running) break;
+                    if (!findPid()) {
+                        console.log('[ammo] 扫描期间模拟器已退出，回到阶段 1');
+                        mem = null; pid = null; target = null;
+                        break;
+                    }
+                    try {
+                        const res = scanOnce(mem, target, snapshotA);
+                        snapshotA = res.nextBaseline;
+                        if (res.found.length) {
+                            let added = 0;
+                            const details = [];
+                            for (const f of res.found) {
+                                if (!independentOffsets.has(f.off)) {
+                                    independentOffsets.add(f.off);
+                                    added++;
+                                    details.push('0x' + f.off.toString(16).toUpperCase() +
+                                        ` ${f.old}→${f.now}`);
+                                    try { mem.write(target + f.off, AMMO_BUFFER); } catch {}
+                                }
+                            }
+                            if (added) {
+                                console.log(`[ammo] 自动扫描命中 ${added} 个（总 ${independentOffsets.size}）:`,
+                                    details.join(', '));
+                            }
+                        }
+                    } catch (err) {
+                        console.log('[ammo] 扫描异常:', err.message);
+                    }
+                }
+
+                // === tight loop 锁定 ===
+                try {
+                    for (const off of independentOffsets) {
+                        mem.write(target + off, AMMO_BUFFER);
+                    }
+                    for (let k = 0; k < MAX_WEAPON_SLOTS; k++) {
+                        const slotBase = OFF_WEAPON_BASE + k * WEAPON_SLOT_SIZE;
+                        const idBuf = mem.read(target + slotBase + WEAPON_ID_OFFSET, 4);
+                        if (idBuf.length !== 4) continue;
+                        const weaponId = idBuf.readUInt32BE(0);
+                        if (!weaponId) continue;
+                        mem.write(target + slotBase + WEAPON_AMMO_OFFSET, AMMO_BUFFER);
+                    }
+                } catch (err) {
+                    // 锁定期间异常：句柄可能坏了，直接回阶段 1
+                    console.log('[ammo] 锁定循环异常:', err.message, '回到阶段 1');
+                    mem = null; pid = null; target = null;
+                    break;
+                }
+
+                if (++cycles % 10000 === 0) {
+                    console.log('[ammo] cycles =', cycles, 'target =', hex(target),
+                        '独立计数器 =', independentOffsets.size);
+                }
+            }
+            if (!running) return;
+        } catch (err) {
+            console.error('[ammo] 外层循环异常（忽略，继续等）:', err.message);
+        }
+    }
+    console.log('[ammo] run() 退出');
+}
+
+// ------------------------------------------------------------------- on/off
 function on() {
     if (process.platform !== 'win32') {
         return Promise.reject(new Error('该修改器仅支持 Windows'));
@@ -302,7 +381,7 @@ function on() {
 
     running = true;
     currentRun = run().catch(err => {
-        console.error('[ammo] run 异常:', err.message || err);
+        console.error('[ammo] run() 异常终止:', err.message || err);
         running = false;
     });
     console.log('[ammo] 已启动后台 run()');
@@ -313,15 +392,15 @@ async function off() {
     console.log('[ammo] 收到关闭请求, running =', running);
     running = false;
     if (currentRun) {
+        console.log('[ammo] 等待 run() 退出...');
         await currentRun;
-        console.log('[ammo] run 已退出');
+        console.log('[ammo] run() 已退出');
     }
     console.log('[ammo] 完成');
 }
 
 module.exports = { on, off };
 
-// 独立运行入口：node lockAmmo.js
 if (require.main === module) {
     on();
     process.on('SIGINT', async () => { await off(); process.exit(0); });

@@ -1,7 +1,7 @@
 {
 	"name": "rpcs3-Gundam Extreme Vs Full Boost 高达极限对决：全力加速",
 	"appIcon": "icon.png",
-	"ver": "0.0.4",
+	"ver": "0.0.5",
 	"width": 1200,
 	"height": 760,
 	"background": {
@@ -28,6 +28,14 @@
 					"tip": "仅在对战时生效",
 					"col": 3,
 					"items": [
+						{
+							"label": "test",
+							"name": "test",
+							"type": "switch",
+							"script": "test.js",
+							"onFnName": "on",
+							"offFnName": "off"
+						},
 						{
 							"label": "锁定EX、Boost、HP",
 							"name": "body",
