@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import type { ItemType } from 'ant-design-vue/es/menu';
 import { isObject } from 'lodash';
+import { isLoadFileEntryConfigured } from '@renderer/lib/lib';
 
 // AppConfig / AppMenuItem 为全局类型，定义在 src/vite-env.d.ts（单一来源，避免字段两处漂移）
 
@@ -42,8 +43,18 @@ export const useConfigStore = defineStore('config', () => {
 
 	/** 直接给 <Menu :items> 用 */
 	const menu = computed<ItemType[]>(() => toMenuItems(config.value?.menu ?? []));
-	/** config.json -> loadFiles（App.vue / LoadFile.vue 共用一个取值入口） */
-	const loadFiles = computed<Record<string, any>>(() => config.value?.loadFiles ?? {});
+	/** config.json -> loadFiles（App.vue / LoadFile.vue 共用一个取值入口）。
+	 *  过滤掉未真正配置的空条目（模板里 loadFiles.<key> 子字段全空的情况），
+	 *  让下游在「无文件可加载」时自动跳过加载流程，而不是报错卡住。
+	 *  注意：Object.fromEntries 只新建外层容器，条目对象仍是 config 里的同一引用，
+	 *  所以 LoadFile.vue 回写 fileObj.fileSrc 仍能生效到原始 config。 */
+	const loadFiles = computed<Record<string, any>>(() => {
+		const raw = config.value?.loadFiles;
+		if (!raw || typeof raw !== 'object') return {};
+		return Object.fromEntries(
+			Object.entries(raw).filter(([, entry]) => isLoadFileEntryConfigured(entry))
+		);
+	});
 
 	async function load(subPath?: string): Promise<void> {
 		config.value = await window.api.getConfig(subPath);

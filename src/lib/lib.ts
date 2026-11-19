@@ -57,6 +57,18 @@ export function splitFileSrcCandidates(fileSrc: string): string[] {
 		.filter(Boolean);
 }
 
+/**
+ * 判断 loadFiles 的一个条目是否「真正配置了可加载的文件」。
+ * config.json 模板里 loadFiles.<key> 的子字段常全为空（fileSrc / filePath 均为 ""），
+ * 这类空条目没有指定任何文件位置，视为未配置，由下游自动跳过而不阻塞加载流程。
+ * 判定标准：至少指定了文件位置——fileSrc（直接路径）或 filePath（目录，由用户选择文件）。
+ */
+export function isLoadFileEntryConfigured(entry: unknown): boolean {
+	if (!entry || typeof entry !== 'object') return false;
+	const { fileSrc, filePath } = entry as { fileSrc?: string; filePath?: string };
+	return Boolean(fileSrc || filePath);
+}
+
 /** 外部脚本 ctx 的通用字段（每个脚本都会收到） */
 export interface ScriptEnv {
 	customDir: string;

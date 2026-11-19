@@ -1,5 +1,5 @@
 {
-	"name": "rpcs3-Mobile Suit Gundam Extreme Vs Full Boost 高达极限对决：全力加速",
+	"name": "rpcs3-Gundam Extreme Vs Full Boost 高达极限对决：全力加速",
 	"appIcon": "icon.png",
 	"ver": "0.0.1",
 	"width": 1200,
@@ -20,18 +20,19 @@
 	},
 	"menu": [
 		{
-			"label": "",
+			"label": "模拟器运行时",
 			"tip": "",
 			"category": [
 				{
-					"label": "",
-					"tip": "",
+					"label": "战斗时修改",
+					"tip": "仅在对战时生效",
 					"col": 3,
 					"items": [
 						{
-							"label": "",
-							"name": "",
-							"type": "text"
+							"label": "锁定EX、Boost、HP、弹药",
+							"name": "full",
+							"type": "switch",
+							"runScript": "exvs_trainer.js"
 						}
 					]
 				}

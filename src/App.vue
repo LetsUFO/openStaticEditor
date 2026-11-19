@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useConfigStore } from './stores/config';
-import { computed, reactive, ref, onMounted, onBeforeMount } from 'vue';
+import { computed, reactive, ref, watch, onMounted, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { name as appName, version as pkgVersion } from '../package.json';
 import theme, { dark } from './style/theme';
@@ -49,6 +49,10 @@ const state = reactive<IState>({
 const activeCategory = computed(() => {
 	return state.activeMenu.category || [];
 });
+
+// 是否有需要加载的文件（loadFiles 缺失或所有条目子字段全空时为 false）。
+// 用于决定是否展示「重新加载」按钮，以及是否需要走文件加载流程。
+const hasFilesToLoad = computed(() => Object.keys(needFiles.value).length > 0);
 
 // 多个 custom 子目录时，让用户在 LoadProject 里选择加载哪一个
 const projectState = reactive({
@@ -173,6 +177,23 @@ const reload = async function () {
 	}
 };
 
+// 没有需要加载的文件时（loadFiles 缺失或所有条目子字段全空），自动跳过加载遮罩，
+// 直接进入主界面并激活第一个菜单；有文件待加载时则确保遮罩可见（覆盖切换项目等场景）。
+watch(
+	needFiles,
+	(files) => {
+		if (!files || !Object.keys(files).length) {
+			fileState.loaded = true;
+			if (!state.activeMenu?.key) {
+				activateMenu(firstLeaf(menu.value));
+			}
+		} else {
+			fileState.loaded = false;
+		}
+	},
+	{ immediate: true }
+);
+
 const $FormBuilder = ref();
 
 /**
@@ -274,7 +295,7 @@ onMounted(async () => {
 			@select="onSelectProject"
 		/>
 		<LoadFile
-			v-if="configStore.baseSrc"
+			v-if="configStore.baseSrc && hasFilesToLoad"
 			:loading="fileState.loading"
 			:loaded="fileState.loaded"
 			@loadFiles="loadAll"
@@ -311,11 +332,11 @@ onMounted(async () => {
 					ref="$FormBuilder"
 				/>
 				<div class="absolute bottom-4 right-6">
-					<Button :loading="fileState.loading" @click="reload()">
+					<Button v-if="hasFilesToLoad" :loading="fileState.loading" @click="reload()">
 						<ReloadOutlined />重新加载</Button
 					>
 					<Button
-						v-if="state.activeMenu?.category?.length"
+						v-if="state.activeMenu?.category?.length && hasFilesToLoad"
 						class="ml-4"
 						:type="'primary'"
 						:loading="state.loading"
