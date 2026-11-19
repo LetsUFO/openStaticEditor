@@ -240,18 +240,16 @@ function loadScriptModule(scriptSrc, baseSrc) {
 }
 
 /**
- * switch 的 script 模块缓存：模块必须常驻，on/off 才能共享模块内部状态（如 running 标志）。
- * 与 loadScriptModule（每次清缓存重载）刻意不同——这里要的是「同一实例上的方法调用」。
- * @type {Map<string, any>} scriptPath -> 模块 exports
+ * 定位并加载 switch 配置的脚本模块：每次调用都清 require 缓存重新读取文件，
+ * 脚本改动无需重启应用即可生效，模块不会永久驻留在内存中。
+ * on/off 的跨调用状态由脚本自身持有（本工程不缓存实例）。
  */
-const switchScriptModules = new Map();
 function loadSwitchScriptModule(scriptSrc, baseSrc) {
 	const { customDir, scriptPath } = resolveScriptLocation(scriptSrc, baseSrc);
 	if (!existsSync(scriptPath)) throw new Error(`脚本不存在：${scriptPath}`);
-	if (!switchScriptModules.has(scriptPath)) {
-		switchScriptModules.set(scriptPath, require(scriptPath));
-	}
-	return { customDir, script: switchScriptModules.get(scriptPath) };
+	const resolved = require.resolve(scriptPath);
+	delete require.cache[resolved];
+	return { customDir, script: require(resolved) };
 }
 
 /**
@@ -304,7 +302,7 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 
 /**
  * 调用 switch 配置 script 模块里 onFnName/offFnName 指定的方法（每次切换各调用一次）。
- * 模块常驻缓存，on/off 共享模块内部状态；等待方法及其 Promise 成功后才返回，
+ * 每次调用都重新读取脚本文件（不常驻缓存）；等待方法及其 Promise 成功后才返回，
  * 同步异常和异步拒绝均透传给渲染层。
  * 请求参数：{ scriptSrc, method, baseSrc? }
  */
