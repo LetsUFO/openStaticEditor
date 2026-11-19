@@ -2,8 +2,9 @@
 
 // EXVSFB (NPJB00512) 战斗倒计时锁定 — 独立脚本
 // 主程序约定：require 本模块后，开/关分别调用 on()/off()
-// 倒计时结构：u32 大端“剩余帧数”(60fps)，后一字段为 0x2A30 = 10800 = 180s*60
-// 该结构位于 PPU 栈区，每局地址会漂移，因此每局按签名自动重扫。
+// 倒计时结构：u32 大端“剩余帧数”(60fps)，后一字段为该模式的时限帧数
+//   （180s=10800、210s=12600 等，不同模式不同，故按结构自动识别）
+// 该结构位于 PPU 内存区，每局地址会漂移，因此每局按签名自动重扫。
 // 日志写 lockTime.log
 
 const koffi = require('koffi');
@@ -15,8 +16,10 @@ const { format } = require('util');
 const BASE = 0x340000000;
 const SIZE = 0x10000000;
 const CHUNK = 1 << 22;
-const TIME_LIMIT_FRAMES = 10800;                       // 180 秒 * 60fps
-const LIMIT_PATTERN = Buffer.from([0x00, 0x00, 0x2A, 0x30]);
+// 不同模式时限不同：180s=10800 帧、210s=12600 帧等，统一按上限字段识别
+const LIMIT_MIN = 1800;                                // 30 秒
+const LIMIT_MAX = 36000;                               // 600 秒
+const ONE_F32 = Buffer.from([0x3F, 0x80, 0x00, 0x00]); // 1.0f 标记位
 const MIN_DECREASE = 10;                               // 400ms 内至少减少的帧数
 const MAX_DECREASE = 60;                               // 400ms 内最多减少的帧数
 
@@ -85,30 +88,27 @@ class Mem {
     }
 }
 
-// 扫描 [剩余帧][10800] 结构，并用 400ms 递减确认是正在运行的倒计时
+// 扫描 [剩余帧][上限][1.0f][小整数] 结构，并用 400ms 递减确认是正在运行的倒计时
 async function scanTimer(mem) {
     const cands = [];
     for (let off = 0; off < SIZE; off += CHUNK) {
         const data = mem.read(BASE + off, CHUNK);
-        if (!data.length) continue;
+        if (data.length < 16) continue;
         let i = 0;
         while (true) {
-            i = data.indexOf(LIMIT_PATTERN, i);
+            i = data.indexOf(ONE_F32, i);
             if (i < 0) break;
-            if (i % 4 !== 0) {
-                i += 1;
-                continue;
-            }
-            const valueAddr = BASE + off + i - 4;
-            // 结构校验：剩余帧、上限、1.0f、2
-            const st = mem.read(valueAddr, 16);
-            if (st.length === 16 &&
-                    st.readUInt32BE(0) > 0 &&
-                    st.readUInt32BE(0) <= TIME_LIMIT_FRAMES &&
-                    st.readUInt32BE(4) === TIME_LIMIT_FRAMES &&
-                    Math.abs(st.readFloatBE(8) - 1.0) < 1e-4 &&
-                    st.readUInt32BE(12) === 2) {
-                cands.push({ valueAddr, value: st.readUInt32BE(0) });
+            const p = i - 8;
+            // 结构校验：剩余帧、上限（60 的倍数）、1.0f、尾部小整数
+            if (p >= 0 && p % 4 === 0 && i + 8 <= data.length) {
+                const value = data.readUInt32BE(p);
+                const limit = data.readUInt32BE(p + 4);
+                const tail = data.readUInt32BE(i + 4);
+                if (value > 0 && value <= limit &&
+                        limit >= LIMIT_MIN && limit <= LIMIT_MAX &&
+                        limit % 60 === 0 && tail <= 16) {
+                    cands.push({ valueAddr: BASE + off + p, value, limit });
+                }
             }
             i += 4;
         }
@@ -122,7 +122,7 @@ async function scanTimer(mem) {
         const value = raw.readUInt32BE(0);
         const decrease = cand.value - value;
         if (value > 0 && decrease >= MIN_DECREASE && decrease <= MAX_DECREASE) {
-            return { valueAddr: cand.valueAddr, value };
+            return { valueAddr: cand.valueAddr, value, limit: cand.limit };
         }
     }
     return null;
@@ -176,7 +176,7 @@ async function run() {
             if (!running) return;
             if (!timer) continue;
 
-            console.log(`[+] 倒计时地址 ${hex(timer.valueAddr)}  剩余 ${timer.value} 帧 (${(timer.value / 60).toFixed(2)}s)`);
+            console.log(`[+] 倒计时地址 ${hex(timer.valueAddr)}  剩余 ${timer.value} 帧 (${(timer.value / 60).toFixed(2)}s)  时限 ${(timer.limit / 60).toFixed(0)}s`);
             console.log('[+] 时间锁定已开启 (Ctrl+C 停止)');
             const freeze = u32be(timer.value);
 
@@ -197,7 +197,7 @@ async function run() {
 
                 // 结构校验，避免写入已被复用的栈空间
                 const st = mem.read(timer.valueAddr, 8);
-                if (st.length === 8 && st.readUInt32BE(4) === TIME_LIMIT_FRAMES) {
+                if (st.length === 8 && st.readUInt32BE(4) === timer.limit) {
                     mem.write(timer.valueAddr, freeze);
                 } else {
                     console.log('[+] 倒计时结构失效，重新定位');

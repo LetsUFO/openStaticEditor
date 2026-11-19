@@ -20,6 +20,7 @@ const CHUNK = 1 << 22;
 const OFF_HP = 0x164;
 const OFF_BOOST = 0x998;
 const OFF_EX = 0x9D8;
+const OFF_UNIT_INDEX = 0x08;   // 单位索引：0 = 玩家，1+ = 队友/敌方
 const OFF_EX_STATE = 0x9DC;   // 觉醒/大招状态：0=普通，非0=觉醒进行中
 const BOOST_MAX = 10000;
 const EX_MAX = 100.0;
@@ -47,7 +48,9 @@ function initNative() {
 }
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-const hex = value => '0x' + value.toString(16).toUpperCase();
+const hex = value => (value === null || value === undefined)
+    ? 'null'
+    : '0x' + value.toString(16).toUpperCase();
 const u32be = value => {
     const b = Buffer.allocUnsafe(4);
     b.writeUInt32BE(value >>> 0, 0);
@@ -153,8 +156,13 @@ function slotOneCandidate(mem, unit) {
 
 function pickPlayerUnit(mem, units) {
     const candidates = units.filter(unit => slotOneCandidate(mem, unit));
-    if (!candidates.length) return null;
-    return candidates[0];
+
+    // 只接受索引 0 的单位（玩家自己），避免把敌方也锁成无限 Boost
+    for (const unit of candidates) {
+        const idxData = mem.read(unit + OFF_UNIT_INDEX, 4);
+        if (idxData.length === 4 && idxData.readUInt32BE(0) === 0) return unit;
+    }
+    return null;
 }
 
 // ---------------------------------------------------------------- 参数解析
@@ -181,23 +189,14 @@ const LOG_FILE = path.join(__dirname, 'exvs_trainer.log');
 const LOCK_FILE = path.join(__dirname, 'exvs_trainer.lock');
 let running = false;
 let currentRun = null;
-let lockFd = null;
 
 function acquireLock() {
-    try {
-        lockFd = fs.openSync(LOCK_FILE, 'wx');
-        fs.writeSync(lockFd, String(process.pid));
-        return true;
-    } catch {
-        return false;
-    }
+    // 清理历史版本可能残留的锁文件，然后始终允许运行
+    try { if (fs.existsSync(LOCK_FILE)) fs.unlinkSync(LOCK_FILE); } catch {}
+    return true;
 }
 function releaseLock() {
-    if (lockFd !== null) {
-        try { fs.closeSync(lockFd); } catch {}
-        try { fs.unlinkSync(LOCK_FILE); } catch {}
-        lockFd = null;
-    }
+    try { if (fs.existsSync(LOCK_FILE)) fs.unlinkSync(LOCK_FILE); } catch {}
 }
 
 for (const method of ['log', 'error']) {
@@ -218,6 +217,7 @@ async function run(args) {
     }
     console.log('[+] 获取文件锁成功, pid =', process.pid);
     try { fs.writeFileSync(LOG_FILE, ''); } catch {}
+    console.log('[+] 版本 = body v2 (pid ' + process.pid + ')');
     initNative();
 
     // 外层无限循环：任何异常/崩溃/模拟器退出都回到这里重新走一遍
@@ -265,6 +265,8 @@ async function run(args) {
             if (!running) return;
             if (!target) continue;  // pid 丢了，回阶段 1
             console.log('[+] target =', hex(target), 'HP =', hpMax);
+            const idxData = mem.read(target + OFF_UNIT_INDEX, 4);
+            console.log('[+] 单位索引 =', idxData.length === 4 ? idxData.readUInt32BE(0) : '?');
             const mode = [];
             if (args.boost) mode.push('气槽');
             if (args.hp) mode.push('血量');
@@ -288,14 +290,15 @@ async function run(args) {
                     }
                 }
 
-                // 每 1 秒检查一次结构变化
-                if (now - lastRecheck >= 1000) {
-                    lastRecheck = now;
-                    try {
+                // 结构变化检查：轻量校验每轮做，全量扫描（256MB，很重）30 秒一次
+                try {
+                    const stale = !target || !unitValid(mem, target);
+                    if (stale || now - lastRecheck >= 30000) {
+                        lastRecheck = now;
                         const newUnits = findUnits(mem);
                         const newTarget = pickPlayerUnit(mem, newUnits);
                         if (newTarget && newTarget !== target) {
-                            console.log('[+] 1 号位判定变化:', hex(target), '->', hex(newTarget));
+                            console.log('[+] 目标变化:', hex(target), '->', hex(newTarget));
                             target = newTarget;
                             const d = mem.read(target + OFF_HP, 4);
                             hpMax = d.length === 4 ? d.readUInt32BE(0) : 0;
@@ -304,10 +307,19 @@ async function run(args) {
                             const d = mem.read(target + OFF_HP, 4);
                             const curHp = d.length === 4 ? d.readUInt32BE(0) : 0;
                             if (curHp > hpMax) hpMax = curHp;
+                        } else {
+                            // 玩家阵亡/重生中
+                            target = null;
                         }
-                    } catch (err) {
-                        console.log('[+] 重扫异常:', err.message);
                     }
+                } catch (err) {
+                    console.log('[+] 重扫异常:', err.message);
+                }
+
+                // 没有玩家机体时不写任何内存
+                if (!target) {
+                    await sleep(200);
+                    continue;
                 }
 
                 // === 锁定 ===
