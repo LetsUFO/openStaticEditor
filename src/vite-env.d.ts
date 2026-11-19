@@ -41,7 +41,7 @@ interface AppMenuFormField {
 	optionFilterFn?: string;
 	/**
 	 * type=switch 时生效：配置后，开关切换会由主进程调用该脚本模块里 onFnName/offFnName 指定的方法。
-	 * 路径相对 custom 目录；模块在主进程常驻缓存，开/关共享模块内部状态，常驻由脚本自控。
+	 * 路径相对 custom 目录；开启时重新读取脚本文件，关闭时复用开启加载的同一实例。
 	 */
 	script?: string;
 	/** 开关切到「开」时调用的脚本导出方法名（如 "on"） */

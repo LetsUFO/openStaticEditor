@@ -240,16 +240,21 @@ function loadScriptModule(scriptSrc, baseSrc) {
 }
 
 /**
- * 定位并加载 switch 配置的脚本模块：每次调用都清 require 缓存重新读取文件，
- * 脚本改动无需重启应用即可生效，模块不会永久驻留在内存中。
- * on/off 的跨调用状态由脚本自身持有（本工程不缓存实例）。
+ * switch 脚本实例缓存：开（reload=true）时清缓存重新读取文件，让脚本改动立即生效；
+ * 关（reload=false）不重载，复用开启时加载的同一实例，保证关闭调用的是同一份脚本状态。
+ * @type {Map<string, any>} resolvedPath -> 模块 exports
  */
-function loadSwitchScriptModule(scriptSrc, baseSrc) {
+const switchScriptModules = new Map();
+
+function loadSwitchScriptModule(scriptSrc, baseSrc, reload) {
 	const { customDir, scriptPath } = resolveScriptLocation(scriptSrc, baseSrc);
 	if (!existsSync(scriptPath)) throw new Error(`脚本不存在：${scriptPath}`);
 	const resolved = require.resolve(scriptPath);
-	delete require.cache[resolved];
-	return { customDir, script: require(resolved) };
+	if (reload || !switchScriptModules.has(resolved)) {
+		delete require.cache[resolved];
+		switchScriptModules.set(resolved, require(resolved));
+	}
+	return { customDir, script: switchScriptModules.get(resolved) };
 }
 
 /**
@@ -302,16 +307,16 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 
 /**
  * 调用 switch 配置 script 模块里 onFnName/offFnName 指定的方法（每次切换各调用一次）。
- * 每次调用都重新读取脚本文件（不常驻缓存）；等待方法及其 Promise 成功后才返回，
- * 同步异常和异步拒绝均透传给渲染层。
- * 请求参数：{ scriptSrc, method, baseSrc? }
+ * 开（reload=true）时重新读取脚本文件，关（reload=false）复用开启时加载的实例。
+ * 等待方法及其 Promise 成功后才返回，同步异常和异步拒绝均透传给渲染层。
+ * 请求参数：{ scriptSrc, method, reload?, baseSrc? }
  */
 ipcMain.handle('script:invoke', async (_event, payload = {}) => {
-	const { scriptSrc, method, baseSrc } = payload;
+	const { scriptSrc, method, baseSrc, reload = true } = payload;
 	if (!scriptSrc) throw new Error('未配置 script，无法调用');
 	if (!method) throw new Error('未配置 onFnName/offFnName 方法名，无法调用');
 
-	const { customDir, script } = loadSwitchScriptModule(scriptSrc, baseSrc);
+	const { customDir, script } = loadSwitchScriptModule(scriptSrc, baseSrc, reload);
 	const fn = script?.[method];
 	if (typeof fn !== 'function') throw new Error(`脚本未导出方法：${method}`);
 

@@ -110,6 +110,8 @@ export interface Api {
 	invokeScript: (payload: {
 		scriptSrc: string;
 		method: string;
+		/** true：重新读取脚本文件（开启）；false：复用已加载实例（关闭） */
+		reload?: boolean;
 		baseSrc?: string;
 	}) => Promise<{ ok: boolean }>;
 }

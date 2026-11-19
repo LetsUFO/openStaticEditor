@@ -1,7 +1,7 @@
 {
 	"name": "rpcs3-Gundam Extreme Vs Full Boost 高达极限对决：全力加速",
 	"appIcon": "icon.png",
-	"ver": "0.0.3",
+	"ver": "0.0.4",
 	"width": 1200,
 	"height": 760,
 	"background": {
@@ -24,7 +24,7 @@
 			"tip": "",
 			"category": [
 				{
-					"label": "战斗时修改",
+					"label": "战斗修改",
 					"tip": "仅在对战时生效",
 					"col": 3,
 					"items": [
@@ -40,7 +40,7 @@
 							"label": "锁定弹药",
 							"name": "ammo",
 							"type": "switch",
-							"script": "lockBody.js",
+							"script": "lockAmmo.js",
 							"onFnName": "on",
 							"offFnName": "off"
 						}
