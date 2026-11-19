@@ -17,6 +17,8 @@ const CHUNK = 1 << 22;
 const OFF_HP = 0x164;
 const OFF_BOOST = 0x998;
 const OFF_EX = 0x9D8;
+// 觉醒/大招状态：0=普通，非0=觉醒进行中。觉醒期间不能强写 EX/Boost，否则状态机被打断，大招只能放一次
+const OFF_EX_STATE = 0x9DC;
 const BOOST_MAX = 10000;
 const EX_MAX = 100.0;
 const HP_MAX_SANE = 5000;
@@ -371,11 +373,15 @@ async function run(args) {
 
             for (const unit of targets) {
                 if (!unitValid(mem, unit)) continue;
+                // 觉醒/大招进行中只跳过 EX 强写（避免打断状态机导致大招只能放一次）；
+                // Boost、HP 全程锁，Boost 硬写不会干扰觉醒状态机
+                const st = mem.read(unit + OFF_EX_STATE, 4);
+                const inBurst = st.length === 4 && st.readUInt32BE(0) !== 0;
                 if (args.boost) mem.write(unit + OFF_BOOST, BOOST_BUFFER);
                 if (args.hp && (hpMax.get(unit) || 0) > 0) {
                     mem.write(unit + OFF_HP, u32be(hpMax.get(unit)));
                 }
-                if (args.ex) mem.write(unit + OFF_EX, EX_BUFFER);
+                if (args.ex && !inBurst) mem.write(unit + OFF_EX, EX_BUFFER);
             }
         } catch (err) {
             console.error('[x] 循环异常（已忽略）:', err.message);
@@ -391,6 +397,7 @@ function on() {
     if (process.platform !== 'win32') {
         return Promise.reject(new Error('该修改器仅支持 Windows'));
     }
+    console.log('[on] 收到开启请求, 当前 running =', running);
     if (running) return Promise.resolve({ status: 'already_running' });
 
     running = true;
@@ -399,13 +406,20 @@ function on() {
         running = false;
     });
     // 立刻返回，不等 run() 里的等待循环
+    console.log('[on] 已启动后台 run()');
     return Promise.resolve({ status: 'started' });
 }
 
 /** 主程序「关」：置标志位并返回 Promise，常驻循环真正退出后完成 */
 async function off() {
+    console.log('[off] 收到关闭请求, 当前 running =', running);
     running = false;
-    if (currentRun) await currentRun;
+    if (currentRun) {
+        console.log('[off] 等待 run() 退出...');
+        await currentRun;
+        console.log('[off] run() 已退出');
+    }
+    console.log('[off] 完成');
 }
 
 module.exports = { on, off };
