@@ -220,22 +220,52 @@ for (const method of ['log', 'error']) {
     };
 }
 
-async function run(args, onStarted) {
+async function run(args) {
     try { fs.writeFileSync(LOG_FILE, ''); } catch { /* 忽略 */ }
     initNative();
-    const pid = findPid();
-    if (!pid) {
-        throw new Error('没找到 rpcs3.exe，请先启动游戏');
-    }
-    const mem = new Mem(pid);
-    console.log('[+] rpcs3 pid =', pid);
 
-    let units = findUnits(mem);
-    if (!units.length) {
-        throw new Error('没找到机体结构，请确认已经进入战斗且游戏未暂停');
-    }
-    console.log(`[+] 找到 ${units.length} 台机体:`);
+    let mem = null;
+    let units = [];
+    let targets = [];
     let hpMax = new Map();
+
+    // ---- 阶段 A: 等模拟器启动 ----
+    while (running) {
+        const pid = findPid();
+        if (pid) {
+            try {
+                mem = new Mem(pid);
+                console.log('[+] rpcs3 pid =', pid);
+                break;
+            } catch (err) {
+                console.log('[+] OpenProcess 失败，继续等待...');
+            }
+        }
+        await sleep(1000);
+    }
+    if (!running) return;
+
+    // ---- 阶段 B: 等进入战斗（机体结构出现） ----
+    while (running) {
+        units = findUnits(mem);
+        if (units.length > 0) break;
+        // 模拟器可能中途崩了 → 重新等 pid
+        if (!findPid()) {
+            console.log('[+] 模拟器连接断开，重新等待...');
+            mem = null;
+            while (running) {
+                const pid = findPid();
+                if (pid) { try { mem = new Mem(pid); break; } catch {} }
+                await sleep(1000);
+            }
+            if (!running) return;
+        }
+        await sleep(1000);
+    }
+    if (!running) return;
+
+    // ---- 阶段 C: 找到机体，开始锁定 ----
+    console.log(`[+] 找到 ${units.length} 台机体:`);
     units.forEach((unit, index) => {
         const hpData = mem.read(unit + OFF_HP, 4);
         const boostData = mem.read(unit + OFF_BOOST, 4);
@@ -246,9 +276,9 @@ async function run(args, onStarted) {
         hpMax.set(unit, hp);
         console.log(`    #${index + 1}  ${hex(unit)}  HP=${hp}  气槽=${boost}  EX=${Number.isFinite(ex) ? ex.toFixed(1) : '?'}`);
     });
-    if (args.list) return;
+    if (args.list) { running = false; return; }
 
-    let targets = args.all ? units :
+    targets = args.all ? units :
         (() => {
             const unit = pickPlayerUnit(mem, units, args.target);
             return unit ? [unit] : [];
@@ -262,85 +292,114 @@ async function run(args, onStarted) {
         console.log(`[+] 目标机体: ${hex(targets[0])}`);
     }
 
-    running = true;
-    onStarted?.();
+    // ---- 主循环 ----
     let lastCheck = 0;
     while (running) {
-        const now = monotonic();
-        if (now - lastCheck >= 1.0) {
-            if (!targets.length || targets.some(unit => !unitValid(mem, unit))) {
-                units = findUnits(mem);
-                const prevTarget = targets[0];
-                targets = args.all ? units :
-                    (() => {
-                        const unit = pickPlayerUnit(mem, units, args.target, prevTarget);
-                        return unit ? [unit] : [];
-                    })();
-                hpMax = new Map();
-                for (const unit of units) {
-                    const d = mem.read(unit + OFF_HP, 4);
-                    hpMax.set(unit, d.length === 4 ? d.readUInt32BE(0) : 0);
+        try {
+            const now = monotonic();
+
+            // 模拟器断开检测（每 5 秒）
+            if (now - lastCheck >= 5.0) {
+                if (!findPid()) {
+                    console.log('[+] 模拟器已退出，等待重新启动...');
+                    mem = null;
+                    targets = [];
+                    units = [];
+                    hpMax = new Map();
+                    while (running) {
+                        const pid = findPid();
+                        if (pid) { try { mem = new Mem(pid); break; } catch {} }
+                        await sleep(1000);
+                    }
+                    if (!running) return;
+                    while (running) {
+                        units = findUnits(mem);
+                        if (units.length > 0) break;
+                        await sleep(1000);
+                    }
+                    if (!running) return;
+                    console.log(`[+] 重新连接，找到 ${units.length} 台机体`);
+                    targets = args.all ? units :
+                        (() => {
+                            const unit = pickPlayerUnit(mem, units, args.target);
+                            return unit ? [unit] : [];
+                        })();
+                    hpMax = new Map();
+                    for (const unit of units) {
+                        const d = mem.read(unit + OFF_HP, 4);
+                        hpMax.set(unit, d.length === 4 ? d.readUInt32BE(0) : 0);
+                    }
+                    lastCheck = now;
+                    continue;
                 }
-                if (targets.length) console.log('[+] 检测到结构变化，已自动重新定位');
             }
-            // 只有结构本身消失(被回收/换局)才重新判定; HP=0 只是阵亡, 不能因此改锁到敌方。
-            if (!args.all && targets.length && !unitValid(mem, targets[0])) {
-                const best = pickPlayerUnit(mem, units, args.target, targets[0]);
-                if (best && best !== targets[0]) {
-                    targets = [best];
-                    hpMax = new Map([[best, 0]]);
-                    console.log('[+] 1 号位判定变化，切换为 ' + hex(best));
+
+            if (now - lastCheck >= 1.0) {
+                if (!targets.length || targets.some(unit => !unitValid(mem, unit))) {
+                    units = findUnits(mem);
+                    const prevTarget = targets[0];
+                    targets = args.all ? units :
+                        (() => {
+                            const unit = pickPlayerUnit(mem, units, args.target, prevTarget);
+                            return unit ? [unit] : [];
+                        })();
+                    hpMax = new Map();
+                    for (const unit of units) {
+                        const d = mem.read(unit + OFF_HP, 4);
+                        hpMax.set(unit, d.length === 4 ? d.readUInt32BE(0) : 0);
+                    }
+                    if (targets.length) console.log('[+] 检测到结构变化，已自动重新定位');
                 }
-            }
-            for (const unit of targets) {
-                if (args.hp && (hpMax.get(unit) || 0) <= 0) {
-                    const d = mem.read(unit + OFF_HP, 4);
-                    if (d.length === 4 && d.readUInt32BE(0) > 0) {
-                        hpMax.set(unit, d.readUInt32BE(0));
+                if (!args.all && targets.length && !unitValid(mem, targets[0])) {
+                    const best = pickPlayerUnit(mem, units, args.target, targets[0]);
+                    if (best && best !== targets[0]) {
+                        targets = [best];
+                        hpMax = new Map([[best, 0]]);
+                        console.log('[+] 1 号位判定变化，切换为 ' + hex(best));
                     }
                 }
+                for (const unit of targets) {
+                    if (args.hp && (hpMax.get(unit) || 0) <= 0) {
+                        const d = mem.read(unit + OFF_HP, 4);
+                        if (d.length === 4 && d.readUInt32BE(0) > 0) {
+                            hpMax.set(unit, d.readUInt32BE(0));
+                        }
+                    }
+                }
+                lastCheck = now;
             }
-            lastCheck = now;
-        }
 
-        for (const unit of targets) {
-            // 结构已被回收时不写入, 防止把数值写到后续占用该地址的其它机体上。
-            if (!unitValid(mem, unit)) continue;
-            if (args.boost) mem.write(unit + OFF_BOOST, BOOST_BUFFER);
-            if (args.hp && (hpMax.get(unit) || 0) > 0) {
-                mem.write(unit + OFF_HP, u32be(hpMax.get(unit)));
+            for (const unit of targets) {
+                if (!unitValid(mem, unit)) continue;
+                if (args.boost) mem.write(unit + OFF_BOOST, BOOST_BUFFER);
+                if (args.hp && (hpMax.get(unit) || 0) > 0) {
+                    mem.write(unit + OFF_HP, u32be(hpMax.get(unit)));
+                }
+                if (args.ex) mem.write(unit + OFF_EX, EX_BUFFER);
             }
-            if (args.ex) mem.write(unit + OFF_EX, EX_BUFFER);
+        } catch (err) {
+            console.error('[x] 循环异常（已忽略）:', err.message);
         }
 
         await sleep(20);
     }
-    console.log('\n[+] 已停止');
+    console.log('[+] 已停止');
 }
 
-/** 主程序「开」：返回 Promise，常驻循环启动成功后完成；启动失败则 reject，运行期异常记录日志 */
+/** 主程序「开」：立即 resolve，后台自动等待模拟器/战斗/锁定 */
 function on() {
     if (process.platform !== 'win32') {
-        return Promise.reject(new Error('该修改器仅支持 Windows，请在 Windows 主程序中配合 RPCS3 使用'));
+        return Promise.reject(new Error('该修改器仅支持 Windows'));
     }
-    if (running) return Promise.resolve();
+    if (running) return Promise.resolve({ status: 'already_running' });
 
-    let resolveStart;
-    let rejectStart;
-    const started = new Promise((resolve, reject) => {
-        resolveStart = resolve;
-        rejectStart = reject;
-    });
-    let startSucceeded = false;
-    currentRun = run(parseArgs([]), () => {
-        startSucceeded = true;
-        resolveStart();
-    }).catch(error => {
-        console.error('[x]', error.message || error);
+    running = true;
+    currentRun = run(parseArgs([])).catch(error => {
+        console.error('[x] run 异常:', error.message || error);
         running = false;
-        if (!startSucceeded) rejectStart(error);
     });
-    return started;
+    // 立刻返回，不等 run() 里的等待循环
+    return Promise.resolve({ status: 'started' });
 }
 
 /** 主程序「关」：置标志位并返回 Promise，常驻循环真正退出后完成 */
