@@ -303,7 +303,7 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 });
 
 /**
- * 调用 switch 配置 script 模块里 on/off 字段指定的方法（每次切换各调用一次）。
+ * 调用 switch 配置 script 模块里 onFnName/offFnName 指定的方法（每次切换各调用一次）。
  * 模块常驻缓存，on/off 共享模块内部状态；等待方法及其 Promise 成功后才返回，
  * 同步异常和异步拒绝均透传给渲染层。
  * 请求参数：{ scriptSrc, method, baseSrc? }
@@ -311,7 +311,7 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
 ipcMain.handle('script:invoke', async (_event, payload = {}) => {
 	const { scriptSrc, method, baseSrc } = payload;
 	if (!scriptSrc) throw new Error('未配置 script，无法调用');
-	if (!method) throw new Error('未配置 on/off 方法名，无法调用');
+	if (!method) throw new Error('未配置 onFnName/offFnName 方法名，无法调用');
 
 	const { customDir, script } = loadSwitchScriptModule(scriptSrc, baseSrc);
 	const fn = script?.[method];

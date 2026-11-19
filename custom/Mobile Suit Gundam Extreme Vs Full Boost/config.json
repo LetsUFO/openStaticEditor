@@ -33,8 +33,8 @@
 							"name": "full",
 							"type": "switch",
 							"script": "exvs_trainer.js",
-							"on": "on",
-							"off": "off"
+							"onFnName": "on",
+							"offFnName": "off"
 						}
 					]
 				}

@@ -266,11 +266,11 @@ function onNumberBlur(item: AppMenuFormField) {
 	}
 }
 
-// ------------------------------------------------------------------ 开关（script + on/off 方法）
-// 配置了 script 的 switch：开/关时主进程调用该模块里 on/off 字段指定的方法（各一次）。
+// ------------------------------------------------------------------ 开关（script + onFnName/offFnName）
+// 配置了 script 的 switch：开/关时主进程调用该模块里 onFnName/offFnName 指定的方法（各一次）。
 // 等待方法及其 Promise 成功后才写入 store；失败时只展示错误，保留原值。
 async function onSwitchChange(item: any, checked: boolean): Promise<void> {
-	const method = checked ? item?.on : item?.off;
+	const method = checked ? item?.onFnName : item?.offFnName;
 	if (!item?.script || !method) {
 		write(item, checked);
 		return;
