@@ -2,8 +2,8 @@
 	"name": "rpcs3-Gundam Extreme Vs Full Boost 高达极限对决：全力加速",
 	"appIcon": "icon.png",
 	"ver": "0.1.0",
-	"width": 1200,
-	"height": 760,
+	"width": 800,
+	"height": 300,
 	"background": {
 		"src": "PIC1.png",
 		"base64": "",
