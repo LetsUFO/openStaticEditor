@@ -1,6 +1,6 @@
 'use strict';
 
-// EXVSFB (NPJB00512) RPCS3 内存修改器 Node.js 版。
+// EXVSFB (NPJB00512) RPCS3 内存修改器 — Body 部分 (HP / Boost / EX)
 // 需要 Node.js 18+，独立运行前执行 npm install；由主程序调用时无需（主程序注册全局 NODE_PATH）。
 // 主程序约定：require 本模块后，开/关分别调用导出的 on()/off()（config.json 的 script/on/off），
 // 模块常驻、on/off 共享 running 标志；日志写 exvs_trainer.log。独立命令行运行见文件末尾。
@@ -17,11 +17,6 @@ const CHUNK = 1 << 22;
 const OFF_HP = 0x164;
 const OFF_BOOST = 0x998;
 const OFF_EX = 0x9D8;
-const AMMO_FIELDS = [[0x0BDC, 12], [0x0BFC, 1], [0x0C1C, 16]];
-const AMMO_NAMES = ['主射', '齐射', '浮游炮'];
-const WEAPON_IDS = [158, 159, 160];
-const SCAN_BASE = 0x341000000;
-const SCAN_SIZE = 0x1200000;
 const BOOST_MAX = 10000;
 const EX_MAX = 100.0;
 const HP_MAX_SANE = 5000;
@@ -63,8 +58,6 @@ function f32be(value) {
 
 const BOOST_BUFFER = u32be(BOOST_MAX);
 const EX_BUFFER = f32be(EX_MAX);
-const GAUGE_FULL_BUFFER = f32be(1.0);
-const AMMO_BUFFERS = AMMO_FIELDS.map(([, maximum]) => u32be(maximum));
 
 function findPid() {
     let out;
@@ -140,24 +133,7 @@ function unitValid(mem, unit) {
         d.readUInt16BE(20) === 0x4FFF;
 }
 
-function readWeaponIds(mem, unit) {
-    const first = AMMO_FIELDS[0][0];
-    const base = first - 4;
-    const size = AMMO_FIELDS[AMMO_FIELDS.length - 1][0] - first + 4;
-    const data = mem.read(unit + base, size);
-    if (data.length !== size) return AMMO_FIELDS.map(() => null);
-    return AMMO_FIELDS.map(([off]) => data.readUInt32BE(off - first));
-}
-
-function weaponIdsMatch(ids) {
-    return ids.every((id, index) => id === WEAPON_IDS[index]);
-}
-
-function formatWeaponIds(ids) {
-    return ids.map(id => id === null ? '?' : id).join('/');
-}
-
-// 检查一个候选机体结构是否像“正常可操控机体”:
+// 检查一个候选机体结构是否像"正常可操控机体":
 // 结构特征完整, HP 在 1..5000, 气槽不超过 10000, EX 是 0..100 的有限浮点。
 // 用于过滤扫描误命中的垃圾结构(例如 HP=0xFFFFFFFF)。
 function slotOneCandidate(mem, unit) {
@@ -189,73 +165,25 @@ function pickPlayerUnit(mem, units, target, previous = null) {
     return candidates[Math.min(target, candidates.length) - 1];
 }
 
-function pairEquals(a, b) {
-    return Boolean(a && b && a.ammo.equals(b.ammo) && a.gauge.equals(b.gauge));
-}
-
-async function findSyncCopies(mem, primary, maximum) {
-    const pair = address => {
-        const d = mem.read(address, 0x10);
-        return d.length === 0x10 ? {
-            ammo: d.subarray(0, 4),
-            gauge: d.subarray(0x0C, 0x10)
-        } : null;
-    };
-
-    const initial = pair(primary);
-    if (!initial) return [];
-    const ammo = initial.ammo.readUInt32BE(0);
-    const gauge = initial.gauge.readFloatBE(0);
-    // 等装填条走到独特的非零小数，避开大量静态 0/1。
-    if (ammo > maximum || !(gauge > 0.001 && gauge < 0.995)) return [];
-
-    const data = mem.read(SCAN_BASE, SCAN_SIZE);
-    if (data.length !== SCAN_SIZE || !pairEquals(pair(primary), initial)) return [];
-
-    let found = [];
-    let i = data.indexOf(initial.gauge);
-    while (i >= 0) {
-        const address = SCAN_BASE + i - 0x0C;
-        if (i >= 0x0C && address % 4 === 0 &&
-                data.subarray(i - 0x0C, i - 0x08).equals(initial.ammo)) {
-            found.push(address);
-        }
-        i = data.indexOf(initial.gauge, i + 1);
-    }
-    if (!found.includes(primary) || found.length < 3) return [];
-
-    // 连续同步三次，排除偶然相同的无关地址。
-    for (let n = 0; n < 3; n++) {
-        await sleep(20);
-        const current = pair(primary);
-        if (!current) return [];
-        found = found.filter(address => pairEquals(pair(address), current));
-        if (found.length < 3) return [];
-    }
-    return found.sort((a, b) => a - b);
-}
-
 function printHelp() {
-    console.log(`用法: node exvs_trainer.js [选项]
-  不带参数时自动启用 HP / Boost / EX / 弹药，并在内部判断是否可用
+    console.log(`用法: node lockBody.js [选项]
+  不带参数时自动启用 HP / Boost / EX
   主程序通过导出方法 on()/off() 启停；日志见 exvs_trainer.log
   --boost          气槽锁定为满 (10000)
   --hp             血量锁定为进入战斗时的值
   --ex             EX 槽锁定为满 (100)
-  --ammo           强袭自由主射/齐射/浮游炮弹药锁定
-  --all            对所有机体生效（不能用于 --ammo）
-  --target N       第几台机体（默认 1，--ammo 只支持 1）
+  --all            对所有机体生效
+  --target N       第几台机体（默认 1）
   --list           只列出机体，不修改`);
 }
 
 function parseArgs(argv) {
-    const args = { boost: false, hp: false, ex: false, ammo: false,
+    const args = { boost: false, hp: false, ex: false,
         all: false, list: false, target: 1, help: false };
     if (argv.length === 0) {
         args.boost = true;
         args.hp = true;
         args.ex = true;
-        args.ammo = true;
     }
     for (let i = 0; i < argv.length; i++) {
         const arg = argv[i];
@@ -263,7 +191,7 @@ function parseArgs(argv) {
             args.target = Number(argv[++i]);
         } else if (arg === '--help' || arg === '-h') {
             args.help = true;
-        } else if (['--boost', '--hp', '--ex', '--ammo', '--all', '--list'].includes(arg)) {
+        } else if (['--boost', '--hp', '--ex', '--all', '--list'].includes(arg)) {
             args[arg.slice(2)] = true;
         } else {
             throw new Error('未知参数: ' + arg);
@@ -293,10 +221,6 @@ for (const method of ['log', 'error']) {
 }
 
 async function run(args, onStarted) {
-    if (args.ammo && (args.all || args.target !== 1)) {
-        throw new Error('--ammo 目前只支持默认的第 1 台强袭自由，不能配合 --all/--target');
-    }
-
     try { fs.writeFileSync(LOG_FILE, ''); } catch { /* 忽略 */ }
     initNative();
     const pid = findPid();
@@ -319,14 +243,8 @@ async function run(args, onStarted) {
         const hp = hpData.length === 4 ? hpData.readUInt32BE(0) : -1;
         const boost = boostData.length === 4 ? boostData.readUInt32BE(0) : -1;
         const ex = exData.length === 4 ? exData.readFloatBE(0) : -1;
-        const ammo = AMMO_FIELDS.map(([off]) => {
-            const d = mem.read(unit + off, 4);
-            return d.length === 4 ? d.readUInt32BE(0) : -1;
-        });
-        const ids = readWeaponIds(mem, unit);
-        const matchLabel = weaponIdsMatch(ids) ? ' [强袭自由配置匹配]' : '';
         hpMax.set(unit, hp);
-        console.log(`    #${index + 1}  ${hex(unit)}  HP=${hp}  气槽=${boost}  EX=${ex.toFixed(1)}  主射=${ammo[0]}  齐射=${ammo[1]}  浮游炮=${ammo[2]}  武器ID=${formatWeaponIds(ids)}${matchLabel}`);
+        console.log(`    #${index + 1}  ${hex(unit)}  HP=${hp}  气槽=${boost}  EX=${Number.isFinite(ex) ? ex.toFixed(1) : '?'}`);
     });
     if (args.list) return;
 
@@ -339,18 +257,10 @@ async function run(args, onStarted) {
     if (args.boost) mode.push('气槽');
     if (args.hp) mode.push('血量');
     if (args.ex) mode.push('EX');
-    if (args.ammo) mode.push('强袭自由主射/齐射/浮游炮');
     console.log(`[+] 已开启: ${mode.join(', ')}  (换局自动重扫, Ctrl+C 停止)`);
     if (!args.all && targets.length) {
         console.log(`[+] 目标机体: ${hex(targets[0])}`);
     }
-
-    const ammoGroups = new Map();
-    const ammoRetry = Array(AMMO_FIELDS.length).fill(0);
-    let ammoAllowed = false;
-    let weaponKey = '';
-    let lastWeaponCheck = 0;
-    if (args.ammo) console.log('[+] 弹药写入前校验武器ID，首次装填时自动定位同步副本');
 
     running = true;
     onStarted?.();
@@ -366,11 +276,6 @@ async function run(args, onStarted) {
                         const unit = pickPlayerUnit(mem, units, args.target, prevTarget);
                         return unit ? [unit] : [];
                     })();
-                ammoGroups.clear();
-                ammoRetry.fill(0);
-                ammoAllowed = false;
-                weaponKey = '';
-                lastWeaponCheck = 0;
                 hpMax = new Map();
                 for (const unit of units) {
                     const d = mem.read(unit + OFF_HP, 4);
@@ -384,11 +289,6 @@ async function run(args, onStarted) {
                 if (best && best !== targets[0]) {
                     targets = [best];
                     hpMax = new Map([[best, 0]]);
-                    ammoGroups.clear();
-                    ammoRetry.fill(0);
-                    ammoAllowed = false;
-                    weaponKey = '';
-                    lastWeaponCheck = 0;
                     console.log('[+] 1 号位判定变化，切换为 ' + hex(best));
                 }
             }
@@ -413,58 +313,7 @@ async function run(args, onStarted) {
             if (args.ex) mem.write(unit + OFF_EX, EX_BUFFER);
         }
 
-        if (args.ammo && targets.length) {
-            const unit = targets[0];
-            if (now - lastWeaponCheck >= 0.5) {
-                const ids = readWeaponIds(mem, unit);
-                const matched = weaponIdsMatch(ids);
-                const key = formatWeaponIds(ids);
-                if (key !== weaponKey) {
-                    if (matched) {
-                        console.log(`[+] 1号机武器ID=${key}，校验通过`);
-                    } else {
-                        console.log(`[x] 1号机武器ID=${key}，需要158/159/160；已跳过弹药锁定`);
-                        ammoGroups.clear();
-                        ammoRetry.fill(0);
-                    }
-                    weaponKey = key;
-                }
-                ammoAllowed = matched;
-                lastWeaponCheck = now;
-            }
-
-            if (ammoAllowed) {
-                for (let index = 0; index < AMMO_FIELDS.length; index++) {
-                    const [off, maximum] = AMMO_FIELDS[index];
-                    let addresses = ammoGroups.get(index);
-                    if (!addresses && now >= ammoRetry[index]) {
-                        addresses = await findSyncCopies(mem, unit + off, maximum);
-                        ammoRetry[index] = monotonic() + 0.1;
-                        if (!unitValid(mem, unit) || !weaponIdsMatch(readWeaponIds(mem, unit))) {
-                            ammoAllowed = false;
-                            weaponKey = '';
-                            ammoGroups.clear();
-                            ammoRetry.fill(0);
-                            break;
-                        }
-                        if (addresses.length) {
-                            ammoGroups.set(index, addresses);
-                            console.log(`[+] ${AMMO_NAMES[index]}同步副本: ${addresses.map(hex).join(', ')}`);
-                        }
-                    }
-                    if (addresses && addresses.length) {
-                        for (const address of addresses) {
-                            const d = mem.read(address, 4);
-                            if (d.length === 4 && d.readUInt32BE(0) <= maximum) {
-                                mem.write(address, AMMO_BUFFERS[index]);
-                                mem.write(address + 0x0C, GAUGE_FULL_BUFFER);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        await sleep(args.ammo ? 5 : 20);
+        await sleep(20);
     }
     console.log('\n[+] 已停止');
 }
@@ -502,11 +351,11 @@ async function off() {
 
 module.exports = { on, off };
 
-// 独立命令行运行：node exvs_trainer.js [选项]（主程序 require 时不走这里）
+// 独立命令行运行：node lockBody.js [选项]（主程序 require 时不走这里）
 if (require.main === module) {
     process.once('SIGINT', () => { running = false; });
     const args = parseArgs(process.argv.slice(2));
-    if (args.help || !(args.boost || args.hp || args.ex || args.ammo || args.list)) {
+    if (args.help || !(args.boost || args.hp || args.ex || args.list)) {
         printHelp();
     } else {
         run(args).catch(error => {

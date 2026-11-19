@@ -1,13 +1,13 @@
 {
 	"name": "rpcs3-Gundam Extreme Vs Full Boost 高达极限对决：全力加速",
 	"appIcon": "icon.png",
-	"ver": "0.0.1",
+	"ver": "0.0.3",
 	"width": 1200,
 	"height": 760,
 	"background": {
 		"src": "PIC1.png",
 		"base64": "",
-		"blur": 20,
+		"blur": 10,
 		"alpha": 0.2
 	},
 	"loadFiles": {
@@ -29,10 +29,18 @@
 					"col": 3,
 					"items": [
 						{
-							"label": "锁定EX、Boost、HP、弹药",
-							"name": "full",
+							"label": "锁定EX、Boost、HP",
+							"name": "body",
 							"type": "switch",
-							"script": "exvs_trainer.js",
+							"script": "lockBody.js",
+							"onFnName": "on",
+							"offFnName": "off"
+						},
+						{
+							"label": "锁定弹药",
+							"name": "ammo",
+							"type": "switch",
+							"script": "lockBody.js",
 							"onFnName": "on",
 							"offFnName": "off"
 						}
