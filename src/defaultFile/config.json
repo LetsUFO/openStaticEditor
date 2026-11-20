@@ -27,11 +27,81 @@
 					"label": "",
 					"tip": "",
 					"col": 3,
+					"enableKey": "",
 					"items": [
 						{
 							"label": "",
 							"name": "",
-							"type": "text"
+							"type": "text",
+							"disabled": false
+						},
+						{
+							"label": "",
+							"name": "",
+							"type": "input",
+							"placeholder": "",
+							"disabled": false
+						},
+						{
+							"label": "",
+							"name": "",
+							"type": "number",
+							"min": 0,
+							"max": 9999,
+							"step": 1,
+							"precision": 0,
+							"disabled": false
+						},
+						{
+							"label": "",
+							"name": "",
+							"type": "switch",
+							"disabled": false,
+							"script": "",
+							"onFnName": "on",
+							"offFnName": "off"
+						},
+						{
+							"label": "",
+							"name": "",
+							"type": "select",
+							"placeholder": "",
+							"disabled": false,
+							"options": [
+								{
+									"label": "",
+									"value": ""
+								}
+							],
+							"optionUse": "",
+							"optionFilterFn": "",
+							"optionBeforeTag": {
+								"key": "",
+								"text": "",
+								"colorClass": ""
+							}
+						},
+						{
+							"label": "",
+							"name": "",
+							"type": "templateSelect",
+							"placeholder": "",
+							"disabled": false,
+							"optionUse": "",
+							"index": 0,
+							"optionFilterFn": "",
+							"optionBeforeTag": {
+								"key": "",
+								"text": "",
+								"colorClass": ""
+							}
+						},
+						{
+							"label": "",
+							"name": "",
+							"type": "enumText",
+							"useEnumMap": "",
+							"disabled": false
 						}
 					]
 				}

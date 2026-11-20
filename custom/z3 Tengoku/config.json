@@ -1,0 +1,62 @@
+{
+	"name": "第3次超级机器人大战Z：天狱篇",
+	"appIcon": "icon.png",
+	"ver": "0.0.1",
+	"width": 1200,
+	"height": 760,
+	"background": {
+		"src": "PIC1.PNG",
+		"base64": "",
+		"blur": 20,
+		"alpha": 0.2
+	},
+	"loadFiles": {
+		"RPW_DATA": {
+			"beforeScript": "",
+			"fileSrc": "",
+			"filePath": "",
+			"readScript": ""
+		}
+	},
+	"menu": [
+		{
+			"label": "强化零件",
+			"tip": "",
+			"category": [
+				{
+					"label": "机体零件修改",
+					"tip": "",
+					"col": 3,
+					"items": [
+						{
+							"label": "选择零件",
+							"name": "",
+							"type": "select"
+						}
+					]
+				},
+				{
+					"label": "修改零件数据",
+					"tip": "先选择需要修改的零件",
+					"col": 3,
+					"enableKey": "targetPart",
+					"items": [
+						{
+							"label": "选择零件",
+							"name": "",
+							"type": "select"
+						}
+					]
+				}
+			],
+			"dataKey": "RPW_DATA",
+			"saveScript": {
+				"needFileKey": "RPW_DATA",
+				"saveScript": ""
+			}
+		}
+	],
+	"i18n": {
+		"zh": {}
+	}
+}
