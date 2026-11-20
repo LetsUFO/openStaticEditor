@@ -1,0 +1,206 @@
+[
+  {
+    "label": "伤害倍率参数（1200 = 1.2倍）",
+    "inputType": "number"
+  },
+  {
+    "label": "保留参数（含义未确认）",
+    "inputType": "number",
+    "confirmed": false
+  },
+  {
+    "label": "武器攻击力",
+    "inputType": "number"
+  },
+  {
+    "label": "气力门槛",
+    "inputType": "number"
+  },
+  {
+    "label": "HP",
+    "inputType": "number"
+  },
+  {
+    "label": "EN",
+    "inputType": "number"
+  },
+  {
+    "label": "装甲",
+    "inputType": "number"
+  },
+  {
+    "label": "价格",
+    "inputType": "number"
+  },
+  {
+    "label": "分类",
+    "inputType": "select",
+    "options": [
+      { "label": "常驻强化", "value": 0 },
+      { "label": "地形模块", "value": 1 },
+      { "label": "消耗品", "value": 2 },
+      { "label": "特殊", "value": 3 }
+    ]
+  },
+  {
+    "label": "移动力",
+    "inputType": "number"
+  },
+  {
+    "label": "运动性",
+    "inputType": "number"
+  },
+  {
+    "label": "照准值",
+    "inputType": "number"
+  },
+  {
+    "label": "分身发动率",
+    "inputType": "number"
+  },
+  {
+    "label": "HP回复率",
+    "inputType": "number"
+  },
+  {
+    "label": "EN回复率",
+    "inputType": "number"
+  },
+  {
+    "label": "弹药回复",
+    "inputType": "switch"
+  },
+  {
+    "label": "地形适应方式",
+    "inputType": "select",
+    "options": [
+      { "label": "不改变", "value": 0 },
+      { "label": "空S", "value": 1 },
+      { "label": "陆S", "value": 2 },
+      { "label": "海S", "value": 3 }
+    ]
+  },
+  {
+    "label": "地形适应对象",
+    "inputType": "select",
+    "options": [
+      { "label": "无", "value": 0 },
+      { "label": "空", "value": 1 },
+      { "label": "宇宙", "value": 2 },
+      { "label": "陆", "value": 3 },
+      { "label": "海", "value": 4 },
+      { "label": "全地形A", "value": 5 },
+      { "label": "全地形S", "value": 6 }
+    ]
+  },
+  {
+    "label": "屏障",
+    "inputType": "select",
+    "options": [
+      { "label": "无", "value": 0 },
+      { "label": "伤害减轻1000", "value": 1 },
+      { "label": "D・フォルト（伤害减轻1200）", "value": 2 }
+    ]
+  },
+  {
+    "label": "特殊能力",
+    "inputType": "select",
+    "options": [
+      { "label": "无", "value": 0 },
+      { "label": "分身", "value": 1 },
+      { "label": "修理・补给装置", "value": 2 },
+      { "label": "移动力＋4（无视移动EN消耗与地形影响）", "value": 3 },
+      { "label": "SOL装甲（无效化特殊效果）", "value": 4 },
+      { "label": "伤害复仇（按HP伤害％加算）", "value": 5 },
+      { "label": "精神耐性＋切払100%", "value": 6 },
+      { "label": "移动1格获得资金500", "value": 7 }
+    ]
+  },
+  {
+    "label": "暴击补正",
+    "inputType": "number"
+  },
+  {
+    "label": "射程",
+    "inputType": "number"
+  },
+  {
+    "label": "射程扩展",
+    "inputType": "select",
+    "options": [
+      { "label": "不扩展", "value": 0 },
+      { "label": "也适用于射程1的武器・歌", "value": 2 }
+    ]
+  },
+  {
+    "label": "无视体积差补正与罩贯通",
+    "inputType": "switch"
+  },
+  {
+    "label": "出击气力",
+    "inputType": "number"
+  },
+  {
+    "label": "出击时SP最大",
+    "inputType": "switch"
+  },
+  {
+    "label": "报酬倍率",
+    "inputType": "select",
+    "options": [
+      { "label": "无", "value": 0 },
+      { "label": "Z芯片1.5倍", "value": 1 },
+      { "label": "PP・资金・Z芯片2倍", "value": 2 },
+      { "label": "经验值2倍", "value": 3 },
+      { "label": "PP2倍", "value": 4 },
+      { "label": "资金2倍", "value": 5 }
+    ]
+  },
+  {
+    "label": "被动效果",
+    "inputType": "select",
+    "options": [
+      { "label": "无", "value": 0 },
+      { "label": "每回合气力＋3（出击第1回合起）", "value": 1 },
+      { "label": "自军阶段开始时队伍行动次数＋1", "value": 2 },
+      { "label": "每回合HP・EN回复10%且SP＋10", "value": 3 },
+      { "label": "每回合SP＋15", "value": 4 },
+      { "label": "击坠敌队时SP＋10", "value": 5 },
+      { "label": "队伍TAG TENSION上升时再＋1", "value": 6 },
+      { "label": "气力上限＋30", "value": 7 },
+      { "label": "获得指挥官L4效果", "value": 8 },
+      { "label": "每10级武器攻击力＋100・装甲＋50", "value": 9 },
+      { "label": "伤害5000以上气力＋5／受伤2000以上SP＋5", "value": 10 }
+    ]
+  },
+  {
+    "label": "消耗品使用效果",
+    "inputType": "select",
+    "options": [
+      { "label": "无", "value": 0 },
+      { "label": "EN250回复", "value": 1 },
+      { "label": "弹药全回复", "value": 2 },
+      { "label": "HP6000回复", "value": 3 },
+      { "label": "HP・EN・弹药全回复", "value": 4 },
+      { "label": "我方全队HP5000・EN50回复", "value": 5 }
+    ]
+  },
+  {
+    "label": "SP回复量",
+    "inputType": "number"
+  },
+  {
+    "label": "一次性使用效果（含义未确认）",
+    "inputType": "number",
+    "confirmed": false
+  },
+  {
+    "label": "发生率加成",
+    "inputType": "number"
+  },
+  {
+    "label": "特殊效果组（含义未确认）",
+    "inputType": "number",
+    "confirmed": false
+  }
+]
