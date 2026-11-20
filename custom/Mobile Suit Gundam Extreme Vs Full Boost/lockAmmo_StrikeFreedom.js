@@ -45,11 +45,18 @@ const MAX_WEAPON_SLOTS = 6;
 const SLOT_ID_OFFSET = 0x00;
 const SLOT_AMMO_OFFSET = 0x04;
 
-// 真实武器状态块所在区域（机体相对）
-const STATE_REGION_START = 0x20000;
-const STATE_REGION_LEN = 0x40000;
+// 武器状态条目结构（经实机 hex dump 验证）：
+//   +0x00: u32 BE 武器 ID
+//   +0x04: u32 BE 当前弹药（游戏每发递减，且 2~3 份同步扣）
+//   +0x08: u32 BE 可变标志位
+//   +0x0C: u32 BE 每武器专属标记（从玩家 HUD 槽实时提取）
+//          158→0xDEC8DE  159→0xFF91FF  160→0xFE6CFE 等
+//   +0x10: float BE 装填进度（1.0 = 装填完成）
+//
+// 关键：游戏扣弹药时同时写 2~3 份（机体副本 + 全局状态），
+// 必须把所有副本都补上满弹值才能顶住扣减。
 
-// 强袭自由实测满弹值
+// 强袭自由/海牛实测满弹值
 const FULL_AMMO = new Map([
     [158, 12],
     [159, 1],
@@ -57,14 +64,11 @@ const FULL_AMMO = new Map([
     [303, 12],   // 海牛（Hi-Nu）2 号武器 - 浮游炮，满弹 12
 ]);
 
-// 实测状态块结构: [u32 武器ID][u32 弹药][u32 0][u32 标记][float 装填进度]
-// 单发武器（159）装填进度从 0 涨到 1.0 约需 10 秒，只补弹药不够，
-// 必须同时把 +0x10 的进度写成 1.0，武器才立刻可用。
 const RELOAD_PROGRESS_OFFSET = 0x10;
 const RELOAD_READY = 1.0;
 
 const LOCK_INTERVAL_MS = 2;   // 500Hz
-const RELOCATE_MS = 2000;
+const RELOCATE_MS = 3000;    // 3 秒全扫一次（单次 ~2s）
 const PID_CHECK_MS = 5000;
 
 const PROCESS_VM_OPERATION = 0x0008;
@@ -211,21 +215,43 @@ function pickPlayerUnit(mem, units) {
     return null;
 }
 
-// 在机体 0x30000~0x40000 区域里找每把武器的真实状态块
-// 结构: [u32 id][u32 ammo][u32 0][u32 标记][float 1.0]
-function findStateBlocks(mem, unit) {
+// 从玩家 HUD 槽提取每把武器的专属 +0x0C 标记
+function extractIdToMark(mem, unit) {
     const map = new Map();
-    const data = mem.read(unit + STATE_REGION_START, STATE_REGION_LEN);
-    if (data.length < 0x20) return map;
-    for (let i = 0; i + 0x14 <= data.length; i += 4) {
-        const id = data.readUInt32BE(i);
-        if (!FULL_AMMO.has(id)) continue;
-        const ammo = data.readUInt32BE(i + 4);
-        if (ammo > 999) continue;
-        if (data.readUInt32BE(i + 8) !== 0) continue;
-        if (!map.has(id)) map.set(id, unit + STATE_REGION_START + i);
+    for (let k = 0; k < MAX_WEAPON_SLOTS; k++) {
+        const d = mem.read(unit + OFF_WEAPON_BASE + k * WEAPON_SLOT_SIZE, 0x20);
+        if (d.length < 0x10) continue;
+        const id = d.readUInt32BE(0);
+        if (id === 0 || !FULL_AMMO.has(id)) continue;
+        const mark = d.readUInt32BE(0x0C);
+        if (mark !== 0) map.set(id, mark);
     }
     return map;
+}
+
+// 全内存扫描：对每把目标武器，用其专属 +0x0C 标记匹配所有副本
+// 返回 Map<weaponId, [absAddr, absAddr, ...]>
+function findAllWeaponEntries(mem, idToMark) {
+    const entries = new Map();  // id -> [absAddr, ...]
+    for (let gOff = 0; gOff < SIZE; gOff += CHUNK) {
+        const data = mem.read(BASE + gOff, CHUNK);
+        if (!data.length) continue;
+        for (let i = 0; i + 0x14 <= data.length; i += 4) {
+            const id = data.readUInt32BE(i);
+            const expectedMark = idToMark.get(id);
+            if (expectedMark === undefined) continue;
+            if (data.readUInt32BE(i + 0x0C) !== expectedMark) continue;
+            const ammo = data.readUInt32BE(i + 4);
+            const full = FULL_AMMO.get(id);
+            // 放宽 ammo 过滤：装填中=0 到满弹值的 3 倍
+            if (ammo > full * 3) continue;
+            const absAddr = BASE + gOff + i;
+            if (!entries.has(id)) entries.set(id, []);
+            const arr = entries.get(id);
+            if (!arr.includes(absAddr)) arr.push(absAddr);
+        }
+    }
+    return entries;
 }
 
 // ------------------------------------------------------------------ 主状态机
@@ -234,7 +260,11 @@ let currentRun = null;
 
 async function run() {
     try { fs.appendFileSync(LOG_FILE, '\n===== 启动 ' + new Date().toLocaleTimeString() + ' =====\n'); } catch {}
-    log('[ammo] 版本 = 强袭自由弹药锁 12/1/16 (pid ' + process.pid + ')');
+    log('[ammo] 版本 = v9 专属标记多副本 (pid ' + process.pid + ')');
+    log('[ammo] FULL_AMMO keys:', [...FULL_AMMO.keys()].join(','),
+        'get(303)=', FULL_AMMO.get(303), 'has(303)=', FULL_AMMO.has(303));
+    log('[ammo] FULL_AMMO full:',
+        [...FULL_AMMO.entries()].map(([k,v]) => k + '→' + v).join(' '));
     initNative();
 
     while (running) {
@@ -277,9 +307,11 @@ async function run() {
             const idxData = mem.read(target + OFF_UNIT_INDEX, 4);
             log('[ammo] 单位索引 =', idxData.length === 4 ? idxData.readUInt32BE(0) : '?');
 
-            // ========= 阶段 3: 定位真实状态块 =========
-            let blocks = new Map();
-            let blocksLogged = false;
+            // ========= 阶段 3: 全内存定位所有武器状态条目 =========
+            // findAllWeaponEntries 全内存扫，返回 Map<id, [{absAddr}]>
+            // 游戏会同时修改 2~3 份副本，必须全部同步补上
+            let entries = new Map();
+            let entriesLogged = false;
             let lastRelocate = 0;
             let lastPidCheck = 0;
             let cycles = 0;
@@ -306,25 +338,31 @@ async function run() {
                                 if (nt !== target) {
                                     log('[ammo] 目标失效，重新定位:', hex(target), '->', hex(nt));
                                     target = nt;
-                                    blocksLogged = false;
                                 }
-                                blocks = findStateBlocks(mem, target);
+                                entries = findAllWeaponEntries(mem, extractIdToMark(mem, target));
+                                entriesLogged = false;
                             } else {
-                                // 玩家阵亡/重生中，停止写入，避免继续写旧机体
                                 target = null;
-                                blocks = new Map();
-                                blocksLogged = false;
+                                entries = new Map();
+                                entriesLogged = false;
                             }
                         } else {
-                            blocks = findStateBlocks(mem, target);
+                            entries = findAllWeaponEntries(mem, extractIdToMark(mem, target));
                         }
                     } catch {}
-                    if (!blocksLogged && blocks.size) {
-                        blocksLogged = true;
-                        const known = [...FULL_AMMO.keys()]
-                            .filter(id => blocks.has(id))
-                            .map(id => id + '→' + hex(blocks.get(id)));
-                        log('[ammo] 状态块:', known.join(' ') || '(无匹配)');
+                    if (!entriesLogged) {
+                        entriesLogged = true;
+                        const lines = [];
+                        for (const id of [...FULL_AMMO.keys()].sort((a,b)=>a-b)) {
+                            const arr = entries.get(id);
+                            const full = FULL_AMMO.get(id);
+                            if (arr && arr.length) {
+                                lines.push(id + '(满' + full + '×' + arr.length + ')');
+                            } else {
+                                lines.push(id + '(满' + full + ' 未找到)');
+                            }
+                        }
+                        log('[ammo] 条目:', lines.join(' '));
                     }
                 }
 
@@ -336,56 +374,48 @@ async function run() {
 
                 try {
                     const parts = [];
+
+                    // 1. 先写全内存里所有带专属标记的武器条目（这是权威层）
+                    // entries 结构: Map<id, [absAddr, absAddr, ...]>
+                    for (const [id, addrs] of entries) {
+                        const full = FULL_AMMO.get(id);
+                        let ammoWrites = 0, reloadWrites = 0;
+                        for (const abs of addrs) {
+                            const cur = mem.read(abs + 4, 4);
+                            if (cur.length === 4 && cur.readUInt32BE(0) !== full) {
+                                if (mem.write(abs + 4, u32be(full))) ammoWrites++;
+                            }
+                            const prog = mem.read(abs + RELOAD_PROGRESS_OFFSET, 4);
+                            if (prog.length === 4 && prog.readFloatBE(0) < RELOAD_READY) {
+                                if (mem.write(abs + RELOAD_PROGRESS_OFFSET, f32be(RELOAD_READY))) reloadWrites++;
+                            }
+                        }
+                        const sample = addrs[0];
+                        const curAmmo = mem.read(sample + 4, 4);
+                        const curProg = mem.read(sample + RELOAD_PROGRESS_OFFSET, 4);
+                        parts.push('id' + id + '(' + curAmmo.readUInt32BE(0) + '/' + full + '×' + addrs.length +
+                            (ammoWrites ? '补' + ammoWrites : '') +
+                            (reloadWrites ? '拉满' + reloadWrites : '') + ')');
+                    }
+
+                    // 2. HUD 槽（显示层）也一并补，防止 HUD 显示扣弹
                     for (let k = 0; k < MAX_WEAPON_SLOTS; k++) {
                         const slotBase = target + OFF_WEAPON_BASE + k * WEAPON_SLOT_SIZE;
                         const head = mem.read(slotBase, 8);
                         if (head.length < 8) continue;
                         const id = head.readUInt32BE(SLOT_ID_OFFSET);
                         if (id === 0) continue;
-
                         const full = FULL_AMMO.get(id);
-                        if (!full) {
-                            parts.push('槽' + k + '(id' + id + ' 未配置,跳过)');
-                            continue;
-                        }
-
+                        if (!full) continue;
                         const slotAmmo = head.readUInt32BE(SLOT_AMMO_OFFSET);
-                        const slotOk = slotAmmo === full
-                            ? 'HUD=' + full
-                            : (mem.write(slotBase + SLOT_AMMO_OFFSET, u32be(full)) ? 'HUD写' + full : 'HUD写失败');
-
-                        const block = blocks.get(id);
-                        let realState = '无状态块';
-                        if (block) {
-                            const cur = mem.read(block + 4, 4);
-                            const value = cur.length === 4 ? cur.readUInt32BE(0) : -1;
-
-                            // 装填进度一并拉满，否则弹药补满但进度没满仍然打不出
-                            let progress = null;
-                            const prog = mem.read(block + RELOAD_PROGRESS_OFFSET, 4);
-                            if (prog.length === 4) {
-                                progress = prog.readFloatBE(0);
-                                if (progress < RELOAD_READY) {
-                                    mem.write(block + RELOAD_PROGRESS_OFFSET, f32be(RELOAD_READY));
-                                    progress = RELOAD_READY;
-                                }
-                            }
-
-                            if (value !== full) {
-                                mem.write(block + 4, u32be(full));
-                                realState = value + '→' + full;
-                            } else {
-                                realState = full + '/' + full;
-                            }
-                            if (progress !== null) realState += '(装填' + progress + ')';
+                        if (slotAmmo !== full) {
+                            mem.write(slotBase + SLOT_AMMO_OFFSET, u32be(full));
                         }
-
-                        // 槽里的进度是镜像，也一起补齐
+                        // HUD 槽的装填进度也拉满
                         const slotProg = mem.read(slotBase + RELOAD_PROGRESS_OFFSET, 4);
                         if (slotProg.length === 4 && slotProg.readFloatBE(0) < RELOAD_READY) {
                             mem.write(slotBase + RELOAD_PROGRESS_OFFSET, f32be(RELOAD_READY));
                         }
-                        parts.push('槽' + k + '(id' + id + ' ' + realState + ' ' + slotOk + ')');
                     }
 
                     lastStatus = parts.join(' ');
