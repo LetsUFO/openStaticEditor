@@ -10,14 +10,7 @@
 		"blur": 10,
 		"alpha": 0.2
 	},
-	"loadFiles": {
-		"base": {
-			"beforeScript": "",
-			"fileSrc": "",
-			"filePath": "",
-			"readScript": ""
-		}
-	},
+	"loadFiles": {},
 	"menu": [
 		{
 			"label": "模拟器运行时",

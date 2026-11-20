@@ -1,5 +1,5 @@
 {
-	"name": "第3次超级机器人大战Z：天狱篇",
+	"name": "第3次超级机器人大战Z：天狱篇 静态修改",
 	"appIcon": "icon.png",
 	"ver": "0.0.1",
 	"width": 1200,
@@ -15,6 +15,7 @@
 			"beforeScript": "",
 			"fileSrc": "",
 			"filePath": "",
+			"useFolderSelect": true,
 			"readScript": ""
 		}
 	},
