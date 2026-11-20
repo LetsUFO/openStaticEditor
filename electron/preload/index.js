@@ -15,6 +15,8 @@ const api = {
 	setWindowTitle: (title) => ipcRenderer.invoke('window:setTitle', title),
 	// 系统内置目录（downloads / documents），供渲染进程解析 fileSrc 简写
 	getPaths: () => ipcRenderer.invoke('app:paths'),
+	// 弹出原生文件夹选择对话框，返回选中目录绝对路径（用户取消返回空串），供 useFolderSelect 使用
+	selectDirectory: (defaultPath) => ipcRenderer.invoke('dialog:openDirectory', defaultPath),
 	// 运行 custom 目录下的读取脚本，返回解析后的数据
 	// baseSrc: 当前 custom 子目录（如 'Rustil/'），主进程会据此算出脚本子目录传给脚本
 	readFile: (fileSrc, readScript, baseSrc) =>

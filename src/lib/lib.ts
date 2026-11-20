@@ -59,14 +59,17 @@ export function splitFileSrcCandidates(fileSrc: string): string[] {
 
 /**
  * 判断 loadFiles 的一个条目是否「真正配置了可加载的文件」。
- * config.json 模板里 loadFiles.<key> 的子字段常全为空（fileSrc / filePath 均为 ""），
- * 这类空条目没有指定任何文件位置，视为未配置，由下游自动跳过而不阻塞加载流程。
- * 判定标准：至少指定了文件位置——fileSrc（直接路径）或 filePath（目录，由用户选择文件）。
+ * loadFiles 下的字段名是开放的：条目名（key，如 RPW_DATA / base）可任意，
+ * 子字段也不局限于 fileSrc / filePath / useFolderSelect，所以这里不枚举具体字段名。
+ * 判定标准：只要条目对象里存在任意一个非空值（非 "" / null / undefined / false），
+ * 即视为已配置、需要参与加载流程；全空的占位条目（模板里子字段全为 ""）才过滤掉，
+ * 避免加载页出现空行、或加载时报「未配置 fileSrc」卡住。
  */
 export function isLoadFileEntryConfigured(entry: unknown): boolean {
 	if (!entry || typeof entry !== 'object') return false;
-	const { fileSrc, filePath } = entry as { fileSrc?: string; filePath?: string };
-	return Boolean(fileSrc || filePath);
+	return Object.values(entry as Record<string, unknown>).some(
+		(v) => v !== '' && v != null && v !== false
+	);
 }
 
 /** 外部脚本 ctx 的通用字段（每个脚本都会收到） */
@@ -92,6 +95,12 @@ export interface Api {
 	setWindowSize: (width: number, height: number) => Promise<void>;
 	setWindowTitle: (title: string) => Promise<void>;
 	getPaths: () => Promise<SystemPaths>;
+	/**
+	 * 弹出原生文件夹选择对话框，供 useFolderSelect 条目让用户手动选择目录。
+	 * @param defaultPath 对话框默认打开的目录（通常传该条目已选的 file.filePath）
+	 * @returns 选中目录的绝对路径；用户取消时返回空串
+	 */
+	selectDirectory: (defaultPath?: string) => Promise<string>;
 	/** baseSrc: 当前 custom 子目录（如 'Rustil/'），由主进程 join(customRoot, baseSrc) 算出脚本子目录 */
 	readFile: (fileSrc: string, readScript: string, baseSrc?: string) => Promise<any>;
 	runScript: (payload: {

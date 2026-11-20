@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, net, protocol, screen } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, net, protocol, screen } from 'electron';
 import { join, isAbsolute, delimiter } from 'node:path';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
@@ -40,6 +40,20 @@ protocol.registerSchemesAsPrivileged([
 // 系统内置目录：渲染进程解析 fileSrc 里的简写（%download% / %document% / %user%）时使用
 const systemPaths = () => createSystemPaths((name) => app.getPath(name));
 ipcMain.handle('app:paths', () => systemPaths());
+
+/**
+ * 弹出原生文件夹选择对话框，供 useFolderSelect 条目让用户手动选择存档所在目录。
+ * 返回选中目录的绝对路径；用户取消则返回空串。
+ * @param {string} [defaultPath] 对话框默认打开的目录（通常取该条目已选的 file.filePath）
+ */
+ipcMain.handle('dialog:openDirectory', async (event, defaultPath) => {
+	const win = BrowserWindow.fromWebContents(event.sender);
+	const result = await dialog.showOpenDialog(win, {
+		properties: ['openDirectory'],
+		defaultPath: typeof defaultPath === 'string' && defaultPath ? defaultPath : undefined
+	});
+	return result.canceled ? '' : result.filePaths[0] || '';
+});
 
 // custom/config.json —— 运行（dev）与打包后都要能加载到
 const DEFAULT_CONFIG = { name: 'OpenStaticEditor', width: 960, height: 680 };

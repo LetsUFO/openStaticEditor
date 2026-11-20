@@ -57,7 +57,8 @@ export const useConfigStore = defineStore('config', () => {
 	});
 
 	/** config.json -> loadFiles（App.vue / LoadFile.vue 共用一个取值入口）。
-	 *  过滤掉未真正配置的空条目（模板里 loadFiles.<key> 子字段全空且无 useFolderSelect 的情况），
+	 *  过滤掉未真正配置的空条目（模板里 loadFiles.<key> 子字段全为空值的情况），
+	 *  判定不依赖具体字段名（见 lib.isLoadFileEntryConfigured），
 	 *  避免加载页列表展示出无法加载的条目、或加载时报「未配置 fileSrc」卡住。
 	 *  注意：Object.fromEntries 只新建外层容器，条目对象仍是 config 里的同一引用，
 	 *  所以 LoadFile.vue 回写 fileObj.fileSrc 仍能生效到原始 config。 */
