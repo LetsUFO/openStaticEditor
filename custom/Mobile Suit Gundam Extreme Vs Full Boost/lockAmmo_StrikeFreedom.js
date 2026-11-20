@@ -104,7 +104,7 @@ const f32be = value => {
 };
 
 // ------------------------------------------------------------------ 日志
-const LOG_FILE = path.join(__dirname, 'exvs_ammo.log');
+const LOG_FILE = path.join(__dirname, 'lockAmmo_StrikeFreedom.log');
 function emit(line) { try { process.stdout.write(line + '\n'); } catch {} }
 function log(...args) {
     const line = format(...args);
@@ -448,6 +448,7 @@ function on() {
     log('[ammo] 收到开启请求, running =', running);
     if (running) return Promise.resolve({ status: 'already_running' });
 
+    try { fs.writeFileSync(LOG_FILE, ''); } catch {}
     running = true;
     currentRun = run().catch(err => {
         logErr('[ammo] run() 异常终止:', err.message || err);

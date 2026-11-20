@@ -185,19 +185,9 @@ function parseArgs(argv) {
 }
 
 // ---------------------------------------------------------------- 日志 & 开关
-const LOG_FILE = path.join(__dirname, 'exvs_trainer.log');
-const LOCK_FILE = path.join(__dirname, 'exvs_trainer.lock');
+const LOG_FILE = path.join(__dirname, 'lockBody.log');
 let running = false;
 let currentRun = null;
-
-function acquireLock() {
-    // 清理历史版本可能残留的锁文件，然后始终允许运行
-    try { if (fs.existsSync(LOCK_FILE)) fs.unlinkSync(LOCK_FILE); } catch {}
-    return true;
-}
-function releaseLock() {
-    try { if (fs.existsSync(LOCK_FILE)) fs.unlinkSync(LOCK_FILE); } catch {}
-}
 
 for (const method of ['log', 'error']) {
     const original = console[method].bind(console);
@@ -209,14 +199,6 @@ for (const method of ['log', 'error']) {
 
 // ---------------------------------------------------------------- 主状态机
 async function run(args) {
-    // 文件锁：防止多个父程序进程各自跑一份，互相并发写 RPCS3 导致崩溃
-    if (!acquireLock()) {
-        console.log('[+] 已有另一实例持有锁，自动退出');
-        running = false;
-        return;
-    }
-    console.log('[+] 获取文件锁成功, pid =', process.pid);
-    try { fs.writeFileSync(LOG_FILE, ''); } catch {}
     console.log('[+] 版本 = body v2 (pid ' + process.pid + ')');
     initNative();
 
@@ -346,7 +328,6 @@ async function run(args) {
             await sleep(1000);
         }
     }
-    releaseLock();
     console.log('[+] run() 退出');
 }
 
@@ -358,6 +339,7 @@ function on() {
     console.log('[on] 收到开启请求, running =', running);
     if (running) return Promise.resolve({ status: 'already_running' });
 
+    try { fs.writeFileSync(LOG_FILE, ''); } catch {}
     running = true;
     currentRun = run(parseArgs([])).catch(err => {
         console.error('[x] run() 异常终止:', err.message || err);

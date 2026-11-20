@@ -131,7 +131,6 @@ async function scanTimer(mem) {
 // ---------------------------------------------------------------- 主状态机
 async function run() {
     initNative();
-    try { fs.writeFileSync(LOG_FILE, ''); } catch { /* ignore */ }
 
     while (running) {
         try {
@@ -237,6 +236,7 @@ function on() {
     console.log('[on] 收到开启请求, running =', running);
     if (running) return Promise.resolve({ status: 'already_running' });
 
+    try { fs.writeFileSync(LOG_FILE, ''); } catch { /* ignore */ }
     running = true;
     currentRun = run().catch(err => {
         console.error('[x] run() 异常终止:', err.message || err);
