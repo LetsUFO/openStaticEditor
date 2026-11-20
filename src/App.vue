@@ -25,7 +25,7 @@ for (const [key, value] of Object.entries(dark)) {
 
 // menu 已在 store 里定义（store 负责把 config.json 的 menu 树转成 antd 需要的 items），
 const configStore = useConfigStore();
-const { menu, loadFiles: needFiles } = storeToRefs(configStore);
+const { menu, loadFiles: needFiles, hasLoadFiles } = storeToRefs(configStore);
 
 /**
  * 只用 menu 推导 openKeys。
@@ -50,9 +50,9 @@ const activeCategory = computed(() => {
 	return state.activeMenu.category || [];
 });
 
-// 是否有需要加载的文件（loadFiles 缺失或所有条目子字段全空时为 false）。
-// 用于决定是否展示「重新加载」按钮，以及是否需要走文件加载流程。
-const hasFilesToLoad = computed(() => Object.keys(needFiles.value).length > 0);
+// 是否有需要加载的文件：对象级判定——loadFiles 字段缺失或为空对象 {} 时为 false，否则为 true。
+// 用于决定是否展示加载页、以及是否展示「重新加载/保存」按钮。单一真相源为 store.hasLoadFiles。
+const hasFilesToLoad = hasLoadFiles;
 
 // 多个 custom 子目录时，让用户在 LoadProject 里选择加载哪一个
 const projectState = reactive({
@@ -177,16 +177,20 @@ const reload = async function () {
 	}
 };
 
-// 没有需要加载的文件时（loadFiles 缺失或所有条目子字段全空），自动跳过加载遮罩，
-// 直接进入主界面并激活第一个菜单；有文件待加载时则确保遮罩可见（覆盖切换项目等场景）。
+// 项目配置加载完成后决定加载页去留，并自然流转到下一步（主编辑界面 + 激活第一个菜单）：
+//   - loadFiles 缺失或为空对象 → 跳过加载页，直接激活第一个菜单进入主界面；
+//   - 有文件待加载 → 展示加载遮罩，等用户点「加载文件」成功后再由 loadAll 激活菜单。
+// 监听 config 引用（每次 loadProject 都会整体替换 config 对象），而不是 hasLoadFiles 布尔值：
+// 若监听布尔值，从「无 config」到「loadFiles 为空的 config」时 hasLoadFiles 始终为 false，
+// watch 不会重跑，激活菜单的逻辑就落在 config 尚未就绪的时机，导致跳过加载页后主界面空白。
 watch(
-	needFiles,
-	(files) => {
-		if (!files || !Object.keys(files).length) {
+	() => configStore.config,
+	(cfg) => {
+		if (!cfg) return; // config 尚未加载，等 loadProject 完成后再处理
+		if (!hasLoadFiles.value) {
 			fileState.loaded = true;
-			if (!state.activeMenu?.key) {
-				activateMenu(firstLeaf(menu.value));
-			}
+			// 与 loadAll 成功后保持一致：无条件激活第一个菜单（覆盖切换项目时残留的旧选中项）
+			activateMenu(firstLeaf(menu.value));
 		} else {
 			fileState.loaded = false;
 		}

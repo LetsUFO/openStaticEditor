@@ -43,9 +43,22 @@ export const useConfigStore = defineStore('config', () => {
 
 	/** 直接给 <Menu :items> 用 */
 	const menu = computed<ItemType[]>(() => toMenuItems(config.value?.menu ?? []));
+	/**
+	 * 是否需要走文件加载流程（对象级判定，决定加载页展示与否）：
+	 * 只看 config.json 里 loadFiles 字段本身——字段缺失，或值为空对象 {} 时为 false（跳过加载页）；
+	 * 只要 loadFiles 下存在任意 key 即为 true（展示加载页）。条目内部字段（fileSrc / useFolderSelect 等）
+	 * 不影响此判定，那些只影响下面 loadFiles computed 里哪些条目参与加载与列表展示。
+	 */
+	const hasLoadFiles = computed(() => {
+		const raw = config.value?.loadFiles;
+		return Boolean(
+			raw && typeof raw === 'object' && !Array.isArray(raw) && Object.keys(raw).length > 0
+		);
+	});
+
 	/** config.json -> loadFiles（App.vue / LoadFile.vue 共用一个取值入口）。
-	 *  过滤掉未真正配置的空条目（模板里 loadFiles.<key> 子字段全空的情况），
-	 *  让下游在「无文件可加载」时自动跳过加载流程，而不是报错卡住。
+	 *  过滤掉未真正配置的空条目（模板里 loadFiles.<key> 子字段全空且无 useFolderSelect 的情况），
+	 *  避免加载页列表展示出无法加载的条目、或加载时报「未配置 fileSrc」卡住。
 	 *  注意：Object.fromEntries 只新建外层容器，条目对象仍是 config 里的同一引用，
 	 *  所以 LoadFile.vue 回写 fileObj.fileSrc 仍能生效到原始 config。 */
 	const loadFiles = computed<Record<string, any>>(() => {
@@ -93,6 +106,7 @@ export const useConfigStore = defineStore('config', () => {
 		config,
 		baseSrc,
 		menu,
+		hasLoadFiles,
 		loadFiles,
 		load,
 		setBaseSrc,
