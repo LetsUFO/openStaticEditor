@@ -157,12 +157,15 @@ ipcMain.handle('config:get', (_event, subPath) => loadConfig(subPath));
 /**
  * 扫描 custom 下的一级子目录（每个游戏一个），返回目录名列表。
  * 渲染进程根据数量决定：只有 1 个 → 自动加载；多个 → 稍后让用户选择。
+ * 子目录内必须存在 config.json，否则视为无效目录，直接忽略。
  */
 ipcMain.handle('config:scanSubdirs', () => {
 	const customDir = getCustomDir();
 	if (!existsSync(customDir)) return [];
 	const entries = readdirSync(customDir, { withFileTypes: true });
-	return entries.filter((e) => e.isDirectory()).map((e) => e.name);
+	return entries
+		.filter((e) => e.isDirectory() && existsSync(join(customDir, e.name, 'config.json')))
+		.map((e) => e.name);
 });
 
 /**
