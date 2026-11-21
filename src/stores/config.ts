@@ -29,7 +29,9 @@ interface IFunctionTextListObj {
 	function: string; // 函数文本，如 "function (list, ctx) { return list.filter(...) }"
 }
 export const useConfigStore = defineStore('config', () => {
-	const config = ref<AppConfig | null>(null);
+	// 默认空对象而非 null：各处统一用可选链读取，避免 null 判断散落；
+	// 用 Partial 表示「尚未加载完整配置」，字段访问保持可选（App.vue 里 cfg?.width 等）。
+	const config = ref<Partial<AppConfig>>({});
 	const fileData = ref<Record<string, any>>({}); //经过转换的文件数据
 	// dataKey -> 已解析的存档绝对路径（loadFiles 时把 fileSrc 的 %download% 等简写转换后存入，
 	// 保存脚本直接拿这个路径写回）
@@ -102,8 +104,13 @@ export const useConfigStore = defineStore('config', () => {
 	function setFilePath(fileKey: string, filePath: string): void {
 		if (filePath) filePaths.value[fileKey] = filePath;
 	}
+	/** 写回某个 dataKey 条目的 fileSrc。
+	 *  ??= 兜底：loadFiles 容器或条目缺失时自动创建，已存在则就地修改（保留 readScript 等字段）；
+	 *  空值直接返回，避免凭空多出一个空条目把 hasLoadFiles 顶成 true。 */
 	function setFileSrc(fileKey: string, fileSrc: string): void {
-		if (fileSrc) filePaths.value[fileKey] = fileSrc;
+		if (!fileSrc) return;
+		const loadFiles = (config.value.loadFiles ??= {});
+		(loadFiles[fileKey] ??= {}).fileSrc = fileSrc;
 	}
 
 	return {

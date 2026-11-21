@@ -135,8 +135,14 @@ const loadFiles = async function (files: Record<string, any>) {
 				// 先解析 fileSrc 里的系统目录简写，再由主进程在 Node 环境中加载脚本并运行，返回解析后的数据
 				const filePath = await resolveFileSrc(candidate);
 				const data = await window.api.readFile(filePath, readScript);
+				// 方案 A：脚本把定位到的真实文件路径放进返回值的 fileSrc，这里回写 store，
+				// 同时让保存路径指向该文件（如 z3 的目录 → RPW_DATA.CPK）
+				const located = typeof data?.fileSrc === 'string' ? data.fileSrc : '';
+				if (located) {
+					configStore.setFileSrc(key, located);
+				}
 				// 只有成功加载的候选路径才存进 store，保存时直接取用
-				configStore.setFilePath(key, filePath);
+				configStore.setFilePath(key, located || filePath);
 				await setFileData(key, data);
 				return;
 			} catch (err: any) {
@@ -191,7 +197,7 @@ const reload = async function () {
 watch(
 	() => configStore.config,
 	(cfg) => {
-		if (!cfg) return; // config 尚未加载，等 loadProject 完成后再处理
+		if (!cfg || !Object.keys(cfg).length) return; // config 尚未加载（默认空对象），等 loadProject 完成后再处理
 		if (!hasLoadFiles.value) {
 			fileState.loaded = true;
 			// 与 loadAll 成功后保持一致：无条件激活第一个菜单（覆盖切换项目时残留的旧选中项）

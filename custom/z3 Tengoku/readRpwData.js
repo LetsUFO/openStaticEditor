@@ -72,10 +72,23 @@ module.exports = function (ctx = {}) {
 	if (!input) throw new Error(ERROR_MESSAGE);
 
 	const dir = path.normalize(input);
-	if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) throw new Error(ERROR_MESSAGE);
+	let stat;
+	try {
+		stat = fs.statSync(dir);
+	} catch {
+		throw new Error(ERROR_MESSAGE);
+	}
 
-	// 1) 拿到 filePath 后在目录里找文件，确保只有唯一一个
-	const target = locateTarget(dir);
+	// filePath 首次加载时是游戏目录；重新加载时 fileSrc 已被回写成 CPK 文件本身
+	let target;
+	if (stat.isDirectory()) {
+		// 1) 拿到 filePath 后在目录里找文件，确保只有唯一一个
+		target = locateTarget(dir);
+	} else if (stat.isFile() && path.basename(dir).toLowerCase() === TARGET_NAME) {
+		target = dir;
+	} else {
+		throw new Error(ERROR_MESSAGE);
+	}
 	// 2) 把找到的文件地址赋值给 fileSrc
 	ctx.fileSrc = target;
 	// 3) 执行加载方法，传入 fileSrc 读取文件
