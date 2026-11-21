@@ -54,8 +54,7 @@ const refreshFileList = async function (key: string) {
 			// 主进程 Node 环境运行 beforeScript，返回文件名列表
 			const files = await window.api.runScript({
 				scriptSrc: fileObj.beforeScript,
-				filePath: candidate,
-				baseSrc: configStore.baseSrc
+				filePath: candidate
 			});
 			const fileList = Array.isArray(files) ? files : [];
 			if (fileList.length) {
@@ -100,12 +99,20 @@ const pickFolder = async function (key: string) {
 	await refreshFileList(key);
 };
 
-// 点「加载文件」：把目录型条目（filePath + 选中文件名）拼成实际文件路径，
-// 以 fileSrc 字段写回 store.config.loadFiles[key]，之后由 App.vue 按 fileSrc 统一加载
+// 点「加载文件」：把各条目定位到实际文件路径，以 fileSrc 字段写回 store.config.loadFiles[key]，
+// 之后由 App.vue 按 fileSrc 统一加载。
+// 每次点击都按当前输入重算 fileSrc：上次加载失败留下的旧 fileSrc 不能保留，否则会被跳过、
+// 导致改了对路径也没生效（脚本永远拿到第一次的路径）。
 const onLoadFiles = function () {
 	for (const key of Object.keys(needFiles.value)) {
 		const fileObj = needFiles.value[key];
-		if (!fileObj?.filePath || fileObj?.fileSrc) continue;
+		if (!fileObj?.filePath) continue;
+		// useFolderSelect：filePath 就是用户在输入框里填的游戏目录，fileSrc 与之一致，
+		// 不使用 dirMap（那是「选择文件夹」按钮留下的旧值，会覆盖手动输入）
+		if (fileObj.useFolderSelect) {
+			fileObj.fileSrc = fileObj.filePath; //目前机制是需要有 fileSrc 才能加载，因为useFolderSelect是先确定目录后确定文件，所以赋值一半，走下去让后续脚本继续完成定位文件
+			continue;
+		}
 		const dir = state.dirMap[key] ?? fileObj.filePath;
 		fileObj.fileSrc = dir + (state.targetFileMap[key] || '');
 	}
