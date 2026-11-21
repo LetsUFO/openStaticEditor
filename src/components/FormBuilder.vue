@@ -2,6 +2,7 @@
 import { computed, watch } from 'vue';
 import { get, set } from 'lodash';
 import { useConfigStore } from '@renderer/stores/config';
+import { cleanScriptError } from '@renderer/lib/lib';
 
 import { Form, Input, InputNumber, Select, Switch, message } from 'ant-design-vue';
 import { AppstoreAddOutlined } from '@ant-design/icons-vue';
@@ -285,7 +286,7 @@ async function onSwitchChange(item: any, checked: boolean): Promise<void> {
 		});
 		write(item, checked);
 	} catch (error: any) {
-		message.error(`${item.label} 调用失败：${error?.message || error}`);
+		message.error(`${item.label} 调用失败：${cleanScriptError(error)}`);
 	}
 }
 

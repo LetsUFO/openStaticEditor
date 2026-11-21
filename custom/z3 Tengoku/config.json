@@ -16,7 +16,7 @@
 			"fileSrc": "",
 			"filePath": "",
 			"useFolderSelect": true,
-			"readScript": ""
+			"readScript": "readRpwData.js"
 		}
 	},
 	"menu": [

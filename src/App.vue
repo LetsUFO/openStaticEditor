@@ -4,7 +4,7 @@ import { computed, reactive, ref, watch, onMounted, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { name as appName, version as pkgVersion } from '../package.json';
 import theme, { dark } from './style/theme';
-import { resolvePathShorthand, splitFileSrcCandidates } from '@renderer/lib/lib';
+import { cleanScriptError, resolvePathShorthand, splitFileSrcCandidates } from '@renderer/lib/lib';
 
 import { Button, Menu, message } from 'ant-design-vue';
 import FormBuilder from './components/FormBuilder.vue';
@@ -120,12 +120,12 @@ const resolveFileSrc = async function (fileSrc: string): Promise<string> {
 const loadFiles = async function (files: Record<string, any>) {
 	fileState.loading = true;
 	const setFileData = configStore.setFileData;
-	const errors: string[] = [];
+	const errors: { key: string; detail: string }[] = [];
 	const loadList = Object.keys(files).map(async (key) => {
 		const { fileSrc, readScript } = files[key] || {};
 		const candidates = splitFileSrcCandidates(fileSrc);
 		if (!candidates.length) {
-			errors.push(`${key}: 未配置 fileSrc`);
+			errors.push({ key, detail: '未配置 fileSrc' });
 			return;
 		}
 
@@ -140,16 +140,21 @@ const loadFiles = async function (files: Record<string, any>) {
 				await setFileData(key, data);
 				return;
 			} catch (err: any) {
-				attemptErrors.push(`${candidate} -> ${err?.message || err}`);
+				attemptErrors.push(cleanScriptError(err));
 			}
 		}
 
-		errors.push(`${key}:\n${attemptErrors.join('\n')}`);
+		errors.push({ key, detail: attemptErrors.join('\n') });
 	});
 	await Promise.all(loadList);
 	fileState.loading = false;
 	if (errors.length) {
-		message.error(`文件加载失败：\n${errors.join('\n')}`);
+		// 单个条目失败时只显示脚本提示原文；多个同时失败才带上条目名区分
+		message.error(
+			errors.length === 1
+				? errors[0].detail
+				: `文件加载失败：\n${errors.map((e) => `${e.key}: ${e.detail}`).join('\n')}`
+		);
 		return false;
 	}
 	return true;
@@ -230,7 +235,7 @@ const save = async function (saveCfg: any = {}) {
 		});
 		message.success('保存成功！');
 	} catch (error: any) {
-		message.error(`保存失败：${error?.message || error}`);
+		message.error(`保存失败：${cleanScriptError(error)}`);
 	} finally {
 		state.loading = false;
 	}

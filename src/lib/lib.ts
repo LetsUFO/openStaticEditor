@@ -156,3 +156,14 @@ export async function executeScript(script: any, ctx: Record<string, any>): Prom
 	const reader = typeof script === 'function' ? script : script?.default;
 	return typeof reader === 'function' ? await reader(ctx) : script;
 }
+
+/**
+ * 清理脚本抛错经 IPC 回传时的包装，只保留脚本自己抛出的业务提示。
+ * Electron 会把主进程错误包成「Error invoking remote method 'file:read': Error: xxx」，
+ * 这些前缀对用户没有意义，展示前统一剥掉。
+ */
+export function cleanScriptError(err: any): string {
+	return String(err?.message || err)
+		.replace(/^Error invoking remote method '[^']*':\s*/, '')
+		.replace(/^Error:\s*/, '');
+}
