@@ -18,9 +18,8 @@ const api = {
 	// 弹出原生文件夹选择对话框，返回选中目录绝对路径（用户取消返回空串），供 useFolderSelect 使用
 	selectDirectory: (defaultPath) => ipcRenderer.invoke('dialog:openDirectory', defaultPath),
 	// 运行 custom 目录下的读取脚本，返回解析后的数据
-	// baseSrc: 当前 custom 子目录（如 'Rustil/'），主进程会据此算出脚本子目录传给脚本
-	readFile: (fileSrc, readScript, baseSrc) =>
-		ipcRenderer.invoke('file:read', { fileSrc, readScript, baseSrc }),
+	// 脚本工作目录由主进程按脚本自身位置推导，无需传 baseSrc
+	readFile: (fileSrc, readScript) => ipcRenderer.invoke('file:read', { fileSrc, readScript }),
 	// 运行 custom 目录下的通用脚本（保存等），返回脚本结果
 	runScript: (payload) => ipcRenderer.invoke('script:run', payload),
 	// 调用 switch 的 script 模块导出方法（payload.method 为 on/off 配置的方法名）：

@@ -1,5 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain, net, protocol, screen } from 'electron';
-import { join, isAbsolute, delimiter } from 'node:path';
+import { join, isAbsolute, delimiter, dirname } from 'node:path';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import Module from 'node:module';
@@ -227,30 +227,28 @@ ipcMain.handle('window:setTitle', (event, title) => {
  * 解析 custom 脚本的位置（不 require），返回脚本运行工作目录与脚本绝对路径。
  * 一次性脚本（loadScriptModule）与 switch 脚本（隔离子进程执行）共用此解析逻辑。
  * @param {string} scriptSrc 脚本相对路径（如 'Rustil/loadSaveFile.js'，已由 getConfig 重写）
- * @param {string} [baseSrc] 当前 custom 子目录（如 'Rustil/'），由渲染层从 store 里传入
- *   - 有 baseSrc：customDir = join(customRoot, baseSrc) → 脚本所在子目录，脚本可读同目录辅助文件
- *   - 无 baseSrc：customDir = customRoot → 兼容旧调用方
+ *
+ * 脚本定位始终从 customRoot 开始（scriptSrc 已带子目录前缀）；
+ * customDir（脚本工作目录）直接取脚本自身所在目录，脚本读同级资源用它，
+ * 因此不再依赖渲染层传入 baseSrc。
  */
-function resolveScriptLocation(scriptSrc, baseSrc) {
+function resolveScriptLocation(scriptSrc) {
 	const customRoot = getCustomDir();
-	// customDir：脚本运行时的工作目录，脚本里读同目录文件用它
-	const customDir = baseSrc ? join(customRoot, baseSrc) : customRoot;
-
 	const scriptPath = resolveScriptPath(scriptSrc, {
-		customDir: customRoot, // 脚本定位始终从 customRoot 开始（scriptSrc 已经带了子目录前缀）
+		customDir: customRoot,
 		projectRoot: app.isPackaged ? process.resourcesPath : join(__dirname, '../../'),
 		isAbsolute,
 		join,
 		exists: existsSync
 	});
-	return { customDir, scriptPath };
+	return { customDir: dirname(scriptPath), scriptPath };
 }
 
 /**
  * 定位并加载 custom 目录下的脚本模块（每次清缓存，脚本改动后无需重启应用）。
  */
-function loadScriptModule(scriptSrc, baseSrc) {
-	const { customDir, scriptPath } = resolveScriptLocation(scriptSrc, baseSrc);
+function loadScriptModule(scriptSrc) {
+	const { customDir, scriptPath } = resolveScriptLocation(scriptSrc);
 	// require 会缓存模块，脚本修改后需要清缓存才能重新加载
 	const resolved = require.resolve(scriptPath);
 	delete require.cache[resolved];
@@ -263,17 +261,17 @@ function loadScriptModule(scriptSrc, baseSrc) {
  *   module.exports = function (ctx) {
  *     // ctx.fileSrc       —— config.json 里配置的原始文件路径
  *     // ctx.filePath      —— 解析后的绝对路径（相对路径按 custom 目录解析）
- *     // ctx.customDir     —— custom 目录绝对路径，方便脚本读取同目录其它资源
+ *     // ctx.customDir     —— 脚本所在目录绝对路径，方便脚本读取同级其它资源
  *     // ctx.downloadsPath —— 系统下载目录绝对路径
  *     // ctx.documentsPath —— 系统文档目录绝对路径
  *     // return 解析后的数据（同步或 Promise 均可）
  *   }
  * 若脚本直接导出数据（非函数），则原样返回。
  */
-ipcMain.handle('file:read', async (_event, { fileSrc, readScript, baseSrc } = {}) => {
+ipcMain.handle('file:read', async (_event, { fileSrc, readScript } = {}) => {
 	if (!readScript) throw new Error('未配置 readScript，无法加载读取脚本');
 
-	const { customDir, script } = loadScriptModule(readScript, baseSrc);
+	const { customDir, script } = loadScriptModule(readScript);
 	const filePath = fileSrc ? (isAbsolute(fileSrc) ? fileSrc : join(customDir, fileSrc)) : '';
 
 	return executeScript(script, {
@@ -290,11 +288,11 @@ ipcMain.handle('file:read', async (_event, { fileSrc, readScript, baseSrc } = {}
  * （下拉选项过滤已移到渲染进程 store 内完成，不再走这里）
  */
 ipcMain.handle('script:run', async (_event, payload = {}) => {
-	const { scriptSrc, dataKey, filePath, data, baseSrc } = payload;
+	const { scriptSrc, dataKey, filePath, data } = payload;
 
 	if (!scriptSrc) throw new Error('未配置 scriptSrc，无法运行脚本');
 
-	const { customDir, script } = loadScriptModule(scriptSrc, baseSrc);
+	const { customDir, script } = loadScriptModule(scriptSrc);
 
 	return executeScript(script, {
 		scriptSrc,
@@ -309,14 +307,14 @@ ipcMain.handle('script:run', async (_event, payload = {}) => {
  * 调用 switch 配置 script 模块里 onFnName/offFnName 指定的方法（每次切换各调用一次）。
  * 开（reload=true）时重新读取脚本文件，关（reload=false）复用开启时加载的实例。
  * 脚本在隔离子进程中执行，卡死只会触发超时结束子进程，不会拖住主进程。
- * 请求参数：{ scriptSrc, method, reload?, baseSrc? }
+ * 请求参数：{ scriptSrc, method, reload? }
  */
 ipcMain.handle('script:invoke', async (_event, payload = {}) => {
-	const { scriptSrc, method, baseSrc, reload = true } = payload;
+	const { scriptSrc, method, reload = true } = payload;
 	if (!scriptSrc) throw new Error('未配置 script，无法调用');
 	if (!method) throw new Error('未配置 onFnName/offFnName 方法名，无法调用');
 
-	const { customDir, scriptPath } = resolveScriptLocation(scriptSrc, baseSrc);
+	const { customDir, scriptPath } = resolveScriptLocation(scriptSrc);
 	if (!existsSync(scriptPath)) throw new Error(`脚本不存在：${scriptPath}`);
 
 	console.log(`[script:invoke] ${method} reload=${reload} -> ${scriptPath}`);

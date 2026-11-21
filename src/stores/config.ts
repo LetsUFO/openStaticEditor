@@ -102,6 +102,9 @@ export const useConfigStore = defineStore('config', () => {
 	function setFilePath(fileKey: string, filePath: string): void {
 		if (filePath) filePaths.value[fileKey] = filePath;
 	}
+	function setFileSrc(fileKey: string, fileSrc: string): void {
+		if (fileSrc) filePaths.value[fileKey] = fileSrc;
+	}
 
 	return {
 		config,
@@ -115,6 +118,7 @@ export const useConfigStore = defineStore('config', () => {
 		filePaths,
 		dataVersion,
 		setFileData,
-		setFilePath
+		setFilePath,
+		setFileSrc
 	};
 });

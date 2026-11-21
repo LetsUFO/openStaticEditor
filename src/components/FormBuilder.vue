@@ -281,8 +281,7 @@ async function onSwitchChange(item: any, checked: boolean): Promise<void> {
 			scriptSrc: item.script,
 			method,
 			// 开启时重新读取脚本文件；关闭不重载，调用开启时的同一实例
-			reload: checked,
-			baseSrc: configStore.baseSrc
+			reload: checked
 		});
 		write(item, checked);
 	} catch (error: any) {

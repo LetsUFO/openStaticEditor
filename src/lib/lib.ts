@@ -101,15 +101,12 @@ export interface Api {
 	 * @returns 选中目录的绝对路径；用户取消时返回空串
 	 */
 	selectDirectory: (defaultPath?: string) => Promise<string>;
-	/** baseSrc: 当前 custom 子目录（如 'Rustil/'），由主进程 join(customRoot, baseSrc) 算出脚本子目录 */
-	readFile: (fileSrc: string, readScript: string, baseSrc?: string) => Promise<any>;
+	readFile: (fileSrc: string, readScript: string) => Promise<any>;
 	runScript: (payload: {
 		scriptSrc: string;
 		dataKey?: string;
 		filePath?: string;
 		data?: any;
-		/** baseSrc: 当前 custom 子目录（如 'Rustil/'），由主进程 join(customRoot, baseSrc) 算出脚本子目录 */
-		baseSrc?: string;
 	}) => Promise<any>;
 	/**
 	 * 调用 switch 配置 script 模块导出的方法（method 取 on/off 字段配置的方法名）。
@@ -121,7 +118,6 @@ export interface Api {
 		method: string;
 		/** true：重新读取脚本文件（开启）；false：复用已加载实例（关闭） */
 		reload?: boolean;
-		baseSrc?: string;
 	}) => Promise<{ ok: boolean }>;
 }
 

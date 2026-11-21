@@ -134,7 +134,7 @@ const loadFiles = async function (files: Record<string, any>) {
 			try {
 				// 先解析 fileSrc 里的系统目录简写，再由主进程在 Node 环境中加载脚本并运行，返回解析后的数据
 				const filePath = await resolveFileSrc(candidate);
-				const data = await window.api.readFile(filePath, readScript, configStore.baseSrc);
+				const data = await window.api.readFile(filePath, readScript);
 				// 只有成功加载的候选路径才存进 store，保存时直接取用
 				configStore.setFilePath(key, filePath);
 				await setFileData(key, data);
@@ -230,8 +230,7 @@ const save = async function (saveCfg: any = {}) {
 			scriptSrc: saveCfg.saveScript,
 			dataKey: saveCfg.needFileKey,
 			filePath,
-			data,
-			baseSrc: configStore.baseSrc
+			data
 		});
 		message.success('保存成功！');
 	} catch (error: any) {
