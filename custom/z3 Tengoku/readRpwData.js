@@ -19,6 +19,8 @@ const path = require('node:path');
 
 const TARGET_NAME = 'rpw_data.cpk';
 const ERROR_MESSAGE = '请重新选择正确的游戏目录，里面因该只包含一个RPW_DATA.CPK文件';
+// 零件下拉选项表，与本脚本同目录
+const PART_LIST_FILE = path.join(__dirname, 'partList.json');
 
 /**
  * 递归收集 dir 下所有 RPW_DATA.CPK 的绝对路径。
@@ -56,19 +58,21 @@ function locateTarget(dir) {
 
 /**
  * 加载方法：用 ctx.fileSrc 读取文件内容。
- * 解析动作待补充，目前先读入文件并返回路径与大小，证明读取成功。
+ * 解析动作待补充，目前先读入文件并返回路径、大小与零件选项列表。
  * @param {{ fileSrc: string }} ctx
  */
 function loadFile(ctx) {
 	const buffer = fs.readFileSync(ctx.fileSrc);
-	return { fileSrc: ctx.fileSrc, size: buffer.length };
+	const partList = JSON.parse(fs.readFileSync(PART_LIST_FILE, 'utf8'));
+	return { fileSrc: ctx.fileSrc, size: buffer.length, partList };
 }
 
 /**
  * @param {{ filePath?: string, fileSrc?: string }} ctx 主进程注入的上下文
  */
 module.exports = function (ctx = {}) {
-	const input = typeof ctx.filePath === 'string' ? ctx.filePath.trim().replace(/^"+|"+$/g, '') : '';
+	const input =
+		typeof ctx.filePath === 'string' ? ctx.filePath.trim().replace(/^"+|"+$/g, '') : '';
 	if (!input) throw new Error(ERROR_MESSAGE);
 
 	const dir = path.normalize(input);

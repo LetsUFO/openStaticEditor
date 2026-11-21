@@ -32,7 +32,8 @@
 						{
 							"label": "选择零件",
 							"name": "",
-							"type": "select"
+							"type": "select",
+							"optionUse": "partList"
 						}
 					]
 				},
