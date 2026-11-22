@@ -1,0 +1,550 @@
+[
+	{
+		"id": 1,
+		"name": "ブースター",
+		"price": 200,
+		"move": 1
+	},
+	{
+		"id": 2,
+		"name": "メガブースター",
+		"price": 1000,
+		"move": 2
+	},
+	{
+		"id": 3,
+		"name": "補助ＩＳＣ",
+		"price": 500,
+		"move": 1,
+		"mobility": 10
+	},
+	{
+		"id": 4,
+		"name": "マグネットコーティング",
+		"price": 200,
+		"mobility": 10
+	},
+	{
+		"id": 5,
+		"name": "慣性制御システム",
+		"price": 500,
+		"mobility": 20
+	},
+	{
+		"id": 6,
+		"name": "精密照準レンズ",
+		"price": 200,
+		"accuracy": 10
+	},
+	{
+		"id": 7,
+		"name": "クエント製センサー",
+		"price": 500,
+		"accuracy": 20
+	},
+	{
+		"id": 8,
+		"name": "スナイパーキット",
+		"price": 200,
+		"crit": 20
+	},
+	{
+		"id": 9,
+		"name": "高性能レーダー",
+		"price": 500,
+		"range": 1
+	},
+	{
+		"id": 10,
+		"name": "超次元ターゲットロック",
+		"price": 1500,
+		"rangeApply": 2
+	},
+	{
+		"id": 11,
+		"name": "脊髄反射コネクタ",
+		"price": 1000,
+		"accuracy": 20,
+		"range": 1
+	},
+	{
+		"id": 12,
+		"name": "ハロ",
+		"price": 1500,
+		"move": 2,
+		"mobility": 25,
+		"accuracy": 25,
+		"range": 1
+	},
+	{
+		"id": 13,
+		"name": "チョバムアーマー",
+		"hp": 500,
+		"armor": 100,
+		"price": 200
+	},
+	{
+		"id": 14,
+		"name": "ハイブリッドアーマー",
+		"hp": 1000,
+		"armor": 150,
+		"price": 500
+	},
+	{
+		"id": 15,
+		"name": "超合金Ｚ",
+		"hp": 1200,
+		"armor": 250,
+		"price": 1000,
+		"enRecover": 10
+	},
+	{
+		"id": 16,
+		"name": "補助ＧＮドライヴ",
+		"en": 100,
+		"price": 500,
+		"enRecover": 10
+	},
+	{
+		"id": 17,
+		"name": "パラジウム・リアクター",
+		"en": 150,
+		"price": 500
+	},
+	{
+		"id": 18,
+		"name": "バリア・フィールド",
+		"price": 1000,
+		"barrier": 1
+	},
+	{
+		"id": 19,
+		"name": "オートディフェンサー",
+		"price": 1500,
+		"specialAbility": 6
+	},
+	{
+		"id": 20,
+		"name": "ＤエクストラクターＳ",
+		"damageRate": 1200,
+		"willReq": 130,
+		"price": 1500
+	},
+	{
+		"id": 21,
+		"name": "ダメージアベンジャー",
+		"price": 1500,
+		"specialAbility": 5
+	},
+	{
+		"id": 22,
+		"name": "極小次元震システム",
+		"price": 1500,
+		"afterimageRate": 50,
+		"barrier": 2,
+		"specialAbility": 1
+	},
+	{
+		"id": 23,
+		"name": "レスキューユニット",
+		"price": 1500,
+		"specialAbility": 2
+	},
+	{
+		"id": 24,
+		"name": "スパイラルエフェクター",
+		"attack": 300,
+		"price": 1500,
+		"sizeIgnore": 1
+	},
+	{
+		"id": 25,
+		"name": "ゲートジャンパー",
+		"price": 1500,
+		"move": 4,
+		"specialAbility": 3
+	},
+	{
+		"id": 26,
+		"name": "ＤＥＣチャージャー",
+		"price": 1500,
+		"enRecover": 100
+	},
+	{
+		"id": 27,
+		"name": "ＤＥＣマガジン",
+		"price": 1500,
+		"ammoRecover": 1
+	},
+	{
+		"id": 28,
+		"name": "ＳＯＬアーマー",
+		"hp": 1000,
+		"armor": 200,
+		"price": 1000,
+		"specialAbility": 4
+	},
+	{
+		"id": 29,
+		"name": "ＳＯＬクォーツ",
+		"attack": 300,
+		"price": 1500,
+		"range": 2
+	},
+	{
+		"id": 30,
+		"name": "リヴァイヴ・セル",
+		"price": 1500,
+		"passive": 9
+	},
+	{
+		"id": 31,
+		"name": "セイクリッドアーマー",
+		"hp": 1500,
+		"armor": 250,
+		"price": 1500,
+		"hpRecover": 10,
+		"enRecover": 10
+	},
+	{
+		"id": 32,
+		"name": "アサルトブースター",
+		"price": 1500,
+		"move": 2,
+		"moveType": 1,
+		"terrainAdapt": 1,
+		"crit": 20
+	},
+	{
+		"id": 33,
+		"name": "ＰＭＣサイト",
+		"price": 1500,
+		"accuracy": 20,
+		"terrainAdapt": 5,
+		"range": 1
+	},
+	{
+		"id": 34,
+		"name": "ＰＭＣモーター",
+		"price": 1500,
+		"mobility": 20,
+		"afterimageRate": 50,
+		"barrier": 1
+	},
+	{
+		"id": 35,
+		"name": "勇者の印",
+		"armor": 200,
+		"price": 1500,
+		"mobility": 25,
+		"accuracy": 25,
+		"crit": 25
+	},
+	{
+		"id": 36,
+		"name": "鋼の魂",
+		"armor": 250,
+		"price": 1500,
+		"mobility": 30,
+		"accuracy": 30,
+		"crit": 30
+	},
+	{
+		"id": 37,
+		"name": "破界の紋章",
+		"attack": 200,
+		"price": 1500,
+		"move": 1,
+		"range": 1
+	},
+	{
+		"id": 38,
+		"name": "再世の紋章",
+		"price": 1500,
+		"hpRecover": 10,
+		"enRecover": 10,
+		"passive": 3
+	},
+	{
+		"id": 39,
+		"name": "時獄の紋章",
+		"price": 1500,
+		"terrainAdapt": 5,
+		"crit": 30
+	},
+	{
+		"id": 40,
+		"name": "連獄の紋章",
+		"price": 1500,
+		"effectGroup": 2
+	},
+	{
+		"id": 41,
+		"name": "天獄の紋章",
+		"price": 1500,
+		"effectGroup": 1
+	},
+	{
+		"id": 42,
+		"name": "フライトモジュール",
+		"price": 1000,
+		"category": 1,
+		"moveType": 1,
+		"terrainAdapt": 1
+	},
+	{
+		"id": 43,
+		"name": "スラスターモジュール",
+		"price": 1000,
+		"category": 1,
+		"terrainAdapt": 2
+	},
+	{
+		"id": 44,
+		"name": "ランドモジュール",
+		"price": 1000,
+		"category": 1,
+		"moveType": 2,
+		"terrainAdapt": 3
+	},
+	{
+		"id": 45,
+		"name": "スクリューモジュール",
+		"price": 500,
+		"category": 1,
+		"moveType": 3,
+		"terrainAdapt": 4
+	},
+	{
+		"id": 46,
+		"name": "Ａ－アダプター",
+		"price": 1000,
+		"category": 1,
+		"terrainAdapt": 5
+	},
+	{
+		"id": 47,
+		"name": "Ｓ－アダプター",
+		"price": 1500,
+		"category": 1,
+		"terrainAdapt": 6
+	},
+	{
+		"id": 48,
+		"name": "プロペラントタンク",
+		"price": 500,
+		"category": 2,
+		"itemEffect": 1
+	},
+	{
+		"id": 49,
+		"name": "カートリッジ",
+		"price": 500,
+		"category": 2,
+		"itemEffect": 2
+	},
+	{
+		"id": 50,
+		"name": "リペアキット",
+		"price": 500,
+		"category": 2,
+		"itemEffect": 3
+	},
+	{
+		"id": 51,
+		"name": "スーパーリペアキット",
+		"price": 1000,
+		"category": 2,
+		"itemEffect": 4
+	},
+	{
+		"id": 52,
+		"name": "マイクロＺＯＮＥ",
+		"price": 1500,
+		"category": 2,
+		"itemEffect": 5
+	},
+	{
+		"id": 53,
+		"name": "郁絵のおやつ",
+		"price": 200,
+		"category": 2,
+		"spRecover": 20
+	},
+	{
+		"id": 54,
+		"name": "わかめパン",
+		"price": 500,
+		"category": 2,
+		"spRecover": 40
+	},
+	{
+		"id": 55,
+		"name": "アンドロメダ焼き",
+		"price": 1000,
+		"category": 2,
+		"spRecover": 60
+	},
+	{
+		"id": 56,
+		"name": "娘娘名物まぐろマン",
+		"price": 1500,
+		"category": 2,
+		"spRecover": 100
+	},
+	{
+		"id": 57,
+		"name": "ＤＭＪ集",
+		"price": 1500,
+		"category": 2,
+		"itemSpecial": 3
+	},
+	{
+		"id": 58,
+		"name": "インサラウムの秘宝",
+		"price": 1500,
+		"category": 2,
+		"itemSpecial": 1
+	},
+	{
+		"id": 59,
+		"name": "アドレナリンアンプル",
+		"price": 500,
+		"category": 3,
+		"sortieWill": 5
+	},
+	{
+		"id": 60,
+		"name": "サイキックリアクター",
+		"price": 1000,
+		"category": 3,
+		"sortieWill": 10
+	},
+	{
+		"id": 61,
+		"name": "カミナのサングラス",
+		"price": 1500,
+		"category": 3,
+		"sortieWill": 20
+	},
+	{
+		"id": 62,
+		"name": "Ｆボンバーのディスク",
+		"price": 1000,
+		"category": 3,
+		"passive": 1
+	},
+	{
+		"id": 63,
+		"name": "シェリルのディスク",
+		"price": 1000,
+		"category": 3,
+		"passive": 3
+	},
+	{
+		"id": 64,
+		"name": "ランカのディスク",
+		"price": 1000,
+		"category": 3,
+		"rewardRate": 1
+	},
+	{
+		"id": 65,
+		"name": "ＳＰゲッター",
+		"price": 1500,
+		"category": 3,
+		"passive": 5
+	},
+	{
+		"id": 66,
+		"name": "カイメラ隊員証",
+		"price": 1500,
+		"category": 3,
+		"passive": 7
+	},
+	{
+		"id": 67,
+		"name": "おコンさんのお面",
+		"price": 1500,
+		"category": 3,
+		"sortieSpFull": 1
+	},
+	{
+		"id": 68,
+		"name": "テンションレイザー",
+		"price": 1500,
+		"category": 3,
+		"passive": 6
+	},
+	{
+		"id": 69,
+		"name": "プラーナコンバーター",
+		"willReq": 150,
+		"price": 1500,
+		"category": 3,
+		"rewardRate": 2
+	},
+	{
+		"id": 70,
+		"name": "コマンダーターミナル",
+		"price": 1500,
+		"category": 3,
+		"passive": 8
+	},
+	{
+		"id": 71,
+		"name": "ゲインメーター",
+		"price": 1500,
+		"category": 3,
+		"specialAbility": 7
+	},
+	{
+		"id": 72,
+		"name": "ＤＧの牙",
+		"price": 1000,
+		"category": 3,
+		"procRate": 10
+	},
+	{
+		"id": 73,
+		"name": "ＦＢ隊員証",
+		"price": 1500,
+		"category": 3,
+		"passive": 10
+	},
+	{
+		"id": 74,
+		"name": "アイアンエンブレム",
+		"price": 2000,
+		"category": 3,
+		"rewardRate": 3
+	},
+	{
+		"id": 75,
+		"name": "ブロンズエンブレム",
+		"price": 2000,
+		"category": 3,
+		"passive": 4
+	},
+	{
+		"id": 76,
+		"name": "シルバーエンブレム",
+		"price": 2000,
+		"category": 3,
+		"rewardRate": 4
+	},
+	{
+		"id": 77,
+		"name": "ゴールドエンブレム",
+		"price": 2000,
+		"category": 3,
+		"rewardRate": 5
+	},
+	{
+		"id": 78,
+		"name": "プラチナエンブレム",
+		"price": 3000,
+		"category": 3,
+		"passive": 2
+	}
+]
