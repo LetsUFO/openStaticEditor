@@ -359,6 +359,7 @@ defineExpose({ getFormData });
 								v-for="li in optionsOf(item)"
 								:key="li.label"
 								:value="li.value"
+								:title="li.label"
 							>
 								<span
 									v-if="optionTag(li, item)"
@@ -383,6 +384,7 @@ defineExpose({ getFormData });
 									v-for="li in optionsOf(item)"
 									:key="li.label"
 									:value="li.value"
+									:title="li.label"
 								>
 									<span
 										v-if="optionTag(li, item)"

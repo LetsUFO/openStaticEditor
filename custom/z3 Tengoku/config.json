@@ -1,7 +1,7 @@
 {
 	"name": "第3次超级机器人大战Z：天狱篇 静态修改",
 	"appIcon": "icon.png",
-	"ver": "0.0.2",
+	"ver": "0.0.3",
 	"width": 1200,
 	"height": 760,
 	"background": {
@@ -61,6 +61,11 @@
 						{
 							"label": "装甲",
 							"name": "partData[targetPart].armor",
+							"type": "number"
+						},
+						{
+							"label": "武器&歌攻击力",
+							"name": "partData[targetPart].attack",
 							"type": "number"
 						},
 						{
@@ -216,10 +221,17 @@
 							"type": "number"
 						},
 						{
-							"label": "特殊效果组（含义未确认）",
+							"label": "特殊效果组",
 							"name": "partData[targetPart].effectGroup",
-							"type": "number",
-							"confirmed": false
+							"type": "select",
+							"options": [
+								{ "label": "无", "value": 0 },
+								{
+									"label": "天獄組（気力上限+50／最大SP+50／武器&歌攻撃力+2000）",
+									"value": 1
+								},
+								{ "label": "連獄組（気力上限+10／出撃時気力+10）", "value": 2 }
+							]
 						}
 					]
 				}
