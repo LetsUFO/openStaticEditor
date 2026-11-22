@@ -31,7 +31,7 @@
 					"items": [
 						{
 							"label": "选择零件",
-							"name": "",
+							"name": "targetPart",
 							"type": "select",
 							"optionUse": "partList"
 						}
@@ -44,9 +44,194 @@
 					"enableKey": "targetPart",
 					"items": [
 						{
-							"label": "选择零件",
-							"name": "",
-							"type": "select"
+							"label": "气力要求",
+							"type": "number"
+						},
+						{
+							"label": "最大HP",
+							"type": "number"
+						},
+						{
+							"label": "最大EN",
+							"type": "number"
+						},
+						{
+							"label": "装甲",
+							"type": "number"
+						},
+						{
+							"label": "价格",
+							"type": "number"
+						},
+						{
+							"label": "分类",
+							"type": "select",
+							"options": [
+								{ "label": "常驻强化", "value": 0 },
+								{ "label": "地形模块", "value": 1 },
+								{ "label": "消耗品", "value": 2 },
+								{ "label": "特殊", "value": 3 }
+							]
+						},
+						{
+							"label": "移动力",
+							"type": "number"
+						},
+						{
+							"label": "运动性",
+							"type": "number"
+						},
+						{
+							"label": "照准值",
+							"type": "number"
+						},
+						{
+							"label": "分身发动概率",
+							"type": "number"
+						},
+						{
+							"label": "HP回复（最大值%）",
+							"type": "number"
+						},
+						{
+							"label": "EN回复（最大值%）",
+							"type": "number"
+						},
+						{
+							"label": "每回合弹药全回复",
+							"type": "switch"
+						},
+						{
+							"label": "移动类型",
+							"type": "select",
+							"options": [
+								{ "label": "不取得", "value": 0 },
+								{ "label": "空", "value": 1 },
+								{ "label": "陆", "value": 2 },
+								{ "label": "水", "value": 3 }
+							]
+						},
+						{
+							"label": "机体・武器地形适应",
+							"type": "select",
+							"options": [
+								{ "label": "无", "value": 0 },
+								{ "label": "空S", "value": 1 },
+								{ "label": "宇宙S", "value": 2 },
+								{ "label": "陆S", "value": 3 },
+								{ "label": "海S", "value": 4 },
+								{ "label": "全地形A", "value": 5 },
+								{ "label": "全地形S", "value": 6 }
+							]
+						},
+						{
+							"label": "屏障",
+							"type": "select",
+							"options": [
+								{ "label": "无", "value": 0 },
+								{ "label": "伤害减轻1000", "value": 1 },
+								{ "label": "D・フォルト（伤害减轻1200）", "value": 2 }
+							]
+						},
+						{
+							"label": "特殊能力",
+							"type": "select",
+							"options": [
+								{ "label": "无", "value": 0 },
+								{ "label": "分身", "value": 1 },
+								{ "label": "修理・补给装置", "value": 2 },
+								{ "label": "移动力＋4（无视移动EN消耗与地形影响）", "value": 3 },
+								{ "label": "SOL装甲（无效化特殊效果）", "value": 4 },
+								{ "label": "伤害复仇（按HP伤害％加算）", "value": 5 },
+								{ "label": "精神耐性＋切払100%", "value": 6 },
+								{ "label": "移动1格获得资金500", "value": 7 }
+							]
+						},
+						{
+							"label": "暴击补正",
+							"type": "number"
+						},
+						{
+							"label": "射程",
+							"type": "number"
+						},
+						{
+							"label": "射程加成适用范围",
+							"type": "select",
+							"options": [
+								{ "label": "不扩展", "value": 0 },
+								{ "label": "也适用于射程1的武器・歌", "value": 2 }
+							]
+						},
+						{
+							"label": "体积差补正无视与护罩贯通",
+							"type": "switch"
+						},
+						{
+							"label": "出击时气力",
+							"type": "number"
+						},
+						{
+							"label": "出击时SP全满",
+							"type": "switch"
+						},
+						{
+							"label": "获得报酬倍率",
+							"type": "select",
+							"options": [
+								{ "label": "无", "value": 0 },
+								{ "label": "Z芯片1.5倍", "value": 1 },
+								{ "label": "PP・资金・Z芯片2倍", "value": 2 },
+								{ "label": "经验值2倍", "value": 3 },
+								{ "label": "PP2倍", "value": 4 },
+								{ "label": "资金2倍", "value": 5 }
+							]
+						},
+						{
+							"label": "被动效果",
+							"type": "select",
+							"options": [
+								{ "label": "无", "value": 0 },
+								{ "label": "每回合气力＋3（出击第1回合起）", "value": 1 },
+								{ "label": "自军阶段开始时队伍行动次数＋1", "value": 2 },
+								{ "label": "每回合SP＋10", "value": 3 },
+								{ "label": "每回合SP＋15", "value": 4 },
+								{ "label": "击坠敌队时SP＋10", "value": 5 },
+								{ "label": "队伍TAG TENSION上升时再＋1", "value": 6 },
+								{ "label": "气力上限＋30", "value": 7 },
+								{ "label": "获得指挥官L4效果", "value": 8 },
+								{ "label": "每10级武器攻击力＋100・装甲＋50", "value": 9 },
+								{ "label": "伤害5000以上气力＋5／受伤2000以上SP＋5", "value": 10 }
+							]
+						},
+						{
+							"label": "消耗品效果",
+							"type": "select",
+							"options": [
+								{ "label": "无", "value": 0 },
+								{ "label": "EN250回复", "value": 1 },
+								{ "label": "弹药全回复", "value": 2 },
+								{ "label": "HP6000回复", "value": 3 },
+								{ "label": "HP・EN・弹药全回复", "value": 4 },
+								{ "label": "我方全队HP5000・EN50回复", "value": 5 }
+							]
+						},
+						{
+							"label": "SP回复量",
+							"type": "number"
+						},
+						{
+							"label": "消耗品特殊效果（1=愛／3=脱力）",
+							"type": "number"
+						},
+						{
+							"label": "发生概率加成",
+							"type": "number"
+						},
+						{
+							"label": "特殊效果组（含义未确认）",
+							"type": "number",
+							"confirmed": false
 						}
 					]
 				}
