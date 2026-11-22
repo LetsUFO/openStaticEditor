@@ -40,69 +40,72 @@
 				{
 					"label": "修改零件数据",
 					"tip": "先选择需要修改的零件",
-					"col": 3,
+					"col": 4,
 					"enableKey": "targetPart",
 					"items": [
 						{
 							"label": "气力要求",
+							"name": "partData[targetPart].willReq",
 							"type": "number"
 						},
 						{
 							"label": "最大HP",
+							"name": "partData[targetPart].hp",
 							"type": "number"
 						},
 						{
 							"label": "最大EN",
+							"name": "partData[targetPart].en",
 							"type": "number"
 						},
 						{
 							"label": "装甲",
+							"name": "partData[targetPart].armor",
 							"type": "number"
 						},
 						{
 							"label": "价格",
+							"name": "partData[targetPart].price",
 							"type": "number"
 						},
 						{
-							"label": "分类",
-							"type": "select",
-							"options": [
-								{ "label": "常驻强化", "value": 0 },
-								{ "label": "地形模块", "value": 1 },
-								{ "label": "消耗品", "value": 2 },
-								{ "label": "特殊", "value": 3 }
-							]
-						},
-						{
 							"label": "移动力",
+							"name": "partData[targetPart].move",
 							"type": "number"
 						},
 						{
 							"label": "运动性",
+							"name": "partData[targetPart].mobility",
 							"type": "number"
 						},
 						{
 							"label": "照准值",
+							"name": "partData[targetPart].accuracy",
 							"type": "number"
 						},
 						{
 							"label": "分身发动概率",
+							"name": "partData[targetPart].afterimageRate",
 							"type": "number"
 						},
 						{
 							"label": "HP回复（最大值%）",
+							"name": "partData[targetPart].hpRecover",
 							"type": "number"
 						},
 						{
 							"label": "EN回复（最大值%）",
+							"name": "partData[targetPart].enRecover",
 							"type": "number"
 						},
 						{
 							"label": "每回合弹药全回复",
+							"name": "partData[targetPart].ammoRecover",
 							"type": "switch"
 						},
 						{
 							"label": "移动类型",
+							"name": "partData[targetPart].moveType",
 							"type": "select",
 							"options": [
 								{ "label": "不取得", "value": 0 },
@@ -113,6 +116,7 @@
 						},
 						{
 							"label": "机体・武器地形适应",
+							"name": "partData[targetPart].terrainAdapt",
 							"type": "select",
 							"options": [
 								{ "label": "无", "value": 0 },
@@ -126,6 +130,7 @@
 						},
 						{
 							"label": "屏障",
+							"name": "partData[targetPart].barrier",
 							"type": "select",
 							"options": [
 								{ "label": "无", "value": 0 },
@@ -135,6 +140,7 @@
 						},
 						{
 							"label": "特殊能力",
+							"name": "partData[targetPart].specialAbility",
 							"type": "select",
 							"options": [
 								{ "label": "无", "value": 0 },
@@ -149,14 +155,17 @@
 						},
 						{
 							"label": "暴击补正",
+							"name": "partData[targetPart].crit",
 							"type": "number"
 						},
 						{
 							"label": "射程",
+							"name": "partData[targetPart].range",
 							"type": "number"
 						},
 						{
 							"label": "射程加成适用范围",
+							"name": "partData[targetPart].rangeApply",
 							"type": "select",
 							"options": [
 								{ "label": "不扩展", "value": 0 },
@@ -165,30 +174,22 @@
 						},
 						{
 							"label": "体积差补正无视与护罩贯通",
+							"name": "partData[targetPart].sizeIgnore",
 							"type": "switch"
 						},
 						{
 							"label": "出击时气力",
+							"name": "partData[targetPart].sortieWill",
 							"type": "number"
 						},
 						{
 							"label": "出击时SP全满",
+							"name": "partData[targetPart].sortieSpFull",
 							"type": "switch"
 						},
 						{
-							"label": "获得报酬倍率",
-							"type": "select",
-							"options": [
-								{ "label": "无", "value": 0 },
-								{ "label": "Z芯片1.5倍", "value": 1 },
-								{ "label": "PP・资金・Z芯片2倍", "value": 2 },
-								{ "label": "经验值2倍", "value": 3 },
-								{ "label": "PP2倍", "value": 4 },
-								{ "label": "资金2倍", "value": 5 }
-							]
-						},
-						{
 							"label": "被动效果",
+							"name": "partData[targetPart].passive",
 							"type": "select",
 							"options": [
 								{ "label": "无", "value": 0 },
@@ -205,31 +206,18 @@
 							]
 						},
 						{
-							"label": "消耗品效果",
-							"type": "select",
-							"options": [
-								{ "label": "无", "value": 0 },
-								{ "label": "EN250回复", "value": 1 },
-								{ "label": "弹药全回复", "value": 2 },
-								{ "label": "HP6000回复", "value": 3 },
-								{ "label": "HP・EN・弹药全回复", "value": 4 },
-								{ "label": "我方全队HP5000・EN50回复", "value": 5 }
-							]
-						},
-						{
 							"label": "SP回复量",
-							"type": "number"
-						},
-						{
-							"label": "消耗品特殊效果（1=愛／3=脱力）",
+							"name": "partData[targetPart].spRecover",
 							"type": "number"
 						},
 						{
 							"label": "发生概率加成",
+							"name": "partData[targetPart].procRate",
 							"type": "number"
 						},
 						{
 							"label": "特殊效果组（含义未确认）",
+							"name": "partData[targetPart].effectGroup",
 							"type": "number",
 							"confirmed": false
 						}

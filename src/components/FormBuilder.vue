@@ -38,6 +38,16 @@ watch(
 const source = computed<any>(() => (props.dataKey ? configStore.fileData[props.dataKey] : null));
 const model = computed<Record<string, any>>(() => source.value || {});
 
+/** 解析 name 里的动态段：如 partData[targetPart].hp，targetPart=12 时变成 partData[12].hp。
+ *  只处理非数字段，数组下标（[0] 等）保持原样。 */
+function resolvePath(path?: string): string {
+	if (!path) return '';
+	return path.replace(/\[([A-Za-z_$][\w$]*)\]/g, (raw, key) => {
+		const value = get(source.value, key);
+		return value == null || value === '' ? raw : `[${String(value)}]`;
+	});
+}
+
 function read(item: AppMenuFormField): any {
 	let out = '';
 	switch (item.type) {
@@ -48,7 +58,7 @@ function read(item: AppMenuFormField): any {
 		}
 		case 'enumText': {
 			// 从 store 里按 name 路径取原始值（ID），再去 useEnumMap 指定的映射表找 label
-			const raw = item?.name ? get(source.value, item.name) : undefined;
+			const raw = item?.name ? get(source.value, resolvePath(item.name)) : undefined;
 			const map = item?.useEnumMap ? get(source.value, item.useEnumMap) : null;
 			if (raw != null && map && typeof map === 'object') {
 				out = map[String(raw)] ?? raw; // 找不到时原样回显原始值
@@ -58,7 +68,7 @@ function read(item: AppMenuFormField): any {
 			break;
 		}
 		default:
-			out = item?.name ? get(source.value, item.name) : undefined;
+			out = item?.name ? get(source.value, resolvePath(item.name)) : undefined;
 			break;
 	}
 	return out;
@@ -67,7 +77,7 @@ function read(item: AppMenuFormField): any {
 function write(item: AppMenuFormField, value: any): void {
 	if (!item?.name || !source.value) return;
 	// 清空(allowClear)拿到的是 undefined，落 null，避免 JSON 序列化时整条键被丢掉
-	set(source.value, item.name, value === undefined ? null : value);
+	set(source.value, resolvePath(item.name), value === undefined ? null : value);
 }
 
 // ------------------------------------------------------------------ 下拉选项

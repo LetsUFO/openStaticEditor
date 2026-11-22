@@ -11,8 +11,8 @@
  *   4. 执行加载方法 loadFile(ctx)：CRILAYLA 解压 → 解析 <mt> 容器 → 提取零件参数表
  * 没找到或找到多个都抛错，提示重新选择游戏目录。
  *
- * 返回数据（由 App.vue 写入 store）：{ fileSrc, size, partList }
- * 同时把解析出的零件参数表写入同级目录的 partData.json，便于核对。
+ * 返回数据（由 App.vue 写入 store）：{ fileSrc, size, partList, partData }
+ *   partData 以零件 ID 为键：partData["12"].hp 等。
  *
  * 注意：ctx.filePath 可能来自界面手动输入，斜杠方向不确定，统一用 path.normalize 归一。
  */
@@ -24,8 +24,6 @@ const TARGET_NAME = 'rpw_data.cpk';
 const ERROR_MESSAGE = '请重新选择正确的游戏目录，里面因该只包含一个RPW_DATA.CPK文件';
 // 零件下拉选项表，与本脚本同目录
 const PART_LIST_FILE = path.join(__dirname, 'partList.json');
-// 解析出的零件参数表，输出到同目录（便于核对）
-const PART_DATA_FILE = path.join(__dirname, 'partData.json');
 
 /* ------------------------------------------------------------------ */
 /* 零件表定位与解析                                                    */
@@ -185,7 +183,7 @@ function parseParts(data, partList) {
 }
 
 /**
- * 精简零件参数：id/name 始终保留，其余仅保留非 0 的有效字段。
+ * 精简零件参数：id/name 始终保留，其余只保留有效（非 0）字段。
  * @param {Record<string, any>} part
  */
 function compactPart(part) {
@@ -248,9 +246,10 @@ function loadFile(ctx) {
 	const buffer = fs.readFileSync(ctx.fileSrc);
 	const partList = JSON.parse(fs.readFileSync(PART_LIST_FILE, 'utf8'));
 	const decoded = decompressCrilayla(buffer);
-	const partData = parseParts(decoded, partList).map(compactPart);
-	fs.writeFileSync(PART_DATA_FILE, JSON.stringify(partData, null, '\t') + '\n', 'utf8');
-	return { fileSrc: ctx.fileSrc, size: buffer.length, partList };
+	const parts = parseParts(decoded, partList).map(compactPart);
+	// 返回给表单的数据按零件 ID 建索引，便于 targetPart（ID）直接用 partData[targetPart] 取值
+	const partData = Object.fromEntries(parts.map((part) => [String(part.id), part]));
+	return { fileSrc: ctx.fileSrc, size: buffer.length, partList, partData };
 }
 
 /**
