@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * readSTGZ3OF2.SDAT.js — 只读解析 PS3 NPDRM/EDAT v4 加密的 CPK（STGZ3OF2.SDAT）
+ * readSTGZ3OF2.SDAT.js — 只读解析 STGZ3OF2.SDAT（NPDRM/EDAT v4 或明文 CPK）
  *
  * 由主进程 file:read 调用（config.json -> loadFiles.stage.readScript）。
  *
@@ -8,7 +8,7 @@
  *   1. 拿到 ctx.filePath（用户在加载页输入 / 选择的游戏目录）
  *   2. 在该目录里查找 ctx.fileName（config.json -> loadFiles[key].fileName，默认 STGZ3OF2.SDAT）
  *   3. 把它的绝对路径赋值给 ctx.fileSrc
- *   4. 解析 NPD/EDAT v4 头 → 逐块 AES-128-CBC 解密 → 解析明文 CPK 的 UTF 表
+ *   4. 识别明文 CPK，或解析 NPD/EDAT v4 头并逐块解密，再解析 CPK 的 UTF 表
  *
  * 解密算法移植自 RPCS3 rpcs3/Crypto/unedat.cpp：
  *   - flags=0x0100003C（SDAT + 0x20 元数据前置 + 0x10 双重加密密钥 + 0x08 加密 ERK）
@@ -262,8 +262,9 @@ function parseCpk(buf) {
 function loadFile(ctx) {
 	const buffer = fs.readFileSync(ctx.fileSrc);
 	const partList = JSON.parse(fs.readFileSync(PART_LIST_FILE, 'utf8'));
-	const npd = parseNpdHeader(buffer);
-	const plain = decryptEdat(buffer, npd);
+	const magic = buffer.toString('latin1', 0, 4);
+	// 保存脚本写回明文 CPK；原始文件仍需先解密 EDAT。
+	const plain = magic === 'CPK ' ? buffer : decryptEdat(buffer, parseNpdHeader(buffer));
 	const cpk = parseCpk(plain);
 	return {
 		fileSrc: ctx.fileSrc,
