@@ -248,7 +248,7 @@
 			"dataKey": "RPW_DATA",
 			"saveScript": {
 				"needFileKey": "RPW_DATA",
-				"saveScript": ""
+				"saveScript": "editRPW_DATA.js"
 			}
 		},
 		{

@@ -6,14 +6,14 @@
  *   2. NPD/EDAT v4 → 解密出明文 CPK（若已经是明文 CPK 则直接使用）
  *   3. 按 ItocL / ItocH 的 ID 顺序依次取出每个文件
  *      - 以 CRILAYLA 开头的走解压，其余视为原始数据
- *   4. 按原文件的排版规则（ContentOffset 起、每条按 16 字节对齐）重新拼装内容区
- *   5. 回填 CpkHeader（ContentSize / EnabledPackedSize / EnabledDataSize）
- *      与 ItocL / ItocH 每条记录的 FileSize（改为未压缩长度）
- *   6. 以明文 CPK 覆盖写回原路径
+ *   4. 检查序章 ID1 / ID2 的奖励表与 StageClear 调用，不存在则创建
+ *      - 将 stage0.giftPart 中的零件按数量 99 写入，保留其他类型奖励
+ *   5. 按原文件的排版规则（ContentOffset 起、每条按 16 字节对齐）重新拼装内容区
+ *   6. 回填 CpkHeader（ContentSize / EnabledPackedSize / EnabledDataSize）
+ *      与 ItocL / ItocH 每条记录的 FileSize / ExtractSize（改为未压缩长度）
+ *   7. 以明文 CPK 覆盖写回原路径
  *
- * 注意：本阶段只保证“解密 → 解包 → 重新打包”的流程正确，
- *       尚未接入表单数据（giftPart 等）的写入，也暂不重新进行 CRILAYLA 压缩，
- *       因此写回的文件不再是 EDAT，游戏暂时无法直接读取。
+ * 注意：本阶段不重新进行 CRILAYLA 压缩或 EDAT 加密，按已验证可读取的明文 CPK 写回。
  */
 'use strict';
 
@@ -278,11 +278,123 @@ function findAllUtfs(buf, limit) {
 	return res;
 }
 
+function normalizeGiftPart(value) {
+	if (!Array.isArray(value)) throw new Error('缺少 stage0.giftPart，数据格式应为零件 ID 数组');
+	return value.filter((id) => id !== undefined && id !== null && id !== '').slice(0, 3).map((id) => {
+		const n = Number(id);
+		if (!Number.isInteger(n) || n <= 0) throw new Error(`无效的机体零件 ID：${id}`);
+		return n;
+	});
+}
+
+function findStageClearGiftName(stageText) {
+	const decl = /\bfunction\s+EventFunc_StageClear\s*\(\s*\)/.exec(stageText);
+	if (!decl) throw new Error('序章关卡脚本缺少 EventFunc_StageClear');
+	const bodyStart = decl.index + decl[0].length;
+	const rest = stageText.slice(bodyStart);
+	const next = /\bfunction\s+/.exec(rest);
+	const body = next ? rest.slice(0, next.index) : rest;
+	const call = /\bSC_GIFT_EXEC_B\s*\(\s*(GIFT_[A-Za-z0-9_]+)\s*\)/.exec(body);
+	return call ? call[1] : '';
+}
+
+function findGiftTable(presetText, giftName) {
+	const assignment = new RegExp(`\\b${giftName}\\s*=\\s*\\{`).exec(presetText);
+	if (!assignment) return null;
+	const open = assignment.index + assignment[0].lastIndexOf('{');
+	let depth = 0;
+	let quote = '';
+	let escaped = false;
+	for (let i = open; i < presetText.length; i++) {
+		const ch = presetText[i];
+		if (quote) {
+			if (escaped) escaped = false;
+			else if (ch === '\\') escaped = true;
+			else if (ch === quote) quote = '';
+			continue;
+		}
+		if (ch === '"' || ch === "'") quote = ch;
+		else if (ch === '{') depth++;
+		else if (ch === '}' && --depth === 0) {
+			return { open, close: i, body: presetText.slice(open + 1, i) };
+		}
+	}
+	throw new Error(`${giftName} 奖励表缺少结束括号`);
+}
+
+function splitLuaValues(body) {
+	const values = [];
+	let start = 0;
+	let depth = 0;
+	let quote = '';
+	let escaped = false;
+	for (let i = 0; i < body.length; i++) {
+		const ch = body[i];
+		if (quote) {
+			if (escaped) escaped = false;
+			else if (ch === '\\') escaped = true;
+			else if (ch === quote) quote = '';
+			continue;
+		}
+		if (ch === '"' || ch === "'") quote = ch;
+		else if (ch === '{' || ch === '[' || ch === '(') depth++;
+		else if (ch === '}' || ch === ']' || ch === ')') depth--;
+		else if (ch === ',' && depth === 0) {
+			const value = body.slice(start, i).trim();
+			if (value) values.push(value);
+			start = i + 1;
+		}
+	}
+	const tail = body.slice(start).trim();
+	if (tail) values.push(tail);
+	return values;
+}
+
+function updatePrologueGift(presetRaw, stageRaw, giftPart) {
+	let presetText = presetRaw.toString('latin1');
+	let stageText = stageRaw.toString('latin1');
+	let giftName = findStageClearGiftName(stageText);
+	const hasGiftCall = Boolean(giftName);
+	if (!giftName) giftName = 'GIFT_500';
+
+	const table = findGiftTable(presetText, giftName);
+	const values = table ? splitLuaValues(table.body) : ['0'];
+	const oldCount = Number(values[0]);
+	if (!values.length || !Number.isInteger(oldCount) || oldCount < 0 || values.length !== 1 + oldCount * 8) {
+		throw new Error(`${giftName} 奖励表结构异常`);
+	}
+
+	// 删除旧零件记录，保留资金、消息等其他奖励，再按表单顺序写入数量 99 的零件。
+	const records = [];
+	for (let i = 0; i < oldCount; i++) {
+		const at = 1 + i * 8;
+		if (Number(values[at + 3]) !== 1) records.push(values.slice(at, at + 8));
+	}
+	for (const id of giftPart) records.push(['-1', '-1', '0', '1', String(id), '""', '99', '0']);
+	const body = [String(records.length), ...records.flat()].join(',');
+	const literal = `${giftName}={${body},}`;
+	if (table) {
+		presetText = presetText.slice(0, table.open) + literal.slice(literal.indexOf('{')) + presetText.slice(table.close + 1);
+	} else {
+		presetText = `${literal}\r\n${presetText}`;
+	}
+
+	if (!hasGiftCall) {
+		const decl = /\bfunction\s+EventFunc_StageClear\s*\(\s*\)/.exec(stageText);
+		const insertAt = decl.index + decl[0].length;
+		const newline = /^(?:\r\n|\r|\n)/.exec(stageText.slice(insertAt))?.[0] || '\r\n';
+		stageText = stageText.slice(0, insertAt) + `${newline}SC_GIFT_EXEC_B(${giftName});` + stageText.slice(insertAt);
+	}
+
+	return { preset: Buffer.from(presetText, 'latin1'), stage: Buffer.from(stageText, 'latin1') };
+}
+
 /**
  * 重新打包明文 CPK（不压缩），返回新的 Buffer
  * @param {Buffer} plain 明文 CPK
+ * @param {number[]} giftPart 序章奖励零件 ID
  */
-function repackCpk(plain) {
+function repackCpk(plain, giftPart) {
 	const tables = findAllUtfs(plain).map(([off]) => new UTFTable(plain, off));
 	if (!tables.length) throw new Error('CPK 内没有找到 @UTF 表');
 
@@ -298,7 +410,9 @@ function repackCpk(plain) {
 	const entries = [];
 	for (const t of idTables) {
 		t.rows().forEach((row, idx) => {
-			entries.push({ table: t, idx, id: row.ID, fileSize: row.FileSize, extractSize: row.ExtractSi ?? row.ExtractSize });
+			const extractKey = ['ExtractSi', 'ExtractSize'].find((key) => row[key] !== undefined);
+			if (!extractKey) throw new Error(`文件 ${row.ID} 缺少 ExtractSize 字段`);
+			entries.push({ table: t, idx, id: row.ID, fileSize: row.FileSize, extractKey, extractSize: row[extractKey] });
 		});
 	}
 	entries.sort((a, b) => a.id - b.id);
@@ -306,11 +420,8 @@ function repackCpk(plain) {
 		throw new Error(`条目数量异常：表内 ${entries.length}，头部 ${hdr.Files}`);
 	}
 
-	// 逐条取出原始数据（CRILAYLA 解压，其余原样）
-	// srcCursor 走原文件里的压缩数据，pos 走新内容区的未压缩数据
+	// 先按原偏移完整取出所有条目，再修改序章脚本，避免变长数据影响后续读取。
 	let srcCursor = contentOffset;
-	let pos = 0;
-	let rawTotal = 0;
 	for (const e of entries) {
 		srcCursor = Math.ceil(srcCursor / align) * align;
 		const comp = plain.subarray(srcCursor, srcCursor + e.fileSize);
@@ -319,10 +430,23 @@ function repackCpk(plain) {
 			throw new Error(`文件 ${e.id} 长度不符：解出 ${raw.length}，表内 ${e.extractSize}`);
 		}
 		e.raw = raw;
-		e.at = Math.ceil(pos / align) * align;
-		pos = e.at + raw.length;
-		rawTotal += raw.length;
 		srcCursor += e.fileSize;
+	}
+
+	const preset = entries.find((e) => e.id === 1);
+	const stage = entries.find((e) => e.id === 2);
+	if (!preset || !stage) throw new Error('CPK 内找不到序章脚本（ID 1 / ID 2）');
+	const updated = updatePrologueGift(preset.raw, stage.raw, giftPart);
+	preset.raw = updated.preset;
+	stage.raw = updated.stage;
+
+	// 所有修改完成后再计算新内容区布局。
+	let pos = 0;
+	let rawTotal = 0;
+	for (const e of entries) {
+		e.at = Math.ceil(pos / align) * align;
+		pos = e.at + e.raw.length;
+		rawTotal += e.raw.length;
 	}
 
 	// 拼内容区：每条按 align 对齐，末尾补零到 align
@@ -335,9 +459,10 @@ function repackCpk(plain) {
 	header.setField(0, 'EnabledPackedSize', rawTotal);
 	header.setField(0, 'EnabledDataSize', rawTotal);
 
-	// 回填每条记录的文件长度
+	// 明文不重压缩，FileSize 与 ExtractSize 都必须改为未压缩长度。
 	for (const e of entries) {
 		e.table.setField(e.idx, 'FileSize', e.raw.length);
+		e.table.setField(e.idx, e.extractKey, e.raw.length);
 	}
 
 	return Buffer.concat([plain.subarray(0, contentOffset), content]);
@@ -350,8 +475,9 @@ module.exports = function (ctx = {}) {
 	const filePath = ctx.filePath || (ctx.data && ctx.data.fileSrc) || '';
 	if (!filePath) throw new Error('缺少关卡文件路径（ctx.filePath 为空），请重新加载 STGZ3OF2.SDAT');
 
+	const giftPart = normalizeGiftPart(ctx.data && ctx.data.stage0 && ctx.data.stage0.giftPart);
 	const plain = loadPlainCpk(filePath);
-	const packed = repackCpk(plain);
+	const packed = repackCpk(plain, giftPart);
 	fs.writeFileSync(filePath, packed);
 
 	console.log(`[editSTGZ3OF2] ${filePath} 已写回：${plain.length} → ${packed.length} 字节（明文 CPK）`);

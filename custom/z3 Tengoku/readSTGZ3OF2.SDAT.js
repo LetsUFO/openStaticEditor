@@ -115,6 +115,74 @@ function decryptEdat(d, npd) {
 	return out;
 }
 
+// ---------------- CRILAYLA ----------------
+function decompressCrilayla(file) {
+	const magic = file.indexOf('CRILAYLA');
+	if (magic < 0) throw new Error('文件格式不符：找不到 CRILAYLA 压缩块');
+
+	const block = file.subarray(magic);
+	const usize = block.readUInt32LE(8);
+	const hoff = block.readUInt32LE(12);
+	if (!usize || usize > file.length * 64) throw new Error('文件格式不符：解压长度异常');
+
+	const out = Buffer.alloc(usize + 0x100);
+	block.copy(out, 0, hoff + 0x10, hoff + 0x10 + 0x100);
+
+	let pos = block.length - 0x100 - 1;
+	let pool = 0;
+	let left = 0;
+	const bits = (k) => {
+		let v = 0;
+		let got = 0;
+		while (got < k) {
+			if (left === 0) {
+				pool = pos >= 0 ? block[pos] : 0;
+				left = 8;
+				pos--;
+			}
+			const take = Math.min(left, k - got);
+			v = (v << take) | ((pool >>> (left - take)) & ((1 << take) - 1));
+			left -= take;
+			got += take;
+		}
+		return v;
+	};
+
+	const end = 0x100 + usize - 1;
+	let done = 0;
+	while (done < usize) {
+		if (bits(1)) {
+			let ref = end - done + bits(13) + 3;
+			let len = 3;
+			let full = true;
+			for (const w of [2, 3, 5, 8]) {
+				const t = bits(w);
+				len += t;
+				if (t !== (1 << w) - 1) {
+					full = false;
+					break;
+				}
+			}
+			if (full) {
+				for (;;) {
+					const t = bits(8);
+					len += t;
+					if (t !== 255) break;
+				}
+			}
+			for (let i = 0; i < len && done < usize; i++) {
+				out[end - done] = out[ref];
+				ref--;
+				done++;
+			}
+		} else {
+			out[end - done] = bits(8);
+			done++;
+		}
+	}
+	return out;
+}
+
 // ---------------- CPK / UTF 解析（大端，移植自 cpk3.py） ----------------
 const TSZ = [1, 1, 2, 2, 4, 4, 8, 8, 4, 8, 4, 8];
 const TFM = [
@@ -255,6 +323,116 @@ function parseCpk(buf) {
 	return { headerRow, lastTableEnd, entries, contentStart };
 }
 
+function readCpkEntry(plain, cpk, id) {
+	const align = cpk.headerRow.Align || 16;
+	let cursor = cpk.contentStart;
+	for (const e of cpk.entries) {
+		cursor = Math.ceil(cursor / align) * align;
+		if (e.ID === id) {
+			const comp = plain.subarray(cursor, cursor + e.FileSize);
+			const raw = comp.toString('latin1', 0, 8) === 'CRILAYLA' ? decompressCrilayla(comp) : comp;
+			const extractSize = esizeOf(e);
+			if (raw.length !== extractSize) {
+				throw new Error(`文件 ${id} 长度不符：解出 ${raw.length}，表内 ${extractSize}`);
+			}
+			return raw;
+		}
+		cursor += e.FileSize;
+	}
+	throw new Error(`CPK 内找不到序章脚本（ID ${id}）`);
+}
+
+function findStageClearGiftName(stageText) {
+	const decl = /\bfunction\s+EventFunc_StageClear\s*\(\s*\)/.exec(stageText);
+	if (!decl) throw new Error('序章关卡脚本缺少 EventFunc_StageClear');
+	const bodyStart = decl.index + decl[0].length;
+	const rest = stageText.slice(bodyStart);
+	const next = /\bfunction\s+/.exec(rest);
+	const body = next ? rest.slice(0, next.index) : rest;
+	const call = /\bSC_GIFT_EXEC_B\s*\(\s*(GIFT_[A-Za-z0-9_]+)\s*\)/.exec(body);
+	return call ? call[1] : '';
+}
+
+function findGiftTable(presetText, giftName) {
+	const assignment = new RegExp(`\\b${giftName}\\s*=\\s*\\{`).exec(presetText);
+	if (!assignment) return null;
+	const open = assignment.index + assignment[0].lastIndexOf('{');
+	let depth = 0;
+	let quote = '';
+	let escaped = false;
+	for (let i = open; i < presetText.length; i++) {
+		const ch = presetText[i];
+		if (quote) {
+			if (escaped) escaped = false;
+			else if (ch === '\\') escaped = true;
+			else if (ch === quote) quote = '';
+			continue;
+		}
+		if (ch === '"' || ch === "'") quote = ch;
+		else if (ch === '{') depth++;
+		else if (ch === '}' && --depth === 0) {
+			return { open, close: i, body: presetText.slice(open + 1, i) };
+		}
+	}
+	throw new Error(`${giftName} 奖励表缺少结束括号`);
+}
+
+function splitLuaValues(body) {
+	const values = [];
+	let start = 0;
+	let depth = 0;
+	let quote = '';
+	let escaped = false;
+	for (let i = 0; i < body.length; i++) {
+		const ch = body[i];
+		if (quote) {
+			if (escaped) escaped = false;
+			else if (ch === '\\') escaped = true;
+			else if (ch === quote) quote = '';
+			continue;
+		}
+		if (ch === '"' || ch === "'") quote = ch;
+		else if (ch === '{' || ch === '[' || ch === '(') depth++;
+		else if (ch === '}' || ch === ']' || ch === ')') depth--;
+		else if (ch === ',' && depth === 0) {
+			const value = body.slice(start, i).trim();
+			if (value) values.push(value);
+			start = i + 1;
+		}
+	}
+	const tail = body.slice(start).trim();
+	if (tail) values.push(tail);
+	return values;
+}
+
+function readGiftPartIds(presetText, giftName) {
+	if (!giftName) return [];
+	const table = findGiftTable(presetText, giftName);
+	if (!table) return [];
+	const values = splitLuaValues(table.body);
+	const count = Number(values[0]);
+	if (!values.length || !Number.isInteger(count) || count < 0 || values.length !== 1 + count * 8) {
+		throw new Error(`${giftName} 奖励表结构异常`);
+	}
+	const ids = [];
+	for (let i = 0; i < count; i++) {
+		const at = 1 + i * 8;
+		if (Number(values[at + 3]) !== 1) continue;
+		const id = Number(values[at + 4]);
+		if (!Number.isInteger(id) || id <= 0) throw new Error(`${giftName} 包含无效零件 ID`);
+		ids.push(id);
+	}
+	return ids.slice(0, 3);
+}
+
+function readPrologueGiftPart(plain, cpk) {
+	const stageText = readCpkEntry(plain, cpk, 2).toString('latin1');
+	const giftName = findStageClearGiftName(stageText);
+	if (!giftName) return [];
+	const presetText = readCpkEntry(plain, cpk, 1).toString('latin1');
+	return readGiftPartIds(presetText, giftName);
+}
+
 /**
  * 加载方法：读取并解析 ctx.fileSrc 指向的 STGZ3OF2.SDAT。
  * @param {{ fileSrc: string }} ctx
@@ -266,6 +444,7 @@ function loadFile(ctx) {
 	// 保存脚本写回明文 CPK；原始文件仍需先解密 EDAT。
 	const plain = magic === 'CPK ' ? buffer : decryptEdat(buffer, parseNpdHeader(buffer));
 	const cpk = parseCpk(plain);
+	const giftPart = readPrologueGiftPart(plain, cpk);
 	return {
 		fileSrc: ctx.fileSrc,
 		size: buffer.length,
@@ -278,7 +457,7 @@ function loadFile(ctx) {
 		// 关卡奖励（config.json -> menu「关卡奖励」的 dataKey=stage 读取的就是这块数据）
 		// giftPart：过关发放的机体零件奖励；giftUnit：过关发放的机体奖励
 		stage0: {
-			giftPart: [],
+			giftPart,
 			giftUnit: []
 		}
 	};
