@@ -1,7 +1,7 @@
 {
 	"name": "第3次超级机器人大战Z：天狱篇 静态修改",
 	"appIcon": "icon.png",
-	"ver": "0.0.4",
+	"ver": "0.0.5",
 	"width": 1200,
 	"height": 760,
 	"background": {
@@ -248,6 +248,42 @@
 			"dataKey": "RPW_DATA",
 			"saveScript": {
 				"needFileKey": "RPW_DATA",
+				"saveScript": ""
+			}
+		},
+		{
+			"label": "关卡奖励",
+			"tip": "",
+			"category": [
+				{
+					"label": "序章",
+					"tip": "奖励零件按照99个发放",
+					"col": 3,
+					"items": [
+						{
+							"label": "奖励的零件1",
+							"name": "stage0.giftPart[0]",
+							"type": "select",
+							"optionUse": "partList"
+						},
+						{
+							"label": "奖励的零件2",
+							"name": "stage0.giftPart[1]",
+							"type": "select",
+							"optionUse": "partList"
+						},
+						{
+							"label": "奖励的零件3",
+							"name": "stage0.giftPart[2]",
+							"type": "select",
+							"optionUse": "partList"
+						}
+					]
+				}
+			],
+			"dataKey": "stage",
+			"saveScript": {
+				"needFileKey": "stage",
 				"saveScript": ""
 			}
 		}

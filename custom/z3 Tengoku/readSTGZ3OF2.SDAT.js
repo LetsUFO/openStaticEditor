@@ -23,10 +23,13 @@
 'use strict';
 
 const fs = require('node:fs');
+const path = require('node:path');
 const crypto = require('node:crypto');
 const findFile = require('./lib');
 
 const DEFAULT_TARGET_NAME = 'STGZ3OF2.SDAT';
+// 零件下拉选项表，与本脚本同目录（关卡奖励 select 的 optionUse=partList）
+const PART_LIST_FILE = path.join(__dirname, 'partList.json');
 
 // ---- RPCS3 key_vault.h 常量 ----
 const SDAT_KEY = Buffer.from('0d655ef8e674a98ab8505cfa7d012933', 'hex');
@@ -82,7 +85,7 @@ function parseNpdHeader(d) {
 function decryptEdat(d, npd) {
 	const totalBlocks = Math.ceil(npd.fileSize / npd.blockSize);
 	const metadataOffset = 0x100;
-	const metaSecSize = (npd.flags & 1) || (npd.flags & 0x20) ? 0x20 : 0x10;
+	const metaSecSize = npd.flags & 1 || npd.flags & 0x20 ? 0x20 : 0x10;
 	const cryptKey = Buffer.alloc(16);
 	for (let i = 0; i < 16; i++) cryptKey[i] = SDAT_KEY[i] ^ npd.devHash[i];
 
@@ -258,6 +261,7 @@ function parseCpk(buf) {
  */
 function loadFile(ctx) {
 	const buffer = fs.readFileSync(ctx.fileSrc);
+	const partList = JSON.parse(fs.readFileSync(PART_LIST_FILE, 'utf8'));
 	const npd = parseNpdHeader(buffer);
 	const plain = decryptEdat(buffer, npd);
 	const cpk = parseCpk(plain);
@@ -268,7 +272,14 @@ function loadFile(ctx) {
 			id: e.ID,
 			size: e.FileSize,
 			extractSize: esizeOf(e)
-		}))
+		})),
+		partList,
+		// 关卡奖励（config.json -> menu「关卡奖励」的 dataKey=stage 读取的就是这块数据）
+		// giftPart：过关发放的机体零件奖励；giftUnit：过关发放的机体奖励
+		stage0: {
+			giftPart: [],
+			giftUnit: []
+		}
 	};
 }
 
