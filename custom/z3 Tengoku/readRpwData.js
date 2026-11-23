@@ -6,7 +6,7 @@
  *
  * 执行流程：
  *   1. 拿到 ctx.filePath（用户在加载页输入 / 选择的游戏目录）
- *   2. 在该目录里查找 RPW_DATA.CPK
+ *   2. 在该目录里查找 ctx.fileName（config.json -> loadFiles[key].fileName，默认 RPW_DATA.CPK）
  *   3. 恰好找到唯一一个 → 把它的绝对路径赋值给 ctx.fileSrc
  *   4. 执行加载方法 loadFile(ctx)：CRILAYLA 解压 → 解析 <mt> 容器 → 提取零件参数表
  * 没找到或找到多个都抛错，提示重新选择游戏目录。
@@ -19,9 +19,9 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const findFile = require('./lib');
 
-const TARGET_NAME = 'rpw_data.cpk';
-const ERROR_MESSAGE = '请重新选择正确的游戏目录，里面因该只包含一个RPW_DATA.CPK文件';
+const DEFAULT_TARGET_NAME = 'RPW_DATA.CPK';
 // 零件下拉选项表，与本脚本同目录
 const PART_LIST_FILE = path.join(__dirname, 'partList.json');
 
@@ -43,12 +43,12 @@ const PART_COUNT = 78;
  */
 function decompressCrilayla(file) {
 	const magic = file.indexOf('CRILAYLA');
-	if (magic < 0) throw new Error('RPW_DATA.CPK 格式不符：找不到 CRILAYLA 压缩块');
+	if (magic < 0) throw new Error('文件格式不符：找不到 CRILAYLA 压缩块');
 
 	const block = file.subarray(magic);
 	const usize = block.readUInt32LE(8); // 解压后长度
 	const hoff = block.readUInt32LE(12); // 字典头偏移
-	if (!usize || usize > file.length * 64) throw new Error('RPW_DATA.CPK 格式不符：解压长度异常');
+	if (!usize || usize > file.length * 64) throw new Error('文件格式不符：解压长度异常');
 
 	const out = Buffer.alloc(usize + 0x100);
 	block.copy(out, 0, hoff + 0x10, hoff + 0x10 + 0x100);
@@ -112,7 +112,7 @@ function decompressCrilayla(file) {
 /** 从解压数据里定位 boost-p 零件表，返回其数据区起始下标与长度 */
 function locatePartTable(data) {
 	const nameAt = data.indexOf('boost-p\0');
-	if (nameAt < 0) throw new Error('RPW_DATA.CPK 格式不符：找不到 boost-p 零件表');
+	if (nameAt < 0) throw new Error('文件格式不符：找不到 boost-p 零件表');
 	// 布局：<chunk-head>(12) + 名称(8) + 总长 u32 + 数据长 u32，数据区在名称后 16 字节
 	const length = data.readUInt32LE(nameAt + 12);
 	return { start: nameAt + 16, length };
@@ -168,7 +168,7 @@ function readPartParams(rec, id, name) {
 function parseParts(data, partList) {
 	const { start, length } = locatePartTable(data);
 	if (length < (PART_COUNT + 1) * PART_RECORD_SIZE) {
-		throw new Error('RPW_DATA.CPK 格式不符：boost-p 零件表长度异常');
+		throw new Error('文件格式不符：boost-p 零件表长度异常');
 	}
 	const nameById = new Map(partList.map((li) => [li.value, li.label]));
 	const parts = [];
@@ -197,44 +197,6 @@ function compactPart(part) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 目录定位                                                            */
-/* ------------------------------------------------------------------ */
-
-/**
- * 递归收集 dir 下所有 RPW_DATA.CPK 的绝对路径。
- * 目录不可读（不存在 / 无权限）时当作无匹配继续，最终由数量校验统一报错。
- */
-function findTargets(dir, results) {
-	let entries;
-	try {
-		entries = fs.readdirSync(dir, { withFileTypes: true });
-	} catch {
-		return;
-	}
-	for (const entry of entries) {
-		const full = path.join(dir, entry.name);
-		if (entry.isDirectory()) {
-			findTargets(full, results);
-		} else if (entry.isFile() && entry.name.toLowerCase() === TARGET_NAME) {
-			results.push(full);
-		}
-	}
-}
-
-/**
- * 在游戏目录里定位唯一的 RPW_DATA.CPK。
- * @param {string} dir 已规范化的游戏目录
- * @returns {string} RPW_DATA.CPK 的绝对路径
- */
-function locateTarget(dir) {
-	const found = [];
-	findTargets(dir, found);
-	// 0 个（没找到）或多个（目录不对 / 含多份）都视为目录选择有误
-	if (found.length !== 1) throw new Error(ERROR_MESSAGE);
-	return found[0];
-}
-
-/* ------------------------------------------------------------------ */
 /* 加载                                                                */
 /* ------------------------------------------------------------------ */
 
@@ -253,30 +215,17 @@ function loadFile(ctx) {
 }
 
 /**
- * @param {{ filePath?: string, fileSrc?: string }} ctx 主进程注入的上下文
+ * @param {{ filePath?: string, fileName?: string, fileSrc?: string }} ctx 主进程注入的上下文
  */
 module.exports = function (ctx = {}) {
-	const input =
-		typeof ctx.filePath === 'string' ? ctx.filePath.trim().replace(/^"+|"+$/g, '') : '';
-	if (!input) throw new Error(ERROR_MESSAGE);
-
-	const dir = path.normalize(input);
-	let stat;
-	try {
-		stat = fs.statSync(dir);
-	} catch {
-		throw new Error(ERROR_MESSAGE);
-	}
-
-	// filePath 首次加载时是游戏目录；重新加载时 fileSrc 已被回写成 CPK 文件本身
+	// 目标文件名来自 config.json -> loadFiles[key].fileName
+	const targetName = ctx.fileName || DEFAULT_TARGET_NAME;
 	let target;
-	if (stat.isDirectory()) {
-		// 1) 拿到 filePath 后在目录里找文件，确保只有唯一一个
-		target = locateTarget(dir);
-	} else if (stat.isFile() && path.basename(dir).toLowerCase() === TARGET_NAME) {
-		target = dir;
-	} else {
-		throw new Error(ERROR_MESSAGE);
+	try {
+		// 1) 拿到 filePath 后查找文件，确保只有唯一一个
+		target = findFile(ctx.filePath, targetName);
+	} catch {
+		throw new Error(`请重新选择正确的游戏目录，里面应该只包含一个${targetName}文件`);
 	}
 	// 2) 把找到的文件地址赋值给 fileSrc
 	ctx.fileSrc = target;

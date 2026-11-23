@@ -122,7 +122,7 @@ const loadFiles = async function (files: Record<string, any>) {
 	const setFileData = configStore.setFileData;
 	const errors: { key: string; detail: string }[] = [];
 	const loadList = Object.keys(files).map(async (key) => {
-		const { fileSrc, readScript } = files[key] || {};
+		const { fileSrc, readScript, fileName } = files[key] || {};
 		const candidates = splitFileSrcCandidates(fileSrc);
 		if (!candidates.length) {
 			errors.push({ key, detail: '未配置 fileSrc' });
@@ -134,7 +134,7 @@ const loadFiles = async function (files: Record<string, any>) {
 			try {
 				// 先解析 fileSrc 里的系统目录简写，再由主进程在 Node 环境中加载脚本并运行，返回解析后的数据
 				const filePath = await resolveFileSrc(candidate);
-				const data = await window.api.readFile(filePath, readScript);
+				const data = await window.api.readFile(filePath, readScript, fileName);
 				// 方案 A：脚本把定位到的真实文件路径放进返回值的 fileSrc，这里回写 store，
 				// 同时让保存路径指向该文件（如 z3 的目录 → RPW_DATA.CPK）
 				const located = typeof data?.fileSrc === 'string' ? data.fileSrc : '';

@@ -129,13 +129,14 @@ const onLoadFiles = function () {
 		<ul class="dark-fcLv3">
 			<li v-for="(file, key) in needFiles" :key="key" class="mb-4 pb-4 border-b">
 				<template v-if="file.useFolderSelect">
-					<div class="mb-2 flex items-center gap-2">
+					<div v-if="file.fileName" class="mb-2">{{ file.fileName }}</div>
+					<div class="w-[30rem] mb-2 flex items-center gap-2">
 						<Input
 							v-model:value="file.filePath"
 							:placeholder="'输入游戏文件夹或通过右边的按钮进行选择'"
-							class="flex-1"
+							class="w-3/4"
 						/>
-						<Button @click="pickFolder(String(key))">选择文件夹</Button>
+						<Button class="flex-1" @click="pickFolder(String(key))">选择文件夹</Button>
 					</div>
 				</template>
 				<template v-else-if="file.fileSrc"> {{ key }}: {{ file.fileSrc }} </template>

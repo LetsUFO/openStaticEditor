@@ -19,7 +19,9 @@ const api = {
 	selectDirectory: (defaultPath) => ipcRenderer.invoke('dialog:openDirectory', defaultPath),
 	// 运行 custom 目录下的读取脚本，返回解析后的数据
 	// 脚本工作目录由主进程按脚本自身位置推导，无需传 baseSrc
-	readFile: (fileSrc, readScript) => ipcRenderer.invoke('file:read', { fileSrc, readScript }),
+	// fileName 来自 config.json -> loadFiles[key].fileName，供脚本定位目标文件
+	readFile: (fileSrc, readScript, fileName) =>
+		ipcRenderer.invoke('file:read', { fileSrc, readScript, fileName }),
 	// 运行 custom 目录下的通用脚本（保存等），返回脚本结果
 	runScript: (payload) => ipcRenderer.invoke('script:run', payload),
 	// 调用 switch 的 script 模块导出方法（payload.method 为 on/off 配置的方法名）：

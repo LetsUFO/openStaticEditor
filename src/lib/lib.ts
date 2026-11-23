@@ -101,7 +101,7 @@ export interface Api {
 	 * @returns 选中目录的绝对路径；用户取消时返回空串
 	 */
 	selectDirectory: (defaultPath?: string) => Promise<string>;
-	readFile: (fileSrc: string, readScript: string) => Promise<any>;
+	readFile: (fileSrc: string, readScript: string, fileName?: string) => Promise<any>;
 	runScript: (payload: {
 		scriptSrc: string;
 		dataKey?: string;

@@ -260,6 +260,7 @@ function loadScriptModule(scriptSrc) {
  * 脚本约定（CommonJS）：
  *   module.exports = function (ctx) {
  *     // ctx.fileSrc       —— config.json 里配置的原始文件路径
+ *     // ctx.fileName      —— config.json -> loadFiles[key].fileName，脚本据此定位目标文件
  *     // ctx.filePath      —— 解析后的绝对路径（相对路径按 custom 目录解析）
  *     // ctx.customDir     —— 脚本所在目录绝对路径，方便脚本读取同级其它资源
  *     // ctx.downloadsPath —— 系统下载目录绝对路径
@@ -268,7 +269,7 @@ function loadScriptModule(scriptSrc) {
  *   }
  * 若脚本直接导出数据（非函数），则原样返回。
  */
-ipcMain.handle('file:read', async (_event, { fileSrc, readScript } = {}) => {
+ipcMain.handle('file:read', async (_event, { fileSrc, readScript, fileName } = {}) => {
 	if (!readScript) throw new Error('未配置 readScript，无法加载读取脚本');
 
 	const { customDir, script } = loadScriptModule(readScript);
@@ -276,6 +277,7 @@ ipcMain.handle('file:read', async (_event, { fileSrc, readScript } = {}) => {
 
 	return executeScript(script, {
 		fileSrc,
+		fileName,
 		filePath,
 		...createScriptEnv(customDir, systemPaths())
 	});
