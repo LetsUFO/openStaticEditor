@@ -284,7 +284,7 @@
 			"dataKey": "stage",
 			"saveScript": {
 				"needFileKey": "stage",
-				"saveScript": ""
+				"saveScript": "editSTGZ3OF2.js"
 			}
 		}
 	],
