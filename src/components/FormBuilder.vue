@@ -359,6 +359,7 @@ defineExpose({ getFormData });
 								v-for="li in optionsOf(item)"
 								:key="li.label"
 								:value="li.value"
+								:label="li.label"
 								:title="li.label"
 							>
 								<span
@@ -384,6 +385,7 @@ defineExpose({ getFormData });
 									v-for="li in optionsOf(item)"
 									:key="li.label"
 									:value="li.value"
+									:label="li.label"
 									:title="li.label"
 								>
 									<span
