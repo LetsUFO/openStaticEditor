@@ -30,6 +30,7 @@ const findFile = require('./lib');
 const DEFAULT_TARGET_NAME = 'STGZ3OF2.SDAT';
 // 零件下拉选项表，与本脚本同目录（关卡奖励 select 的 optionUse=partList）
 const PART_LIST_FILE = path.join(__dirname, 'partList.json');
+const UNIT_LIST_FILE = path.join(__dirname, 'unitList.json');
 
 // ---- RPCS3 key_vault.h 常量 ----
 const SDAT_KEY = Buffer.from('0d655ef8e674a98ab8505cfa7d012933', 'hex');
@@ -330,7 +331,8 @@ function readCpkEntry(plain, cpk, id) {
 		cursor = Math.ceil(cursor / align) * align;
 		if (e.ID === id) {
 			const comp = plain.subarray(cursor, cursor + e.FileSize);
-			const raw = comp.toString('latin1', 0, 8) === 'CRILAYLA' ? decompressCrilayla(comp) : comp;
+			const raw =
+				comp.toString('latin1', 0, 8) === 'CRILAYLA' ? decompressCrilayla(comp) : comp;
 			const extractSize = esizeOf(e);
 			if (raw.length !== extractSize) {
 				throw new Error(`文件 ${id} 长度不符：解出 ${raw.length}，表内 ${extractSize}`);
@@ -411,7 +413,12 @@ function readGiftPartIds(presetText, giftName) {
 	if (!table) return [];
 	const values = splitLuaValues(table.body);
 	const count = Number(values[0]);
-	if (!values.length || !Number.isInteger(count) || count < 0 || values.length !== 1 + count * 8) {
+	if (
+		!values.length ||
+		!Number.isInteger(count) ||
+		count < 0 ||
+		values.length !== 1 + count * 8
+	) {
 		throw new Error(`${giftName} 奖励表结构异常`);
 	}
 	const ids = [];
@@ -440,6 +447,7 @@ function readPrologueGiftPart(plain, cpk) {
 function loadFile(ctx) {
 	const buffer = fs.readFileSync(ctx.fileSrc);
 	const partList = JSON.parse(fs.readFileSync(PART_LIST_FILE, 'utf8'));
+	const unitList = JSON.parse(fs.readFileSync(UNIT_LIST_FILE, 'utf8'));
 	const magic = buffer.toString('latin1', 0, 4);
 	// 保存脚本写回明文 CPK；原始文件仍需先解密 EDAT。
 	const plain = magic === 'CPK ' ? buffer : decryptEdat(buffer, parseNpdHeader(buffer));
@@ -454,6 +462,7 @@ function loadFile(ctx) {
 			extractSize: esizeOf(e)
 		})),
 		partList,
+		unitList,
 		// 关卡奖励（config.json -> menu「关卡奖励」的 dataKey=stage 读取的就是这块数据）
 		// giftPart：过关发放的机体零件奖励；giftUnit：过关发放的机体奖励
 		stage0: {

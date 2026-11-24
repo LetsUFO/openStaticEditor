@@ -277,6 +277,42 @@
 							"name": "stage0.giftPart[2]",
 							"type": "select",
 							"optionUse": "partList"
+						},
+						{
+							"label": "奖励的机体1",
+							"name": "stage0.giftUnit[0]",
+							"type": "select",
+							"optionUse": "unitList"
+						},
+						{
+							"label": "奖励的机体2",
+							"name": "stage0.giftUnit[1]",
+							"type": "select",
+							"optionUse": "unitList"
+						},
+						{
+							"label": "奖励的机体3",
+							"name": "stage0.giftUnit[4]",
+							"type": "select",
+							"optionUse": "unitList"
+						},
+						{
+							"label": "奖励的机体4",
+							"name": "stage0.giftUnit[3]",
+							"type": "select",
+							"optionUse": "unitList"
+						},
+						{
+							"label": "奖励的机体5",
+							"name": "stage0.giftUnit[4]",
+							"type": "select",
+							"optionUse": "unitList"
+						},
+						{
+							"label": "奖励的机体6",
+							"name": "stage0.giftUnit[5]",
+							"type": "select",
+							"optionUse": "unitList"
 						}
 					]
 				}
