@@ -287,6 +287,17 @@ function normalizeGiftPart(value) {
 	});
 }
 
+function normalizeGiftUnit(value) {
+	// giftUnit 允许为空数组（用户可以一个机体都不选），不存在时返回 []
+	if (!Array.isArray(value)) return [];
+	// 过滤掉表单中未选择的（null/undefined/''），得到紧凑的有效 ID 数组
+	return value.filter((id) => id !== undefined && id !== null && id !== '').map((id) => {
+		const n = Number(id);
+		if (!Number.isInteger(n) || n <= 0) throw new Error(`无效的机体 ID：${id}`);
+		return n;
+	});
+}
+
 function findStageClearGiftName(stageText) {
 	const decl = /\bfunction\s+EventFunc_StageClear\s*\(\s*\)/.exec(stageText);
 	if (!decl) throw new Error('序章关卡脚本缺少 EventFunc_StageClear');
@@ -350,7 +361,7 @@ function splitLuaValues(body) {
 	return values;
 }
 
-function updatePrologueGift(presetRaw, stageRaw, giftPart) {
+function updatePrologueGift(presetRaw, stageRaw, giftPart, giftUnit) {
 	let presetText = presetRaw.toString('latin1');
 	let stageText = stageRaw.toString('latin1');
 	let giftName = findStageClearGiftName(stageText);
@@ -394,7 +405,7 @@ function updatePrologueGift(presetRaw, stageRaw, giftPart) {
  * @param {Buffer} plain 明文 CPK
  * @param {number[]} giftPart 序章奖励零件 ID
  */
-function repackCpk(plain, giftPart) {
+function repackCpk(plain, giftPart, giftUnit) {
 	const tables = findAllUtfs(plain).map(([off]) => new UTFTable(plain, off));
 	if (!tables.length) throw new Error('CPK 内没有找到 @UTF 表');
 
@@ -436,7 +447,7 @@ function repackCpk(plain, giftPart) {
 	const preset = entries.find((e) => e.id === 1);
 	const stage = entries.find((e) => e.id === 2);
 	if (!preset || !stage) throw new Error('CPK 内找不到序章脚本（ID 1 / ID 2）');
-	const updated = updatePrologueGift(preset.raw, stage.raw, giftPart);
+	const updated = updatePrologueGift(preset.raw, stage.raw, giftPart, giftUnit);
 	preset.raw = updated.preset;
 	stage.raw = updated.stage;
 
@@ -476,8 +487,9 @@ module.exports = function (ctx = {}) {
 	if (!filePath) throw new Error('缺少关卡文件路径（ctx.filePath 为空），请重新加载 STGZ3OF2.SDAT');
 
 	const giftPart = normalizeGiftPart(ctx.data && ctx.data.stage0 && ctx.data.stage0.giftPart);
+	const giftUnit = normalizeGiftUnit(ctx.data && ctx.data.stage0 && ctx.data.stage0.giftUnit);
 	const plain = loadPlainCpk(filePath);
-	const packed = repackCpk(plain, giftPart);
+	const packed = repackCpk(plain, giftPart, giftUnit);
 	fs.writeFileSync(filePath, packed);
 
 	console.log(`[editSTGZ3OF2] ${filePath} 已写回：${plain.length} → ${packed.length} 字节（明文 CPK）`);

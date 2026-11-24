@@ -292,7 +292,7 @@
 						},
 						{
 							"label": "奖励的机体3",
-							"name": "stage0.giftUnit[4]",
+							"name": "stage0.giftUnit[2]",
 							"type": "select",
 							"optionUse": "unitList"
 						},
@@ -311,6 +311,24 @@
 						{
 							"label": "奖励的机体6",
 							"name": "stage0.giftUnit[5]",
+							"type": "select",
+							"optionUse": "unitList"
+						},
+						{
+							"label": "奖励的机体7",
+							"name": "stage0.giftUnit[6]",
+							"type": "select",
+							"optionUse": "unitList"
+						},
+						{
+							"label": "奖励的机体8",
+							"name": "stage0.giftUnit[7]",
+							"type": "select",
+							"optionUse": "unitList"
+						},
+						{
+							"label": "奖励的机体9",
+							"name": "stage0.giftUnit[8]",
 							"type": "select",
 							"optionUse": "unitList"
 						}
