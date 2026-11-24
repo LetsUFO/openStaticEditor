@@ -490,11 +490,13 @@ module.exports = function (ctx = {}) {
 	// 5) 重新 CRILAYLA 压缩
 	const compressed = compressCrilayla(decoded);
 
-	// 6) 按 align 对齐拼装新内容区
+	// 6) 拼装新内容区：直接使用压缩块，不追加对齐填充
+	//    CRILAYLA 解压端按 block 末尾（block.length - 0x100 - 1）定位比特流起点，
+	//    若在压缩块后补零对齐，会让读取位置错位、破坏整个解压（游戏与本工具均受影响）。
+	//    原文件本身也未填充到 ContentSize（实际内容区长度 == FileSize），故保持紧凑布局。
 	const newFileSize = compressed.length;
-	const newContentSize = Math.ceil(newFileSize / align) * align;
-	const content = Buffer.alloc(newContentSize);
-	compressed.copy(content, 0);
+	const newContentSize = Math.ceil(newFileSize / align) * align; // 仅用于 CpkHeader.ContentSize，与原文件一致
+	const content = compressed;
 
 	// 7) 回填 CpkItocH 与 CpkHeader（FileSize / TotalDataSize 是常量列，不在行内，跳过）
 	itocH.setField(0, 'FileSize', newFileSize);

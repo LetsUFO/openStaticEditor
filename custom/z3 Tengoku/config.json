@@ -1,7 +1,7 @@
 {
 	"name": "第3次超级机器人大战Z：天狱篇 静态修改",
 	"appIcon": "icon.png",
-	"ver": "0.0.6",
+	"ver": "0.0.7",
 	"width": 1200,
 	"height": 760,
 	"background": {
@@ -52,11 +52,6 @@
 					"col": 4,
 					"enableKey": "targetPart",
 					"items": [
-						{
-							"label": "气力要求",
-							"name": "partData[targetPart].willReq",
-							"type": "number"
-						},
 						{
 							"label": "最大HP",
 							"name": "partData[targetPart].hp",
@@ -256,7 +251,7 @@
 			"tip": "",
 			"category": [
 				{
-					"label": "序章",
+					"label": "序章第一话",
 					"tip": "奖励零件按照99个发放",
 					"col": 3,
 					"items": [
@@ -282,43 +277,50 @@
 							"label": "奖励的机体1",
 							"name": "stage0_1.giftUnit[0]",
 							"type": "select",
-							"optionUse": "unitList"
+							"optionUse": "unitList",
+							"value": 279
 						},
 						{
 							"label": "奖励的机体2",
 							"name": "stage0_1.giftUnit[1]",
 							"type": "select",
-							"optionUse": "unitList"
+							"optionUse": "unitList",
+							"value": 336
 						},
 						{
 							"label": "奖励的机体3",
 							"name": "stage0_1.giftUnit[2]",
 							"type": "select",
-							"optionUse": "unitList"
+							"optionUse": "unitList",
+							"value": 466
 						},
 						{
 							"label": "奖励的机体4",
 							"name": "stage0_1.giftUnit[3]",
 							"type": "select",
-							"optionUse": "unitList"
+							"optionUse": "unitList",
+							"value": 855
 						},
 						{
 							"label": "奖励的机体5",
 							"name": "stage0_1.giftUnit[4]",
 							"type": "select",
-							"optionUse": "unitList"
+							"optionUse": "unitList",
+							"value": 845
 						},
 						{
 							"label": "奖励的机体6",
 							"name": "stage0_1.giftUnit[5]",
 							"type": "select",
-							"optionUse": "unitList"
+							"optionUse": "unitList",
+							"value": 849
 						},
 						{
 							"label": "奖励的机体7",
 							"name": "stage0_1.giftUnit[6]",
 							"type": "select",
-							"optionUse": "unitList"
+							"optionUse": "unitList",
+							"value": 859
 						},
 						{
 							"label": "奖励的机体8",
@@ -329,6 +331,92 @@
 						{
 							"label": "奖励的机体9",
 							"name": "stage0_1.giftUnit[8]",
+							"type": "select",
+							"optionUse": "unitList"
+						}
+					]
+				},
+				{
+					"label": "第一话",
+					"tip": "奖励零件按照99个发放",
+					"col": 3,
+					"items": [
+						{
+							"label": "奖励的零件1",
+							"name": "stage1.giftPart[0]",
+							"type": "select",
+							"optionUse": "partList"
+						},
+						{
+							"label": "奖励的零件2",
+							"name": "stage1.giftPart[1]",
+							"type": "select",
+							"optionUse": "partList"
+						},
+						{
+							"label": "奖励的零件3",
+							"name": "stage1.giftPart[2]",
+							"type": "select",
+							"optionUse": "partList"
+						},
+						{
+							"label": "奖励的机体1",
+							"name": "stage1.giftUnit[0]",
+							"type": "select",
+							"optionUse": "unitList",
+							"value": 279
+						},
+						{
+							"label": "奖励的机体2",
+							"name": "stage1.giftUnit[1]",
+							"type": "select",
+							"optionUse": "unitList",
+							"value": 336
+						},
+						{
+							"label": "奖励的机体3",
+							"name": "stage1.giftUnit[2]",
+							"type": "select",
+							"optionUse": "unitList",
+							"value": 466
+						},
+						{
+							"label": "奖励的机体4",
+							"name": "stage1.giftUnit[3]",
+							"type": "select",
+							"optionUse": "unitList",
+							"value": 855
+						},
+						{
+							"label": "奖励的机体5",
+							"name": "stage1.giftUnit[4]",
+							"type": "select",
+							"optionUse": "unitList",
+							"value": 845
+						},
+						{
+							"label": "奖励的机体6",
+							"name": "stage1.giftUnit[5]",
+							"type": "select",
+							"optionUse": "unitList",
+							"value": 849
+						},
+						{
+							"label": "奖励的机体7",
+							"name": "stage1.giftUnit[6]",
+							"type": "select",
+							"optionUse": "unitList",
+							"value": 859
+						},
+						{
+							"label": "奖励的机体8",
+							"name": "stage1.giftUnit[7]",
+							"type": "select",
+							"optionUse": "unitList"
+						},
+						{
+							"label": "奖励的机体9",
+							"name": "stage1.giftUnit[8]",
 							"type": "select",
 							"optionUse": "unitList"
 						}

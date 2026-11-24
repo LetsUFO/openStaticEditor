@@ -438,12 +438,28 @@ function readGiftIds(presetText, giftName) {
 	return { giftPart, giftUnit };
 }
 
-function readPrologueGift(plain, cpk) {
-	const stageText = readCpkEntry(plain, cpk, 2).toString('latin1');
+/**
+ * 读取某个关卡的奖励：
+ *   - stageId：关卡脚本 entry（其 EventFunc_StageClear 里调用 SC_GIFT_EXEC_B(GIFT_xxx)）
+ *   - presetId：该关卡的预设脚本 entry（定义 GIFT_xxx 表）
+ * 序章/第一话等都遵循「预设 N-1 定义表、关卡 N 调用」的配对规则。
+ */
+function readStageGift(plain, cpk, stageId, presetId) {
+	const stageText = readCpkEntry(plain, cpk, stageId).toString('latin1');
 	const giftName = findStageClearGiftName(stageText);
 	if (!giftName) return { giftPart: [], giftUnit: [] };
-	const presetText = readCpkEntry(plain, cpk, 1).toString('latin1');
+	const presetText = readCpkEntry(plain, cpk, presetId).toString('latin1');
 	return readGiftIds(presetText, giftName);
+}
+
+function readPrologueGift(plain, cpk) {
+	return readStageGift(plain, cpk, 2, 1);
+}
+
+// 第一话（本編第一关）：关卡脚本 ID 20（StageClear 调 SC_GIFT_EXEC_B(GIFT_501)），
+// 预设脚本 ID 19 定义 GIFT_501 表。
+function readStage1Gift(plain, cpk) {
+	return readStageGift(plain, cpk, 20, 19);
 }
 
 // 序章 1/2 里我方配置的独角兽（机体 ID 264）的 4 个零件槽。
@@ -494,6 +510,7 @@ function loadFile(ctx) {
 	const plain = magic === 'CPK ' ? buffer : decryptEdat(buffer, parseNpdHeader(buffer));
 	const cpk = parseCpk(plain);
 	const { giftPart, giftUnit } = readPrologueGift(plain, cpk);
+	const stage1 = readStage1Gift(plain, cpk);
 	const { prologue1, prologue2 } = readPrologueUnicornParts(plain, cpk);
 	return {
 		fileSrc: ctx.fileSrc,
@@ -516,6 +533,11 @@ function loadFile(ctx) {
 		// 序章2（ID7/ID8）：我方独角兽（ID 264）的 4 个零件槽
 		stage0_2: {
 			unicornParts: prologue2
+		},
+		// 第一话（ID19/ID20）：过关发放的零件 / 机体奖励
+		stage1: {
+			giftPart: stage1.giftPart,
+			giftUnit: stage1.giftUnit
 		}
 	};
 }

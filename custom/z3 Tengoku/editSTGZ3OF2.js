@@ -371,7 +371,7 @@ function findLuaTable(presetText, tableName) {
 			return { open, close: i, body: presetText.slice(open + 1, i) };
 		}
 	}
-	throw new Error(`${giftName} 奖励表缺少结束括号`);
+	throw new Error(`${tableName} 表缺少结束括号`);
 }
 
 function splitLuaValues(body) {
@@ -402,7 +402,7 @@ function splitLuaValues(body) {
 	return values;
 }
 
-function updatePrologueGift(presetRaw, stageRaw, giftPart, giftUnit) {
+function updateStageGift(presetRaw, stageRaw, giftPart, giftUnit) {
 	let presetText = presetRaw.toString('latin1');
 	let stageText = stageRaw.toString('latin1');
 	let giftName = findStageClearGiftName(stageText);
@@ -448,6 +448,73 @@ function updatePrologueGift(presetRaw, stageRaw, giftPart, giftUnit) {
 	return { preset: Buffer.from(presetText, 'latin1'), stage: Buffer.from(stageText, 'latin1') };
 }
 
+// TOUROKU 记录按首字段「类型」决定长度（字段数，含类型本身）
+const TOUROKU_TYPE_FIELDS = { 0: 20, 1: 10, 16: 12 };
+
+/**
+ * 拆出 TOUROKU 表里的每条记录。
+ * 表格式为 `{ 表ID, 记录数, 未知标志, 记录1..., 记录2... }`，每条记录以类型开头。
+ */
+function splitTourokuRecords(values) {
+	if (values.length < 3) throw new Error('TOUROKU 表结构异常');
+	const count = Number(values[1]);
+	if (!Number.isInteger(count) || count < 0) throw new Error('TOUROKU 记录数异常');
+	const records = [];
+	let at = 3;
+	for (let i = 0; i < count; i++) {
+		const type = Number(values[at]);
+		const size = TOUROKU_TYPE_FIELDS[type];
+		if (!size) throw new Error(`TOUROKU 记录类型 ${values[at]} 暂不支持`);
+		records.push(values.slice(at, at + size));
+		at += size;
+	}
+	if (at !== values.length) throw new Error(`TOUROKU 记录数与表头 ${count} 不符`);
+	return { header: values.slice(0, 3), records };
+}
+
+/**
+ * 把奖励机体写进指定关卡预设的 TOUROKU 表。
+ * 该关卡 EventFunc_StageClear 调用 SC_PLAYER_ENTRY(tableName)，机体因此真正加入 roster；
+ * GIFT 的 kind=2 记录只负责演出/提示，不能替代入队。
+ * 用 type 0（机体 + 机师，机师 -1 由玩家自行编成）追加，重复保存时先清掉旧的 type 0 记录保证幂等。
+ */
+function updateGiftUnits(presetText, giftUnit, tableName) {
+	const table = findLuaTable(presetText, tableName);
+	if (!table) {
+		if (!giftUnit.length) return presetText;
+		throw new Error(`预设脚本缺少 ${tableName}，无法写入奖励机体`);
+	}
+	const parsed = splitTourokuRecords(splitLuaValues(table.body));
+	// 只清理之前由本编辑器注入的 type 0 记录（无零件、无固定机师），避免误删原版内容。
+	const isInjected = (record) =>
+		Number(record[0]) === 0 && record[1] === '-1' && record[2] === '-1'
+		&& record[3] === '-1' && record[4] === '-1' && record[6] === '-1';
+	const kept = parsed.records.filter((record) => !isInjected(record));
+	for (const id of new Set(giftUnit)) {
+		kept.push([
+			'0', '-1', '-1', '-1', '-1', String(id), '-1',
+			'0', '0', '0', '0', '0', '0', '0', '0', '0',
+			'false', 'true', 'false', 'false'
+		]);
+	}
+	const same = kept.length === parsed.records.length
+		&& kept.every((record, i) => record.join(',') === parsed.records[i].join(','));
+	if (same) return presetText;
+
+	const body = [parsed.header[0], String(kept.length), parsed.header[2], ...kept.flat()].join(',') + ',';
+	return presetText.slice(0, table.open + 1) + body + presetText.slice(table.close);
+}
+
+// 序章（ID2）StageClear 调 SC_PLAYER_ENTRY(TOUROKU_001)，机体注入到 TOUROKU_001（在 ID1 预设里）
+function updatePrologueGiftUnits(presetText, giftUnit) {
+	return updateGiftUnits(presetText, giftUnit, 'TOUROKU_001');
+}
+
+// 第一话（ID20）StageClear 调 SC_PLAYER_ENTRY(TOUROKU_002)，机体注入到 TOUROKU_002（在 ID19 预设里）
+function updateStage1GiftUnits(presetText, giftUnit) {
+	return updateGiftUnits(presetText, giftUnit, 'TOUROKU_002');
+}
+
 /**
  * 重新打包明文 CPK（不压缩），返回新的 Buffer
  * @param {Buffer} plain 明文 CPK
@@ -455,8 +522,10 @@ function updatePrologueGift(presetRaw, stageRaw, giftPart, giftUnit) {
  * @param {number[]} giftUnit 序章奖励机体 ID
  * @param {number[]} unicornParts1 序章1 独角兽的 4 个零件槽
  * @param {number[]} unicornParts2 序章2 独角兽的 4 个零件槽
+ * @param {number[]} stage1GiftPart 第一话奖励零件 ID
+ * @param {number[]} stage1GiftUnit 第一话奖励机体 ID
  */
-function repackCpk(plain, giftPart, giftUnit, unicornParts1, unicornParts2) {
+function repackCpk(plain, giftPart, giftUnit, unicornParts1, unicornParts2, stage1GiftPart, stage1GiftUnit) {
 	const tables = findAllUtfs(plain).map(([off]) => new UTFTable(plain, off));
 	if (!tables.length) throw new Error('CPK 内没有找到 @UTF 表');
 
@@ -498,13 +567,35 @@ function repackCpk(plain, giftPart, giftUnit, unicornParts1, unicornParts2) {
 	const preset = entries.find((e) => e.id === 1);
 	const stage = entries.find((e) => e.id === 2);
 	if (!preset || !stage) throw new Error('CPK 内找不到序章脚本（ID 1 / ID 2）');
-	const updated = updatePrologueGift(preset.raw, stage.raw, giftPart, giftUnit);
-	preset.raw = updateUnicornParts(updated.preset, unicornParts1);
+	const updated = updateStageGift(preset.raw, stage.raw, giftPart, giftUnit);
+	const presetWithUnits = Buffer.from(
+		updatePrologueGiftUnits(updated.preset.toString('latin1'), giftUnit),
+		'latin1'
+	);
+	preset.raw = updateUnicornParts(presetWithUnits, unicornParts1);
 	stage.raw = updated.stage;
 
 	// 序章2（ID7）的预设脚本：写入序章2 自己的独角兽零件配置
 	const preset2 = entries.find((e) => e.id === 7);
 	if (preset2) preset2.raw = updateUnicornParts(preset2.raw, unicornParts2);
+
+	// 第一话（ID19 预设 / ID20 关卡）：重写 GIFT_501 奖励表 + 把奖励机体注入 TOUROKU_002
+	const stage1Preset = entries.find((e) => e.id === 19);
+	const stage1Stage = entries.find((e) => e.id === 20);
+	if (stage1Preset && stage1Stage) {
+		const stage1Updated = updateStageGift(
+			stage1Preset.raw,
+			stage1Stage.raw,
+			stage1GiftPart,
+			stage1GiftUnit
+		);
+		const stage1PresetWithUnits = Buffer.from(
+			updateStage1GiftUnits(stage1Updated.preset.toString('latin1'), stage1GiftUnit),
+			'latin1'
+		);
+		stage1Preset.raw = stage1PresetWithUnits;
+		stage1Stage.raw = stage1Updated.stage;
+	}
 
 	// 所有修改完成后再计算新内容区布局。
 	let pos = 0;
@@ -549,8 +640,18 @@ module.exports = function (ctx = {}) {
 	const unicornParts2 = normalizeUnicornParts(
 		ctx.data && ctx.data.stage0_2 && ctx.data.stage0_2.unicornParts
 	);
+	const stage1GiftPart = normalizeGiftPart(ctx.data && ctx.data.stage1 && ctx.data.stage1.giftPart);
+	const stage1GiftUnit = normalizeGiftUnit(ctx.data && ctx.data.stage1 && ctx.data.stage1.giftUnit);
 	const plain = loadPlainCpk(filePath);
-	const packed = repackCpk(plain, giftPart, giftUnit, unicornParts1, unicornParts2);
+	const packed = repackCpk(
+		plain,
+		giftPart,
+		giftUnit,
+		unicornParts1,
+		unicornParts2,
+		stage1GiftPart,
+		stage1GiftUnit
+	);
 	fs.writeFileSync(filePath, packed);
 
 	console.log(`[editSTGZ3OF2] ${filePath} 已写回：${plain.length} → ${packed.length} 字节（明文 CPK）`);

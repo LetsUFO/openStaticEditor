@@ -24,6 +24,8 @@ interface AppMenuFormField {
 	precision?: number;
 	disabled?: boolean;
 	placeholder?: string;
+	/** 默认值：加载后若 name 路径的数据为空（undefined / null / ''），自动填入该值并写入数据 */
+	value?: any;
 	/** 静态选项：[{label,value}]，也允许直接给字符串数组 */
 	options?: any[];
 	/** 动态选项数据：store.fileData[dataKey] 下该路径的值（如 "skillMap"）。

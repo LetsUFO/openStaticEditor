@@ -80,6 +80,32 @@ function write(item: AppMenuFormField, value: any): void {
 	set(source.value, resolvePath(item.name), value === undefined ? null : value);
 }
 
+// ------------------------------------------------------------------ 默认值
+// config.json 里 item.value 作为默认值：数据加载后（dataVersion 变化）或切换分类时，
+// name 路径为空（undefined / null / ''）的字段自动填入默认值并写入 store，表单立即回显。
+// 仅在加载/换分类时执行，用户手动清空的字段不会被立刻抢回。
+function applyDefaults(): void {
+	if (!source.value || !Array.isArray(props.config)) return;
+	for (const block of props.config) {
+		for (const item of block?.items || []) {
+			if (!item?.name || item.value === undefined) continue;
+			const path = resolvePath(item.name);
+			// 动态段（如 partData[targetPart]）未解析时不写入，避免生成非法键
+			if (/\[[A-Za-z_$][\w$]*\]/.test(path)) continue;
+			const current = get(source.value, path);
+			if (current === undefined || current === null || current === '') {
+				set(source.value, path, item.value);
+			}
+		}
+	}
+}
+
+watch(
+	() => [props.config, configStore.dataVersion],
+	() => applyDefaults(),
+	{ immediate: true }
+);
+
 // ------------------------------------------------------------------ 下拉选项
 function normalizeOptions(list: any): { label: string; value: any; [key: string]: any }[] {
 	if (!Array.isArray(list)) return [];
