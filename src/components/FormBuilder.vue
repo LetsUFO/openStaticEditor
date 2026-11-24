@@ -357,7 +357,7 @@ defineExpose({ getFormData });
 						>
 							<Select.Option
 								v-for="li in optionsOf(item)"
-								:key="li.label"
+								:key="li.value"
 								:value="li.value"
 								:label="li.label"
 								:title="li.label"
@@ -383,7 +383,7 @@ defineExpose({ getFormData });
 							>
 								<Select.Option
 									v-for="li in optionsOf(item)"
-									:key="li.label"
+									:key="li.value"
 									:value="li.value"
 									:label="li.label"
 									:title="li.label"
