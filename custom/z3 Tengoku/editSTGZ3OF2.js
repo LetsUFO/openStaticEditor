@@ -298,6 +298,47 @@ function normalizeGiftUnit(value) {
 	});
 }
 
+// 序章 UE 独角兽（机体 ID 264）的 4 个零件槽；空槽用 -1 表示
+const UNICORN_UNIT_ID = 264;
+const PART_SLOT_COUNT = 4;
+const PART_ID_MAX = 78;
+
+function normalizeUnicornParts(value) {
+	if (!Array.isArray(value)) return [];
+	const slots = value.slice(0, PART_SLOT_COUNT).map((id) => {
+		if (id === undefined || id === null || id === '') return -1;
+		const n = Number(id);
+		if (!Number.isInteger(n) || n <= 0 || n > PART_ID_MAX) {
+			throw new Error(`无效的机体零件 ID：${id}`);
+		}
+		return n;
+	});
+	while (slots.length < PART_SLOT_COUNT) slots.push(-1);
+	return slots;
+}
+
+/**
+ * 给序章预设脚本里的独角兽（TOUROKU_000 / TOUROKU_001 的单位记录）写入 4 个零件槽。
+ * 记录格式为「类型,零件1..4,机体ID,机师ID,...」，HDR 队列表里的 264 前面是队名字符串，不会被匹配。
+ */
+function updateUnicornParts(presetRaw, parts) {
+	if (!parts.length) return presetRaw;
+	let text = presetRaw.toString('latin1');
+	for (const tableName of ['TOUROKU_000', 'TOUROKU_001']) {
+		const table = findLuaTable(text, tableName);
+		if (!table) continue;
+		const m = new RegExp(
+			`(-?\\d+),(-?\\d+),(-?\\d+),(-?\\d+),${UNICORN_UNIT_ID},(\\d+),`
+		).exec(table.body);
+		if (!m) continue;
+		const pilotId = m[5];
+		const replacement = `${parts.join(',')},${UNICORN_UNIT_ID},${pilotId},`;
+		const at = table.open + 1 + m.index;
+		text = text.slice(0, at) + replacement + text.slice(at + m[0].length);
+	}
+	return Buffer.from(text, 'latin1');
+}
+
 function findStageClearGiftName(stageText) {
 	const decl = /\bfunction\s+EventFunc_StageClear\s*\(\s*\)/.exec(stageText);
 	if (!decl) throw new Error('序章关卡脚本缺少 EventFunc_StageClear');
@@ -309,8 +350,8 @@ function findStageClearGiftName(stageText) {
 	return call ? call[1] : '';
 }
 
-function findGiftTable(presetText, giftName) {
-	const assignment = new RegExp(`\\b${giftName}\\s*=\\s*\\{`).exec(presetText);
+function findLuaTable(presetText, tableName) {
+	const assignment = new RegExp(`\\b${tableName}\\s*=\\s*\\{`).exec(presetText);
 	if (!assignment) return null;
 	const open = assignment.index + assignment[0].lastIndexOf('{');
 	let depth = 0;
@@ -368,7 +409,12 @@ function updatePrologueGift(presetRaw, stageRaw, giftPart, giftUnit) {
 	const hasGiftCall = Boolean(giftName);
 	if (!giftName) giftName = 'GIFT_500';
 
-	const table = findGiftTable(presetText, giftName);
+	const table = findLuaTable(presetText, giftName);
+	// 文件里本来没有奖励表、本次也没有配置奖励时不做任何改动，
+	// 避免只改独角兽零件时给关卡脚本插入空的 GIFT 调用。
+	if (!hasGiftCall && !table && !giftPart.length && !giftUnit.length) {
+		return { preset: presetRaw, stage: stageRaw };
+	}
 	const values = table ? splitLuaValues(table.body) : ['0'];
 	const oldCount = Number(values[0]);
 	if (!values.length || !Number.isInteger(oldCount) || oldCount < 0 || values.length !== 1 + oldCount * 8) {
@@ -406,8 +452,11 @@ function updatePrologueGift(presetRaw, stageRaw, giftPart, giftUnit) {
  * 重新打包明文 CPK（不压缩），返回新的 Buffer
  * @param {Buffer} plain 明文 CPK
  * @param {number[]} giftPart 序章奖励零件 ID
+ * @param {number[]} giftUnit 序章奖励机体 ID
+ * @param {number[]} unicornParts1 序章1 独角兽的 4 个零件槽
+ * @param {number[]} unicornParts2 序章2 独角兽的 4 个零件槽
  */
-function repackCpk(plain, giftPart, giftUnit) {
+function repackCpk(plain, giftPart, giftUnit, unicornParts1, unicornParts2) {
 	const tables = findAllUtfs(plain).map(([off]) => new UTFTable(plain, off));
 	if (!tables.length) throw new Error('CPK 内没有找到 @UTF 表');
 
@@ -450,8 +499,12 @@ function repackCpk(plain, giftPart, giftUnit) {
 	const stage = entries.find((e) => e.id === 2);
 	if (!preset || !stage) throw new Error('CPK 内找不到序章脚本（ID 1 / ID 2）');
 	const updated = updatePrologueGift(preset.raw, stage.raw, giftPart, giftUnit);
-	preset.raw = updated.preset;
+	preset.raw = updateUnicornParts(updated.preset, unicornParts1);
 	stage.raw = updated.stage;
+
+	// 序章2（ID7）的预设脚本：写入序章2 自己的独角兽零件配置
+	const preset2 = entries.find((e) => e.id === 7);
+	if (preset2) preset2.raw = updateUnicornParts(preset2.raw, unicornParts2);
 
 	// 所有修改完成后再计算新内容区布局。
 	let pos = 0;
@@ -488,10 +541,16 @@ module.exports = function (ctx = {}) {
 	const filePath = ctx.filePath || (ctx.data && ctx.data.fileSrc) || '';
 	if (!filePath) throw new Error('缺少关卡文件路径（ctx.filePath 为空），请重新加载 STGZ3OF2.SDAT');
 
-	const giftPart = normalizeGiftPart(ctx.data && ctx.data.stage0 && ctx.data.stage0.giftPart);
-	const giftUnit = normalizeGiftUnit(ctx.data && ctx.data.stage0 && ctx.data.stage0.giftUnit);
+	const giftPart = normalizeGiftPart(ctx.data && ctx.data.stage0_1 && ctx.data.stage0_1.giftPart);
+	const giftUnit = normalizeGiftUnit(ctx.data && ctx.data.stage0_1 && ctx.data.stage0_1.giftUnit);
+	const unicornParts1 = normalizeUnicornParts(
+		ctx.data && ctx.data.stage0_1 && ctx.data.stage0_1.unicornParts
+	);
+	const unicornParts2 = normalizeUnicornParts(
+		ctx.data && ctx.data.stage0_2 && ctx.data.stage0_2.unicornParts
+	);
 	const plain = loadPlainCpk(filePath);
-	const packed = repackCpk(plain, giftPart, giftUnit);
+	const packed = repackCpk(plain, giftPart, giftUnit, unicornParts1, unicornParts2);
 	fs.writeFileSync(filePath, packed);
 
 	console.log(`[editSTGZ3OF2] ${filePath} 已写回：${plain.length} → ${packed.length} 字节（明文 CPK）`);

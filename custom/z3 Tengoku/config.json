@@ -1,7 +1,7 @@
 {
 	"name": "第3次超级机器人大战Z：天狱篇 静态修改",
 	"appIcon": "icon.png",
-	"ver": "0.0.5",
+	"ver": "0.0.6",
 	"width": 1200,
 	"height": 760,
 	"background": {
@@ -262,75 +262,148 @@
 					"items": [
 						{
 							"label": "奖励的零件1",
-							"name": "stage0.giftPart[0]",
+							"name": "stage0_1.giftPart[0]",
 							"type": "select",
 							"optionUse": "partList"
 						},
 						{
 							"label": "奖励的零件2",
-							"name": "stage0.giftPart[1]",
+							"name": "stage0_1.giftPart[1]",
 							"type": "select",
 							"optionUse": "partList"
 						},
 						{
 							"label": "奖励的零件3",
-							"name": "stage0.giftPart[2]",
+							"name": "stage0_1.giftPart[2]",
 							"type": "select",
 							"optionUse": "partList"
 						},
 						{
 							"label": "奖励的机体1",
-							"name": "stage0.giftUnit[0]",
+							"name": "stage0_1.giftUnit[0]",
 							"type": "select",
 							"optionUse": "unitList"
 						},
 						{
 							"label": "奖励的机体2",
-							"name": "stage0.giftUnit[1]",
+							"name": "stage0_1.giftUnit[1]",
 							"type": "select",
 							"optionUse": "unitList"
 						},
 						{
 							"label": "奖励的机体3",
-							"name": "stage0.giftUnit[2]",
+							"name": "stage0_1.giftUnit[2]",
 							"type": "select",
 							"optionUse": "unitList"
 						},
 						{
 							"label": "奖励的机体4",
-							"name": "stage0.giftUnit[3]",
+							"name": "stage0_1.giftUnit[3]",
 							"type": "select",
 							"optionUse": "unitList"
 						},
 						{
 							"label": "奖励的机体5",
-							"name": "stage0.giftUnit[4]",
+							"name": "stage0_1.giftUnit[4]",
 							"type": "select",
 							"optionUse": "unitList"
 						},
 						{
 							"label": "奖励的机体6",
-							"name": "stage0.giftUnit[5]",
+							"name": "stage0_1.giftUnit[5]",
 							"type": "select",
 							"optionUse": "unitList"
 						},
 						{
 							"label": "奖励的机体7",
-							"name": "stage0.giftUnit[6]",
+							"name": "stage0_1.giftUnit[6]",
 							"type": "select",
 							"optionUse": "unitList"
 						},
 						{
 							"label": "奖励的机体8",
-							"name": "stage0.giftUnit[7]",
+							"name": "stage0_1.giftUnit[7]",
 							"type": "select",
 							"optionUse": "unitList"
 						},
 						{
 							"label": "奖励的机体9",
-							"name": "stage0.giftUnit[8]",
+							"name": "stage0_1.giftUnit[8]",
 							"type": "select",
 							"optionUse": "unitList"
+						}
+					]
+				}
+			],
+			"dataKey": "stage",
+			"saveScript": {
+				"needFileKey": "stage",
+				"saveScript": "editSTGZ3OF2.js"
+			}
+		},
+		{
+			"label": "章节机体零件设置",
+			"tip": "",
+			"category": [
+				{
+					"label": "序章1",
+					"tip": "我方配置的独角兽（机体ID 264）追加装配零件",
+					"col": 4,
+					"items": [
+						{
+							"label": "独角兽零件1",
+							"name": "stage0_1.unicornParts[0]",
+							"type": "select",
+							"optionUse": "partList"
+						},
+						{
+							"label": "独角兽零件2",
+							"name": "stage0_1.unicornParts[1]",
+							"type": "select",
+							"optionUse": "partList"
+						},
+						{
+							"label": "独角兽零件3",
+							"name": "stage0_1.unicornParts[2]",
+							"type": "select",
+							"optionUse": "partList"
+						},
+						{
+							"label": "独角兽零件4",
+							"name": "stage0_1.unicornParts[3]",
+							"type": "select",
+							"optionUse": "partList"
+						}
+					]
+				},
+				{
+					"label": "序章2",
+					"tip": "我方配置的独角兽（机体ID 264）追加装配零件",
+					"col": 4,
+					"items": [
+						{
+							"label": "独角兽零件1",
+							"name": "stage0_2.unicornParts[0]",
+							"type": "select",
+							"optionUse": "partList"
+						},
+						{
+							"label": "独角兽零件2",
+							"name": "stage0_2.unicornParts[1]",
+							"type": "select",
+							"optionUse": "partList"
+						},
+						{
+							"label": "独角兽零件3",
+							"name": "stage0_2.unicornParts[2]",
+							"type": "select",
+							"optionUse": "partList"
+						},
+						{
+							"label": "独角兽零件4",
+							"name": "stage0_2.unicornParts[3]",
+							"type": "select",
+							"optionUse": "partList"
 						}
 					]
 				}

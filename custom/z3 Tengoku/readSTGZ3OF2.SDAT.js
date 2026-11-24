@@ -355,8 +355,8 @@ function findStageClearGiftName(stageText) {
 	return call ? call[1] : '';
 }
 
-function findGiftTable(presetText, giftName) {
-	const assignment = new RegExp(`\\b${giftName}\\s*=\\s*\\{`).exec(presetText);
+function findLuaTable(presetText, tableName) {
+	const assignment = new RegExp(`\\b${tableName}\\s*=\\s*\\{`).exec(presetText);
 	if (!assignment) return null;
 	const open = assignment.index + assignment[0].lastIndexOf('{');
 	let depth = 0;
@@ -409,7 +409,7 @@ function splitLuaValues(body) {
 
 function readGiftIds(presetText, giftName) {
 	if (!giftName) return { giftPart: [], giftUnit: [] };
-	const table = findGiftTable(presetText, giftName);
+	const table = findLuaTable(presetText, giftName);
 	if (!table) return { giftPart: [], giftUnit: [] };
 	const values = splitLuaValues(table.body);
 	const count = Number(values[0]);
@@ -446,6 +446,41 @@ function readPrologueGift(plain, cpk) {
 	return readGiftIds(presetText, giftName);
 }
 
+// 序章 1/2 里我方配置的独角兽（机体 ID 264）的 4 个零件槽。
+// TOUROKU 表里单位记录格式为「类型,零件1..4,机体ID,机师ID,...」，
+// 前面的 HDR 队列表（16,...,"队名",264,352）不会匹配，因为 264 前面是字符串。
+const UNICORN_UNIT_ID = 264;
+
+function readUnicornPartSlots(presetText) {
+	const empty = [null, null, null, null];
+	const table = findLuaTable(presetText, 'TOUROKU_000');
+	if (!table) return empty;
+	const m = new RegExp(
+		`(-?\\d+),(-?\\d+),(-?\\d+),(-?\\d+),${UNICORN_UNIT_ID},\\d+,`
+	).exec(table.body);
+	if (!m) return empty;
+	return [1, 2, 3, 4].map((i) => {
+		const value = Number(m[i]);
+		return Number.isInteger(value) && value > 0 ? value : null;
+	});
+}
+
+/** 分别读取序章1（ID1）、序章2（ID7）的独角兽零件槽 */
+function readPrologueUnicornParts(plain, cpk) {
+	const prologue1 = readUnicornPartSlots(
+		readCpkEntry(plain, cpk, 1).toString('latin1')
+	);
+	let prologue2 = [null, null, null, null];
+	try {
+		prologue2 = readUnicornPartSlots(
+			readCpkEntry(plain, cpk, 7).toString('latin1')
+		);
+	} catch {
+		// 没有序章2预设时保持空槽
+	}
+	return { prologue1, prologue2 };
+}
+
 /**
  * 加载方法：读取并解析 ctx.fileSrc 指向的 STGZ3OF2.SDAT。
  * @param {{ fileSrc: string }} ctx
@@ -459,6 +494,7 @@ function loadFile(ctx) {
 	const plain = magic === 'CPK ' ? buffer : decryptEdat(buffer, parseNpdHeader(buffer));
 	const cpk = parseCpk(plain);
 	const { giftPart, giftUnit } = readPrologueGift(plain, cpk);
+	const { prologue1, prologue2 } = readPrologueUnicornParts(plain, cpk);
 	return {
 		fileSrc: ctx.fileSrc,
 		size: buffer.length,
@@ -471,9 +507,15 @@ function loadFile(ctx) {
 		unitList,
 		// 关卡奖励（config.json -> menu「关卡奖励」的 dataKey=stage 读取的就是这块数据）
 		// giftPart：过关发放的机体零件奖励；giftUnit：过关发放的机体奖励
-		stage0: {
+		// 序章1（ID1/ID2）：关卡奖励 + 我方独角兽（ID 264）的 4 个零件槽
+		stage0_1: {
 			giftPart,
-			giftUnit: []
+			giftUnit,
+			unicornParts: prologue1
+		},
+		// 序章2（ID7/ID8）：我方独角兽（ID 264）的 4 个零件槽
+		stage0_2: {
+			unicornParts: prologue2
 		}
 	};
 }
