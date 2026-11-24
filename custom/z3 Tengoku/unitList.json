@@ -1,4784 +1,4760 @@
 [
-	{
-		"label": "ザンボット３",
-		"value": 1,
-		"hp": 7900,
-		"isBoss": false
-	},
-	{
-		"label": "ザンボット３",
-		"value": 2,
-		"hp": 7900,
-		"isBoss": false
-	},
-	{
-		"label": "バンドック",
-		"value": 3,
-		"hp": 52000,
-		"isBoss": false
-	},
-	{
-		"label": "バンドック",
-		"value": 6,
-		"hp": 52000,
-		"isBoss": true
-	},
-	{
-		"label": "ダイターン３",
-		"value": 11,
-		"hp": 9000,
-		"isBoss": false
-	},
-	{
-		"label": "ダイターン３",
-		"value": 12,
-		"hp": 9000,
-		"isBoss": false
-	},
-	{
-		"label": "トライダーＧ７",
-		"value": 17,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "トライダーＧ７",
-		"value": 18,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "シャトル",
-		"value": 19,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "ブラックオックス",
-		"value": 28,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ブランチロボ２号",
-		"value": 29,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "スペースロボ１号",
-		"value": 30,
-		"hp": 7800,
-		"isBoss": false
-	},
-	{
-		"label": "スペースロボ１号",
-		"value": 31,
-		"hp": 9800,
-		"isBoss": false
-	},
-	{
-		"label": "スペースロボ２号",
-		"value": 32,
-		"hp": 8500,
-		"isBoss": false
-	},
-	{
-		"label": "スペースロボ２号",
-		"value": 33,
-		"hp": 10500,
-		"isBoss": false
-	},
-	{
-		"label": "スペースロボ３号",
-		"value": 34,
-		"hp": 8900,
-		"isBoss": false
-	},
-	{
-		"label": "スペースロボ３号",
-		"value": 35,
-		"hp": 10900,
-		"isBoss": false
-	},
-	{
-		"label": "スペースロボ５号",
-		"value": 36,
-		"hp": 10000,
-		"isBoss": false
-	},
-	{
-		"label": "スペースロボ５号",
-		"value": 37,
-		"hp": 12000,
-		"isBoss": false
-	},
-	{
-		"label": "スペースロボ７号",
-		"value": 38,
-		"hp": 6800,
-		"isBoss": false
-	},
-	{
-		"label": "スペースロボ７号",
-		"value": 39,
-		"hp": 6800,
-		"isBoss": false
-	},
-	{
-		"label": "宇宙魔王",
-		"value": 45,
-		"hp": 52464,
-		"isBoss": false
-	},
-	{
-		"label": "宇宙魔王",
-		"value": 46,
-		"hp": 52464,
-		"isBoss": false
-	},
-	{
-		"label": "宇宙魔王",
-		"value": 47,
-		"hp": 62464,
-		"isBoss": false
-	},
-	{
-		"label": "ブランチロボ２号",
-		"value": 48,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ゴッドマーズ",
-		"value": 53,
-		"hp": 7700,
-		"isBoss": false
-	},
-	{
-		"label": "ゴッドマーズ",
-		"value": 54,
-		"hp": 7700,
-		"isBoss": false
-	},
-	{
-		"label": "コスモクラッシャー",
-		"value": 55,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "ダイダロス",
-		"value": 56,
-		"hp": 8100,
-		"isBoss": false
-	},
-	{
-		"label": "ダイダロス",
-		"value": 57,
-		"hp": 10100,
-		"isBoss": false
-	},
-	{
-		"label": "バッフル",
-		"value": 58,
-		"hp": 8500,
-		"isBoss": false
-	},
-	{
-		"label": "バッフル",
-		"value": 59,
-		"hp": 10500,
-		"isBoss": false
-	},
-	{
-		"label": "ブリザーム",
-		"value": 60,
-		"hp": 9000,
-		"isBoss": false
-	},
-	{
-		"label": "ブリザーム",
-		"value": 61,
-		"hp": 11000,
-		"isBoss": false
-	},
-	{
-		"label": "ゼッドファイナー",
-		"value": 62,
-		"hp": 10000,
-		"isBoss": false
-	},
-	{
-		"label": "ゼッドファイナー",
-		"value": 63,
-		"hp": 12000,
-		"isBoss": false
-	},
-	{
-		"label": "ゼッドファイナー",
-		"value": 64,
-		"hp": 35000,
-		"isBoss": false
-	},
-	{
-		"label": "皇帝ズール",
-		"value": 65,
-		"hp": 58464,
-		"isBoss": false
-	},
-	{
-		"label": "皇帝ズール",
-		"value": 66,
-		"hp": 58464,
-		"isBoss": false
-	},
-	{
-		"label": "皇帝ズール",
-		"value": 67,
-		"hp": 2928,
-		"isBoss": false
-	},
-	{
-		"label": "ゼッドファイナー",
-		"value": 68,
-		"hp": 50000,
-		"isBoss": true
-	},
-	{
-		"label": "スコープドッグ",
-		"value": 73,
-		"hp": 4000,
-		"isBoss": false
-	},
-	{
-		"label": "スコープドッグ",
-		"value": 74,
-		"hp": 4200,
-		"isBoss": false
-	},
-	{
-		"label": "スコープドッグＲＭ",
-		"value": 75,
-		"hp": 4000,
-		"isBoss": false
-	},
-	{
-		"label": "スコープドッグＲＭ",
-		"value": 76,
-		"hp": 4200,
-		"isBoss": false
-	},
-	{
-		"label": "ライト・スコープドッグ",
-		"value": 77,
-		"hp": 3700,
-		"isBoss": false
-	},
-	{
-		"label": "ライト・スコープドッグ",
-		"value": 78,
-		"hp": 3900,
-		"isBoss": false
-	},
-	{
-		"label": "バーグラリードッグ",
-		"value": 79,
-		"hp": 4400,
-		"isBoss": false
-	},
-	{
-		"label": "バーグラリードッグ",
-		"value": 80,
-		"hp": 4600,
-		"isBoss": false
-	},
-	{
-		"label": "ベルゼルガＤＴ",
-		"value": 81,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "スコープドッグ",
-		"value": 82,
-		"hp": 4300,
-		"isBoss": false
-	},
-	{
-		"label": "スコープドッグ",
-		"value": 83,
-		"hp": 5300,
-		"isBoss": false
-	},
-	{
-		"label": "スタンディングトータス",
-		"value": 84,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "スタンディングトータス",
-		"value": 85,
-		"hp": 5700,
-		"isBoss": false
-	},
-	{
-		"label": "スタンディングトータス",
-		"value": 86,
-		"hp": 4000,
-		"isBoss": false
-	},
-	{
-		"label": "ファッティー",
-		"value": 87,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "ファッティー",
-		"value": 88,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "エクルビス",
-		"value": 89,
-		"hp": 17500,
-		"isBoss": false
-	},
-	{
-		"label": "エクルビス",
-		"value": 90,
-		"hp": 32500,
-		"isBoss": false
-	},
-	{
-		"label": "オーデルバックラー",
-		"value": 93,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "オーデルバックラー",
-		"value": 94,
-		"hp": 20500,
-		"isBoss": false
-	},
-	{
-		"label": "エルドスピーネ",
-		"value": 95,
-		"hp": 6400,
-		"isBoss": false
-	},
-	{
-		"label": "エルドスピーネ",
-		"value": 96,
-		"hp": 7800,
-		"isBoss": false
-	},
-	{
-		"label": "エルドスピーネ",
-		"value": 97,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "バーグラリードッグ",
-		"value": 98,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "バーグラリードッグ",
-		"value": 99,
-		"hp": 6400,
-		"isBoss": false
-	},
-	{
-		"label": "スコープドッグ",
-		"value": 100,
-		"hp": 3800,
-		"isBoss": false
-	},
-	{
-		"label": "スタンディングトータス",
-		"value": 101,
-		"hp": 4200,
-		"isBoss": false
-	},
-	{
-		"label": "ファッティー",
-		"value": 102,
-		"hp": 4000,
-		"isBoss": false
-	},
-	{
-		"label": "エルドスピーネ",
-		"value": 103,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "地上戦艦",
-		"value": 104,
-		"hp": 44000,
-		"isBoss": true
-	},
-	{
-		"label": "ウェイブ・ライダー",
-		"value": 117,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "Ｚガンダム",
-		"value": 118,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ウェイブ・ライダー",
-		"value": 119,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "Ｚガンダム",
-		"value": 120,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ウェイブ・ライダー",
-		"value": 121,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ウェイブ・ライダー",
-		"value": 123,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ウェイブ・ライダー",
-		"value": 125,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ウェイブ・ライダー",
-		"value": 127,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "キュベレイ",
-		"value": 131,
-		"hp": 27000,
-		"isBoss": false
-	},
-	{
-		"label": "キュベレイ",
-		"value": 132,
-		"hp": 42000,
-		"isBoss": false
-	},
-	{
-		"label": "キュベレイ",
-		"value": 133,
-		"hp": 8464,
-		"isBoss": false
-	},
-	{
-		"label": "キュベレイ",
-		"value": 134,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "キュベレイ",
-		"value": 135,
-		"hp": 18000,
-		"isBoss": false
-	},
-	{
-		"label": "ガザＣ",
-		"value": 136,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ガザＣ",
-		"value": 137,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "ガザＣ",
-		"value": 138,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "Ｚガンダム",
-		"value": 139,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ウェイブ・ライダー",
-		"value": 140,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "Ｚガンダム",
-		"value": 141,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ウェイブ・ライダー",
-		"value": 142,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "キュベレイ",
-		"value": 143,
-		"hp": 18000,
-		"isBoss": false
-	},
-	{
-		"label": "ガザＣ",
-		"value": 144,
-		"hp": 4400,
-		"isBoss": false
-	},
-	{
-		"label": "ジェガン",
-		"value": 156,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "ジェガン",
-		"value": 157,
-		"hp": 5300,
-		"isBoss": false
-	},
-	{
-		"label": "リ・ガズィ",
-		"value": 158,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "リ・ガズィ（ＢＷＳ）",
-		"value": 159,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "ラー・カイラム",
-		"value": 160,
-		"hp": 12500,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ドーガ",
-		"value": 161,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ドーガ",
-		"value": 162,
-		"hp": 8400,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ドーガ",
-		"value": 163,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ドーガ",
-		"value": 164,
-		"hp": 13800,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ドーガ",
-		"value": 165,
-		"hp": 26500,
-		"isBoss": false
-	},
-	{
-		"label": "ヤクト・ドーガ",
-		"value": 166,
-		"hp": 19500,
-		"isBoss": false
-	},
-	{
-		"label": "ヤクト・ドーガ",
-		"value": 167,
-		"hp": 32500,
-		"isBoss": false
-	},
-	{
-		"label": "ヤクト・ドーガ",
-		"value": 168,
-		"hp": 45000,
-		"isBoss": false
-	},
-	{
-		"label": "ヤクト・ドーガ",
-		"value": 169,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "ヤクト・ドーガ",
-		"value": 170,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "α・アジール",
-		"value": 171,
-		"hp": 8200,
-		"isBoss": false
-	},
-	{
-		"label": "サザビー",
-		"value": 172,
-		"hp": 5600,
-		"isBoss": false
-	},
-	{
-		"label": "サザビー",
-		"value": 173,
-		"hp": 5600,
-		"isBoss": false
-	},
-	{
-		"label": "レウルーラ",
-		"value": 174,
-		"hp": 56000,
-		"isBoss": false
-	},
-	{
-		"label": "ムサカ",
-		"value": 175,
-		"hp": 18600,
-		"isBoss": false
-	},
-	{
-		"label": "ムサカ",
-		"value": 176,
-		"hp": 22600,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ドーガ",
-		"value": 177,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ウイングガンダムゼロ",
-		"value": 182,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "ウイングガンダムゼロ",
-		"value": 183,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "ガンダムデスサイズヘル",
-		"value": 184,
-		"hp": 5800,
-		"isBoss": false
-	},
-	{
-		"label": "ガンダムデスサイズヘル",
-		"value": 185,
-		"hp": 5800,
-		"isBoss": false
-	},
-	{
-		"label": "ガンダムヘビーアームズ改",
-		"value": 186,
-		"hp": 5900,
-		"isBoss": false
-	},
-	{
-		"label": "ガンダムヘビーアームズ改",
-		"value": 187,
-		"hp": 5900,
-		"isBoss": false
-	},
-	{
-		"label": "ガンダムサンドロック改",
-		"value": 188,
-		"hp": 6200,
-		"isBoss": false
-	},
-	{
-		"label": "ガンダムサンドロック改",
-		"value": 189,
-		"hp": 6200,
-		"isBoss": false
-	},
-	{
-		"label": "アルトロンガンダム",
-		"value": 190,
-		"hp": 6100,
-		"isBoss": false
-	},
-	{
-		"label": "アルトロンガンダム",
-		"value": 191,
-		"hp": 6100,
-		"isBoss": false
-	},
-	{
-		"label": "サーペント",
-		"value": 198,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "サーペント",
-		"value": 199,
-		"hp": 8700,
-		"isBoss": false
-	},
-	{
-		"label": "サーペント",
-		"value": 200,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "リーオー",
-		"value": 201,
-		"hp": 3900,
-		"isBoss": false
-	},
-	{
-		"label": "サーペント",
-		"value": 202,
-		"hp": 6300,
-		"isBoss": false
-	},
-	{
-		"label": "∀ガンダム",
-		"value": 213,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "∀ガンダム",
-		"value": 214,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "デスティニーガンダム",
-		"value": 219,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "デスティニーガンダム",
-		"value": 220,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "デスティニーガンダム",
-		"value": 221,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "ストライクフリーダムガンダム",
-		"value": 222,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ストライクフリーダムガンダム",
-		"value": 223,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "デスティニーガンダム",
-		"value": 224,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "ストライクフリーダムガンダム",
-		"value": 225,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ダブルオーライザー",
-		"value": 230,
-		"hp": 5600,
-		"isBoss": false
-	},
-	{
-		"label": "ダブルオークアンタ",
-		"value": 231,
-		"hp": 5700,
-		"isBoss": false
-	},
-	{
-		"label": "ダブルオークアンタ",
-		"value": 232,
-		"hp": 5700,
-		"isBoss": false
-	},
-	{
-		"label": "ガンダムサバーニャ",
-		"value": 233,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "ガンダムサバーニャ",
-		"value": 234,
-		"hp": 5700,
-		"isBoss": false
-	},
-	{
-		"label": "ガンダムハルート",
-		"value": 235,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ガンダムハルート",
-		"value": 236,
-		"hp": 5800,
-		"isBoss": false
-	},
-	{
-		"label": "ラファエルガンダム",
-		"value": 237,
-		"hp": 5900,
-		"isBoss": false
-	},
-	{
-		"label": "ラファエルガンダム",
-		"value": 238,
-		"hp": 5900,
-		"isBoss": false
-	},
-	{
-		"label": "ラファエルガンダム",
-		"value": 239,
-		"hp": 5900,
-		"isBoss": false
-	},
-	{
-		"label": "プトレマイオス２改",
-		"value": 240,
-		"hp": 11000,
-		"isBoss": false
-	},
-	{
-		"label": "プトレマイオス２改",
-		"value": 241,
-		"hp": 11000,
-		"isBoss": false
-	},
-	{
-		"label": "ＧＮ－ＸⅣ",
-		"value": 242,
-		"hp": 5800,
-		"isBoss": false
-	},
-	{
-		"label": "ＧＮ－ＸⅣ",
-		"value": 243,
-		"hp": 5800,
-		"isBoss": false
-	},
-	{
-		"label": "ＧＮ－ＸⅣ",
-		"value": 244,
-		"hp": 5600,
-		"isBoss": false
-	},
-	{
-		"label": "ＧＮ－ＸⅣ",
-		"value": 245,
-		"hp": 6600,
-		"isBoss": false
-	},
-	{
-		"label": "ＧＮ－ＸⅣ",
-		"value": 246,
-		"hp": 8600,
-		"isBoss": false
-	},
-	{
-		"label": "ブレイヴ",
-		"value": 247,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ブレイヴ",
-		"value": 248,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ＥＬＳ　ＧＮ－ＸⅣ",
-		"value": 255,
-		"hp": 14600,
-		"isBoss": false
-	},
-	{
-		"label": "ＧＮ－ＸⅣ",
-		"value": 259,
-		"hp": 6100,
-		"isBoss": false
-	},
-	{
-		"label": "ユニコーンガンダム",
-		"value": 264,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ユニコーンガンダム",
-		"value": 265,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ユニコーンガンダム",
-		"value": 266,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ユニコーンガンダム",
-		"value": 267,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ユニコーンガンダム",
-		"value": 268,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ユニコーンガンダム",
-		"value": 269,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ユニコーンガンダム",
-		"value": 270,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ユニコーンガンダム",
-		"value": 271,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ＦＡ・ユニコーンガンダム",
-		"value": 272,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ＦＡ・ユニコーンガンダム",
-		"value": 273,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ユニコーンガンダム",
-		"value": 274,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ユニコーンガンダム",
-		"value": 275,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ＦＡ・ユニコーンガンダム",
-		"value": 276,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ＦＡ・ユニコーンガンダム",
-		"value": 277,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "バンシィ",
-		"value": 278,
-		"hp": 25000,
-		"isBoss": false
-	},
-	{
-		"label": "バンシィ",
-		"value": 279,
-		"hp": 28000,
-		"isBoss": false
-	},
-	{
-		"label": "バンシィ・ノルン",
-		"value": 280,
-		"hp": 45000,
-		"isBoss": false
-	},
-	{
-		"label": "バンシィ・ノルン",
-		"value": 281,
-		"hp": 55000,
-		"isBoss": false
-	},
-	{
-		"label": "バンシィ・ノルン",
-		"value": 282,
-		"hp": 60000,
-		"isBoss": false
-	},
-	{
-		"label": "バンシィ・ノルン",
-		"value": 283,
-		"hp": 14464,
-		"isBoss": false
-	},
-	{
-		"label": "バンシィ・ノルン",
-		"value": 284,
-		"hp": 5300,
-		"isBoss": false
-	},
-	{
-		"label": "バンシィ・ノルン",
-		"value": 285,
-		"hp": 5300,
-		"isBoss": false
-	},
-	{
-		"label": "バンシィ・ノルン",
-		"value": 286,
-		"hp": 5300,
-		"isBoss": false
-	},
-	{
-		"label": "バンシィ・ノルン",
-		"value": 287,
-		"hp": 5300,
-		"isBoss": false
-	},
-	{
-		"label": "リゼル",
-		"value": 288,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "リゼル（ＭＡ）",
-		"value": 289,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "リゼル",
-		"value": 290,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "リゼル（ＭＡ）",
-		"value": 291,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "リゼル（ＭＡ）",
-		"value": 292,
-		"hp": 6300,
-		"isBoss": false
-	},
-	{
-		"label": "リゼル（ＭＡ）",
-		"value": 293,
-		"hp": 8300,
-		"isBoss": false
-	},
-	{
-		"label": "デルタプラス",
-		"value": 294,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "デルタプラス（ＷＲ）",
-		"value": 295,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "デルタプラス",
-		"value": 296,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "デルタプラス（ＷＲ）",
-		"value": 297,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ロト",
-		"value": 298,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "ジェガン",
-		"value": 299,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ジェスタ",
-		"value": 300,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "ネェル・アーガマ",
-		"value": 301,
-		"hp": 12000,
-		"isBoss": false
-	},
-	{
-		"label": "シナンジュ",
-		"value": 302,
-		"hp": 32000,
-		"isBoss": false
-	},
-	{
-		"label": "シナンジュ",
-		"value": 303,
-		"hp": 49000,
-		"isBoss": false
-	},
-	{
-		"label": "シナンジュ",
-		"value": 304,
-		"hp": 6464,
-		"isBoss": false
-	},
-	{
-		"label": "ネオ・ジオング",
-		"value": 305,
-		"hp": 59464,
-		"isBoss": false
-	},
-	{
-		"label": "クシャトリヤ",
-		"value": 306,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "クシャトリヤ",
-		"value": 307,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ズール",
-		"value": 308,
-		"hp": 5900,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ズール",
-		"value": 309,
-		"hp": 9200,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ズール",
-		"value": 310,
-		"hp": 5900,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ズール",
-		"value": 311,
-		"hp": 7100,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ズール",
-		"value": 312,
-		"hp": 10600,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ズール",
-		"value": 313,
-		"hp": 17000,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ズール",
-		"value": 314,
-		"hp": 32000,
-		"isBoss": false
-	},
-	{
-		"label": "ローゼン・ズール",
-		"value": 315,
-		"hp": 36000,
-		"isBoss": false
-	},
-	{
-		"label": "ローゼン・ズール",
-		"value": 316,
-		"hp": 60000,
-		"isBoss": false
-	},
-	{
-		"label": "ドラッツェ",
-		"value": 317,
-		"hp": 3500,
-		"isBoss": false
-	},
-	{
-		"label": "ドラッツェ",
-		"value": 318,
-		"hp": 3500,
-		"isBoss": false
-	},
-	{
-		"label": "ドライセン",
-		"value": 319,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "ドライセン",
-		"value": 320,
-		"hp": 8000,
-		"isBoss": false
-	},
-	{
-		"label": "ドライセン",
-		"value": 321,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "ズサ",
-		"value": 322,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "ズサ",
-		"value": 323,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "ガルスＫ",
-		"value": 324,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ガルスＫ",
-		"value": 325,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ドワッジ",
-		"value": 326,
-		"hp": 5600,
-		"isBoss": false
-	},
-	{
-		"label": "ドワッジ",
-		"value": 327,
-		"hp": 5600,
-		"isBoss": false
-	},
-	{
-		"label": "ジュアッグ",
-		"value": 328,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ズゴック",
-		"value": 329,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "バイアラン・カスタム",
-		"value": 330,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "ガランシェール",
-		"value": 331,
-		"hp": 45000,
-		"isBoss": false
-	},
-	{
-		"label": "ガランシェール",
-		"value": 332,
-		"hp": 10000,
-		"isBoss": false
-	},
-	{
-		"label": "デルタプラス",
-		"value": 333,
-		"hp": 7800,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ズール",
-		"value": 334,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ズール",
-		"value": 335,
-		"hp": 16000,
-		"isBoss": false
-	},
-	{
-		"label": "ネオ・ジオング",
-		"value": 336,
-		"hp": 9464,
-		"isBoss": true
-	},
-	{
-		"label": "ローゼン・ズール",
-		"value": 337,
-		"hp": 45000,
-		"isBoss": true
-	},
-	{
-		"label": "ドライセン",
-		"value": 338,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ズサ",
-		"value": 339,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "ガルスＫ",
-		"value": 340,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ドワッジ",
-		"value": 341,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ガンバスター",
-		"value": 346,
-		"hp": 9600,
-		"isBoss": false
-	},
-	{
-		"label": "ガンバスター",
-		"value": 347,
-		"hp": 9600,
-		"isBoss": false
-	},
-	{
-		"label": "ガンバスター",
-		"value": 348,
-		"hp": 9600,
-		"isBoss": false
-	},
-	{
-		"label": "宇宙怪獣・上陸艇",
-		"value": 351,
-		"hp": 24000,
-		"isBoss": false
-	},
-	{
-		"label": "宇宙怪獣・巡洋艦級",
-		"value": 352,
-		"hp": 32000,
-		"isBoss": false
-	},
-	{
-		"label": "宇宙怪獣・混合型",
-		"value": 353,
-		"hp": 45000,
-		"isBoss": false
-	},
-	{
-		"label": "ディスヌフ",
-		"value": 358,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "ディスヌフ",
-		"value": 359,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "ディスヌフ",
-		"value": 360,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "ディスヌフ",
-		"value": 361,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "バスターマシン１９号",
-		"value": 362,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "バスターマシン１９号",
-		"value": 363,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "ヴァンセット",
-		"value": 364,
-		"hp": 7300,
-		"isBoss": false
-	},
-	{
-		"label": "ヴァンセット",
-		"value": 365,
-		"hp": 7300,
-		"isBoss": false
-	},
-	{
-		"label": "ヴァンセット",
-		"value": 366,
-		"hp": 7300,
-		"isBoss": false
-	},
-	{
-		"label": "キャトフヴァンディス",
-		"value": 367,
-		"hp": 7100,
-		"isBoss": false
-	},
-	{
-		"label": "キャトフヴァンディス",
-		"value": 368,
-		"hp": 7100,
-		"isBoss": false
-	},
-	{
-		"label": "キャトフヴァンディス",
-		"value": 369,
-		"hp": 7100,
-		"isBoss": false
-	},
-	{
-		"label": "ＥＶＯ－４",
-		"value": 370,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "ＥＶＯ－４",
-		"value": 371,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "ＥＶＯ－４",
-		"value": 372,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "ＥＶＯ－４",
-		"value": 373,
-		"hp": 4200,
-		"isBoss": false
-	},
-	{
-		"label": "バスターマシン７号",
-		"value": 374,
-		"hp": 3000,
-		"isBoss": false
-	},
-	{
-		"label": "バスターマシン７号",
-		"value": 375,
-		"hp": 3000,
-		"isBoss": false
-	},
-	{
-		"label": "バスターマシン７号",
-		"value": 376,
-		"hp": 3000,
-		"isBoss": false
-	},
-	{
-		"label": "ダイバスター",
-		"value": 377,
-		"hp": 16500,
-		"isBoss": false
-	},
-	{
-		"label": "ダイバスター",
-		"value": 378,
-		"hp": 16500,
-		"isBoss": false
-	},
-	{
-		"label": "ダイバスター",
-		"value": 379,
-		"hp": 16500,
-		"isBoss": false
-	},
-	{
-		"label": "宇宙怪獣・ツインテール級",
-		"value": 380,
-		"hp": 7800,
-		"isBoss": false
-	},
-	{
-		"label": "宇宙怪獣・ビーストロン級",
-		"value": 381,
-		"hp": 21000,
-		"isBoss": false
-	},
-	{
-		"label": "宇宙怪獣・ザザゴラス級",
-		"value": 382,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "タイタン変動重力源",
-		"value": 383,
-		"hp": 48000,
-		"isBoss": false
-	},
-	{
-		"label": "タイタン変動重力源",
-		"value": 384,
-		"hp": 6928,
-		"isBoss": false
-	},
-	{
-		"label": "エグゼリオ変動重力源",
-		"value": 385,
-		"hp": 53392,
-		"isBoss": false
-	},
-	{
-		"label": "エグゼリオ変動重力源",
-		"value": 386,
-		"hp": 37856,
-		"isBoss": false
-	},
-	{
-		"label": "ビーストロン級",
-		"value": 387,
-		"hp": 21000,
-		"isBoss": false
-	},
-	{
-		"label": "ザザゴラス級",
-		"value": 388,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "タイタン変動重力源",
-		"value": 389,
-		"hp": 2464,
-		"isBoss": true
-	},
-	{
-		"label": "ＶＦ－１９改Ｆバルキリー",
-		"value": 394,
-		"hp": 4400,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－１９改Ｆバルキリー",
-		"value": 395,
-		"hp": 4400,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－１９改Ｆバルキリー",
-		"value": 396,
-		"hp": 4400,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２２Ｓ　ＳボーゲルⅡＦ",
-		"value": 397,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２２Ｓ　ＳボーゲルⅡＢ",
-		"value": 398,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２５ＦメサイアＦ・ＴＰ",
-		"value": 403,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２５ＦメサイアＢ・ＴＰ",
-		"value": 404,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２５ＦメサイアＦ・ＴＰ",
-		"value": 405,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２５ＦメサイアＢ・ＴＰ",
-		"value": 406,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２５ＧメサイアＦ・ＴＰ",
-		"value": 407,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２５ＧメサイアＢ・ＴＰ",
-		"value": 408,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２５ＧメサイアＦ・ＴＰ",
-		"value": 409,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２５ＧメサイアＢ・ＴＰ",
-		"value": 410,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＲＶＦ－２５メサイアＦ",
-		"value": 411,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "ＲＶＦ－２５メサイアＢ",
-		"value": 412,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "ＲＶＦ－２５メサイアＦ・ＳＰ",
-		"value": 413,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ＲＶＦ－２５メサイアＢ・ＳＰ",
-		"value": 414,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２５ＳメサイアＦ・ＴＰ",
-		"value": 415,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２５ＳメサイアＢ・ＴＰ",
-		"value": 416,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２５ＳメサイアＦ・ＴＰ",
-		"value": 417,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２５ＳメサイアＢ・ＴＰ",
-		"value": 418,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "クァドラン・レア",
-		"value": 419,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＢ－６ケーニッヒモンスターＳ",
-		"value": 420,
-		"hp": 6400,
-		"isBoss": false
-	},
-	{
-		"label": "マクロス・クォーター要塞艦型",
-		"value": 421,
-		"hp": 12400,
-		"isBoss": false
-	},
-	{
-		"label": "マクロス・クォーター強攻型",
-		"value": 422,
-		"hp": 12400,
-		"isBoss": false
-	},
-	{
-		"label": "マクロス・クォーター要塞艦型",
-		"value": 423,
-		"hp": 12400,
-		"isBoss": false
-	},
-	{
-		"label": "マクロス・クォーター強攻型",
-		"value": 424,
-		"hp": 12400,
-		"isBoss": false
-	},
-	{
-		"label": "ＹＦ－２９デュランダルＦ・ＳＰ",
-		"value": 425,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "ＹＦ－２９デュランダルＢ・ＳＰ",
-		"value": 426,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "ＹＦ－２９デュランダルＦ・ＳＰ",
-		"value": 427,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ＹＦ－２９デュランダルＢ・ＳＰ",
-		"value": 428,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ＹＦ－２９デュランダルＦ・ＳＰ",
-		"value": 429,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ＹＦ－２９デュランダルＢ・ＳＰ",
-		"value": 430,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ＹＦ－２９デュランダルＦ・ＳＰ",
-		"value": 431,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ＹＦ－２９デュランダルＢ・ＳＰ",
-		"value": 432,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ＹＦ－２９デュランダルＦ・ＳＰ",
-		"value": 433,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ＹＦ－２９デュランダルＢ・ＳＰ",
-		"value": 434,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ＹＦ－２９デュランダルＦ・ＳＰ",
-		"value": 435,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ＹＦ－２９デュランダルＢ・ＳＰ",
-		"value": 436,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２７γルシファーＦ・ＳＰ",
-		"value": 437,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２７γルシファーＢ・ＳＰ",
-		"value": 438,
-		"hp": 5100,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２７γルシファーＦ・ＳＰ",
-		"value": 439,
-		"hp": 42000,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－２７γルシファーＢ・ＳＰ",
-		"value": 440,
-		"hp": 42000,
-		"isBoss": false
-	},
-	{
-		"label": "ゴーストＶ９",
-		"value": 441,
-		"hp": 7000,
-		"isBoss": false
-	},
-	{
-		"label": "ゴーストＶ９",
-		"value": 442,
-		"hp": 9000,
-		"isBoss": false
-	},
-	{
-		"label": "重機動兵隊バジュラ",
-		"value": 451,
-		"hp": 11400,
-		"isBoss": false
-	},
-	{
-		"label": "重機動兵隊バジュラ",
-		"value": 452,
-		"hp": 13400,
-		"isBoss": false
-	},
-	{
-		"label": "重機動兵隊バジュラ",
-		"value": 453,
-		"hp": 12400,
-		"isBoss": false
-	},
-	{
-		"label": "重機動兵隊バジュラ",
-		"value": 454,
-		"hp": 14400,
-		"isBoss": false
-	},
-	{
-		"label": "重戦艦バジュラ",
-		"value": 459,
-		"hp": 62500,
-		"isBoss": false
-	},
-	{
-		"label": "重戦艦バジュラ",
-		"value": 460,
-		"hp": 62500,
-		"isBoss": false
-	},
-	{
-		"label": "重戦艦バジュラ",
-		"value": 461,
-		"hp": 6964,
-		"isBoss": false
-	},
-	{
-		"label": "駆逐艦バジュラ",
-		"value": 462,
-		"hp": 28500,
-		"isBoss": false
-	},
-	{
-		"label": "駆逐艦バジュラ",
-		"value": 463,
-		"hp": 32500,
-		"isBoss": false
-	},
-	{
-		"label": "駆逐艦バジュラ",
-		"value": 464,
-		"hp": 32500,
-		"isBoss": false
-	},
-	{
-		"label": "駆逐艦バジュラ",
-		"value": 465,
-		"hp": 36500,
-		"isBoss": false
-	},
-	{
-		"label": "クイーン・フロンティア",
-		"value": 466,
-		"hp": 28928,
-		"isBoss": false
-	},
-	{
-		"label": "重戦艦バジュラ",
-		"value": 467,
-		"hp": 6964,
-		"isBoss": true
-	},
-	{
-		"label": "駆逐艦バジュラ",
-		"value": 468,
-		"hp": 18500,
-		"isBoss": true
-	},
-	{
-		"label": "真ゲッター１",
-		"value": 473,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "真ゲッター２",
-		"value": 474,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "真ゲッター３",
-		"value": 475,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "真ゲッター１",
-		"value": 476,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "真ゲッター２",
-		"value": 477,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "真ゲッター３",
-		"value": 478,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "真ゲッター１",
-		"value": 479,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "真ゲッター２",
-		"value": 480,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "真ゲッター３",
-		"value": 481,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "真ゲッタードラゴン",
-		"value": 482,
-		"hp": 13500,
-		"isBoss": false
-	},
-	{
-		"label": "真ゲッタードラゴン",
-		"value": 483,
-		"hp": 13500,
-		"isBoss": false
-	},
-	{
-		"label": "ブラックゲッター",
-		"value": 484,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "ブラックゲッター",
-		"value": 485,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "ブラックゲッター",
-		"value": 486,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "インベーダー",
-		"value": 487,
-		"hp": 9500,
-		"isBoss": false
-	},
-	{
-		"label": "インベーダー",
-		"value": 488,
-		"hp": 11500,
-		"isBoss": false
-	},
-	{
-		"label": "インベーダー",
-		"value": 489,
-		"hp": 24000,
-		"isBoss": false
-	},
-	{
-		"label": "インベーダー",
-		"value": 490,
-		"hp": 29000,
-		"isBoss": false
-	},
-	{
-		"label": "インベーダー",
-		"value": 491,
-		"hp": 34000,
-		"isBoss": false
-	},
-	{
-		"label": "コーウェン＆スティンガー",
-		"value": 492,
-		"hp": 18464,
-		"isBoss": false
-	},
-	{
-		"label": "インベーダー",
-		"value": 493,
-		"hp": 18000,
-		"isBoss": true
-	},
-	{
-		"label": "インベーダー",
-		"value": 494,
-		"hp": 23000,
-		"isBoss": true
-	},
-	{
-		"label": "インベーダー",
-		"value": 495,
-		"hp": 28000,
-		"isBoss": true
-	},
-	{
-		"label": "マジンガーＺ",
-		"value": 500,
-		"hp": 6800,
-		"isBoss": false
-	},
-	{
-		"label": "マジンガーＺ",
-		"value": 501,
-		"hp": 6800,
-		"isBoss": false
-	},
-	{
-		"label": "マジンガーＺ",
-		"value": 502,
-		"hp": 6800,
-		"isBoss": false
-	},
-	{
-		"label": "マジンガーＺ",
-		"value": 503,
-		"hp": 6800,
-		"isBoss": false
-	},
-	{
-		"label": "ビューナスＡ",
-		"value": 504,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "ボスボロット",
-		"value": 505,
-		"hp": 5600,
-		"isBoss": true
-	},
-	{
-		"label": "ボスボロット",
-		"value": 506,
-		"hp": 5600,
-		"isBoss": true
-	},
-	{
-		"label": "ゴーストファイアーＶ９",
-		"value": 507,
-		"hp": 28000,
-		"isBoss": false
-	},
-	{
-		"label": "ゴウキューンＵ５",
-		"value": 508,
-		"hp": 28000,
-		"isBoss": false
-	},
-	{
-		"label": "ジェイサーＪ１",
-		"value": 509,
-		"hp": 28000,
-		"isBoss": false
-	},
-	{
-		"label": "バジンＢ９",
-		"value": 510,
-		"hp": 28000,
-		"isBoss": false
-	},
-	{
-		"label": "バルガスＶ５",
-		"value": 511,
-		"hp": 28000,
-		"isBoss": false
-	},
-	{
-		"label": "グロゴスＧ５",
-		"value": 512,
-		"hp": 28000,
-		"isBoss": false
-	},
-	{
-		"label": "タロス像",
-		"value": 513,
-		"hp": 9600,
-		"isBoss": false
-	},
-	{
-		"label": "タロス像",
-		"value": 514,
-		"hp": 12600,
-		"isBoss": false
-	},
-	{
-		"label": "ゼウス神",
-		"value": 515,
-		"hp": 14000,
-		"isBoss": false
-	},
-	{
-		"label": "ゼウス神",
-		"value": 516,
-		"hp": 14000,
-		"isBoss": false
-	},
-	{
-		"label": "ハーデス神",
-		"value": 517,
-		"hp": 62464,
-		"isBoss": false
-	},
-	{
-		"label": "ハーデス神",
-		"value": 518,
-		"hp": 6928,
-		"isBoss": false
-	},
-	{
-		"label": "勇者ガラダブラ",
-		"value": 519,
-		"hp": 65000,
-		"isBoss": false
-	},
-	{
-		"label": "勇者ガラダブラ",
-		"value": 520,
-		"hp": 19464,
-		"isBoss": false
-	},
-	{
-		"label": "勇者ガラダブラ",
-		"value": 521,
-		"hp": 18000,
-		"isBoss": false
-	},
-	{
-		"label": "ミケーネ神",
-		"value": 522,
-		"hp": 24000,
-		"isBoss": false
-	},
-	{
-		"label": "ミケーネ神",
-		"value": 523,
-		"hp": 24000,
-		"isBoss": false
-	},
-	{
-		"label": "ミケーネ神",
-		"value": 524,
-		"hp": 24000,
-		"isBoss": false
-	},
-	{
-		"label": "タロス像",
-		"value": 525,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "勇者ガラダブラ",
-		"value": 526,
-		"hp": 4464,
-		"isBoss": true
-	},
-	{
-		"label": "ミケーネ神",
-		"value": 527,
-		"hp": 18000,
-		"isBoss": false
-	},
-	{
-		"label": "ミケーネ神",
-		"value": 528,
-		"hp": 18000,
-		"isBoss": false
-	},
-	{
-		"label": "ミケーネ神",
-		"value": 529,
-		"hp": 18000,
-		"isBoss": false
-	},
-	{
-		"label": "ダイ・ガード",
-		"value": 534,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "ダイ・ガード",
-		"value": 535,
-		"hp": 6200,
-		"isBoss": false
-	},
-	{
-		"label": "フレイムワーク",
-		"value": 536,
-		"hp": 16000,
-		"isBoss": false
-	},
-	{
-		"label": "ビッグオー",
-		"value": 541,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "ビッグオー",
-		"value": 542,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "ビッグオー",
-		"value": 543,
-		"hp": 17600,
-		"isBoss": false
-	},
-	{
-		"label": "ベック・ビクトリー・デラックス",
-		"value": 544,
-		"hp": 19000,
-		"isBoss": false
-	},
-	{
-		"label": "ベック・ビクトリー・デラックス",
-		"value": 545,
-		"hp": 39000,
-		"isBoss": false
-	},
-	{
-		"label": "ベック・ビクトリー・デラックス",
-		"value": 547,
-		"hp": 7300,
-		"isBoss": false
-	},
-	{
-		"label": "ビッグデュオ",
-		"value": 548,
-		"hp": 15500,
-		"isBoss": false
-	},
-	{
-		"label": "ビッグファウ",
-		"value": 549,
-		"hp": 16500,
-		"isBoss": false
-	},
-	{
-		"label": "ベック・ビクトリー・デラックス",
-		"value": 550,
-		"hp": 49000,
-		"isBoss": true
-	},
-	{
-		"label": "ＡＲＸ－７　アーバレスト",
-		"value": 555,
-		"hp": 4600,
-		"isBoss": false
-	},
-	{
-		"label": "ＡＲＸ－７　アーバレスト",
-		"value": 556,
-		"hp": 4600,
-		"isBoss": false
-	},
-	{
-		"label": "ＡＲＸ－７　アーバレスト",
-		"value": 557,
-		"hp": 4600,
-		"isBoss": false
-	},
-	{
-		"label": "ＡＲＸ－７　アーバレスト",
-		"value": 558,
-		"hp": 4600,
-		"isBoss": false
-	},
-	{
-		"label": "ＡＲＸ－７　アーバレスト",
-		"value": 559,
-		"hp": 4600,
-		"isBoss": false
-	},
-	{
-		"label": "ＡＲＸ－８　レーバテイン",
-		"value": 560,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＡＲＸ－８　レーバテイン",
-		"value": 561,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "ＡＲＸ－８　レーバテイン",
-		"value": 562,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ９　ガーンズバック",
-		"value": 563,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ９　ガーンズバック",
-		"value": 564,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ９　ガーンズバック",
-		"value": 565,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ９　ガーンズバック",
-		"value": 566,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ９　ガーンズバック",
-		"value": 567,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ９　ガーンズバック",
-		"value": 568,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ９Ｄ　ファルケ",
-		"value": 569,
-		"hp": 4600,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ９Ｄ　ファルケ",
-		"value": 570,
-		"hp": 4600,
-		"isBoss": false
-	},
-	{
-		"label": "サベージ（クロスボウ）",
-		"value": 571,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "サベージ（クロスボウ）",
-		"value": 572,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "サベージ（クロスボウ）",
-		"value": 573,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "トゥアハー・デ・ダナン",
-		"value": 574,
-		"hp": 11600,
-		"isBoss": false
-	},
-	{
-		"label": "トゥアハー・デ・ダナン",
-		"value": 575,
-		"hp": 11600,
-		"isBoss": false
-	},
-	{
-		"label": "トゥアハー・デ・ダナン",
-		"value": 576,
-		"hp": 11600,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ６　ブッシュネル",
-		"value": 577,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ６　ブッシュネル",
-		"value": 578,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ６　ブッシュネル",
-		"value": 579,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ６　ブッシュネル",
-		"value": 580,
-		"hp": 4300,
-		"isBoss": false
-	},
-	{
-		"label": "Ｃ３－５　ミストラルⅡ",
-		"value": 581,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "Ｃ３－５　ミストラルⅡ",
-		"value": 582,
-		"hp": 6300,
-		"isBoss": false
-	},
-	{
-		"label": "Ｃ３－５　ミストラルⅡ",
-		"value": 583,
-		"hp": 4300,
-		"isBoss": false
-	},
-	{
-		"label": "Ｒｋ－９２　サベージ",
-		"value": 584,
-		"hp": 4600,
-		"isBoss": false
-	},
-	{
-		"label": "Ｒｋ－９２　サベージ",
-		"value": 585,
-		"hp": 6100,
-		"isBoss": false
-	},
-	{
-		"label": "Ｚｙ－９８　シャドウ",
-		"value": 586,
-		"hp": 5800,
-		"isBoss": false
-	},
-	{
-		"label": "Ｚｙ－９８　シャドウ",
-		"value": 587,
-		"hp": 7300,
-		"isBoss": false
-	},
-	{
-		"label": "プラン１０５６　コダールｉ",
-		"value": 588,
-		"hp": 35600,
-		"isBoss": false
-	},
-	{
-		"label": "プラン１０５６　コダールｉ",
-		"value": 589,
-		"hp": 55600,
-		"isBoss": false
-	},
-	{
-		"label": "プラン１０５９　コダールｃ",
-		"value": 590,
-		"hp": 9800,
-		"isBoss": false
-	},
-	{
-		"label": "プラン１０５９　コダールｃ",
-		"value": 591,
-		"hp": 12800,
-		"isBoss": false
-	},
-	{
-		"label": "ベヘモス",
-		"value": 592,
-		"hp": 22000,
-		"isBoss": false
-	},
-	{
-		"label": "ベヘモス",
-		"value": 593,
-		"hp": 36000,
-		"isBoss": false
-	},
-	{
-		"label": "ベヘモス",
-		"value": 594,
-		"hp": 18000,
-		"isBoss": false
-	},
-	{
-		"label": "プラン１０５５　ベリアル",
-		"value": 595,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "プラン１０５５　ベリアル",
-		"value": 596,
-		"hp": 15200,
-		"isBoss": false
-	},
-	{
-		"label": "ボン太くん",
-		"value": 597,
-		"hp": 3800,
-		"isBoss": false
-	},
-	{
-		"label": "ボン太くん",
-		"value": 598,
-		"hp": 3800,
-		"isBoss": false
-	},
-	{
-		"label": "ボン太くん",
-		"value": 599,
-		"hp": 3800,
-		"isBoss": false
-	},
-	{
-		"label": "ボン太くん",
-		"value": 600,
-		"hp": 3800,
-		"isBoss": false
-	},
-	{
-		"label": "ボン太くん",
-		"value": 601,
-		"hp": 3800,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ６　ブッシュネル",
-		"value": 602,
-		"hp": 4300,
-		"isBoss": false
-	},
-	{
-		"label": "Ｃ３－５　ミストラルⅡ",
-		"value": 603,
-		"hp": 4300,
-		"isBoss": false
-	},
-	{
-		"label": "Ｒｋ－９２　サベージ",
-		"value": 604,
-		"hp": 4100,
-		"isBoss": false
-	},
-	{
-		"label": "Ｚｙ－９８　シャドウ",
-		"value": 605,
-		"hp": 5800,
-		"isBoss": false
-	},
-	{
-		"label": "プラン１０５５　ベリアル",
-		"value": 606,
-		"hp": 6300,
-		"isBoss": true
-	},
-	{
-		"label": "ソーラーアクエリオン",
-		"value": 611,
-		"hp": 7100,
-		"isBoss": false
-	},
-	{
-		"label": "ソーラーアクエリオン",
-		"value": 612,
-		"hp": 7100,
-		"isBoss": false
-	},
-	{
-		"label": "ケルビム・ヴェルルゼバ",
-		"value": 613,
-		"hp": 20464,
-		"isBoss": false
-	},
-	{
-		"label": "ケルビム・ヴェルルゼバ",
-		"value": 614,
-		"hp": 20464,
-		"isBoss": false
-	},
-	{
-		"label": "アクエリオンＥＶＯＬ",
-		"value": 619,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "アクエリオンゲパルト",
-		"value": 620,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "アクエリオンスパーダ",
-		"value": 621,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "アクエリオンＥＶＯＬ",
-		"value": 622,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "アクエリオンゲパルト",
-		"value": 623,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "アクエリオンスパーダ",
-		"value": 624,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "アクエリオンＥＶＯＬ",
-		"value": 625,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "アクエリオンゲパルト",
-		"value": 626,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "アクエリオンスパーダ",
-		"value": 627,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "ロー・グニス",
-		"value": 628,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "ロー・グニス",
-		"value": 629,
-		"hp": 9200,
-		"isBoss": false
-	},
-	{
-		"label": "コモン・グニス",
-		"value": 630,
-		"hp": 8200,
-		"isBoss": false
-	},
-	{
-		"label": "コモン・グニス",
-		"value": 631,
-		"hp": 10200,
-		"isBoss": false
-	},
-	{
-		"label": "エンシェントＡＱ",
-		"value": 634,
-		"hp": 29464,
-		"isBoss": false
-	},
-	{
-		"label": "エンシェントＡＱ",
-		"value": 635,
-		"hp": 33928,
-		"isBoss": false
-	},
-	{
-		"label": "ロー・グニス",
-		"value": 636,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "コモン・グニス",
-		"value": 637,
-		"hp": 8200,
-		"isBoss": false
-	},
-	{
-		"label": "ケルビム兵",
-		"value": 638,
-		"hp": 15000,
-		"isBoss": false
-	},
-	{
-		"label": "エンシェントＡＱ",
-		"value": 639,
-		"hp": 9464,
-		"isBoss": true
-	},
-	{
-		"label": "ダンクーガノヴァマックスゴッド",
-		"value": 644,
-		"hp": 7400,
-		"isBoss": false
-	},
-	{
-		"label": "ダンクーガノヴァマックスゴッド",
-		"value": 645,
-		"hp": 7400,
-		"isBoss": false
-	},
-	{
-		"label": "ドラゴンズハイヴ",
-		"value": 646,
-		"hp": 12500,
-		"isBoss": false
-	},
-	{
-		"label": "ドラゴンズハイヴ",
-		"value": 647,
-		"hp": 12500,
-		"isBoss": false
-	},
-	{
-		"label": "グレンラガン",
-		"value": 652,
-		"hp": 6400,
-		"isBoss": false
-	},
-	{
-		"label": "グレンラガン",
-		"value": 653,
-		"hp": 6400,
-		"isBoss": false
-	},
-	{
-		"label": "グレンラガン",
-		"value": 654,
-		"hp": 6400,
-		"isBoss": false
-	},
-	{
-		"label": "超銀河ダイグレン",
-		"value": 655,
-		"hp": 14500,
-		"isBoss": false
-	},
-	{
-		"label": "超銀河ダイグレン",
-		"value": 656,
-		"hp": 14500,
-		"isBoss": false
-	},
-	{
-		"label": "超銀河ダイグレン",
-		"value": 657,
-		"hp": 14500,
-		"isBoss": false
-	},
-	{
-		"label": "超銀河グレンラガン",
-		"value": 658,
-		"hp": 15500,
-		"isBoss": false
-	},
-	{
-		"label": "超銀河グレンラガン",
-		"value": 659,
-		"hp": 15500,
-		"isBoss": false
-	},
-	{
-		"label": "超銀河グレンラガン",
-		"value": 660,
-		"hp": 15500,
-		"isBoss": false
-	},
-	{
-		"label": "天元突破グレンラガン",
-		"value": 661,
-		"hp": 17500,
-		"isBoss": false
-	},
-	{
-		"label": "天元突破グレンラガン",
-		"value": 662,
-		"hp": 17500,
-		"isBoss": false
-	},
-	{
-		"label": "天元突破グレンラガン",
-		"value": 663,
-		"hp": 17500,
-		"isBoss": false
-	},
-	{
-		"label": "スペースガンマール",
-		"value": 664,
-		"hp": 8500,
-		"isBoss": false
-	},
-	{
-		"label": "スペースガンマール",
-		"value": 665,
-		"hp": 8500,
-		"isBoss": false
-	},
-	{
-		"label": "スペースキングキタン",
-		"value": 666,
-		"hp": 9600,
-		"isBoss": false
-	},
-	{
-		"label": "スペースヨーコＷタンク",
-		"value": 667,
-		"hp": 9400,
-		"isBoss": false
-	},
-	{
-		"label": "ムガン",
-		"value": 668,
-		"hp": 9500,
-		"isBoss": false
-	},
-	{
-		"label": "上級ムガン",
-		"value": 669,
-		"hp": 12000,
-		"isBoss": false
-	},
-	{
-		"label": "アシュタンガ級",
-		"value": 670,
-		"hp": 62000,
-		"isBoss": false
-	},
-	{
-		"label": "ハスタグライ級",
-		"value": 671,
-		"hp": 30000,
-		"isBoss": false
-	},
-	{
-		"label": "パダ級",
-		"value": 672,
-		"hp": 35000,
-		"isBoss": false
-	},
-	{
-		"label": "エヴァンゲリオン初号機",
-		"value": 677,
-		"hp": 7300,
-		"isBoss": false
-	},
-	{
-		"label": "エヴァンゲリオン改２号機γ",
-		"value": 685,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "エヴァンゲリオン８号機",
-		"value": 686,
-		"hp": 7400,
-		"isBoss": false
-	},
-	{
-		"label": "エヴァンゲリオン第１３号機",
-		"value": 687,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "エヴァンゲリオン第１３号機",
-		"value": 688,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "エヴァンゲリオンＭａｒｋ．０９",
-		"value": 689,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "ランスロット・アルビオン",
-		"value": 704,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ランスロット・アルビオン",
-		"value": 705,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ランスロット・フロンティア",
-		"value": 706,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "ランスロット・フロンティア",
-		"value": 707,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "チェインバー",
-		"value": 712,
-		"hp": 4400,
-		"isBoss": false
-	},
-	{
-		"label": "チェインバー",
-		"value": 713,
-		"hp": 4400,
-		"isBoss": false
-	},
-	{
-		"label": "チェインバー",
-		"value": 714,
-		"hp": 4400,
-		"isBoss": false
-	},
-	{
-		"label": "チェインバー",
-		"value": 715,
-		"hp": 4400,
-		"isBoss": false
-	},
-	{
-		"label": "ストライカー",
-		"value": 716,
-		"hp": 13000,
-		"isBoss": false
-	},
-	{
-		"label": "ストライカー",
-		"value": 717,
-		"hp": 46000,
-		"isBoss": false
-	},
-	{
-		"label": "ストライカー",
-		"value": 718,
-		"hp": 10464,
-		"isBoss": false
-	},
-	{
-		"label": "ストライカー",
-		"value": 720,
-		"hp": 4600,
-		"isBoss": false
-	},
-	{
-		"label": "クジライカ",
-		"value": 721,
-		"hp": 2800,
-		"isBoss": false
-	},
-	{
-		"label": "ヒディアーズ",
-		"value": 722,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "ラケージ・ユンボロ",
-		"value": 723,
-		"hp": 5800,
-		"isBoss": false
-	},
-	{
-		"label": "ラケージ・ユンボロ",
-		"value": 724,
-		"hp": 22600,
-		"isBoss": false
-	},
-	{
-		"label": "海賊ユンボロ",
-		"value": 725,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "ストライカー",
-		"value": 726,
-		"hp": 48000,
-		"isBoss": true
-	},
-	{
-		"label": "ジェニオン",
-		"value": 731,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ジェニオン・ガイ",
-		"value": 732,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "ジェニオン",
-		"value": 733,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ジェニオン・ガイ",
-		"value": 734,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "ジェニオン",
-		"value": 735,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ジェニオン・ガイ",
-		"value": 736,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "ジェニオン",
-		"value": 737,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ジェニオン・ガイ",
-		"value": 738,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "ジェミニオン・レイ",
-		"value": 739,
-		"hp": 8000,
-		"isBoss": false
-	},
-	{
-		"label": "ジェニオン",
-		"value": 740,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ジェニオン・ガイ",
-		"value": 741,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "ジェミニオン・レイ",
-		"value": 742,
-		"hp": 8000,
-		"isBoss": false
-	},
-	{
-		"label": "バルゴラ・グローリーＳ",
-		"value": 743,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "バルゴラ・グローリーＳ",
-		"value": 744,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "ガンレオン・マグナ",
-		"value": 745,
-		"hp": 7400,
-		"isBoss": false
-	},
-	{
-		"label": "ガンレオン・マグナ",
-		"value": 746,
-		"hp": 7400,
-		"isBoss": false
-	},
-	{
-		"label": "リ・ブラスタＴ",
-		"value": 747,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "リ・ブラスタＴ",
-		"value": 748,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "ソーラリアン",
-		"value": 749,
-		"hp": 11600,
-		"isBoss": false
-	},
-	{
-		"label": "ソーラリアン",
-		"value": 750,
-		"hp": 11600,
-		"isBoss": false
-	},
-	{
-		"label": "ジェミニア",
-		"value": 752,
-		"hp": 14464,
-		"isBoss": false
-	},
-	{
-		"label": "ジェミニア",
-		"value": 753,
-		"hp": 34464,
-		"isBoss": false
-	},
-	{
-		"label": "ジェミニア",
-		"value": 754,
-		"hp": 8800,
-		"isBoss": false
-	},
-	{
-		"label": "ディオスク",
-		"value": 755,
-		"hp": 18000,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイ",
-		"value": 756,
-		"hp": 7100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイ",
-		"value": 757,
-		"hp": 11100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＧＥＭ",
-		"value": 758,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＧＥＭ",
-		"value": 759,
-		"hp": 11100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＣＡＮ",
-		"value": 760,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＣＡＮ",
-		"value": 761,
-		"hp": 12100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＣＡＮ",
-		"value": 762,
-		"hp": 12100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＳＡＧ",
-		"value": 763,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＳＡＧ",
-		"value": 764,
-		"hp": 12100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＨＩＡ",
-		"value": 765,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＨＩＡ",
-		"value": 766,
-		"hp": 12100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＨＩＡ",
-		"value": 767,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＡＮＴ",
-		"value": 768,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＡＮＴ",
-		"value": 769,
-		"hp": 12100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイ・アルカ",
-		"value": 770,
-		"hp": 18400,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイ・アルカ",
-		"value": 771,
-		"hp": 18400,
-		"isBoss": false
-	},
-	{
-		"label": "？？？",
-		"value": 772,
-		"hp": 18400,
-		"isBoss": false
-	},
-	{
-		"label": "デイモーン",
-		"value": 773,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "デイモーン",
-		"value": 774,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "デイモーン・ポリス",
-		"value": 775,
-		"hp": 4200,
-		"isBoss": false
-	},
-	{
-		"label": "ティアマート",
-		"value": 776,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "ティアマート",
-		"value": 777,
-		"hp": 9200,
-		"isBoss": false
-	},
-	{
-		"label": "アクシオ・バーグラー",
-		"value": 780,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "アクシオ・バーグラー",
-		"value": 781,
-		"hp": 9500,
-		"isBoss": false
-	},
-	{
-		"label": "エイクロス",
-		"value": 782,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "エイクロス",
-		"value": 783,
-		"hp": 7000,
-		"isBoss": false
-	},
-	{
-		"label": "エイクロス",
-		"value": 784,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "エイクロス",
-		"value": 785,
-		"hp": 9000,
-		"isBoss": false
-	},
-	{
-		"label": "ランボルト",
-		"value": 786,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "ランボルト",
-		"value": 787,
-		"hp": 8000,
-		"isBoss": false
-	},
-	{
-		"label": "ランボルト",
-		"value": 788,
-		"hp": 10000,
-		"isBoss": false
-	},
-	{
-		"label": "アクシオ",
-		"value": 789,
-		"hp": 4900,
-		"isBoss": false
-	},
-	{
-		"label": "アクシオ",
-		"value": 790,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "アクシオ",
-		"value": 791,
-		"hp": 8800,
-		"isBoss": false
-	},
-	{
-		"label": "尸逝天",
-		"value": 792,
-		"hp": 42464,
-		"isBoss": false
-	},
-	{
-		"label": "尸逝天",
-		"value": 793,
-		"hp": 62464,
-		"isBoss": false
-	},
-	{
-		"label": "尸逝天",
-		"value": 794,
-		"hp": 6928,
-		"isBoss": false
-	},
-	{
-		"label": "尸逝天",
-		"value": 795,
-		"hp": 42464,
-		"isBoss": false
-	},
-	{
-		"label": "尸冥爪",
-		"value": 796,
-		"hp": 15000,
-		"isBoss": false
-	},
-	{
-		"label": "尸冥爪",
-		"value": 797,
-		"hp": 17000,
-		"isBoss": false
-	},
-	{
-		"label": "尸冥爪・絶",
-		"value": 798,
-		"hp": 32000,
-		"isBoss": false
-	},
-	{
-		"label": "尸冥爪・絶",
-		"value": 799,
-		"hp": 64000,
-		"isBoss": false
-	},
-	{
-		"label": "プレイアデス・タウラ",
-		"value": 800,
-		"hp": 46464,
-		"isBoss": false
-	},
-	{
-		"label": "プレイアデス・タウラ",
-		"value": 801,
-		"hp": 928,
-		"isBoss": false
-	},
-	{
-		"label": "プレイアデス・タウラ",
-		"value": 802,
-		"hp": 10928,
-		"isBoss": false
-	},
-	{
-		"label": "プレイアデス・タウラ",
-		"value": 803,
-		"hp": 46464,
-		"isBoss": false
-	},
-	{
-		"label": "アルデバル",
-		"value": 804,
-		"hp": 20000,
-		"isBoss": false
-	},
-	{
-		"label": "アルデバル",
-		"value": 805,
-		"hp": 26000,
-		"isBoss": false
-	},
-	{
-		"label": "バン・アルデバル",
-		"value": 806,
-		"hp": 36000,
-		"isBoss": false
-	},
-	{
-		"label": "バン・アルデバル",
-		"value": 807,
-		"hp": 6464,
-		"isBoss": false
-	},
-	{
-		"label": "バン・アルデバル",
-		"value": 808,
-		"hp": 28000,
-		"isBoss": false
-	},
-	{
-		"label": "アン・アーレス",
-		"value": 809,
-		"hp": 34464,
-		"isBoss": false
-	},
-	{
-		"label": "アン・アーレス",
-		"value": 810,
-		"hp": 54464,
-		"isBoss": false
-	},
-	{
-		"label": "アン・アーレス",
-		"value": 811,
-		"hp": 64464,
-		"isBoss": false
-	},
-	{
-		"label": "アン・アーレス",
-		"value": 812,
-		"hp": 56000,
-		"isBoss": false
-	},
-	{
-		"label": "シャウラス",
-		"value": 813,
-		"hp": 16000,
-		"isBoss": false
-	},
-	{
-		"label": "シャウラス",
-		"value": 814,
-		"hp": 18000,
-		"isBoss": false
-	},
-	{
-		"label": "シャウラス",
-		"value": 815,
-		"hp": 28000,
-		"isBoss": false
-	},
-	{
-		"label": "シャウラス",
-		"value": 816,
-		"hp": 42000,
-		"isBoss": false
-	},
-	{
-		"label": "シャウラス・リーダー",
-		"value": 817,
-		"hp": 33000,
-		"isBoss": false
-	},
-	{
-		"label": "シャウラス・リーダー",
-		"value": 818,
-		"hp": 464,
-		"isBoss": false
-	},
-	{
-		"label": "シャウラス・リーダー",
-		"value": 819,
-		"hp": 16000,
-		"isBoss": false
-	},
-	{
-		"label": "次元将ヴィルダーク",
-		"value": 820,
-		"hp": 16928,
-		"isBoss": false
-	},
-	{
-		"label": "次元将ヴィルダーク",
-		"value": 821,
-		"hp": 5392,
-		"isBoss": false
-	},
-	{
-		"label": "次元将ヴィルダーク",
-		"value": 822,
-		"hp": 15392,
-		"isBoss": false
-	},
-	{
-		"label": "？？？",
-		"value": 823,
-		"hp": 45000,
-		"isBoss": false
-	},
-	{
-		"label": "次元獣ヴァルナー",
-		"value": 824,
-		"hp": 20000,
-		"isBoss": false
-	},
-	{
-		"label": "次元獣ヴァルナー",
-		"value": 825,
-		"hp": 36000,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 826,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 827,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 828,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 829,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 830,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 831,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 832,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 833,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 834,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 835,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 836,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 837,
-		"hp": 3464,
-		"isBoss": false
-	},
-	{
-		"label": "アドラティオ",
-		"value": 838,
-		"hp": 14500,
-		"isBoss": false
-	},
-	{
-		"label": "アドラティオ",
-		"value": 839,
-		"hp": 21500,
-		"isBoss": false
-	},
-	{
-		"label": "アドラティオ",
-		"value": 840,
-		"hp": 21500,
-		"isBoss": false
-	},
-	{
-		"label": "？？？",
-		"value": 841,
-		"hp": 14500,
-		"isBoss": false
-	},
-	{
-		"label": "グラーティア",
-		"value": 842,
-		"hp": 8800,
-		"isBoss": false
-	},
-	{
-		"label": "グラーティア",
-		"value": 843,
-		"hp": 11800,
-		"isBoss": false
-	},
-	{
-		"label": "アスクレプス",
-		"value": 844,
-		"hp": 6600,
-		"isBoss": false
-	},
-	{
-		"label": "アスクレプス",
-		"value": 845,
-		"hp": 58000,
-		"isBoss": false
-	},
-	{
-		"label": "アスクレプス",
-		"value": 846,
-		"hp": 22464,
-		"isBoss": false
-	},
-	{
-		"label": "アスクレプス",
-		"value": 847,
-		"hp": 6600,
-		"isBoss": false
-	},
-	{
-		"label": "ヘリオース",
-		"value": 849,
-		"hp": 41392,
-		"isBoss": false
-	},
-	{
-		"label": "ヘリオース",
-		"value": 850,
-		"hp": 51392,
-		"isBoss": false
-	},
-	{
-		"label": "アドヴェント",
-		"value": 854,
-		"hp": 100,
-		"isBoss": false
-	},
-	{
-		"label": "シュロウガ",
-		"value": 855,
-		"hp": 48000,
-		"isBoss": false
-	},
-	{
-		"label": "シュロウガ",
-		"value": 856,
-		"hp": 6600,
-		"isBoss": false
-	},
-	{
-		"label": "シュロウガ",
-		"value": 857,
-		"hp": 6600,
-		"isBoss": false
-	},
-	{
-		"label": "シュロウガ・シン",
-		"value": 859,
-		"hp": 62464,
-		"isBoss": false
-	},
-	{
-		"label": "シュロウガ・シン",
-		"value": 860,
-		"hp": 1392,
-		"isBoss": false
-	},
-	{
-		"label": "シュロウガ・シン",
-		"value": 861,
-		"hp": 11392,
-		"isBoss": false
-	},
-	{
-		"label": "シュロウガ・シン",
-		"value": 862,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "エル・ミレニウム",
-		"value": 863,
-		"hp": 42000,
-		"isBoss": false
-	},
-	{
-		"label": "エル・ミレニウム",
-		"value": 864,
-		"hp": 42000,
-		"isBoss": false
-	},
-	{
-		"label": "？？？",
-		"value": 865,
-		"hp": 42000,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 866,
-		"hp": 64000,
-		"isBoss": false
-	},
-	{
-		"label": "ゼル・ビレニウム",
-		"value": 867,
-		"hp": 64000,
-		"isBoss": false
-	},
-	{
-		"label": "プロディキウム",
-		"value": 868,
-		"hp": 57856,
-		"isBoss": false
-	},
-	{
-		"label": "プロディキウム",
-		"value": 869,
-		"hp": 12320,
-		"isBoss": false
-	},
-	{
-		"label": "至高神Ｚ",
-		"value": 870,
-		"hp": 6784,
-		"isBoss": false
-	},
-	{
-		"label": "至高神Ｚ",
-		"value": 871,
-		"hp": 1248,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイ",
-		"value": 872,
-		"hp": 7100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＣＡＮ",
-		"value": 873,
-		"hp": 8100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＨＩＡ",
-		"value": 874,
-		"hp": 8100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＨＩＡ",
-		"value": 875,
-		"hp": 7100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＡＮＴ",
-		"value": 876,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＡＮＴ",
-		"value": 877,
-		"hp": 8100,
-		"isBoss": false
-	},
-	{
-		"label": "？？？",
-		"value": 878,
-		"hp": 18400,
-		"isBoss": false
-	},
-	{
-		"label": "デイモーン",
-		"value": 879,
-		"hp": 4700,
-		"isBoss": false
-	},
-	{
-		"label": "デイモーン・ポリス",
-		"value": 880,
-		"hp": 4200,
-		"isBoss": false
-	},
-	{
-		"label": "ティアマート",
-		"value": 881,
-		"hp": 6700,
-		"isBoss": false
-	},
-	{
-		"label": "アクシオ・バーグラー",
-		"value": 883,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "アクシオ・バーグラー",
-		"value": 884,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "アクシオ・バーグラー",
-		"value": 885,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "アクシオ・バーグラー",
-		"value": 886,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "アクシオ・バーグラー",
-		"value": 887,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "エイクロス",
-		"value": 888,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ランボルト",
-		"value": 889,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "アクシオ",
-		"value": 890,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "尸逝天",
-		"value": 891,
-		"hp": 16928,
-		"isBoss": false
-	},
-	{
-		"label": "尸冥爪",
-		"value": 892,
-		"hp": 15000,
-		"isBoss": false
-	},
-	{
-		"label": "尸冥爪・絶",
-		"value": 893,
-		"hp": 64000,
-		"isBoss": false
-	},
-	{
-		"label": "プレイアデス・タウラ",
-		"value": 894,
-		"hp": 20928,
-		"isBoss": false
-	},
-	{
-		"label": "アルデバル",
-		"value": 895,
-		"hp": 17000,
-		"isBoss": false
-	},
-	{
-		"label": "バン・アルデバル",
-		"value": 896,
-		"hp": 6464,
-		"isBoss": false
-	},
-	{
-		"label": "アン・アーレス",
-		"value": 897,
-		"hp": 8928,
-		"isBoss": false
-	},
-	{
-		"label": "シャウラス",
-		"value": 898,
-		"hp": 16000,
-		"isBoss": false
-	},
-	{
-		"label": "シャウラス",
-		"value": 899,
-		"hp": 22000,
-		"isBoss": false
-	},
-	{
-		"label": "シャウラス・リーダー",
-		"value": 900,
-		"hp": 33000,
-		"isBoss": false
-	},
-	{
-		"label": "シャウラス・リーダー",
-		"value": 901,
-		"hp": 464,
-		"isBoss": false
-	},
-	{
-		"label": "アドラティオ",
-		"value": 902,
-		"hp": 14500,
-		"isBoss": false
-	},
-	{
-		"label": "グラーティア",
-		"value": 913,
-		"hp": 7800,
-		"isBoss": false
-	},
-	{
-		"label": "アドラティオ",
-		"value": 914,
-		"hp": 14500,
-		"isBoss": false
-	},
-	{
-		"label": "シュロウガ",
-		"value": 915,
-		"hp": 12464,
-		"isBoss": false
-	},
-	{
-		"label": "アスクレプス",
-		"value": 916,
-		"hp": 22464,
-		"isBoss": false
-	},
-	{
-		"label": "アークグレン",
-		"value": 923,
-		"hp": 13000,
-		"isBoss": false
-	},
-	{
-		"label": "アークグレンラガン",
-		"value": 924,
-		"hp": 13000,
-		"isBoss": false
-	},
-	{
-		"label": "クラップ級",
-		"value": 925,
-		"hp": 10000,
-		"isBoss": false
-	},
-	{
-		"label": "クラップ級",
-		"value": 926,
-		"hp": 10000,
-		"isBoss": false
-	},
-	{
-		"label": "エヴァンゲリオン２号機",
-		"value": 929,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "ガルダ",
-		"value": 930,
-		"hp": 10000,
-		"isBoss": false
-	},
-	{
-		"label": "ラー・カイラム",
-		"value": 931,
-		"hp": 12500,
-		"isBoss": false
-	},
-	{
-		"label": "ドラゴンズハイヴ",
-		"value": 932,
-		"hp": 12500,
-		"isBoss": false
-	},
-	{
-		"label": "真ゲッタードラゴン",
-		"value": 933,
-		"hp": 13500,
-		"isBoss": false
-	},
-	{
-		"label": "超銀河ダイグレン",
-		"value": 934,
-		"hp": 14500,
-		"isBoss": false
-	},
-	{
-		"label": "プトレマイオス２改",
-		"value": 935,
-		"hp": 11000,
-		"isBoss": false
-	},
-	{
-		"label": "トライダーＧ７",
-		"value": 936,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "ゴッドマーズ",
-		"value": 937,
-		"hp": 7700,
-		"isBoss": false
-	},
-	{
-		"label": "スコープドッグ",
-		"value": 938,
-		"hp": 3800,
-		"isBoss": false
-	},
-	{
-		"label": "オーガス",
-		"value": 939,
-		"hp": 4000,
-		"isBoss": false
-	},
-	{
-		"label": "ウイングガンダムゼロ",
-		"value": 941,
-		"hp": 5800,
-		"isBoss": false
-	},
-	{
-		"label": "デスティニーガンダム",
-		"value": 942,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "ストライクフリーダムガンダム",
-		"value": 943,
-		"hp": 5300,
-		"isBoss": false
-	},
-	{
-		"label": "ダブルオークアンタ",
-		"value": 944,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "ダイ・ガード",
-		"value": 945,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "ガンバスター",
-		"value": 946,
-		"hp": 9600,
-		"isBoss": false
-	},
-	{
-		"label": "ビッグオー",
-		"value": 947,
-		"hp": 7600,
-		"isBoss": false
-	},
-	{
-		"label": "アクエリオンＥＶＯＬ",
-		"value": 948,
-		"hp": 6900,
-		"isBoss": false
-	},
-	{
-		"label": "グレンラガン",
-		"value": 949,
-		"hp": 6400,
-		"isBoss": false
-	},
-	{
-		"label": "ダンクーガノヴァマックスゴッド",
-		"value": 950,
-		"hp": 7400,
-		"isBoss": false
-	},
-	{
-		"label": "ジェニオン・ガイ",
-		"value": 952,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "チェインバー",
-		"value": 953,
-		"hp": 4500,
-		"isBoss": false
-	},
-	{
-		"label": "ストライカー",
-		"value": 954,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "ＶＦ－１１",
-		"value": 955,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "ＡＲＸ－７　アーバレスト",
-		"value": 956,
-		"hp": 4400,
-		"isBoss": false
-	},
-	{
-		"label": "ブラックオックス",
-		"value": 957,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ＧＮ－ＸⅣ",
-		"value": 958,
-		"hp": 5600,
-		"isBoss": false
-	},
-	{
-		"label": "サザビー",
-		"value": 959,
-		"hp": 4800,
-		"isBoss": false
-	},
-	{
-		"label": "サザビー",
-		"value": 960,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "ジェガン",
-		"value": 961,
-		"hp": 4300,
-		"isBoss": false
-	},
-	{
-		"label": "ジェニオン",
-		"value": 962,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "バトル７",
-		"value": 963,
-		"hp": 15000,
-		"isBoss": false
-	},
-	{
-		"label": "ゲペルニッチ艦",
-		"value": 964,
-		"hp": 5500,
-		"isBoss": false
-	},
-	{
-		"label": "トゥアハー・デ・ダナン",
-		"value": 965,
-		"hp": 11600,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ズール",
-		"value": 966,
-		"hp": 5900,
-		"isBoss": false
-	},
-	{
-		"label": "ジェミニオン",
-		"value": 967,
-		"hp": 7200,
-		"isBoss": false
-	},
-	{
-		"label": "ディム・サー",
-		"value": 968,
-		"hp": 5900,
-		"isBoss": false
-	},
-	{
-		"label": "ディアムド",
-		"value": 969,
-		"hp": 11600,
-		"isBoss": false
-	},
-	{
-		"label": "サフィアーダ",
-		"value": 970,
-		"hp": 5900,
-		"isBoss": false
-	},
-	{
-		"label": "エメラルダン",
-		"value": 971,
-		"hp": 11600,
-		"isBoss": false
-	},
-	{
-		"label": "カイト",
-		"value": 972,
-		"hp": 5900,
-		"isBoss": false
-	},
-	{
-		"label": "エヴァンゲリオン第１３号機",
-		"value": 973,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "エヴァンゲリオン第１３号機",
-		"value": 974,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "エヴァンゲリオン　Ｍａｒｋ.０９",
-		"value": 975,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "ソーラーアクエリオン",
-		"value": 976,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "ギラ・ドーガ",
-		"value": 977,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "サーペント",
-		"value": 978,
-		"hp": 5400,
-		"isBoss": false
-	},
-	{
-		"label": "ザク・ウォーリア",
-		"value": 979,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "ザザゴラス級",
-		"value": 980,
-		"hp": 35000,
-		"isBoss": false
-	},
-	{
-		"label": "マジンガーＺ",
-		"value": 983,
-		"hp": 6800,
-		"isBoss": false
-	},
-	{
-		"label": "ザク・ウォーリア",
-		"value": 986,
-		"hp": 5200,
-		"isBoss": false
-	},
-	{
-		"label": "∞ジャスティスガンダム",
-		"value": 987,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "レジェンドガンダム",
-		"value": 988,
-		"hp": 7500,
-		"isBoss": false
-	},
-	{
-		"label": "鉄人２８号",
-		"value": 989,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "バルゴラⅠ号機",
-		"value": 990,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "バルゴラⅡ号機",
-		"value": 991,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "エリファス",
-		"value": 992,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "パールネイル",
-		"value": 993,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ガデラーザ",
-		"value": 996,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "アルデバル",
-		"value": 997,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "シャウラス",
-		"value": 999,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ジェミニオン・レイ",
-		"value": 1000,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ガンレオン・マグナ",
-		"value": 1001,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "バルゴラ・グローリーＳ",
-		"value": 1002,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "リ・ブラスタＴ",
-		"value": 1003,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＨＩＡ",
-		"value": 1004,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＡＮＴ",
-		"value": 1005,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＣＡＮ",
-		"value": 1006,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ガンダムＸ",
-		"value": 1013,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ゴールドスモー",
-		"value": 1014,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "アカツキ",
-		"value": 1015,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "アークエンジェル",
-		"value": 1016,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "エターナル",
-		"value": 1017,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "トリスタン・ディバイダー",
-		"value": 1018,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "モルドレッド",
-		"value": 1019,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "サザーランド・ジーク",
-		"value": 1020,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "斬月",
-		"value": 1021,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "カランドゥ",
-		"value": 1022,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ソワサンシス",
-		"value": 1023,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ディム・サー",
-		"value": 1024,
-		"hp": 5900,
-		"isBoss": false
-	},
-	{
-		"label": "ツインテール級",
-		"value": 1025,
-		"hp": 7800,
-		"isBoss": false
-	},
-	{
-		"label": "ムサカ",
-		"value": 1026,
-		"hp": 35000,
-		"isBoss": false
-	},
-	{
-		"label": "ザンボット３",
-		"value": 1027,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ダイターン３",
-		"value": 1028,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "Ｚガンダム",
-		"value": 1029,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ガンダムＤＸ",
-		"value": 1030,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "∀ガンダム",
-		"value": 1031,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ビーストロン級",
-		"value": 1033,
-		"hp": 21000,
-		"isBoss": false
-	},
-	{
-		"label": "ヤクト・ドーガ",
-		"value": 1034,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "ビッグオー",
-		"value": 1035,
-		"hp": 6500,
-		"isBoss": false
-	},
-	{
-		"label": "ビッグデュオ",
-		"value": 1036,
-		"hp": 21000,
-		"isBoss": false
-	},
-	{
-		"label": "ビッグファウ",
-		"value": 1037,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＧＥＭ",
-		"value": 1038,
-		"hp": 8100,
-		"isBoss": false
-	},
-	{
-		"label": "アンゲロイＧＥＭ",
-		"value": 1039,
-		"hp": 11100,
-		"isBoss": false
-	},
-	{
-		"label": "アスクレプス",
-		"value": 1040,
-		"hp": 5000,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ９　ガーンズバック",
-		"value": 1043,
-		"hp": 4300,
-		"isBoss": false
-	},
-	{
-		"label": "Ｍ９Ｄ　ファルケ",
-		"value": 1044,
-		"hp": 4400,
-		"isBoss": false
-	},
-	{
-		"label": "ソーラーアクエリオン",
-		"value": 1045,
-		"hp": 7100,
-		"isBoss": false
-	},
-	{
-		"label": "メズー",
-		"value": 1046,
-		"hp": 3500,
-		"isBoss": false
-	},
-	{
-		"label": "ランボルト",
-		"value": 1047,
-		"hp": 6000,
-		"isBoss": false
-	},
-	{
-		"label": "アクシオ",
-		"value": 1048,
-		"hp": 4900,
-		"isBoss": false
-	}
+  {
+    "label": "ザンボット３",
+    "value": 1,
+    "hp": 7900,
+    "isBoss": false
+  },
+  {
+    "label": "ザンボット３",
+    "value": 2,
+    "hp": 7900,
+    "isBoss": false
+  },
+  {
+    "label": "バンドック",
+    "value": 3,
+    "hp": 52000,
+    "isBoss": false
+  },
+  {
+    "label": "バンドック",
+    "value": 6,
+    "hp": 52000,
+    "isBoss": false
+  },
+  {
+    "label": "ダイターン３",
+    "value": 11,
+    "hp": 9000,
+    "isBoss": false
+  },
+  {
+    "label": "ダイターン３",
+    "value": 12,
+    "hp": 9000,
+    "isBoss": false
+  },
+  {
+    "label": "トライダーＧ７",
+    "value": 17,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "トライダーＧ７",
+    "value": 18,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "シャトル",
+    "value": 19,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "ブラックオックス",
+    "value": 28,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ブランチロボ２号",
+    "value": 29,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "スペースロボ１号",
+    "value": 30,
+    "hp": 7800,
+    "isBoss": false
+  },
+  {
+    "label": "スペースロボ１号",
+    "value": 31,
+    "hp": 9800,
+    "isBoss": false
+  },
+  {
+    "label": "スペースロボ２号",
+    "value": 32,
+    "hp": 8500,
+    "isBoss": false
+  },
+  {
+    "label": "スペースロボ２号",
+    "value": 33,
+    "hp": 10500,
+    "isBoss": false
+  },
+  {
+    "label": "スペースロボ３号",
+    "value": 34,
+    "hp": 8900,
+    "isBoss": false
+  },
+  {
+    "label": "スペースロボ３号",
+    "value": 35,
+    "hp": 10900,
+    "isBoss": false
+  },
+  {
+    "label": "スペースロボ５号",
+    "value": 36,
+    "hp": 10000,
+    "isBoss": false
+  },
+  {
+    "label": "スペースロボ５号",
+    "value": 37,
+    "hp": 12000,
+    "isBoss": false
+  },
+  {
+    "label": "スペースロボ７号",
+    "value": 38,
+    "hp": 6800,
+    "isBoss": false
+  },
+  {
+    "label": "スペースロボ７号",
+    "value": 39,
+    "hp": 6800,
+    "isBoss": false
+  },
+  {
+    "label": "宇宙魔王",
+    "value": 45,
+    "hp": 52464,
+    "isBoss": false
+  },
+  {
+    "label": "宇宙魔王",
+    "value": 46,
+    "hp": 52464,
+    "isBoss": false
+  },
+  {
+    "label": "宇宙魔王",
+    "value": 47,
+    "hp": 62464,
+    "isBoss": false
+  },
+  {
+    "label": "ブランチロボ２号",
+    "value": 48,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ゴッドマーズ",
+    "value": 53,
+    "hp": 7700,
+    "isBoss": false
+  },
+  {
+    "label": "ゴッドマーズ",
+    "value": 54,
+    "hp": 7700,
+    "isBoss": false
+  },
+  {
+    "label": "コスモクラッシャー",
+    "value": 55,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "ダイダロス",
+    "value": 56,
+    "hp": 8100,
+    "isBoss": false
+  },
+  {
+    "label": "ダイダロス",
+    "value": 57,
+    "hp": 10100,
+    "isBoss": false
+  },
+  {
+    "label": "バッフル",
+    "value": 58,
+    "hp": 8500,
+    "isBoss": false
+  },
+  {
+    "label": "バッフル",
+    "value": 59,
+    "hp": 10500,
+    "isBoss": false
+  },
+  {
+    "label": "ブリザーム",
+    "value": 60,
+    "hp": 9000,
+    "isBoss": false
+  },
+  {
+    "label": "ブリザーム",
+    "value": 61,
+    "hp": 11000,
+    "isBoss": false
+  },
+  {
+    "label": "ゼッドファイナー",
+    "value": 62,
+    "hp": 10000,
+    "isBoss": false
+  },
+  {
+    "label": "ゼッドファイナー",
+    "value": 63,
+    "hp": 12000,
+    "isBoss": false
+  },
+  {
+    "label": "ゼッドファイナー",
+    "value": 64,
+    "hp": 35000,
+    "isBoss": false
+  },
+  {
+    "label": "皇帝ズール",
+    "value": 65,
+    "hp": 58464,
+    "isBoss": false
+  },
+  {
+    "label": "皇帝ズール",
+    "value": 66,
+    "hp": 58464,
+    "isBoss": false
+  },
+  {
+    "label": "皇帝ズール",
+    "value": 67,
+    "hp": 2928,
+    "isBoss": false
+  },
+  {
+    "label": "ゼッドファイナー",
+    "value": 68,
+    "hp": 50000,
+    "isBoss": false
+  },
+  {
+    "label": "スコープドッグ",
+    "value": 73,
+    "hp": 4000,
+    "isBoss": false
+  },
+  {
+    "label": "スコープドッグ",
+    "value": 74,
+    "hp": 4200,
+    "isBoss": false
+  },
+  {
+    "label": "スコープドッグＲＭ",
+    "value": 75,
+    "hp": 4000,
+    "isBoss": false
+  },
+  {
+    "label": "スコープドッグＲＭ",
+    "value": 76,
+    "hp": 4200,
+    "isBoss": false
+  },
+  {
+    "label": "ライト・スコープドッグ",
+    "value": 77,
+    "hp": 3700,
+    "isBoss": false
+  },
+  {
+    "label": "ライト・スコープドッグ",
+    "value": 78,
+    "hp": 3900,
+    "isBoss": false
+  },
+  {
+    "label": "バーグラリードッグ",
+    "value": 79,
+    "hp": 4400,
+    "isBoss": false
+  },
+  {
+    "label": "バーグラリードッグ",
+    "value": 80,
+    "hp": 4600,
+    "isBoss": false
+  },
+  {
+    "label": "ベルゼルガＤＴ",
+    "value": 81,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "スコープドッグ",
+    "value": 82,
+    "hp": 4300,
+    "isBoss": false
+  },
+  {
+    "label": "スコープドッグ",
+    "value": 83,
+    "hp": 5300,
+    "isBoss": false
+  },
+  {
+    "label": "スタンディングトータス",
+    "value": 84,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "スタンディングトータス",
+    "value": 85,
+    "hp": 5700,
+    "isBoss": false
+  },
+  {
+    "label": "スタンディングトータス",
+    "value": 86,
+    "hp": 4000,
+    "isBoss": false
+  },
+  {
+    "label": "ファッティー",
+    "value": 87,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "ファッティー",
+    "value": 88,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "エクルビス",
+    "value": 89,
+    "hp": 17500,
+    "isBoss": false
+  },
+  {
+    "label": "エクルビス",
+    "value": 90,
+    "hp": 32500,
+    "isBoss": false
+  },
+  {
+    "label": "オーデルバックラー",
+    "value": 93,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "オーデルバックラー",
+    "value": 94,
+    "hp": 20500,
+    "isBoss": false
+  },
+  {
+    "label": "エルドスピーネ",
+    "value": 95,
+    "hp": 6400,
+    "isBoss": false
+  },
+  {
+    "label": "エルドスピーネ",
+    "value": 96,
+    "hp": 7800,
+    "isBoss": false
+  },
+  {
+    "label": "エルドスピーネ",
+    "value": 97,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "バーグラリードッグ",
+    "value": 98,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "バーグラリードッグ",
+    "value": 99,
+    "hp": 6400,
+    "isBoss": false
+  },
+  {
+    "label": "スコープドッグ",
+    "value": 100,
+    "hp": 3800,
+    "isBoss": false
+  },
+  {
+    "label": "スタンディングトータス",
+    "value": 101,
+    "hp": 4200,
+    "isBoss": false
+  },
+  {
+    "label": "ファッティー",
+    "value": 102,
+    "hp": 4000,
+    "isBoss": false
+  },
+  {
+    "label": "エルドスピーネ",
+    "value": 103,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "地上戦艦",
+    "value": 104,
+    "hp": 44000,
+    "isBoss": false
+  },
+  {
+    "label": "ウェイブ・ライダー",
+    "value": 117,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "Ｚガンダム",
+    "value": 118,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ウェイブ・ライダー",
+    "value": 119,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "Ｚガンダム",
+    "value": 120,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ウェイブ・ライダー",
+    "value": 121,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ウェイブ・ライダー",
+    "value": 123,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ウェイブ・ライダー",
+    "value": 125,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ウェイブ・ライダー",
+    "value": 127,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "キュベレイ",
+    "value": 131,
+    "hp": 27000,
+    "isBoss": false
+  },
+  {
+    "label": "キュベレイ",
+    "value": 132,
+    "hp": 42000,
+    "isBoss": false
+  },
+  {
+    "label": "キュベレイ",
+    "value": 133,
+    "hp": 8464,
+    "isBoss": false
+  },
+  {
+    "label": "キュベレイ",
+    "value": 134,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "キュベレイ",
+    "value": 135,
+    "hp": 18000,
+    "isBoss": false
+  },
+  {
+    "label": "ガザＣ",
+    "value": 136,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ガザＣ",
+    "value": 137,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "ガザＣ",
+    "value": 138,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "Ｚガンダム",
+    "value": 139,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ウェイブ・ライダー",
+    "value": 140,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "Ｚガンダム",
+    "value": 141,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ウェイブ・ライダー",
+    "value": 142,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "キュベレイ",
+    "value": 143,
+    "hp": 18000,
+    "isBoss": false
+  },
+  {
+    "label": "ガザＣ",
+    "value": 144,
+    "hp": 4400,
+    "isBoss": false
+  },
+  {
+    "label": "ジェガン",
+    "value": 156,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "ジェガン",
+    "value": 157,
+    "hp": 5300,
+    "isBoss": false
+  },
+  {
+    "label": "リ・ガズィ",
+    "value": 158,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "リ・ガズィ（ＢＷＳ）",
+    "value": 159,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "ラー・カイラム",
+    "value": 160,
+    "hp": 12500,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ドーガ",
+    "value": 161,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ドーガ",
+    "value": 162,
+    "hp": 8400,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ドーガ",
+    "value": 163,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ドーガ",
+    "value": 164,
+    "hp": 13800,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ドーガ",
+    "value": 165,
+    "hp": 26500,
+    "isBoss": false
+  },
+  {
+    "label": "ヤクト・ドーガ",
+    "value": 166,
+    "hp": 19500,
+    "isBoss": false
+  },
+  {
+    "label": "ヤクト・ドーガ",
+    "value": 167,
+    "hp": 32500,
+    "isBoss": false
+  },
+  {
+    "label": "ヤクト・ドーガ",
+    "value": 168,
+    "hp": 45000,
+    "isBoss": false
+  },
+  {
+    "label": "ヤクト・ドーガ",
+    "value": 169,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "ヤクト・ドーガ",
+    "value": 170,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "α・アジール",
+    "value": 171,
+    "hp": 8200,
+    "isBoss": false
+  },
+  {
+    "label": "サザビー",
+    "value": 172,
+    "hp": 5600,
+    "isBoss": false
+  },
+  {
+    "label": "サザビー",
+    "value": 173,
+    "hp": 5600,
+    "isBoss": false
+  },
+  {
+    "label": "レウルーラ",
+    "value": 174,
+    "hp": 56000,
+    "isBoss": false
+  },
+  {
+    "label": "ムサカ",
+    "value": 175,
+    "hp": 18600,
+    "isBoss": false
+  },
+  {
+    "label": "ムサカ",
+    "value": 176,
+    "hp": 22600,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ドーガ",
+    "value": 177,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ウイングガンダムゼロ",
+    "value": 182,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "ウイングガンダムゼロ",
+    "value": 183,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "ガンダムデスサイズヘル",
+    "value": 184,
+    "hp": 5800,
+    "isBoss": false
+  },
+  {
+    "label": "ガンダムデスサイズヘル",
+    "value": 185,
+    "hp": 5800,
+    "isBoss": false
+  },
+  {
+    "label": "ガンダムヘビーアームズ改",
+    "value": 186,
+    "hp": 5900,
+    "isBoss": false
+  },
+  {
+    "label": "ガンダムヘビーアームズ改",
+    "value": 187,
+    "hp": 5900,
+    "isBoss": false
+  },
+  {
+    "label": "ガンダムサンドロック改",
+    "value": 188,
+    "hp": 6200,
+    "isBoss": false
+  },
+  {
+    "label": "ガンダムサンドロック改",
+    "value": 189,
+    "hp": 6200,
+    "isBoss": false
+  },
+  {
+    "label": "アルトロンガンダム",
+    "value": 190,
+    "hp": 6100,
+    "isBoss": false
+  },
+  {
+    "label": "アルトロンガンダム",
+    "value": 191,
+    "hp": 6100,
+    "isBoss": false
+  },
+  {
+    "label": "サーペント",
+    "value": 198,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "サーペント",
+    "value": 199,
+    "hp": 8700,
+    "isBoss": false
+  },
+  {
+    "label": "サーペント",
+    "value": 200,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "リーオー",
+    "value": 201,
+    "hp": 3900,
+    "isBoss": false
+  },
+  {
+    "label": "サーペント",
+    "value": 202,
+    "hp": 6300,
+    "isBoss": false
+  },
+  {
+    "label": "∀ガンダム",
+    "value": 213,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "∀ガンダム",
+    "value": 214,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "デスティニーガンダム",
+    "value": 219,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "デスティニーガンダム",
+    "value": 220,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "デスティニーガンダム",
+    "value": 221,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "ストライクフリーダムガンダム",
+    "value": 222,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ストライクフリーダムガンダム",
+    "value": 223,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "デスティニーガンダム",
+    "value": 224,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "ストライクフリーダムガンダム",
+    "value": 225,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ダブルオーライザー",
+    "value": 230,
+    "hp": 5600,
+    "isBoss": false
+  },
+  {
+    "label": "ダブルオークアンタ",
+    "value": 231,
+    "hp": 5700,
+    "isBoss": false
+  },
+  {
+    "label": "ダブルオークアンタ",
+    "value": 232,
+    "hp": 5700,
+    "isBoss": false
+  },
+  {
+    "label": "ガンダムサバーニャ",
+    "value": 233,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "ガンダムサバーニャ",
+    "value": 234,
+    "hp": 5700,
+    "isBoss": false
+  },
+  {
+    "label": "ガンダムハルート",
+    "value": 235,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ガンダムハルート",
+    "value": 236,
+    "hp": 5800,
+    "isBoss": false
+  },
+  {
+    "label": "ラファエルガンダム",
+    "value": 237,
+    "hp": 5900,
+    "isBoss": false
+  },
+  {
+    "label": "ラファエルガンダム",
+    "value": 238,
+    "hp": 5900,
+    "isBoss": false
+  },
+  {
+    "label": "ラファエルガンダム",
+    "value": 239,
+    "hp": 5900,
+    "isBoss": false
+  },
+  {
+    "label": "プトレマイオス２改",
+    "value": 240,
+    "hp": 11000,
+    "isBoss": false
+  },
+  {
+    "label": "プトレマイオス２改",
+    "value": 241,
+    "hp": 11000,
+    "isBoss": false
+  },
+  {
+    "label": "ＧＮ－ＸⅣ",
+    "value": 242,
+    "hp": 5800,
+    "isBoss": false
+  },
+  {
+    "label": "ＧＮ－ＸⅣ",
+    "value": 243,
+    "hp": 5800,
+    "isBoss": false
+  },
+  {
+    "label": "ＧＮ－ＸⅣ",
+    "value": 244,
+    "hp": 5600,
+    "isBoss": false
+  },
+  {
+    "label": "ＧＮ－ＸⅣ",
+    "value": 245,
+    "hp": 6600,
+    "isBoss": false
+  },
+  {
+    "label": "ＧＮ－ＸⅣ",
+    "value": 246,
+    "hp": 8600,
+    "isBoss": false
+  },
+  {
+    "label": "ブレイヴ",
+    "value": 247,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ブレイヴ",
+    "value": 248,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ＥＬＳ　ＧＮ－ＸⅣ",
+    "value": 255,
+    "hp": 14600,
+    "isBoss": false
+  },
+  {
+    "label": "ＧＮ－ＸⅣ",
+    "value": 259,
+    "hp": 6100,
+    "isBoss": false
+  },
+  {
+    "label": "ユニコーンガンダム",
+    "value": 264,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ユニコーンガンダム",
+    "value": 265,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ユニコーンガンダム",
+    "value": 266,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ユニコーンガンダム",
+    "value": 267,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ユニコーンガンダム",
+    "value": 268,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ユニコーンガンダム",
+    "value": 269,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ユニコーンガンダム",
+    "value": 270,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ユニコーンガンダム",
+    "value": 271,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ＦＡ・ユニコーンガンダム",
+    "value": 272,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ＦＡ・ユニコーンガンダム",
+    "value": 273,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ユニコーンガンダム",
+    "value": 274,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ユニコーンガンダム",
+    "value": 275,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ＦＡ・ユニコーンガンダム",
+    "value": 276,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ＦＡ・ユニコーンガンダム",
+    "value": 277,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "バンシィ",
+    "value": 278,
+    "hp": 25000,
+    "isBoss": false
+  },
+  {
+    "label": "バンシィ",
+    "value": 279,
+    "hp": 28000,
+    "isBoss": false
+  },
+  {
+    "label": "バンシィ・ノルン",
+    "value": 280,
+    "hp": 45000,
+    "isBoss": false
+  },
+  {
+    "label": "バンシィ・ノルン",
+    "value": 281,
+    "hp": 55000,
+    "isBoss": false
+  },
+  {
+    "label": "バンシィ・ノルン",
+    "value": 282,
+    "hp": 60000,
+    "isBoss": false
+  },
+  {
+    "label": "バンシィ・ノルン",
+    "value": 283,
+    "hp": 14464,
+    "isBoss": false
+  },
+  {
+    "label": "バンシィ・ノルン",
+    "value": 284,
+    "hp": 5300,
+    "isBoss": false
+  },
+  {
+    "label": "バンシィ・ノルン",
+    "value": 285,
+    "hp": 5300,
+    "isBoss": false
+  },
+  {
+    "label": "バンシィ・ノルン",
+    "value": 286,
+    "hp": 5300,
+    "isBoss": false
+  },
+  {
+    "label": "バンシィ・ノルン",
+    "value": 287,
+    "hp": 5300,
+    "isBoss": false
+  },
+  {
+    "label": "リゼル",
+    "value": 288,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "リゼル（ＭＡ）",
+    "value": 289,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "リゼル",
+    "value": 290,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "リゼル（ＭＡ）",
+    "value": 291,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "リゼル（ＭＡ）",
+    "value": 292,
+    "hp": 6300,
+    "isBoss": false
+  },
+  {
+    "label": "リゼル（ＭＡ）",
+    "value": 293,
+    "hp": 8300,
+    "isBoss": false
+  },
+  {
+    "label": "デルタプラス",
+    "value": 294,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "デルタプラス（ＷＲ）",
+    "value": 295,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "デルタプラス",
+    "value": 296,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "デルタプラス（ＷＲ）",
+    "value": 297,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ロト",
+    "value": 298,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "ジェガン",
+    "value": 299,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ジェスタ",
+    "value": 300,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "ネェル・アーガマ",
+    "value": 301,
+    "hp": 12000,
+    "isBoss": false
+  },
+  {
+    "label": "シナンジュ",
+    "value": 302,
+    "hp": 32000,
+    "isBoss": false
+  },
+  {
+    "label": "シナンジュ",
+    "value": 303,
+    "hp": 49000,
+    "isBoss": false
+  },
+  {
+    "label": "シナンジュ",
+    "value": 304,
+    "hp": 6464,
+    "isBoss": false
+  },
+  {
+    "label": "ネオ・ジオング",
+    "value": 305,
+    "hp": 59464,
+    "isBoss": false
+  },
+  {
+    "label": "クシャトリヤ",
+    "value": 306,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "クシャトリヤ",
+    "value": 307,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ズール",
+    "value": 308,
+    "hp": 5900,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ズール",
+    "value": 309,
+    "hp": 9200,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ズール",
+    "value": 310,
+    "hp": 5900,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ズール",
+    "value": 311,
+    "hp": 7100,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ズール",
+    "value": 312,
+    "hp": 10600,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ズール",
+    "value": 313,
+    "hp": 17000,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ズール",
+    "value": 314,
+    "hp": 32000,
+    "isBoss": false
+  },
+  {
+    "label": "ローゼン・ズール",
+    "value": 315,
+    "hp": 36000,
+    "isBoss": false
+  },
+  {
+    "label": "ローゼン・ズール",
+    "value": 316,
+    "hp": 60000,
+    "isBoss": false
+  },
+  {
+    "label": "ドラッツェ",
+    "value": 317,
+    "hp": 3500,
+    "isBoss": false
+  },
+  {
+    "label": "ドラッツェ",
+    "value": 318,
+    "hp": 3500,
+    "isBoss": false
+  },
+  {
+    "label": "ドライセン",
+    "value": 319,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "ドライセン",
+    "value": 320,
+    "hp": 8000,
+    "isBoss": false
+  },
+  {
+    "label": "ドライセン",
+    "value": 321,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "ズサ",
+    "value": 322,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "ズサ",
+    "value": 323,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "ガルスＫ",
+    "value": 324,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ガルスＫ",
+    "value": 325,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ドワッジ",
+    "value": 326,
+    "hp": 5600,
+    "isBoss": false
+  },
+  {
+    "label": "ドワッジ",
+    "value": 327,
+    "hp": 5600,
+    "isBoss": false
+  },
+  {
+    "label": "ジュアッグ",
+    "value": 328,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ズゴック",
+    "value": 329,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "バイアラン・カスタム",
+    "value": 330,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "ガランシェール",
+    "value": 331,
+    "hp": 45000,
+    "isBoss": false
+  },
+  {
+    "label": "ガランシェール",
+    "value": 332,
+    "hp": 10000,
+    "isBoss": false
+  },
+  {
+    "label": "デルタプラス",
+    "value": 333,
+    "hp": 7800,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ズール",
+    "value": 334,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ズール",
+    "value": 335,
+    "hp": 16000,
+    "isBoss": false
+  },
+  {
+    "label": "ネオ・ジオング",
+    "value": 336,
+    "hp": 9464,
+    "isBoss": false
+  },
+  {
+    "label": "ローゼン・ズール",
+    "value": 337,
+    "hp": 45000,
+    "isBoss": false
+  },
+  {
+    "label": "ドライセン",
+    "value": 338,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ズサ",
+    "value": 339,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "ガルスＫ",
+    "value": 340,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ドワッジ",
+    "value": 341,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ガンバスター",
+    "value": 346,
+    "hp": 9600,
+    "isBoss": false
+  },
+  {
+    "label": "ガンバスター",
+    "value": 347,
+    "hp": 9600,
+    "isBoss": false
+  },
+  {
+    "label": "ガンバスター",
+    "value": 348,
+    "hp": 9600,
+    "isBoss": false
+  },
+  {
+    "label": "宇宙怪獣・上陸艇",
+    "value": 351,
+    "hp": 24000,
+    "isBoss": false
+  },
+  {
+    "label": "宇宙怪獣・巡洋艦級",
+    "value": 352,
+    "hp": 32000,
+    "isBoss": false
+  },
+  {
+    "label": "宇宙怪獣・混合型",
+    "value": 353,
+    "hp": 45000,
+    "isBoss": false
+  },
+  {
+    "label": "ディスヌフ",
+    "value": 358,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "ディスヌフ",
+    "value": 359,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "ディスヌフ",
+    "value": 360,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "ディスヌフ",
+    "value": 361,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "バスターマシン１９号",
+    "value": 362,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "バスターマシン１９号",
+    "value": 363,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "ヴァンセット",
+    "value": 364,
+    "hp": 7300,
+    "isBoss": false
+  },
+  {
+    "label": "ヴァンセット",
+    "value": 365,
+    "hp": 7300,
+    "isBoss": false
+  },
+  {
+    "label": "ヴァンセット",
+    "value": 366,
+    "hp": 7300,
+    "isBoss": false
+  },
+  {
+    "label": "キャトフヴァンディス",
+    "value": 367,
+    "hp": 7100,
+    "isBoss": false
+  },
+  {
+    "label": "キャトフヴァンディス",
+    "value": 368,
+    "hp": 7100,
+    "isBoss": false
+  },
+  {
+    "label": "キャトフヴァンディス",
+    "value": 369,
+    "hp": 7100,
+    "isBoss": false
+  },
+  {
+    "label": "ＥＶＯ－４",
+    "value": 370,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "ＥＶＯ－４",
+    "value": 371,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "ＥＶＯ－４",
+    "value": 372,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "ＥＶＯ－４",
+    "value": 373,
+    "hp": 4200,
+    "isBoss": false
+  },
+  {
+    "label": "バスターマシン７号",
+    "value": 374,
+    "hp": 3000,
+    "isBoss": false
+  },
+  {
+    "label": "バスターマシン７号",
+    "value": 375,
+    "hp": 3000,
+    "isBoss": false
+  },
+  {
+    "label": "バスターマシン７号",
+    "value": 376,
+    "hp": 3000,
+    "isBoss": false
+  },
+  {
+    "label": "ダイバスター",
+    "value": 377,
+    "hp": 16500,
+    "isBoss": false
+  },
+  {
+    "label": "ダイバスター",
+    "value": 378,
+    "hp": 16500,
+    "isBoss": false
+  },
+  {
+    "label": "ダイバスター",
+    "value": 379,
+    "hp": 16500,
+    "isBoss": false
+  },
+  {
+    "label": "宇宙怪獣・ツインテール級",
+    "value": 380,
+    "hp": 7800,
+    "isBoss": false
+  },
+  {
+    "label": "宇宙怪獣・ビーストロン級",
+    "value": 381,
+    "hp": 21000,
+    "isBoss": false
+  },
+  {
+    "label": "宇宙怪獣・ザザゴラス級",
+    "value": 382,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "タイタン変動重力源",
+    "value": 383,
+    "hp": 48000,
+    "isBoss": false
+  },
+  {
+    "label": "タイタン変動重力源",
+    "value": 384,
+    "hp": 6928,
+    "isBoss": false
+  },
+  {
+    "label": "エグゼリオ変動重力源",
+    "value": 385,
+    "hp": 53392,
+    "isBoss": false
+  },
+  {
+    "label": "エグゼリオ変動重力源",
+    "value": 386,
+    "hp": 37856,
+    "isBoss": false
+  },
+  {
+    "label": "ビーストロン級",
+    "value": 387,
+    "hp": 21000,
+    "isBoss": false
+  },
+  {
+    "label": "ザザゴラス級",
+    "value": 388,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "タイタン変動重力源",
+    "value": 389,
+    "hp": 2464,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－１９改Ｆバルキリー",
+    "value": 394,
+    "hp": 4400,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－１９改Ｆバルキリー",
+    "value": 395,
+    "hp": 4400,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－１９改Ｆバルキリー",
+    "value": 396,
+    "hp": 4400,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２２Ｓ　ＳボーゲルⅡＦ",
+    "value": 397,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２２Ｓ　ＳボーゲルⅡＢ",
+    "value": 398,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２５ＦメサイアＦ・ＴＰ",
+    "value": 403,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２５ＦメサイアＢ・ＴＰ",
+    "value": 404,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２５ＦメサイアＦ・ＴＰ",
+    "value": 405,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２５ＦメサイアＢ・ＴＰ",
+    "value": 406,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２５ＧメサイアＦ・ＴＰ",
+    "value": 407,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２５ＧメサイアＢ・ＴＰ",
+    "value": 408,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２５ＧメサイアＦ・ＴＰ",
+    "value": 409,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２５ＧメサイアＢ・ＴＰ",
+    "value": 410,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＲＶＦ－２５メサイアＦ",
+    "value": 411,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "ＲＶＦ－２５メサイアＢ",
+    "value": 412,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "ＲＶＦ－２５メサイアＦ・ＳＰ",
+    "value": 413,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ＲＶＦ－２５メサイアＢ・ＳＰ",
+    "value": 414,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２５ＳメサイアＦ・ＴＰ",
+    "value": 415,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２５ＳメサイアＢ・ＴＰ",
+    "value": 416,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２５ＳメサイアＦ・ＴＰ",
+    "value": 417,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２５ＳメサイアＢ・ＴＰ",
+    "value": 418,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "クァドラン・レア",
+    "value": 419,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＢ－６ケーニッヒモンスターＳ",
+    "value": 420,
+    "hp": 6400,
+    "isBoss": false
+  },
+  {
+    "label": "マクロス・クォーター要塞艦型",
+    "value": 421,
+    "hp": 12400,
+    "isBoss": false
+  },
+  {
+    "label": "マクロス・クォーター強攻型",
+    "value": 422,
+    "hp": 12400,
+    "isBoss": false
+  },
+  {
+    "label": "マクロス・クォーター要塞艦型",
+    "value": 423,
+    "hp": 12400,
+    "isBoss": false
+  },
+  {
+    "label": "マクロス・クォーター強攻型",
+    "value": 424,
+    "hp": 12400,
+    "isBoss": false
+  },
+  {
+    "label": "ＹＦ－２９デュランダルＦ・ＳＰ",
+    "value": 425,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "ＹＦ－２９デュランダルＢ・ＳＰ",
+    "value": 426,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "ＹＦ－２９デュランダルＦ・ＳＰ",
+    "value": 427,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ＹＦ－２９デュランダルＢ・ＳＰ",
+    "value": 428,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ＹＦ－２９デュランダルＦ・ＳＰ",
+    "value": 429,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ＹＦ－２９デュランダルＢ・ＳＰ",
+    "value": 430,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ＹＦ－２９デュランダルＦ・ＳＰ",
+    "value": 431,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ＹＦ－２９デュランダルＢ・ＳＰ",
+    "value": 432,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ＹＦ－２９デュランダルＦ・ＳＰ",
+    "value": 433,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ＹＦ－２９デュランダルＢ・ＳＰ",
+    "value": 434,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ＹＦ－２９デュランダルＦ・ＳＰ",
+    "value": 435,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ＹＦ－２９デュランダルＢ・ＳＰ",
+    "value": 436,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２７γルシファーＦ・ＳＰ",
+    "value": 437,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２７γルシファーＢ・ＳＰ",
+    "value": 438,
+    "hp": 5100,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２７γルシファーＦ・ＳＰ",
+    "value": 439,
+    "hp": 42000,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－２７γルシファーＢ・ＳＰ",
+    "value": 440,
+    "hp": 42000,
+    "isBoss": false
+  },
+  {
+    "label": "ゴーストＶ９",
+    "value": 441,
+    "hp": 7000,
+    "isBoss": false
+  },
+  {
+    "label": "ゴーストＶ９",
+    "value": 442,
+    "hp": 9000,
+    "isBoss": false
+  },
+  {
+    "label": "重戦艦バジュラ",
+    "value": 459,
+    "hp": 62500,
+    "isBoss": false
+  },
+  {
+    "label": "重戦艦バジュラ",
+    "value": 460,
+    "hp": 62500,
+    "isBoss": false
+  },
+  {
+    "label": "重戦艦バジュラ",
+    "value": 461,
+    "hp": 6964,
+    "isBoss": false
+  },
+  {
+    "label": "駆逐艦バジュラ",
+    "value": 462,
+    "hp": 28500,
+    "isBoss": false
+  },
+  {
+    "label": "駆逐艦バジュラ",
+    "value": 463,
+    "hp": 32500,
+    "isBoss": false
+  },
+  {
+    "label": "駆逐艦バジュラ",
+    "value": 464,
+    "hp": 32500,
+    "isBoss": false
+  },
+  {
+    "label": "駆逐艦バジュラ",
+    "value": 465,
+    "hp": 36500,
+    "isBoss": false
+  },
+  {
+    "label": "クイーン・フロンティア",
+    "value": 466,
+    "hp": 28928,
+    "isBoss": false
+  },
+  {
+    "label": "重戦艦バジュラ",
+    "value": 467,
+    "hp": 6964,
+    "isBoss": false
+  },
+  {
+    "label": "駆逐艦バジュラ",
+    "value": 468,
+    "hp": 18500,
+    "isBoss": false
+  },
+  {
+    "label": "真ゲッター１",
+    "value": 473,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "真ゲッター２",
+    "value": 474,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "真ゲッター３",
+    "value": 475,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "真ゲッター１",
+    "value": 476,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "真ゲッター２",
+    "value": 477,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "真ゲッター３",
+    "value": 478,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "真ゲッター１",
+    "value": 479,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "真ゲッター２",
+    "value": 480,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "真ゲッター３",
+    "value": 481,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "真ゲッタードラゴン",
+    "value": 482,
+    "hp": 13500,
+    "isBoss": false
+  },
+  {
+    "label": "真ゲッタードラゴン",
+    "value": 483,
+    "hp": 13500,
+    "isBoss": false
+  },
+  {
+    "label": "ブラックゲッター",
+    "value": 484,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "ブラックゲッター",
+    "value": 485,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "ブラックゲッター",
+    "value": 486,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "インベーダー",
+    "value": 487,
+    "hp": 9500,
+    "isBoss": false
+  },
+  {
+    "label": "インベーダー",
+    "value": 488,
+    "hp": 11500,
+    "isBoss": false
+  },
+  {
+    "label": "インベーダー",
+    "value": 489,
+    "hp": 24000,
+    "isBoss": false
+  },
+  {
+    "label": "インベーダー",
+    "value": 490,
+    "hp": 29000,
+    "isBoss": false
+  },
+  {
+    "label": "インベーダー",
+    "value": 491,
+    "hp": 34000,
+    "isBoss": false
+  },
+  {
+    "label": "コーウェン＆スティンガー",
+    "value": 492,
+    "hp": 18464,
+    "isBoss": false
+  },
+  {
+    "label": "インベーダー",
+    "value": 493,
+    "hp": 18000,
+    "isBoss": false
+  },
+  {
+    "label": "インベーダー",
+    "value": 494,
+    "hp": 23000,
+    "isBoss": false
+  },
+  {
+    "label": "インベーダー",
+    "value": 495,
+    "hp": 28000,
+    "isBoss": false
+  },
+  {
+    "label": "マジンガーＺ",
+    "value": 500,
+    "hp": 6800,
+    "isBoss": false
+  },
+  {
+    "label": "マジンガーＺ",
+    "value": 501,
+    "hp": 6800,
+    "isBoss": false
+  },
+  {
+    "label": "マジンガーＺ",
+    "value": 502,
+    "hp": 6800,
+    "isBoss": false
+  },
+  {
+    "label": "マジンガーＺ",
+    "value": 503,
+    "hp": 6800,
+    "isBoss": false
+  },
+  {
+    "label": "ビューナスＡ",
+    "value": 504,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "ボスボロット",
+    "value": 505,
+    "hp": 5600,
+    "isBoss": true
+  },
+  {
+    "label": "ボスボロット",
+    "value": 506,
+    "hp": 5600,
+    "isBoss": true
+  },
+  {
+    "label": "ゴーストファイアーＶ９",
+    "value": 507,
+    "hp": 28000,
+    "isBoss": false
+  },
+  {
+    "label": "ゴウキューンＵ５",
+    "value": 508,
+    "hp": 28000,
+    "isBoss": false
+  },
+  {
+    "label": "ジェイサーＪ１",
+    "value": 509,
+    "hp": 28000,
+    "isBoss": false
+  },
+  {
+    "label": "バジンＢ９",
+    "value": 510,
+    "hp": 28000,
+    "isBoss": false
+  },
+  {
+    "label": "バルガスＶ５",
+    "value": 511,
+    "hp": 28000,
+    "isBoss": false
+  },
+  {
+    "label": "グロゴスＧ５",
+    "value": 512,
+    "hp": 28000,
+    "isBoss": false
+  },
+  {
+    "label": "タロス像",
+    "value": 513,
+    "hp": 9600,
+    "isBoss": false
+  },
+  {
+    "label": "タロス像",
+    "value": 514,
+    "hp": 12600,
+    "isBoss": false
+  },
+  {
+    "label": "ゼウス神",
+    "value": 515,
+    "hp": 14000,
+    "isBoss": false
+  },
+  {
+    "label": "ゼウス神",
+    "value": 516,
+    "hp": 14000,
+    "isBoss": false
+  },
+  {
+    "label": "ハーデス神",
+    "value": 517,
+    "hp": 62464,
+    "isBoss": false
+  },
+  {
+    "label": "ハーデス神",
+    "value": 518,
+    "hp": 6928,
+    "isBoss": false
+  },
+  {
+    "label": "勇者ガラダブラ",
+    "value": 519,
+    "hp": 65000,
+    "isBoss": false
+  },
+  {
+    "label": "勇者ガラダブラ",
+    "value": 520,
+    "hp": 19464,
+    "isBoss": false
+  },
+  {
+    "label": "勇者ガラダブラ",
+    "value": 521,
+    "hp": 18000,
+    "isBoss": false
+  },
+  {
+    "label": "ミケーネ神",
+    "value": 522,
+    "hp": 24000,
+    "isBoss": false
+  },
+  {
+    "label": "ミケーネ神",
+    "value": 523,
+    "hp": 24000,
+    "isBoss": false
+  },
+  {
+    "label": "ミケーネ神",
+    "value": 524,
+    "hp": 24000,
+    "isBoss": false
+  },
+  {
+    "label": "タロス像",
+    "value": 525,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "勇者ガラダブラ",
+    "value": 526,
+    "hp": 4464,
+    "isBoss": false
+  },
+  {
+    "label": "ミケーネ神",
+    "value": 527,
+    "hp": 18000,
+    "isBoss": false
+  },
+  {
+    "label": "ミケーネ神",
+    "value": 528,
+    "hp": 18000,
+    "isBoss": false
+  },
+  {
+    "label": "ミケーネ神",
+    "value": 529,
+    "hp": 18000,
+    "isBoss": false
+  },
+  {
+    "label": "ダイ・ガード",
+    "value": 534,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "ダイ・ガード",
+    "value": 535,
+    "hp": 6200,
+    "isBoss": false
+  },
+  {
+    "label": "フレイムワーク",
+    "value": 536,
+    "hp": 16000,
+    "isBoss": false
+  },
+  {
+    "label": "ビッグオー",
+    "value": 541,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "ビッグオー",
+    "value": 542,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "ビッグオー",
+    "value": 543,
+    "hp": 17600,
+    "isBoss": false
+  },
+  {
+    "label": "ベック・ビクトリー・デラックス",
+    "value": 544,
+    "hp": 19000,
+    "isBoss": false
+  },
+  {
+    "label": "ベック・ビクトリー・デラックス",
+    "value": 545,
+    "hp": 39000,
+    "isBoss": false
+  },
+  {
+    "label": "ベック・ビクトリー・デラックス",
+    "value": 547,
+    "hp": 7300,
+    "isBoss": false
+  },
+  {
+    "label": "ビッグデュオ",
+    "value": 548,
+    "hp": 15500,
+    "isBoss": false
+  },
+  {
+    "label": "ビッグファウ",
+    "value": 549,
+    "hp": 16500,
+    "isBoss": false
+  },
+  {
+    "label": "ベック・ビクトリー・デラックス",
+    "value": 550,
+    "hp": 49000,
+    "isBoss": false
+  },
+  {
+    "label": "ＡＲＸ－７　アーバレスト",
+    "value": 555,
+    "hp": 4600,
+    "isBoss": false
+  },
+  {
+    "label": "ＡＲＸ－７　アーバレスト",
+    "value": 556,
+    "hp": 4600,
+    "isBoss": false
+  },
+  {
+    "label": "ＡＲＸ－７　アーバレスト",
+    "value": 557,
+    "hp": 4600,
+    "isBoss": false
+  },
+  {
+    "label": "ＡＲＸ－７　アーバレスト",
+    "value": 558,
+    "hp": 4600,
+    "isBoss": false
+  },
+  {
+    "label": "ＡＲＸ－７　アーバレスト",
+    "value": 559,
+    "hp": 4600,
+    "isBoss": false
+  },
+  {
+    "label": "ＡＲＸ－８　レーバテイン",
+    "value": 560,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＡＲＸ－８　レーバテイン",
+    "value": 561,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "ＡＲＸ－８　レーバテイン",
+    "value": 562,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ９　ガーンズバック",
+    "value": 563,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ９　ガーンズバック",
+    "value": 564,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ９　ガーンズバック",
+    "value": 565,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ９　ガーンズバック",
+    "value": 566,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ９　ガーンズバック",
+    "value": 567,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ９　ガーンズバック",
+    "value": 568,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ９Ｄ　ファルケ",
+    "value": 569,
+    "hp": 4600,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ９Ｄ　ファルケ",
+    "value": 570,
+    "hp": 4600,
+    "isBoss": false
+  },
+  {
+    "label": "サベージ（クロスボウ）",
+    "value": 571,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "サベージ（クロスボウ）",
+    "value": 572,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "サベージ（クロスボウ）",
+    "value": 573,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "トゥアハー・デ・ダナン",
+    "value": 574,
+    "hp": 11600,
+    "isBoss": false
+  },
+  {
+    "label": "トゥアハー・デ・ダナン",
+    "value": 575,
+    "hp": 11600,
+    "isBoss": false
+  },
+  {
+    "label": "トゥアハー・デ・ダナン",
+    "value": 576,
+    "hp": 11600,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ６　ブッシュネル",
+    "value": 577,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ６　ブッシュネル",
+    "value": 578,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ６　ブッシュネル",
+    "value": 579,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ６　ブッシュネル",
+    "value": 580,
+    "hp": 4300,
+    "isBoss": false
+  },
+  {
+    "label": "Ｃ３－５　ミストラルⅡ",
+    "value": 581,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "Ｃ３－５　ミストラルⅡ",
+    "value": 582,
+    "hp": 6300,
+    "isBoss": false
+  },
+  {
+    "label": "Ｃ３－５　ミストラルⅡ",
+    "value": 583,
+    "hp": 4300,
+    "isBoss": false
+  },
+  {
+    "label": "Ｒｋ－９２　サベージ",
+    "value": 584,
+    "hp": 4600,
+    "isBoss": false
+  },
+  {
+    "label": "Ｒｋ－９２　サベージ",
+    "value": 585,
+    "hp": 6100,
+    "isBoss": false
+  },
+  {
+    "label": "Ｚｙ－９８　シャドウ",
+    "value": 586,
+    "hp": 5800,
+    "isBoss": false
+  },
+  {
+    "label": "Ｚｙ－９８　シャドウ",
+    "value": 587,
+    "hp": 7300,
+    "isBoss": false
+  },
+  {
+    "label": "プラン１０５６　コダールｉ",
+    "value": 588,
+    "hp": 35600,
+    "isBoss": false
+  },
+  {
+    "label": "プラン１０５６　コダールｉ",
+    "value": 589,
+    "hp": 55600,
+    "isBoss": false
+  },
+  {
+    "label": "プラン１０５９　コダールｃ",
+    "value": 590,
+    "hp": 9800,
+    "isBoss": false
+  },
+  {
+    "label": "プラン１０５９　コダールｃ",
+    "value": 591,
+    "hp": 12800,
+    "isBoss": false
+  },
+  {
+    "label": "ベヘモス",
+    "value": 592,
+    "hp": 22000,
+    "isBoss": false
+  },
+  {
+    "label": "ベヘモス",
+    "value": 593,
+    "hp": 36000,
+    "isBoss": false
+  },
+  {
+    "label": "ベヘモス",
+    "value": 594,
+    "hp": 18000,
+    "isBoss": false
+  },
+  {
+    "label": "プラン１０５５　ベリアル",
+    "value": 595,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "プラン１０５５　ベリアル",
+    "value": 596,
+    "hp": 15200,
+    "isBoss": false
+  },
+  {
+    "label": "ボン太くん",
+    "value": 597,
+    "hp": 3800,
+    "isBoss": false
+  },
+  {
+    "label": "ボン太くん",
+    "value": 598,
+    "hp": 3800,
+    "isBoss": false
+  },
+  {
+    "label": "ボン太くん",
+    "value": 599,
+    "hp": 3800,
+    "isBoss": false
+  },
+  {
+    "label": "ボン太くん",
+    "value": 600,
+    "hp": 3800,
+    "isBoss": false
+  },
+  {
+    "label": "ボン太くん",
+    "value": 601,
+    "hp": 3800,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ６　ブッシュネル",
+    "value": 602,
+    "hp": 4300,
+    "isBoss": false
+  },
+  {
+    "label": "Ｃ３－５　ミストラルⅡ",
+    "value": 603,
+    "hp": 4300,
+    "isBoss": false
+  },
+  {
+    "label": "Ｒｋ－９２　サベージ",
+    "value": 604,
+    "hp": 4100,
+    "isBoss": false
+  },
+  {
+    "label": "Ｚｙ－９８　シャドウ",
+    "value": 605,
+    "hp": 5800,
+    "isBoss": false
+  },
+  {
+    "label": "プラン１０５５　ベリアル",
+    "value": 606,
+    "hp": 6300,
+    "isBoss": false
+  },
+  {
+    "label": "ソーラーアクエリオン",
+    "value": 611,
+    "hp": 7100,
+    "isBoss": false
+  },
+  {
+    "label": "ソーラーアクエリオン",
+    "value": 612,
+    "hp": 7100,
+    "isBoss": false
+  },
+  {
+    "label": "ケルビム・ヴェルルゼバ",
+    "value": 613,
+    "hp": 20464,
+    "isBoss": false
+  },
+  {
+    "label": "ケルビム・ヴェルルゼバ",
+    "value": 614,
+    "hp": 20464,
+    "isBoss": false
+  },
+  {
+    "label": "アクエリオンＥＶＯＬ",
+    "value": 619,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "アクエリオンゲパルト",
+    "value": 620,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "アクエリオンスパーダ",
+    "value": 621,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "アクエリオンＥＶＯＬ",
+    "value": 622,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "アクエリオンゲパルト",
+    "value": 623,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "アクエリオンスパーダ",
+    "value": 624,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "アクエリオンＥＶＯＬ",
+    "value": 625,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "アクエリオンゲパルト",
+    "value": 626,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "アクエリオンスパーダ",
+    "value": 627,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "ロー・グニス",
+    "value": 628,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "ロー・グニス",
+    "value": 629,
+    "hp": 9200,
+    "isBoss": false
+  },
+  {
+    "label": "コモン・グニス",
+    "value": 630,
+    "hp": 8200,
+    "isBoss": false
+  },
+  {
+    "label": "コモン・グニス",
+    "value": 631,
+    "hp": 10200,
+    "isBoss": false
+  },
+  {
+    "label": "エンシェントＡＱ",
+    "value": 634,
+    "hp": 29464,
+    "isBoss": false
+  },
+  {
+    "label": "エンシェントＡＱ",
+    "value": 635,
+    "hp": 33928,
+    "isBoss": false
+  },
+  {
+    "label": "ロー・グニス",
+    "value": 636,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "コモン・グニス",
+    "value": 637,
+    "hp": 8200,
+    "isBoss": false
+  },
+  {
+    "label": "ケルビム兵",
+    "value": 638,
+    "hp": 15000,
+    "isBoss": false
+  },
+  {
+    "label": "エンシェントＡＱ",
+    "value": 639,
+    "hp": 9464,
+    "isBoss": false
+  },
+  {
+    "label": "ダンクーガノヴァマックスゴッド",
+    "value": 644,
+    "hp": 7400,
+    "isBoss": false
+  },
+  {
+    "label": "ダンクーガノヴァマックスゴッド",
+    "value": 645,
+    "hp": 7400,
+    "isBoss": false
+  },
+  {
+    "label": "ドラゴンズハイヴ",
+    "value": 646,
+    "hp": 12500,
+    "isBoss": false
+  },
+  {
+    "label": "ドラゴンズハイヴ",
+    "value": 647,
+    "hp": 12500,
+    "isBoss": false
+  },
+  {
+    "label": "グレンラガン",
+    "value": 652,
+    "hp": 6400,
+    "isBoss": false
+  },
+  {
+    "label": "グレンラガン",
+    "value": 653,
+    "hp": 6400,
+    "isBoss": false
+  },
+  {
+    "label": "グレンラガン",
+    "value": 654,
+    "hp": 6400,
+    "isBoss": false
+  },
+  {
+    "label": "超銀河ダイグレン",
+    "value": 655,
+    "hp": 14500,
+    "isBoss": false
+  },
+  {
+    "label": "超銀河ダイグレン",
+    "value": 656,
+    "hp": 14500,
+    "isBoss": false
+  },
+  {
+    "label": "超銀河ダイグレン",
+    "value": 657,
+    "hp": 14500,
+    "isBoss": false
+  },
+  {
+    "label": "超銀河グレンラガン",
+    "value": 658,
+    "hp": 15500,
+    "isBoss": false
+  },
+  {
+    "label": "超銀河グレンラガン",
+    "value": 659,
+    "hp": 15500,
+    "isBoss": false
+  },
+  {
+    "label": "超銀河グレンラガン",
+    "value": 660,
+    "hp": 15500,
+    "isBoss": false
+  },
+  {
+    "label": "天元突破グレンラガン",
+    "value": 661,
+    "hp": 17500,
+    "isBoss": false
+  },
+  {
+    "label": "天元突破グレンラガン",
+    "value": 662,
+    "hp": 17500,
+    "isBoss": false
+  },
+  {
+    "label": "天元突破グレンラガン",
+    "value": 663,
+    "hp": 17500,
+    "isBoss": false
+  },
+  {
+    "label": "スペースガンマール",
+    "value": 664,
+    "hp": 8500,
+    "isBoss": false
+  },
+  {
+    "label": "スペースガンマール",
+    "value": 665,
+    "hp": 8500,
+    "isBoss": false
+  },
+  {
+    "label": "スペースキングキタン",
+    "value": 666,
+    "hp": 9600,
+    "isBoss": false
+  },
+  {
+    "label": "スペースヨーコＷタンク",
+    "value": 667,
+    "hp": 9400,
+    "isBoss": false
+  },
+  {
+    "label": "ムガン",
+    "value": 668,
+    "hp": 9500,
+    "isBoss": false
+  },
+  {
+    "label": "上級ムガン",
+    "value": 669,
+    "hp": 12000,
+    "isBoss": false
+  },
+  {
+    "label": "アシュタンガ級",
+    "value": 670,
+    "hp": 62000,
+    "isBoss": false
+  },
+  {
+    "label": "ハスタグライ級",
+    "value": 671,
+    "hp": 30000,
+    "isBoss": false
+  },
+  {
+    "label": "パダ級",
+    "value": 672,
+    "hp": 35000,
+    "isBoss": false
+  },
+  {
+    "label": "エヴァンゲリオン初号機",
+    "value": 677,
+    "hp": 7300,
+    "isBoss": false
+  },
+  {
+    "label": "エヴァンゲリオン改２号機γ",
+    "value": 685,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "エヴァンゲリオン８号機",
+    "value": 686,
+    "hp": 7400,
+    "isBoss": false
+  },
+  {
+    "label": "エヴァンゲリオン第１３号機",
+    "value": 687,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "エヴァンゲリオン第１３号機",
+    "value": 688,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "エヴァンゲリオンＭａｒｋ．０９",
+    "value": 689,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "ランスロット・アルビオン",
+    "value": 704,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ランスロット・アルビオン",
+    "value": 705,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ランスロット・フロンティア",
+    "value": 706,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "ランスロット・フロンティア",
+    "value": 707,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "チェインバー",
+    "value": 712,
+    "hp": 4400,
+    "isBoss": false
+  },
+  {
+    "label": "チェインバー",
+    "value": 713,
+    "hp": 4400,
+    "isBoss": false
+  },
+  {
+    "label": "チェインバー",
+    "value": 714,
+    "hp": 4400,
+    "isBoss": false
+  },
+  {
+    "label": "チェインバー",
+    "value": 715,
+    "hp": 4400,
+    "isBoss": false
+  },
+  {
+    "label": "ストライカー",
+    "value": 716,
+    "hp": 13000,
+    "isBoss": false
+  },
+  {
+    "label": "ストライカー",
+    "value": 717,
+    "hp": 46000,
+    "isBoss": false
+  },
+  {
+    "label": "ストライカー",
+    "value": 718,
+    "hp": 10464,
+    "isBoss": false
+  },
+  {
+    "label": "ストライカー",
+    "value": 720,
+    "hp": 4600,
+    "isBoss": false
+  },
+  {
+    "label": "クジライカ",
+    "value": 721,
+    "hp": 2800,
+    "isBoss": false
+  },
+  {
+    "label": "ヒディアーズ",
+    "value": 722,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "ラケージ・ユンボロ",
+    "value": 723,
+    "hp": 5800,
+    "isBoss": false
+  },
+  {
+    "label": "ラケージ・ユンボロ",
+    "value": 724,
+    "hp": 22600,
+    "isBoss": false
+  },
+  {
+    "label": "海賊ユンボロ",
+    "value": 725,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "ストライカー",
+    "value": 726,
+    "hp": 48000,
+    "isBoss": false
+  },
+  {
+    "label": "ジェニオン",
+    "value": 731,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ジェニオン・ガイ",
+    "value": 732,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "ジェニオン",
+    "value": 733,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ジェニオン・ガイ",
+    "value": 734,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "ジェニオン",
+    "value": 735,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ジェニオン・ガイ",
+    "value": 736,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "ジェニオン",
+    "value": 737,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ジェニオン・ガイ",
+    "value": 738,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "ジェミニオン・レイ",
+    "value": 739,
+    "hp": 8000,
+    "isBoss": false
+  },
+  {
+    "label": "ジェニオン",
+    "value": 740,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ジェニオン・ガイ",
+    "value": 741,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "ジェミニオン・レイ",
+    "value": 742,
+    "hp": 8000,
+    "isBoss": false
+  },
+  {
+    "label": "バルゴラ・グローリーＳ",
+    "value": 743,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "バルゴラ・グローリーＳ",
+    "value": 744,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "ガンレオン・マグナ",
+    "value": 745,
+    "hp": 7400,
+    "isBoss": false
+  },
+  {
+    "label": "ガンレオン・マグナ",
+    "value": 746,
+    "hp": 7400,
+    "isBoss": false
+  },
+  {
+    "label": "リ・ブラスタＴ",
+    "value": 747,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "リ・ブラスタＴ",
+    "value": 748,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "ソーラリアン",
+    "value": 749,
+    "hp": 11600,
+    "isBoss": false
+  },
+  {
+    "label": "ソーラリアン",
+    "value": 750,
+    "hp": 11600,
+    "isBoss": false
+  },
+  {
+    "label": "ジェミニア",
+    "value": 752,
+    "hp": 14464,
+    "isBoss": false
+  },
+  {
+    "label": "ジェミニア",
+    "value": 753,
+    "hp": 34464,
+    "isBoss": false
+  },
+  {
+    "label": "ジェミニア",
+    "value": 754,
+    "hp": 8800,
+    "isBoss": false
+  },
+  {
+    "label": "ディオスク",
+    "value": 755,
+    "hp": 18000,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイ",
+    "value": 756,
+    "hp": 7100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイ",
+    "value": 757,
+    "hp": 11100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＧＥＭ",
+    "value": 758,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＧＥＭ",
+    "value": 759,
+    "hp": 11100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＣＡＮ",
+    "value": 760,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＣＡＮ",
+    "value": 761,
+    "hp": 12100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＣＡＮ",
+    "value": 762,
+    "hp": 12100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＳＡＧ",
+    "value": 763,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＳＡＧ",
+    "value": 764,
+    "hp": 12100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＨＩＡ",
+    "value": 765,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＨＩＡ",
+    "value": 766,
+    "hp": 12100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＨＩＡ",
+    "value": 767,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＡＮＴ",
+    "value": 768,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＡＮＴ",
+    "value": 769,
+    "hp": 12100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイ・アルカ",
+    "value": 770,
+    "hp": 18400,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイ・アルカ",
+    "value": 771,
+    "hp": 18400,
+    "isBoss": false
+  },
+  {
+    "label": "？？？",
+    "value": 772,
+    "hp": 18400,
+    "isBoss": false
+  },
+  {
+    "label": "デイモーン",
+    "value": 773,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "デイモーン",
+    "value": 774,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "デイモーン・ポリス",
+    "value": 775,
+    "hp": 4200,
+    "isBoss": false
+  },
+  {
+    "label": "ティアマート",
+    "value": 776,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "ティアマート",
+    "value": 777,
+    "hp": 9200,
+    "isBoss": false
+  },
+  {
+    "label": "アクシオ・バーグラー",
+    "value": 780,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "アクシオ・バーグラー",
+    "value": 781,
+    "hp": 9500,
+    "isBoss": false
+  },
+  {
+    "label": "エイクロス",
+    "value": 782,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "エイクロス",
+    "value": 783,
+    "hp": 7000,
+    "isBoss": false
+  },
+  {
+    "label": "エイクロス",
+    "value": 784,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "エイクロス",
+    "value": 785,
+    "hp": 9000,
+    "isBoss": false
+  },
+  {
+    "label": "ランボルト",
+    "value": 786,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "ランボルト",
+    "value": 787,
+    "hp": 8000,
+    "isBoss": false
+  },
+  {
+    "label": "ランボルト",
+    "value": 788,
+    "hp": 10000,
+    "isBoss": false
+  },
+  {
+    "label": "アクシオ",
+    "value": 789,
+    "hp": 4900,
+    "isBoss": false
+  },
+  {
+    "label": "アクシオ",
+    "value": 790,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "アクシオ",
+    "value": 791,
+    "hp": 8800,
+    "isBoss": false
+  },
+  {
+    "label": "尸逝天",
+    "value": 792,
+    "hp": 42464,
+    "isBoss": false
+  },
+  {
+    "label": "尸逝天",
+    "value": 793,
+    "hp": 62464,
+    "isBoss": false
+  },
+  {
+    "label": "尸逝天",
+    "value": 794,
+    "hp": 6928,
+    "isBoss": false
+  },
+  {
+    "label": "尸逝天",
+    "value": 795,
+    "hp": 42464,
+    "isBoss": false
+  },
+  {
+    "label": "尸冥爪",
+    "value": 796,
+    "hp": 15000,
+    "isBoss": false
+  },
+  {
+    "label": "尸冥爪",
+    "value": 797,
+    "hp": 17000,
+    "isBoss": false
+  },
+  {
+    "label": "尸冥爪・絶",
+    "value": 798,
+    "hp": 32000,
+    "isBoss": false
+  },
+  {
+    "label": "尸冥爪・絶",
+    "value": 799,
+    "hp": 64000,
+    "isBoss": false
+  },
+  {
+    "label": "プレイアデス・タウラ",
+    "value": 800,
+    "hp": 46464,
+    "isBoss": false
+  },
+  {
+    "label": "プレイアデス・タウラ",
+    "value": 801,
+    "hp": 928,
+    "isBoss": false
+  },
+  {
+    "label": "プレイアデス・タウラ",
+    "value": 802,
+    "hp": 10928,
+    "isBoss": false
+  },
+  {
+    "label": "プレイアデス・タウラ",
+    "value": 803,
+    "hp": 46464,
+    "isBoss": false
+  },
+  {
+    "label": "アルデバル",
+    "value": 804,
+    "hp": 20000,
+    "isBoss": false
+  },
+  {
+    "label": "アルデバル",
+    "value": 805,
+    "hp": 26000,
+    "isBoss": false
+  },
+  {
+    "label": "バン・アルデバル",
+    "value": 806,
+    "hp": 36000,
+    "isBoss": false
+  },
+  {
+    "label": "バン・アルデバル",
+    "value": 807,
+    "hp": 6464,
+    "isBoss": false
+  },
+  {
+    "label": "バン・アルデバル",
+    "value": 808,
+    "hp": 28000,
+    "isBoss": false
+  },
+  {
+    "label": "アン・アーレス",
+    "value": 809,
+    "hp": 34464,
+    "isBoss": false
+  },
+  {
+    "label": "アン・アーレス",
+    "value": 810,
+    "hp": 54464,
+    "isBoss": false
+  },
+  {
+    "label": "アン・アーレス",
+    "value": 811,
+    "hp": 64464,
+    "isBoss": false
+  },
+  {
+    "label": "アン・アーレス",
+    "value": 812,
+    "hp": 56000,
+    "isBoss": false
+  },
+  {
+    "label": "シャウラス",
+    "value": 813,
+    "hp": 16000,
+    "isBoss": false
+  },
+  {
+    "label": "シャウラス",
+    "value": 814,
+    "hp": 18000,
+    "isBoss": false
+  },
+  {
+    "label": "シャウラス",
+    "value": 815,
+    "hp": 28000,
+    "isBoss": false
+  },
+  {
+    "label": "シャウラス",
+    "value": 816,
+    "hp": 42000,
+    "isBoss": false
+  },
+  {
+    "label": "シャウラス・リーダー",
+    "value": 817,
+    "hp": 33000,
+    "isBoss": false
+  },
+  {
+    "label": "シャウラス・リーダー",
+    "value": 818,
+    "hp": 464,
+    "isBoss": false
+  },
+  {
+    "label": "シャウラス・リーダー",
+    "value": 819,
+    "hp": 16000,
+    "isBoss": false
+  },
+  {
+    "label": "次元将ヴィルダーク",
+    "value": 820,
+    "hp": 16928,
+    "isBoss": false
+  },
+  {
+    "label": "次元将ヴィルダーク",
+    "value": 821,
+    "hp": 5392,
+    "isBoss": false
+  },
+  {
+    "label": "次元将ヴィルダーク",
+    "value": 822,
+    "hp": 15392,
+    "isBoss": false
+  },
+  {
+    "label": "？？？",
+    "value": 823,
+    "hp": 45000,
+    "isBoss": false
+  },
+  {
+    "label": "次元獣ヴァルナー",
+    "value": 824,
+    "hp": 20000,
+    "isBoss": false
+  },
+  {
+    "label": "次元獣ヴァルナー",
+    "value": 825,
+    "hp": 36000,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 826,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 827,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 828,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 829,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 830,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 831,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 832,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 833,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 834,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 835,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 836,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 837,
+    "hp": 3464,
+    "isBoss": false
+  },
+  {
+    "label": "アドラティオ",
+    "value": 838,
+    "hp": 14500,
+    "isBoss": false
+  },
+  {
+    "label": "アドラティオ",
+    "value": 839,
+    "hp": 21500,
+    "isBoss": false
+  },
+  {
+    "label": "アドラティオ",
+    "value": 840,
+    "hp": 21500,
+    "isBoss": false
+  },
+  {
+    "label": "？？？",
+    "value": 841,
+    "hp": 14500,
+    "isBoss": false
+  },
+  {
+    "label": "グラーティア",
+    "value": 842,
+    "hp": 8800,
+    "isBoss": false
+  },
+  {
+    "label": "グラーティア",
+    "value": 843,
+    "hp": 11800,
+    "isBoss": false
+  },
+  {
+    "label": "アスクレプス",
+    "value": 844,
+    "hp": 6600,
+    "isBoss": false
+  },
+  {
+    "label": "アスクレプス",
+    "value": 845,
+    "hp": 58000,
+    "isBoss": false
+  },
+  {
+    "label": "アスクレプス",
+    "value": 846,
+    "hp": 22464,
+    "isBoss": false
+  },
+  {
+    "label": "アスクレプス",
+    "value": 847,
+    "hp": 6600,
+    "isBoss": false
+  },
+  {
+    "label": "ヘリオース",
+    "value": 849,
+    "hp": 41392,
+    "isBoss": false
+  },
+  {
+    "label": "ヘリオース",
+    "value": 850,
+    "hp": 51392,
+    "isBoss": false
+  },
+  {
+    "label": "アドヴェント",
+    "value": 854,
+    "hp": 100,
+    "isBoss": false
+  },
+  {
+    "label": "シュロウガ",
+    "value": 855,
+    "hp": 48000,
+    "isBoss": false
+  },
+  {
+    "label": "シュロウガ",
+    "value": 856,
+    "hp": 6600,
+    "isBoss": false
+  },
+  {
+    "label": "シュロウガ",
+    "value": 857,
+    "hp": 6600,
+    "isBoss": false
+  },
+  {
+    "label": "シュロウガ・シン",
+    "value": 859,
+    "hp": 62464,
+    "isBoss": false
+  },
+  {
+    "label": "シュロウガ・シン",
+    "value": 860,
+    "hp": 1392,
+    "isBoss": false
+  },
+  {
+    "label": "シュロウガ・シン",
+    "value": 861,
+    "hp": 11392,
+    "isBoss": false
+  },
+  {
+    "label": "シュロウガ・シン",
+    "value": 862,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "エル・ミレニウム",
+    "value": 863,
+    "hp": 42000,
+    "isBoss": false
+  },
+  {
+    "label": "エル・ミレニウム",
+    "value": 864,
+    "hp": 42000,
+    "isBoss": false
+  },
+  {
+    "label": "？？？",
+    "value": 865,
+    "hp": 42000,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 866,
+    "hp": 64000,
+    "isBoss": false
+  },
+  {
+    "label": "ゼル・ビレニウム",
+    "value": 867,
+    "hp": 64000,
+    "isBoss": false
+  },
+  {
+    "label": "プロディキウム",
+    "value": 868,
+    "hp": 57856,
+    "isBoss": false
+  },
+  {
+    "label": "プロディキウム",
+    "value": 869,
+    "hp": 12320,
+    "isBoss": false
+  },
+  {
+    "label": "至高神Ｚ",
+    "value": 870,
+    "hp": 6784,
+    "isBoss": false
+  },
+  {
+    "label": "至高神Ｚ",
+    "value": 871,
+    "hp": 1248,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイ",
+    "value": 872,
+    "hp": 7100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＣＡＮ",
+    "value": 873,
+    "hp": 8100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＨＩＡ",
+    "value": 874,
+    "hp": 8100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＨＩＡ",
+    "value": 875,
+    "hp": 7100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＡＮＴ",
+    "value": 876,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＡＮＴ",
+    "value": 877,
+    "hp": 8100,
+    "isBoss": false
+  },
+  {
+    "label": "？？？",
+    "value": 878,
+    "hp": 18400,
+    "isBoss": false
+  },
+  {
+    "label": "デイモーン",
+    "value": 879,
+    "hp": 4700,
+    "isBoss": false
+  },
+  {
+    "label": "デイモーン・ポリス",
+    "value": 880,
+    "hp": 4200,
+    "isBoss": false
+  },
+  {
+    "label": "ティアマート",
+    "value": 881,
+    "hp": 6700,
+    "isBoss": false
+  },
+  {
+    "label": "アクシオ・バーグラー",
+    "value": 883,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "アクシオ・バーグラー",
+    "value": 884,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "アクシオ・バーグラー",
+    "value": 885,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "アクシオ・バーグラー",
+    "value": 886,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "アクシオ・バーグラー",
+    "value": 887,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "エイクロス",
+    "value": 888,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ランボルト",
+    "value": 889,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "アクシオ",
+    "value": 890,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "尸逝天",
+    "value": 891,
+    "hp": 16928,
+    "isBoss": false
+  },
+  {
+    "label": "尸冥爪",
+    "value": 892,
+    "hp": 15000,
+    "isBoss": false
+  },
+  {
+    "label": "尸冥爪・絶",
+    "value": 893,
+    "hp": 64000,
+    "isBoss": false
+  },
+  {
+    "label": "プレイアデス・タウラ",
+    "value": 894,
+    "hp": 20928,
+    "isBoss": false
+  },
+  {
+    "label": "アルデバル",
+    "value": 895,
+    "hp": 17000,
+    "isBoss": false
+  },
+  {
+    "label": "バン・アルデバル",
+    "value": 896,
+    "hp": 6464,
+    "isBoss": false
+  },
+  {
+    "label": "アン・アーレス",
+    "value": 897,
+    "hp": 8928,
+    "isBoss": false
+  },
+  {
+    "label": "シャウラス",
+    "value": 898,
+    "hp": 16000,
+    "isBoss": false
+  },
+  {
+    "label": "シャウラス",
+    "value": 899,
+    "hp": 22000,
+    "isBoss": false
+  },
+  {
+    "label": "シャウラス・リーダー",
+    "value": 900,
+    "hp": 33000,
+    "isBoss": false
+  },
+  {
+    "label": "シャウラス・リーダー",
+    "value": 901,
+    "hp": 464,
+    "isBoss": false
+  },
+  {
+    "label": "アドラティオ",
+    "value": 902,
+    "hp": 14500,
+    "isBoss": false
+  },
+  {
+    "label": "グラーティア",
+    "value": 913,
+    "hp": 7800,
+    "isBoss": false
+  },
+  {
+    "label": "アドラティオ",
+    "value": 914,
+    "hp": 14500,
+    "isBoss": false
+  },
+  {
+    "label": "シュロウガ",
+    "value": 915,
+    "hp": 12464,
+    "isBoss": false
+  },
+  {
+    "label": "アスクレプス",
+    "value": 916,
+    "hp": 22464,
+    "isBoss": false
+  },
+  {
+    "label": "アークグレン",
+    "value": 923,
+    "hp": 13000,
+    "isBoss": false
+  },
+  {
+    "label": "アークグレンラガン",
+    "value": 924,
+    "hp": 13000,
+    "isBoss": false
+  },
+  {
+    "label": "クラップ級",
+    "value": 925,
+    "hp": 10000,
+    "isBoss": false
+  },
+  {
+    "label": "クラップ級",
+    "value": 926,
+    "hp": 10000,
+    "isBoss": false
+  },
+  {
+    "label": "エヴァンゲリオン２号機",
+    "value": 929,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "ガルダ",
+    "value": 930,
+    "hp": 10000,
+    "isBoss": false
+  },
+  {
+    "label": "ラー・カイラム",
+    "value": 931,
+    "hp": 12500,
+    "isBoss": false
+  },
+  {
+    "label": "ドラゴンズハイヴ",
+    "value": 932,
+    "hp": 12500,
+    "isBoss": false
+  },
+  {
+    "label": "真ゲッタードラゴン",
+    "value": 933,
+    "hp": 13500,
+    "isBoss": false
+  },
+  {
+    "label": "超銀河ダイグレン",
+    "value": 934,
+    "hp": 14500,
+    "isBoss": false
+  },
+  {
+    "label": "プトレマイオス２改",
+    "value": 935,
+    "hp": 11000,
+    "isBoss": false
+  },
+  {
+    "label": "トライダーＧ７",
+    "value": 936,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "ゴッドマーズ",
+    "value": 937,
+    "hp": 7700,
+    "isBoss": false
+  },
+  {
+    "label": "スコープドッグ",
+    "value": 938,
+    "hp": 3800,
+    "isBoss": false
+  },
+  {
+    "label": "オーガス",
+    "value": 939,
+    "hp": 4000,
+    "isBoss": false
+  },
+  {
+    "label": "ウイングガンダムゼロ",
+    "value": 941,
+    "hp": 5800,
+    "isBoss": false
+  },
+  {
+    "label": "デスティニーガンダム",
+    "value": 942,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "ストライクフリーダムガンダム",
+    "value": 943,
+    "hp": 5300,
+    "isBoss": false
+  },
+  {
+    "label": "ダブルオークアンタ",
+    "value": 944,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "ダイ・ガード",
+    "value": 945,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "ガンバスター",
+    "value": 946,
+    "hp": 9600,
+    "isBoss": false
+  },
+  {
+    "label": "ビッグオー",
+    "value": 947,
+    "hp": 7600,
+    "isBoss": false
+  },
+  {
+    "label": "アクエリオンＥＶＯＬ",
+    "value": 948,
+    "hp": 6900,
+    "isBoss": false
+  },
+  {
+    "label": "グレンラガン",
+    "value": 949,
+    "hp": 6400,
+    "isBoss": false
+  },
+  {
+    "label": "ダンクーガノヴァマックスゴッド",
+    "value": 950,
+    "hp": 7400,
+    "isBoss": false
+  },
+  {
+    "label": "ジェニオン・ガイ",
+    "value": 952,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "チェインバー",
+    "value": 953,
+    "hp": 4500,
+    "isBoss": false
+  },
+  {
+    "label": "ストライカー",
+    "value": 954,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "ＶＦ－１１",
+    "value": 955,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "ＡＲＸ－７　アーバレスト",
+    "value": 956,
+    "hp": 4400,
+    "isBoss": false
+  },
+  {
+    "label": "ブラックオックス",
+    "value": 957,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ＧＮ－ＸⅣ",
+    "value": 958,
+    "hp": 5600,
+    "isBoss": false
+  },
+  {
+    "label": "サザビー",
+    "value": 959,
+    "hp": 4800,
+    "isBoss": false
+  },
+  {
+    "label": "サザビー",
+    "value": 960,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "ジェガン",
+    "value": 961,
+    "hp": 4300,
+    "isBoss": false
+  },
+  {
+    "label": "ジェニオン",
+    "value": 962,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "バトル７",
+    "value": 963,
+    "hp": 15000,
+    "isBoss": false
+  },
+  {
+    "label": "ゲペルニッチ艦",
+    "value": 964,
+    "hp": 5500,
+    "isBoss": false
+  },
+  {
+    "label": "トゥアハー・デ・ダナン",
+    "value": 965,
+    "hp": 11600,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ズール",
+    "value": 966,
+    "hp": 5900,
+    "isBoss": false
+  },
+  {
+    "label": "ジェミニオン",
+    "value": 967,
+    "hp": 7200,
+    "isBoss": false
+  },
+  {
+    "label": "ディム・サー",
+    "value": 968,
+    "hp": 5900,
+    "isBoss": false
+  },
+  {
+    "label": "ディアムド",
+    "value": 969,
+    "hp": 11600,
+    "isBoss": false
+  },
+  {
+    "label": "サフィアーダ",
+    "value": 970,
+    "hp": 5900,
+    "isBoss": false
+  },
+  {
+    "label": "エメラルダン",
+    "value": 971,
+    "hp": 11600,
+    "isBoss": false
+  },
+  {
+    "label": "カイト",
+    "value": 972,
+    "hp": 5900,
+    "isBoss": false
+  },
+  {
+    "label": "エヴァンゲリオン第１３号機",
+    "value": 973,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "エヴァンゲリオン第１３号機",
+    "value": 974,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "エヴァンゲリオン　Ｍａｒｋ.０９",
+    "value": 975,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "ソーラーアクエリオン",
+    "value": 976,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "ギラ・ドーガ",
+    "value": 977,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "サーペント",
+    "value": 978,
+    "hp": 5400,
+    "isBoss": false
+  },
+  {
+    "label": "ザク・ウォーリア",
+    "value": 979,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "ザザゴラス級",
+    "value": 980,
+    "hp": 35000,
+    "isBoss": false
+  },
+  {
+    "label": "マジンガーＺ",
+    "value": 983,
+    "hp": 6800,
+    "isBoss": false
+  },
+  {
+    "label": "ザク・ウォーリア",
+    "value": 986,
+    "hp": 5200,
+    "isBoss": false
+  },
+  {
+    "label": "∞ジャスティスガンダム",
+    "value": 987,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "レジェンドガンダム",
+    "value": 988,
+    "hp": 7500,
+    "isBoss": false
+  },
+  {
+    "label": "鉄人２８号",
+    "value": 989,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "バルゴラⅠ号機",
+    "value": 990,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "バルゴラⅡ号機",
+    "value": 991,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "エリファス",
+    "value": 992,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "パールネイル",
+    "value": 993,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ガデラーザ",
+    "value": 996,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "アルデバル",
+    "value": 997,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "シャウラス",
+    "value": 999,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ジェミニオン・レイ",
+    "value": 1000,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ガンレオン・マグナ",
+    "value": 1001,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "バルゴラ・グローリーＳ",
+    "value": 1002,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "リ・ブラスタＴ",
+    "value": 1003,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＨＩＡ",
+    "value": 1004,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＡＮＴ",
+    "value": 1005,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＣＡＮ",
+    "value": 1006,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ガンダムＸ",
+    "value": 1013,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ゴールドスモー",
+    "value": 1014,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "アカツキ",
+    "value": 1015,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "アークエンジェル",
+    "value": 1016,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "エターナル",
+    "value": 1017,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "トリスタン・ディバイダー",
+    "value": 1018,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "モルドレッド",
+    "value": 1019,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "サザーランド・ジーク",
+    "value": 1020,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "斬月",
+    "value": 1021,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "カランドゥ",
+    "value": 1022,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ソワサンシス",
+    "value": 1023,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ディム・サー",
+    "value": 1024,
+    "hp": 5900,
+    "isBoss": false
+  },
+  {
+    "label": "ツインテール級",
+    "value": 1025,
+    "hp": 7800,
+    "isBoss": false
+  },
+  {
+    "label": "ムサカ",
+    "value": 1026,
+    "hp": 35000,
+    "isBoss": false
+  },
+  {
+    "label": "ザンボット３",
+    "value": 1027,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ダイターン３",
+    "value": 1028,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "Ｚガンダム",
+    "value": 1029,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ガンダムＤＸ",
+    "value": 1030,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "∀ガンダム",
+    "value": 1031,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ビーストロン級",
+    "value": 1033,
+    "hp": 21000,
+    "isBoss": false
+  },
+  {
+    "label": "ヤクト・ドーガ",
+    "value": 1034,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "ビッグオー",
+    "value": 1035,
+    "hp": 6500,
+    "isBoss": false
+  },
+  {
+    "label": "ビッグデュオ",
+    "value": 1036,
+    "hp": 21000,
+    "isBoss": false
+  },
+  {
+    "label": "ビッグファウ",
+    "value": 1037,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＧＥＭ",
+    "value": 1038,
+    "hp": 8100,
+    "isBoss": false
+  },
+  {
+    "label": "アンゲロイＧＥＭ",
+    "value": 1039,
+    "hp": 11100,
+    "isBoss": false
+  },
+  {
+    "label": "アスクレプス",
+    "value": 1040,
+    "hp": 5000,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ９　ガーンズバック",
+    "value": 1043,
+    "hp": 4300,
+    "isBoss": false
+  },
+  {
+    "label": "Ｍ９Ｄ　ファルケ",
+    "value": 1044,
+    "hp": 4400,
+    "isBoss": false
+  },
+  {
+    "label": "ソーラーアクエリオン",
+    "value": 1045,
+    "hp": 7100,
+    "isBoss": false
+  },
+  {
+    "label": "メズー",
+    "value": 1046,
+    "hp": 3500,
+    "isBoss": false
+  },
+  {
+    "label": "ランボルト",
+    "value": 1047,
+    "hp": 6000,
+    "isBoss": false
+  },
+  {
+    "label": "アクシオ",
+    "value": 1048,
+    "hp": 4900,
+    "isBoss": false
+  }
 ]
