@@ -280,7 +280,7 @@ function findAllUtfs(buf, limit) {
 
 function normalizeGiftPart(value) {
 	if (!Array.isArray(value)) throw new Error('缺少 stage0.giftPart，数据格式应为零件 ID 数组');
-	return value.filter((id) => id !== undefined && id !== null && id !== '').slice(0, 3).map((id) => {
+	return value.filter((id) => id !== undefined && id !== null && id !== '').map((id) => {
 		const n = Number(id);
 		if (!Number.isInteger(n) || n <= 0) throw new Error(`无效的机体零件 ID：${id}`);
 		return n;
@@ -375,13 +375,15 @@ function updatePrologueGift(presetRaw, stageRaw, giftPart, giftUnit) {
 		throw new Error(`${giftName} 奖励表结构异常`);
 	}
 
-	// 删除旧零件记录，保留资金、消息等其他奖励，再按表单顺序写入数量 99 的零件。
+	// 删除旧零件/旧机体记录，保留资金、消息等其他奖励，再按表单顺序写入数量 99 的零件和数量 0 的机体。
 	const records = [];
 	for (let i = 0; i < oldCount; i++) {
 		const at = 1 + i * 8;
-		if (Number(values[at + 3]) !== 1) records.push(values.slice(at, at + 8));
+		const kind = Number(values[at + 3]);
+		if (kind !== 1 && kind !== 2) records.push(values.slice(at, at + 8));
 	}
 	for (const id of giftPart) records.push(['-1', '-1', '0', '1', String(id), '""', '99', '0']);
+	for (const id of giftUnit) records.push(['-1', '-1', '0', '2', String(id), '""', '0', '0']);
 	const body = [String(records.length), ...records.flat()].join(',');
 	const literal = `${giftName}={${body},}`;
 	if (table) {

@@ -407,10 +407,10 @@ function splitLuaValues(body) {
 	return values;
 }
 
-function readGiftPartIds(presetText, giftName) {
-	if (!giftName) return [];
+function readGiftIds(presetText, giftName) {
+	if (!giftName) return { giftPart: [], giftUnit: [] };
 	const table = findGiftTable(presetText, giftName);
-	if (!table) return [];
+	if (!table) return { giftPart: [], giftUnit: [] };
 	const values = splitLuaValues(table.body);
 	const count = Number(values[0]);
 	if (
@@ -421,23 +421,29 @@ function readGiftPartIds(presetText, giftName) {
 	) {
 		throw new Error(`${giftName} 奖励表结构异常`);
 	}
-	const ids = [];
+	const giftPart = [];
+	const giftUnit = [];
 	for (let i = 0; i < count; i++) {
 		const at = 1 + i * 8;
-		if (Number(values[at + 3]) !== 1) continue;
+		const kind = Number(values[at + 3]);
 		const id = Number(values[at + 4]);
-		if (!Number.isInteger(id) || id <= 0) throw new Error(`${giftName} 包含无效零件 ID`);
-		ids.push(id);
+		if (kind === 1) {
+			if (!Number.isInteger(id) || id <= 0) throw new Error(`${giftName} 包含无效零件 ID`);
+			giftPart.push(id);
+		} else if (kind === 2) {
+			if (!Number.isInteger(id)) throw new Error(`${giftName} 包含无效机体 ID`);
+			giftUnit.push(id);
+		}
 	}
-	return ids.slice(0, 3);
+	return { giftPart, giftUnit };
 }
 
-function readPrologueGiftPart(plain, cpk) {
+function readPrologueGift(plain, cpk) {
 	const stageText = readCpkEntry(plain, cpk, 2).toString('latin1');
 	const giftName = findStageClearGiftName(stageText);
-	if (!giftName) return [];
+	if (!giftName) return { giftPart: [], giftUnit: [] };
 	const presetText = readCpkEntry(plain, cpk, 1).toString('latin1');
-	return readGiftPartIds(presetText, giftName);
+	return readGiftIds(presetText, giftName);
 }
 
 /**
@@ -452,7 +458,7 @@ function loadFile(ctx) {
 	// 保存脚本写回明文 CPK；原始文件仍需先解密 EDAT。
 	const plain = magic === 'CPK ' ? buffer : decryptEdat(buffer, parseNpdHeader(buffer));
 	const cpk = parseCpk(plain);
-	const giftPart = readPrologueGiftPart(plain, cpk);
+	const { giftPart, giftUnit } = readPrologueGift(plain, cpk);
 	return {
 		fileSrc: ctx.fileSrc,
 		size: buffer.length,
