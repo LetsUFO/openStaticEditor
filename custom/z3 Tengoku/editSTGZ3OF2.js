@@ -318,8 +318,10 @@ function normalizeUnicornParts(value) {
 }
 
 /**
- * 给序章预设脚本里的独角兽（TOUROKU_000 / TOUROKU_001 的单位记录）写入 4 个零件槽。
- * 记录格式为「类型,零件1..4,机体ID,机师ID,...」，HDR 队列表里的 264 前面是队名字符串，不会被匹配。
+ * 给预设脚本里独角兽（机体 ID 264）的「所持」记录写入 4 个零件槽。
+ * 只改 type 0 记录（0,零件1..4,机体ID,机师ID,...）；出击引用记录（type 1）的对应字段
+ * 并非零件槽，写进去会破坏出击编成、导致出击的独角兽消失，故绝不触碰。
+ * HDR 队列表里的 264 前面是队名字符串，也不会被匹配。
  */
 function updateUnicornParts(presetRaw, parts) {
 	if (!parts.length) return presetRaw;
@@ -327,14 +329,23 @@ function updateUnicornParts(presetRaw, parts) {
 	for (const tableName of ['TOUROKU_000', 'TOUROKU_001']) {
 		const table = findLuaTable(text, tableName);
 		if (!table) continue;
-		const m = new RegExp(
-			`(-?\\d+),(-?\\d+),(-?\\d+),(-?\\d+),${UNICORN_UNIT_ID},(\\d+),`
-		).exec(table.body);
-		if (!m) continue;
-		const pilotId = m[5];
-		const replacement = `${parts.join(',')},${UNICORN_UNIT_ID},${pilotId},`;
-		const at = table.open + 1 + m.index;
-		text = text.slice(0, at) + replacement + text.slice(at + m[0].length);
+		const values = splitLuaValues(table.body);
+		if (values.length < 3) continue;
+		let changed = false;
+		// 自第 4 个值起是记录区；寻找 type 0 且机体 ID 为 264 的记录
+		for (let i = 3; i + 7 <= values.length; i++) {
+			if (values[i] !== '0' || values[i + 5] !== String(UNICORN_UNIT_ID)) continue;
+			// 记录形如 0,p1,p2,p3,p4,264,pilot,...，各字段均应为整数
+			if (![1, 2, 3, 4, 6].every((k) => /^-?\d+$/.test(values[i + k]))) continue;
+			values[i + 1] = String(parts[0]);
+			values[i + 2] = String(parts[1]);
+			values[i + 3] = String(parts[2]);
+			values[i + 4] = String(parts[3]);
+			changed = true;
+			break;
+		}
+		if (!changed) continue;
+		text = text.slice(0, table.open + 1) + values.join(',') + ',' + text.slice(table.close);
 	}
 	return Buffer.from(text, 'latin1');
 }
