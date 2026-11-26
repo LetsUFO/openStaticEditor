@@ -448,71 +448,99 @@ function updateStageGift(presetRaw, stageRaw, giftPart, giftUnit) {
 	return { preset: Buffer.from(presetText, 'latin1'), stage: Buffer.from(stageText, 'latin1') };
 }
 
-// TOUROKU 记录按首字段「类型」决定长度（字段数，含类型本身）
-const TOUROKU_TYPE_FIELDS = { 0: 20, 1: 10, 16: 12 };
+/* ------------------------------------------------------------------ */
+/* TOUROKU 所持机体注入                                                */
+/* ------------------------------------------------------------------ */
 
-/**
- * 拆出 TOUROKU 表里的每条记录。
- * 表格式为 `{ 表ID, 记录数, 未知标志, 记录1..., 记录2... }`，每条记录以类型开头。
- */
-function splitTourokuRecords(values) {
-	if (values.length < 3) throw new Error('TOUROKU 表结构异常');
-	const count = Number(values[1]);
-	if (!Number.isInteger(count) || count < 0) throw new Error('TOUROKU 记录数异常');
-	const records = [];
-	let at = 3;
-	for (let i = 0; i < count; i++) {
-		const type = Number(values[at]);
-		const size = TOUROKU_TYPE_FIELDS[type];
-		if (!size) throw new Error(`TOUROKU 记录类型 ${values[at]} 暂不支持`);
-		records.push(values.slice(at, at + size));
-		at += size;
-	}
-	if (at !== values.length) throw new Error(`TOUROKU 记录数与表头 ${count} 不符`);
-	return { header: values.slice(0, 3), records };
+// 本编辑器注入的「所持机体」记录 = type 0，共 20 字段
+const INJECTED_UNIT_FIELDS = 20;
+
+/** 生成一条 type 0 所持记录（机师 -1，由玩家在换乘里指定） */
+function buildInjectedUnitRecord(id) {
+	return [
+		'0', '-1', '-1', '-1', '-1', String(id), '-1',
+		'0', '0', '0', '0', '0', '0', '0', '0', '0',
+		'true', 'true', 'false', 'false'
+	];
 }
 
 /**
- * 把奖励机体写进指定关卡预设的 TOUROKU 表。
- * 该关卡 EventFunc_StageClear 调用 SC_PLAYER_ENTRY(tableName)，机体因此真正加入 roster；
- * GIFT 的 kind=2 记录只负责演出/提示，不能替代入队。
- * 用 type 0（机体 + 机师，机师 -1 由玩家自行编成）追加，重复保存时先清掉旧的 type 0 记录保证幂等。
+ * 判断扁平值数组自 index 起 20 个值，是否为「机体 id」的注入记录。
+ * 记录格式：0, 零件1..4(-1), 机体ID, 机师ID(-1), 0×9, true,true,false,false
+ * 兼容两种历史 bool 尾：新 true,true,false,false / 旧 false,true,false,false。
  */
-function updateGiftUnits(presetText, giftUnit, tableName) {
+function isInjectedUnitAt(values, index, id) {
+	if (values[index] !== '0') return false;
+	for (const k of [1, 2, 3, 4, 6]) if (values[index + k] !== '-1') return false;
+	if (values[index + 5] !== String(id)) return false;
+	for (let k = 7; k <= 15; k++) if (values[index + k] !== '0') return false;
+	const tail = `${values[index + 16]},${values[index + 17]},${values[index + 18]},${values[index + 19]}`;
+	return tail === 'true,true,false,false' || tail === 'false,true,false,false';
+}
+
+/**
+ * 从扁平值数组里剔除属于 giftUnit 的注入记录。
+ * 只按「机体 ID + 固定签名」精确匹配，绝不触碰其它原生记录（例如原生就存在的无机师机体 298）。
+ */
+function stripInjectedUnits(values, giftUnit) {
+	const ids = new Set(giftUnit.map((id) => String(id)));
+	const starts = [];
+	for (let i = 0; i + INJECTED_UNIT_FIELDS <= values.length; i++) {
+		if (values[i] === '0' && ids.has(values[i + 5]) && isInjectedUnitAt(values, i, values[i + 5])) {
+			starts.push(i);
+		}
+	}
+	for (let k = starts.length - 1; k >= 0; k--) values.splice(starts[k], INJECTED_UNIT_FIELDS);
+	return starts.length;
+}
+
+/**
+ * 把奖励机体以 type 0 记录写入指定预设的 TOUROKU 表（所持机体表）。
+ * 该关卡 EventFunc_StageClear 会调用 SC_PLAYER_ENTRY(tableName)，机体因此登记为「所持」，
+ * 出现在改造 / 零件 / 换乘；只写所持表不会把机体塞进出击编成。
+ *
+ * 不同章节的 TOUROKU 表里可能含未知记录类型（如 type 2/10/5），因此不按类型长度整表解析：
+ * 仅按机体 ID 精确剔除/追加本编辑器注入的 type 0 记录，其余原生记录（含未知类型）原样保留。
+ * @param {string} presetText 预设脚本文本
+ * @param {number[]} giftUnit 奖励机体 ID
+ * @param {string} tableName 目标 TOUROKU 表名
+ * @param {boolean} add 剔除后是否追加本次记录（清理旧表时传 false）
+ */
+function updateGiftUnits(presetText, giftUnit, tableName, add = true) {
 	const table = findLuaTable(presetText, tableName);
 	if (!table) {
-		if (!giftUnit.length) return presetText;
+		if (!add || !giftUnit.length) return presetText;
 		throw new Error(`预设脚本缺少 ${tableName}，无法写入奖励机体`);
 	}
-	const parsed = splitTourokuRecords(splitLuaValues(table.body));
-	// 只清理之前由本编辑器注入的 type 0 记录（无零件、无固定机师），避免误删原版内容。
-	const isInjected = (record) =>
-		Number(record[0]) === 0 && record[1] === '-1' && record[2] === '-1'
-		&& record[3] === '-1' && record[4] === '-1' && record[6] === '-1';
-	const kept = parsed.records.filter((record) => !isInjected(record));
-	for (const id of new Set(giftUnit)) {
-		kept.push([
-			'0', '-1', '-1', '-1', '-1', String(id), '-1',
-			'0', '0', '0', '0', '0', '0', '0', '0', '0',
-			'false', 'true', 'false', 'false'
-		]);
-	}
-	const same = kept.length === parsed.records.length
-		&& kept.every((record, i) => record.join(',') === parsed.records[i].join(','));
-	if (same) return presetText;
+	const values = splitLuaValues(table.body);
+	if (values.length < 3) throw new Error(`${tableName} 表结构异常`);
+	const oldCount = Number(values[1]);
+	if (!Number.isInteger(oldCount) || oldCount < 0) throw new Error(`${tableName} 记录数异常`);
 
-	const body = [parsed.header[0], String(kept.length), parsed.header[2], ...kept.flat()].join(',') + ',';
+	const records = values.slice(3);
+	const removed = stripInjectedUnits(records, giftUnit);
+	const added = add ? [...new Set(giftUnit)].map((id) => buildInjectedUnitRecord(id)) : [];
+	if (removed === 0 && added.length === 0) return presetText;
+
+	const newCount = oldCount - removed + added.length;
+	const body = [values[0], String(newCount), values[2], ...records, ...added.flat()].join(',') + ',';
 	return presetText.slice(0, table.open + 1) + body + presetText.slice(table.close);
 }
 
-// 序章（ID2）StageClear 调 SC_PLAYER_ENTRY(TOUROKU_001)，机体注入到 TOUROKU_001（在 ID1 预设里）
+// 序章（entry 2）StageClear 调 SC_PLAYER_ENTRY(TOUROKU_000)：写进所持表（entry 1 预设的 TOUROKU_000）
 function updatePrologueGiftUnits(presetText, giftUnit) {
-	return updateGiftUnits(presetText, giftUnit, 'TOUROKU_001');
+	// 清掉旧版本误写进出击表 TOUROKU_001 的注入记录（仅按 ID 精确剔除）
+	const cleaned = updateGiftUnits(presetText, giftUnit, 'TOUROKU_001', false);
+	return updateGiftUnits(cleaned, giftUnit, 'TOUROKU_000', true);
 }
 
-// 第一话（ID20）StageClear 调 SC_PLAYER_ENTRY(TOUROKU_002)，机体注入到 TOUROKU_002（在 ID19 预设里）
+// 第一话（entry 20）StageClear 会调 SC_PLAYER_ENTRY(TOUROKU_000/001/002)。
+// entry 19 预设里 type 0 单机所持记录位于 TOUROKU_001（TOUROKU_000 只有 7 条多座机 731/732），故写 TOUROKU_001。
 function updateStage1GiftUnits(presetText, giftUnit) {
-	return updateGiftUnits(presetText, giftUnit, 'TOUROKU_002');
+	// 清掉旧版本误写进部队表 TOUROKU_002 / TOUROKU_000 的注入记录（仅按 ID 精确剔除）
+	let out = updateGiftUnits(presetText, giftUnit, 'TOUROKU_002', false);
+	out = updateGiftUnits(out, giftUnit, 'TOUROKU_000', false);
+	return updateGiftUnits(out, giftUnit, 'TOUROKU_001', true);
 }
 
 /**
@@ -579,7 +607,7 @@ function repackCpk(plain, giftPart, giftUnit, unicornParts1, unicornParts2, stag
 	const preset2 = entries.find((e) => e.id === 7);
 	if (preset2) preset2.raw = updateUnicornParts(preset2.raw, unicornParts2);
 
-	// 第一话（ID19 预设 / ID20 关卡）：重写 GIFT_501 奖励表 + 把奖励机体注入 TOUROKU_002
+	// 第一话（ID19 预设 / ID20 关卡）：重写 GIFT_501 奖励表 + 把奖励机体注入所持表 TOUROKU_001
 	const stage1Preset = entries.find((e) => e.id === 19);
 	const stage1Stage = entries.find((e) => e.id === 20);
 	if (stage1Preset && stage1Stage) {

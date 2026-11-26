@@ -1,7 +1,7 @@
 {
 	"name": "第3次超级机器人大战Z：天狱篇 静态修改",
 	"appIcon": "icon.png",
-	"ver": "0.0.7",
+	"ver": "0.0.8",
 	"width": 1200,
 	"height": 760,
 	"background": {
@@ -299,7 +299,7 @@
 							"name": "stage0_1.giftUnit[3]",
 							"type": "select",
 							"optionUse": "unitList",
-							"value": 855
+							"value": 859
 						},
 						{
 							"label": "奖励的机体5",
@@ -319,8 +319,7 @@
 							"label": "奖励的机体7",
 							"name": "stage0_1.giftUnit[6]",
 							"type": "select",
-							"optionUse": "unitList",
-							"value": 859
+							"optionUse": "unitList"
 						},
 						{
 							"label": "奖励的机体8",
