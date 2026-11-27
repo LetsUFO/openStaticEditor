@@ -1,13 +1,21 @@
 /**
  * STGZ3OF2.SDAT 保存脚本（第一阶段：结构级重打包，不做压缩）
  *
+ * 职责划分（拆分后）：
+ *   - 本文件 = 底层（EDAT 解密 / CRILAYLA / UTF 表 / CPK 重打包）+「关卡奖励」业务
+ *       序章1 / 第一话的 GIFT 奖励表（零件 99 个、机体登记）
+ *       与 TOUROKU_001 / TOUROKU_002 的所持机体注入
+ *   - 序章1 / 序章2 的「机体零件槽」业务已剥离到 editSTGZ3OF2_unicornParts.js，
+ *     本文件通过 require 复用：一次全量写回仍会附带写入零件，行为与拆分前一致
+ *   - 底层 loadPlainCpk / repackCpkWith 一并导出，供零件模块独立运行时复用
+ *
  * 执行流程：
  *   1. 读取 ctx.filePath（关卡文件绝对路径）
  *   2. NPD/EDAT v4 → 解密出明文 CPK（若已经是明文 CPK 则直接使用）
  *   3. 按 ItocL / ItocH 的 ID 顺序依次取出每个文件
  *      - 以 CRILAYLA 开头的走解压，其余视为原始数据
- *   4. 检查序章 ID1 / ID2 的奖励表与 StageClear 调用，不存在则创建
- *      - 将 stage0.giftPart 中的零件按数量 99 写入，保留其他类型奖励
+ *   4. 在条目上应用「关卡奖励」修改（检查 / 创建奖励表与 StageClear 调用，
+ *      零件按数量 99 写入并保留其他类型奖励），再应用序章机体零件修改
  *   5. 按原文件的排版规则（ContentOffset 起、每条按 16 字节对齐）重新拼装内容区
  *   6. 回填 CpkHeader（ContentSize / EnabledPackedSize / EnabledDataSize）
  *      与 ItocL / ItocH 每条记录的 FileSize / ExtractSize（改为未压缩长度）
@@ -19,6 +27,7 @@
 
 const fs = require('node:fs');
 const crypto = require('node:crypto');
+const unicornParts = require('./editSTGZ3OF2_unicornParts.js');
 
 // ---- RPCS3 key_vault.h 常量 ----
 const SDAT_KEY = Buffer.from('0d655ef8e674a98ab8505cfa7d012933', 'hex');
@@ -315,58 +324,6 @@ function normalizeGiftUnit(value) {
 		});
 }
 
-// 序章 UE 独角兽（机体 ID 264）的 4 个零件槽；空槽用 -1 表示
-const UNICORN_UNIT_ID = 264;
-const PART_SLOT_COUNT = 4;
-const PART_ID_MAX = 78;
-
-function normalizeUnicornParts(value) {
-	if (!Array.isArray(value)) return [];
-	const slots = value.slice(0, PART_SLOT_COUNT).map((id) => {
-		if (id === undefined || id === null || id === '') return -1;
-		const n = Number(id);
-		if (!Number.isInteger(n) || n <= 0 || n > PART_ID_MAX) {
-			throw new Error(`无效的机体零件 ID：${id}`);
-		}
-		return n;
-	});
-	while (slots.length < PART_SLOT_COUNT) slots.push(-1);
-	return slots;
-}
-
-/**
- * 给预设脚本里独角兽（机体 ID 264）的「所持」记录写入 4 个零件槽。
- * 只改 type 0 记录（0,零件1..4,机体ID,机师ID,...）；出击引用记录（type 1）的对应字段
- * 并非零件槽，写进去会破坏出击编成、导致出击的独角兽消失，故绝不触碰。
- * HDR 队列表里的 264 前面是队名字符串，也不会被匹配。
- */
-function updateUnicornParts(presetRaw, parts) {
-	if (!parts.length) return presetRaw;
-	let text = presetRaw.toString('latin1');
-	for (const tableName of ['TOUROKU_000', 'TOUROKU_001']) {
-		const table = findLuaTable(text, tableName);
-		if (!table) continue;
-		const values = splitLuaValues(table.body);
-		if (values.length < 3) continue;
-		let changed = false;
-		// 自第 4 个值起是记录区；寻找 type 0 且机体 ID 为 264 的记录
-		for (let i = 3; i + 7 <= values.length; i++) {
-			if (values[i] !== '0' || values[i + 5] !== String(UNICORN_UNIT_ID)) continue;
-			// 记录形如 0,p1,p2,p3,p4,264,pilot,...，各字段均应为整数
-			if (![1, 2, 3, 4, 6].every((k) => /^-?\d+$/.test(values[i + k]))) continue;
-			values[i + 1] = String(parts[0]);
-			values[i + 2] = String(parts[1]);
-			values[i + 3] = String(parts[2]);
-			values[i + 4] = String(parts[3]);
-			changed = true;
-			break;
-		}
-		if (!changed) continue;
-		text = text.slice(0, table.open + 1) + values.join(',') + ',' + text.slice(table.close);
-	}
-	return Buffer.from(text, 'latin1');
-}
-
 function findStageClearGiftName(stageText) {
 	const decl = /\bfunction\s+EventFunc_StageClear\s*\(\s*\)/.exec(stageText);
 	if (!decl) throw new Error('序章关卡脚本缺少 EventFunc_StageClear');
@@ -599,24 +556,13 @@ function updateStage1GiftUnits(presetText, giftUnit) {
 }
 
 /**
- * 重新打包明文 CPK（不压缩），返回新的 Buffer
+ * 重新打包明文 CPK（不压缩）—— 通用骨架，返回新的 Buffer
+ * 解析表头 → 按 ID 取出全部条目 → 交给 mutate 修改 → 重排内容区 / 回填字段。
+ * 具体业务（关卡奖励、序章机体零件）由 mutate 决定，零件模块独立运行时可复用本函数。
  * @param {Buffer} plain 明文 CPK
- * @param {number[]} giftPart 序章奖励零件 ID
- * @param {number[]} giftUnit 序章奖励机体 ID
- * @param {number[]} unicornParts1 序章1 独角兽的 4 个零件槽
- * @param {number[]} unicornParts2 序章2 独角兽的 4 个零件槽
- * @param {number[]} stage1GiftPart 第一话奖励零件 ID
- * @param {number[]} stage1GiftUnit 第一话奖励机体 ID
+ * @param {(entries: object[]) => void} mutate 在已解出的条目上原地修改 raw
  */
-function repackCpk(
-	plain,
-	giftPart,
-	giftUnit,
-	unicornParts1,
-	unicornParts2,
-	stage1GiftPart,
-	stage1GiftUnit
-) {
+function repackCpkWith(plain, mutate) {
 	const tables = findAllUtfs(plain).map(([off]) => new UTFTable(plain, off));
 	if (!tables.length) throw new Error('CPK 内没有找到 @UTF 表');
 
@@ -662,38 +608,8 @@ function repackCpk(
 		srcCursor += e.fileSize;
 	}
 
-	const preset = entries.find((e) => e.id === 1);
-	const stage = entries.find((e) => e.id === 2);
-	if (!preset || !stage) throw new Error('CPK 内找不到序章脚本（ID 1 / ID 2）');
-	const updated = updateStageGift(preset.raw, stage.raw, giftPart, giftUnit);
-	const presetWithUnits = Buffer.from(
-		updatePrologueGiftUnits(updated.preset.toString('latin1'), giftUnit),
-		'latin1'
-	);
-	preset.raw = updateUnicornParts(presetWithUnits, unicornParts1);
-	stage.raw = updated.stage;
-
-	// 序章2（ID7）的预设脚本：写入序章2 自己的独角兽零件配置
-	const preset2 = entries.find((e) => e.id === 7);
-	if (preset2) preset2.raw = updateUnicornParts(preset2.raw, unicornParts2);
-
-	// 第一话（ID19 预设 / ID20 关卡）：重写 GIFT_501 奖励表 + 把奖励机体以 type 0 注入 TOUROKU_002
-	const stage1Preset = entries.find((e) => e.id === 19);
-	const stage1Stage = entries.find((e) => e.id === 20);
-	if (stage1Preset && stage1Stage) {
-		const stage1Updated = updateStageGift(
-			stage1Preset.raw,
-			stage1Stage.raw,
-			stage1GiftPart,
-			stage1GiftUnit
-		);
-		const stage1PresetWithUnits = Buffer.from(
-			updateStage1GiftUnits(stage1Updated.preset.toString('latin1'), stage1GiftUnit),
-			'latin1'
-		);
-		stage1Preset.raw = stage1PresetWithUnits;
-		stage1Stage.raw = stage1Updated.stage;
-	}
+	// 业务修改（奖励 / 零件）统一交给回调；条目已全部取出，变长数据不会影响后续读取。
+	if (mutate) mutate(entries);
 
 	// 所有修改完成后再计算新内容区布局。
 	let pos = 0;
@@ -724,6 +640,66 @@ function repackCpk(
 }
 
 /**
+ * 关卡奖励业务：序章1（ID1 预设 / ID2 关卡）与第一话（ID19 预设 / ID20 关卡）
+ * 的 GIFT 奖励表 + TOUROKU 所持机体注入。原 repackCpk 业务块原样提取。
+ */
+function applyRewards(entries, giftPart, giftUnit, stage1GiftPart, stage1GiftUnit) {
+	const preset = entries.find((e) => e.id === 1);
+	const stage = entries.find((e) => e.id === 2);
+	if (!preset || !stage) throw new Error('CPK 内找不到序章脚本（ID 1 / ID 2）');
+	const updated = updateStageGift(preset.raw, stage.raw, giftPart, giftUnit);
+	const presetWithUnits = Buffer.from(
+		updatePrologueGiftUnits(updated.preset.toString('latin1'), giftUnit),
+		'latin1'
+	);
+	preset.raw = presetWithUnits;
+	stage.raw = updated.stage;
+
+	// 第一话（ID19 预设 / ID20 关卡）：重写 GIFT_501 奖励表 + 把奖励机体以 type 0 注入 TOUROKU_002
+	const stage1Preset = entries.find((e) => e.id === 19);
+	const stage1Stage = entries.find((e) => e.id === 20);
+	if (stage1Preset && stage1Stage) {
+		const stage1Updated = updateStageGift(
+			stage1Preset.raw,
+			stage1Stage.raw,
+			stage1GiftPart,
+			stage1GiftUnit
+		);
+		const stage1PresetWithUnits = Buffer.from(
+			updateStage1GiftUnits(stage1Updated.preset.toString('latin1'), stage1GiftUnit),
+			'latin1'
+		);
+		stage1Preset.raw = stage1PresetWithUnits;
+		stage1Stage.raw = stage1Updated.stage;
+	}
+}
+
+/**
+ * 一次全量写回：关卡奖励 + 序章1 / 序章2 机体零件（拆分前后输出一致）
+ * @param {Buffer} plain 明文 CPK
+ * @param {number[]} giftPart 序章奖励零件 ID
+ * @param {number[]} giftUnit 序章奖励机体 ID
+ * @param {number[]} unicornParts1 序章1 独角兽的 4 个零件槽
+ * @param {number[]} unicornParts2 序章2 独角兽的 4 个零件槽
+ * @param {number[]} stage1GiftPart 第一话奖励零件 ID
+ * @param {number[]} stage1GiftUnit 第一话奖励机体 ID
+ */
+function repackCpk(
+	plain,
+	giftPart,
+	giftUnit,
+	unicornParts1,
+	unicornParts2,
+	stage1GiftPart,
+	stage1GiftUnit
+) {
+	return repackCpkWith(plain, (entries) => {
+		applyRewards(entries, giftPart, giftUnit, stage1GiftPart, stage1GiftUnit);
+		unicornParts.applyToEntries(entries, unicornParts1, unicornParts2);
+	});
+}
+
+/**
  * @param {{ filePath?: string, dataKey?: string, data?: any }} ctx 主进程注入的上下文
  */
 module.exports = function (ctx = {}) {
@@ -733,10 +709,10 @@ module.exports = function (ctx = {}) {
 
 	const giftPart = normalizeGiftPart(ctx.data && ctx.data.stage0_1 && ctx.data.stage0_1.giftPart);
 	const giftUnit = normalizeGiftUnit(ctx.data && ctx.data.stage0_1 && ctx.data.stage0_1.giftUnit);
-	const unicornParts1 = normalizeUnicornParts(
+	const unicornParts1 = unicornParts.normalizeUnicornParts(
 		ctx.data && ctx.data.stage0_1 && ctx.data.stage0_1.unicornParts
 	);
-	const unicornParts2 = normalizeUnicornParts(
+	const unicornParts2 = unicornParts.normalizeUnicornParts(
 		ctx.data && ctx.data.stage0_2 && ctx.data.stage0_2.unicornParts
 	);
 	const stage1GiftPart = normalizeGiftPart(
@@ -762,3 +738,7 @@ module.exports = function (ctx = {}) {
 	);
 	return { fileSrc: filePath, size: packed.length };
 };
+
+// 序章机体零件模块独立运行时复用底层能力（不重复实现解密 / 重打包）。
+module.exports.loadPlainCpk = loadPlainCpk;
+module.exports.repackCpkWith = repackCpkWith;

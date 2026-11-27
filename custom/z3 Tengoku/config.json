@@ -1,7 +1,7 @@
 {
 	"name": "第3次超级机器人大战Z：天狱篇 静态修改",
 	"appIcon": "icon.png",
-	"ver": "0.0.9",
+	"ver": "0.0.10",
 	"width": 1200,
 	"height": 760,
 	"background": {
@@ -418,7 +418,7 @@
 			"dataKey": "stage",
 			"saveScript": {
 				"needFileKey": "stage",
-				"saveScript": "editSTGZ3OF2.js"
+				"saveScript": "editSTGZ3OF2_gift.js"
 			}
 		},
 		{
@@ -491,7 +491,7 @@
 			"dataKey": "stage",
 			"saveScript": {
 				"needFileKey": "stage",
-				"saveScript": "editSTGZ3OF2.js"
+				"saveScript": "editSTGZ3OF2_editPart.js"
 			}
 		}
 	],
