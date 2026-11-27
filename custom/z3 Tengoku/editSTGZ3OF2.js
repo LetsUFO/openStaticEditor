@@ -171,9 +171,16 @@ function decompressCrilayla(file) {
 // ---------------- CPK / UTF 表 ----------------
 const TSZ = [1, 1, 2, 2, 4, 4, 8, 8, 4, 8, 4, 8];
 const TFM = [
-	'readUInt8', 'readInt8', 'readUInt16BE', 'readInt16BE',
-	'readUInt32BE', 'readInt32BE', 'readBigUInt64BE', 'readBigInt64BE',
-	'readFloatBE', 'readDoubleBE'
+	'readUInt8',
+	'readInt8',
+	'readUInt16BE',
+	'readInt16BE',
+	'readUInt32BE',
+	'readInt32BE',
+	'readBigUInt64BE',
+	'readBigInt64BE',
+	'readFloatBE',
+	'readDoubleBE'
 ];
 
 class UTFTable {
@@ -251,8 +258,14 @@ class UTFTable {
 		const c = this.layout.find((it) => it.name === name);
 		if (!c) throw new Error(`表 ${this.name} 缺少字段 ${name}`);
 		const p = this.rowsBase + rowIndex * this.stride + c.at;
-		if (c.sz === 8) { this.buf.writeBigUInt64BE(BigInt(value), p); return; }
-		if (c.sz === 4) { this.buf.writeUInt32BE(value, p); return; }
+		if (c.sz === 8) {
+			this.buf.writeBigUInt64BE(BigInt(value), p);
+			return;
+		}
+		if (c.sz === 4) {
+			this.buf.writeUInt32BE(value, p);
+			return;
+		}
 		if (c.sz === 2) {
 			if (value > 0xffff) throw new Error(`${this.name}.${name} 超出 u16 范围：${value}`);
 			this.buf.writeUInt16BE(value, p);
@@ -280,22 +293,26 @@ function findAllUtfs(buf, limit) {
 
 function normalizeGiftPart(value) {
 	if (!Array.isArray(value)) throw new Error('缺少 stage0.giftPart，数据格式应为零件 ID 数组');
-	return value.filter((id) => id !== undefined && id !== null && id !== '').map((id) => {
-		const n = Number(id);
-		if (!Number.isInteger(n) || n <= 0) throw new Error(`无效的机体零件 ID：${id}`);
-		return n;
-	});
+	return value
+		.filter((id) => id !== undefined && id !== null && id !== '')
+		.map((id) => {
+			const n = Number(id);
+			if (!Number.isInteger(n) || n <= 0) throw new Error(`无效的机体零件 ID：${id}`);
+			return n;
+		});
 }
 
 function normalizeGiftUnit(value) {
 	// giftUnit 允许为空数组（用户可以一个机体都不选），不存在时返回 []
 	if (!Array.isArray(value)) return [];
 	// 过滤掉表单中未选择的（null/undefined/''），得到紧凑的有效 ID 数组
-	return value.filter((id) => id !== undefined && id !== null && id !== '').map((id) => {
-		const n = Number(id);
-		if (!Number.isInteger(n) || n <= 0) throw new Error(`无效的机体 ID：${id}`);
-		return n;
-	});
+	return value
+		.filter((id) => id !== undefined && id !== null && id !== '')
+		.map((id) => {
+			const n = Number(id);
+			if (!Number.isInteger(n) || n <= 0) throw new Error(`无效的机体 ID：${id}`);
+			return n;
+		});
 }
 
 // 序章 UE 独角兽（机体 ID 264）的 4 个零件槽；空槽用 -1 表示
@@ -327,9 +344,9 @@ function updateUnicornParts(presetRaw, parts) {
 	for (const tableName of ['TOUROKU_000', 'TOUROKU_001']) {
 		const table = findLuaTable(text, tableName);
 		if (!table) continue;
-		const m = new RegExp(
-			`(-?\\d+),(-?\\d+),(-?\\d+),(-?\\d+),${UNICORN_UNIT_ID},(\\d+),`
-		).exec(table.body);
+		const m = new RegExp(`(-?\\d+),(-?\\d+),(-?\\d+),(-?\\d+),${UNICORN_UNIT_ID},(\\d+),`).exec(
+			table.body
+		);
 		if (!m) continue;
 		const pilotId = m[5];
 		const replacement = `${parts.join(',')},${UNICORN_UNIT_ID},${pilotId},`;
@@ -417,7 +434,12 @@ function updateStageGift(presetRaw, stageRaw, giftPart, giftUnit) {
 	}
 	const values = table ? splitLuaValues(table.body) : ['0'];
 	const oldCount = Number(values[0]);
-	if (!values.length || !Number.isInteger(oldCount) || oldCount < 0 || values.length !== 1 + oldCount * 8) {
+	if (
+		!values.length ||
+		!Number.isInteger(oldCount) ||
+		oldCount < 0 ||
+		values.length !== 1 + oldCount * 8
+	) {
 		throw new Error(`${giftName} 奖励表结构异常`);
 	}
 
@@ -433,7 +455,10 @@ function updateStageGift(presetRaw, stageRaw, giftPart, giftUnit) {
 	const body = [String(records.length), ...records.flat()].join(',');
 	const literal = `${giftName}={${body},}`;
 	if (table) {
-		presetText = presetText.slice(0, table.open) + literal.slice(literal.indexOf('{')) + presetText.slice(table.close + 1);
+		presetText =
+			presetText.slice(0, table.open) +
+			literal.slice(literal.indexOf('{')) +
+			presetText.slice(table.close + 1);
 	} else {
 		presetText = `${literal}\r\n${presetText}`;
 	}
@@ -442,10 +467,16 @@ function updateStageGift(presetRaw, stageRaw, giftPart, giftUnit) {
 		const decl = /\bfunction\s+EventFunc_StageClear\s*\(\s*\)/.exec(stageText);
 		const insertAt = decl.index + decl[0].length;
 		const newline = /^(?:\r\n|\r|\n)/.exec(stageText.slice(insertAt))?.[0] || '\r\n';
-		stageText = stageText.slice(0, insertAt) + `${newline}SC_GIFT_EXEC_B(${giftName});` + stageText.slice(insertAt);
+		stageText =
+			stageText.slice(0, insertAt) +
+			`${newline}SC_GIFT_EXEC_B(${giftName});` +
+			stageText.slice(insertAt);
 	}
 
-	return { preset: Buffer.from(presetText, 'latin1'), stage: Buffer.from(stageText, 'latin1') };
+	return {
+		preset: Buffer.from(presetText, 'latin1'),
+		stage: Buffer.from(stageText, 'latin1')
+	};
 }
 
 // TOUROKU 记录按首字段「类型」决定长度（字段数，含类型本身）
@@ -487,21 +518,44 @@ function updateGiftUnits(presetText, giftUnit, tableName) {
 	const parsed = splitTourokuRecords(splitLuaValues(table.body));
 	// 只清理之前由本编辑器注入的 type 0 记录（无零件、无固定机师），避免误删原版内容。
 	const isInjected = (record) =>
-		Number(record[0]) === 0 && record[1] === '-1' && record[2] === '-1'
-		&& record[3] === '-1' && record[4] === '-1' && record[6] === '-1';
+		Number(record[0]) === 0 &&
+		record[1] === '-1' &&
+		record[2] === '-1' &&
+		record[3] === '-1' &&
+		record[4] === '-1' &&
+		record[6] === '-1';
 	const kept = parsed.records.filter((record) => !isInjected(record));
 	for (const id of new Set(giftUnit)) {
 		kept.push([
-			'0', '-1', '-1', '-1', '-1', String(id), '-1',
-			'0', '0', '0', '0', '0', '0', '0', '0', '0',
-			'false', 'true', 'false', 'false'
+			'0',
+			'-1',
+			'-1',
+			'-1',
+			'-1',
+			String(id),
+			'-1',
+			'0',
+			'0',
+			'0',
+			'0',
+			'0',
+			'0',
+			'0',
+			'0',
+			'0',
+			'false',
+			'true',
+			'false',
+			'false'
 		]);
 	}
-	const same = kept.length === parsed.records.length
-		&& kept.every((record, i) => record.join(',') === parsed.records[i].join(','));
+	const same =
+		kept.length === parsed.records.length &&
+		kept.every((record, i) => record.join(',') === parsed.records[i].join(','));
 	if (same) return presetText;
 
-	const body = [parsed.header[0], String(kept.length), parsed.header[2], ...kept.flat()].join(',') + ',';
+	const body =
+		[parsed.header[0], String(kept.length), parsed.header[2], ...kept.flat()].join(',') + ',';
 	return presetText.slice(0, table.open + 1) + body + presetText.slice(table.close);
 }
 
@@ -525,7 +579,15 @@ function updateStage1GiftUnits(presetText, giftUnit) {
  * @param {number[]} stage1GiftPart 第一话奖励零件 ID
  * @param {number[]} stage1GiftUnit 第一话奖励机体 ID
  */
-function repackCpk(plain, giftPart, giftUnit, unicornParts1, unicornParts2, stage1GiftPart, stage1GiftUnit) {
+function repackCpk(
+	plain,
+	giftPart,
+	giftUnit,
+	unicornParts1,
+	unicornParts2,
+	stage1GiftPart,
+	stage1GiftUnit
+) {
 	const tables = findAllUtfs(plain).map(([off]) => new UTFTable(plain, off));
 	if (!tables.length) throw new Error('CPK 内没有找到 @UTF 表');
 
@@ -543,7 +605,14 @@ function repackCpk(plain, giftPart, giftUnit, unicornParts1, unicornParts2, stag
 		t.rows().forEach((row, idx) => {
 			const extractKey = ['ExtractSi', 'ExtractSize'].find((key) => row[key] !== undefined);
 			if (!extractKey) throw new Error(`文件 ${row.ID} 缺少 ExtractSize 字段`);
-			entries.push({ table: t, idx, id: row.ID, fileSize: row.FileSize, extractKey, extractSize: row[extractKey] });
+			entries.push({
+				table: t,
+				idx,
+				id: row.ID,
+				fileSize: row.FileSize,
+				extractKey,
+				extractSize: row[extractKey]
+			});
 		});
 	}
 	entries.sort((a, b) => a.id - b.id);
@@ -630,7 +699,8 @@ function repackCpk(plain, giftPart, giftUnit, unicornParts1, unicornParts2, stag
  */
 module.exports = function (ctx = {}) {
 	const filePath = ctx.filePath || (ctx.data && ctx.data.fileSrc) || '';
-	if (!filePath) throw new Error('缺少关卡文件路径（ctx.filePath 为空），请重新加载 STGZ3OF2.SDAT');
+	if (!filePath)
+		throw new Error('缺少关卡文件路径（ctx.filePath 为空），请重新加载 STGZ3OF2.SDAT');
 
 	const giftPart = normalizeGiftPart(ctx.data && ctx.data.stage0_1 && ctx.data.stage0_1.giftPart);
 	const giftUnit = normalizeGiftUnit(ctx.data && ctx.data.stage0_1 && ctx.data.stage0_1.giftUnit);
@@ -640,8 +710,12 @@ module.exports = function (ctx = {}) {
 	const unicornParts2 = normalizeUnicornParts(
 		ctx.data && ctx.data.stage0_2 && ctx.data.stage0_2.unicornParts
 	);
-	const stage1GiftPart = normalizeGiftPart(ctx.data && ctx.data.stage1 && ctx.data.stage1.giftPart);
-	const stage1GiftUnit = normalizeGiftUnit(ctx.data && ctx.data.stage1 && ctx.data.stage1.giftUnit);
+	const stage1GiftPart = normalizeGiftPart(
+		ctx.data && ctx.data.stage1 && ctx.data.stage1.giftPart
+	);
+	const stage1GiftUnit = normalizeGiftUnit(
+		ctx.data && ctx.data.stage1 && ctx.data.stage1.giftUnit
+	);
 	const plain = loadPlainCpk(filePath);
 	const packed = repackCpk(
 		plain,
@@ -654,6 +728,8 @@ module.exports = function (ctx = {}) {
 	);
 	fs.writeFileSync(filePath, packed);
 
-	console.log(`[editSTGZ3OF2] ${filePath} 已写回：${plain.length} → ${packed.length} 字节（明文 CPK）`);
+	console.log(
+		`[editSTGZ3OF2] ${filePath} 已写回：${plain.length} → ${packed.length} 字节（明文 CPK）`
+	);
 	return { fileSrc: filePath, size: packed.length };
 };
