@@ -5,8 +5,7 @@
  *   - 本文件 = 底层（EDAT 解密 / CRILAYLA / UTF 表 / CPK 重打包）+「关卡奖励」业务
  *       序章1 / 第一话的 GIFT 奖励表（零件 99 个、机体登记）
  *       与 TOUROKU_001 / TOUROKU_002 的所持机体注入
- *   - 序章1 / 序章2 的「机体零件槽」业务已剥离到 editSTGZ3OF2_unicornParts.js，
- *     本文件通过 require 复用：一次全量写回仍会附带写入零件，行为与拆分前一致
+ *   - 序章1 / 序章2 的「机体零件槽」业务在 editSTGZ3OF2_editPart.js 中独立处理，本文件不涉及
  *   - 底层 loadPlainCpk / repackCpkWith 一并导出，供零件模块独立运行时复用
  *
  * 执行流程：
@@ -15,7 +14,7 @@
  *   3. 按 ItocL / ItocH 的 ID 顺序依次取出每个文件
  *      - 以 CRILAYLA 开头的走解压，其余视为原始数据
  *   4. 在条目上应用「关卡奖励」修改（检查 / 创建奖励表与 StageClear 调用，
- *      零件按数量 99 写入并保留其他类型奖励），再应用序章机体零件修改
+ *      零件按数量 99 写入并保留其他类型奖励）
  *   5. 按原文件的排版规则（ContentOffset 起、每条按 16 字节对齐）重新拼装内容区
  *   6. 回填 CpkHeader（ContentSize / EnabledPackedSize / EnabledDataSize）
  *      与 ItocL / ItocH 每条记录的 FileSize / ExtractSize（改为未压缩长度）
@@ -27,7 +26,7 @@
 
 const fs = require('node:fs');
 const crypto = require('node:crypto');
-const unicornParts = require('./editSTGZ3OF2_unicornParts.js');
+// 本模块只负责「关卡奖励」；机体零件由 editSTGZ3OF2_editPart.js 独立处理，此处不再引用。
 
 // ---- RPCS3 key_vault.h 常量 ----
 const SDAT_KEY = Buffer.from('0d655ef8e674a98ab8505cfa7d012933', 'hex');
@@ -675,27 +674,16 @@ function applyRewards(entries, giftPart, giftUnit, stage1GiftPart, stage1GiftUni
 }
 
 /**
- * 一次全量写回：关卡奖励 + 序章1 / 序章2 机体零件（拆分前后输出一致）
+ * 一次全量写回：仅关卡奖励（机体零件由 editSTGZ3OF2_editPart.js 独立处理）
  * @param {Buffer} plain 明文 CPK
  * @param {number[]} giftPart 序章奖励零件 ID
  * @param {number[]} giftUnit 序章奖励机体 ID
- * @param {number[]} unicornParts1 序章1 独角兽的 4 个零件槽
- * @param {number[]} unicornParts2 序章2 独角兽的 4 个零件槽
  * @param {number[]} stage1GiftPart 第一话奖励零件 ID
  * @param {number[]} stage1GiftUnit 第一话奖励机体 ID
  */
-function repackCpk(
-	plain,
-	giftPart,
-	giftUnit,
-	unicornParts1,
-	unicornParts2,
-	stage1GiftPart,
-	stage1GiftUnit
-) {
+function repackCpk(plain, giftPart, giftUnit, stage1GiftPart, stage1GiftUnit) {
 	return repackCpkWith(plain, (entries) => {
 		applyRewards(entries, giftPart, giftUnit, stage1GiftPart, stage1GiftUnit);
-		unicornParts.applyToEntries(entries, unicornParts1, unicornParts2);
 	});
 }
 
@@ -709,12 +697,6 @@ module.exports = function (ctx = {}) {
 
 	const giftPart = normalizeGiftPart(ctx.data && ctx.data.stage0_1 && ctx.data.stage0_1.giftPart);
 	const giftUnit = normalizeGiftUnit(ctx.data && ctx.data.stage0_1 && ctx.data.stage0_1.giftUnit);
-	const unicornParts1 = unicornParts.normalizeUnicornParts(
-		ctx.data && ctx.data.stage0_1 && ctx.data.stage0_1.unicornParts
-	);
-	const unicornParts2 = unicornParts.normalizeUnicornParts(
-		ctx.data && ctx.data.stage0_2 && ctx.data.stage0_2.unicornParts
-	);
 	const stage1GiftPart = normalizeGiftPart(
 		ctx.data && ctx.data.stage1 && ctx.data.stage1.giftPart
 	);
@@ -722,15 +704,7 @@ module.exports = function (ctx = {}) {
 		ctx.data && ctx.data.stage1 && ctx.data.stage1.giftUnit
 	);
 	const plain = loadPlainCpk(filePath);
-	const packed = repackCpk(
-		plain,
-		giftPart,
-		giftUnit,
-		unicornParts1,
-		unicornParts2,
-		stage1GiftPart,
-		stage1GiftUnit
-	);
+	const packed = repackCpk(plain, giftPart, giftUnit, stage1GiftPart, stage1GiftUnit);
 	fs.writeFileSync(filePath, packed);
 
 	console.log(

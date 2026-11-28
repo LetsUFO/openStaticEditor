@@ -163,8 +163,9 @@ function run(ctx = {}) {
 		return { fileSrc: filePath, size: fs.statSync(filePath).size, skipped: true };
 	}
 
-	// 延迟 require：主脚本顶层会 require 本模块，这样不会形成顶层循环依赖。
-	const core = require('./editSTGZ3OF2.js');
+	// 延迟 require：核心 loadPlainCpk / repackCpkWith 由 editSTGZ3OF2_gift.js 导出。
+	// 本文件对它的引用放在 run() 内，构成懒加载，避免与 gift 模块形成顶层循环依赖。
+	const core = require('./editSTGZ3OF2_gift.js');
 	const plain = core.loadPlainCpk(filePath);
 	const packed = core.repackCpkWith(plain, (entries) =>
 		applyToEntries(entries, parts1, parts2)
